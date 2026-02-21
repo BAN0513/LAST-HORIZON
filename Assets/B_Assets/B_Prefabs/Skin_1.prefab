@@ -506,8 +506,9 @@ GameObject:
   m_Component:
   - component: {fileID: 967943393376106079}
   - component: {fileID: 3513130172469498851}
-  - component: {fileID: 3480829734619545835}
   - component: {fileID: -7453391546502693227}
+  - component: {fileID: 3480829734619545835}
+  - component: {fileID: 1579044570290113309}
   m_Layer: 0
   m_Name: Skin_1
   m_TagString: Untagged
@@ -554,20 +555,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3480829734619545835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805838368531266230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
-  searchDistance: 10
-  contactDistance: 10
 --- !u!95 &-7453391546502693227
 Animator:
   serializedVersion: 7
@@ -590,6 +577,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3480829734619545835
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805838368531266230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
+  searchDistance: 10
+  contactDistance: 10
+  isContact: 0
+--- !u!114 &1579044570290113309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805838368531266230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc3a432cf6c10bc4e81f39b601014ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimatorController
 --- !u!1 &858485625285592101
 GameObject:
   m_ObjectHideFlags: 0

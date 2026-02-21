@@ -5,11 +5,14 @@ public class Enemy : MonoBehaviour
 {
     protected Transform target;
     protected NavMeshAgent agent;
+    protected EnemyAnimatorController animatorContoller;
 
     [SerializeField] protected float searchDistance;  //’T’m”ÍˆÍ
     [SerializeField] protected float contactDistance; //’ÇÕ”ÍˆÍ
+
     protected float distance = 0;
     public bool isContact = false;
+    protected bool isAnimation = false;
 
     protected virtual void Start()
     {
