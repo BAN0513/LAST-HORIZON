@@ -3,38 +3,50 @@ using UnityEngine;
 
 public class Enemy_1 : Enemy
 {
+    [Header("武器のスクリプト")]
     [SerializeField] private WeaponController _weaponController;
 
-    private float actionCoolDown = 3;
-    private float timeCnt = 0;
     private Coroutine backMoveCor = null;
     private int rand;
-    private float randTime;
+    private float lotteryTime;
 
-    //下がる行動に移る距離
-    private float backDis = 2;
-    //下がる距離
-    private float backMoveDis = 3;
+    [Header("プレイヤーとの距離が値以下になると下がる行動をする")]
+    [SerializeField] private float backActionDis = 2;
 
-    private float engageDis = 10;
+    [Header("下がる行動の時に下がる距離")]
+    [SerializeField] private float backMoveDis = 3;
+
+    [Header("接敵距離（この値以下になると攻撃の抽選を開始する）")]
+    [SerializeField] private float engageDis = 5;
+
+    [Header("接敵状態時の動くスピード")]
+    [SerializeField] private float engageMoveSpeed = 1;
+
+    //攻撃時にこの値の距離まで近づく
     private float attackDis = 2f;
 
-    private float engageMoveSpeed = 1;
+    [Header("攻撃の確率")]
+    [SerializeField] private float attackInitProbability = 20;
 
-    private float attackInitProbability = 20;
-    private float attackProbability = 20;
-    private float attackUpProbability = 20;
+    [Header("抽選で攻撃以外になった時に攻撃確率を上げるための値")]
+    [SerializeField] private float attackUpProbability = 20;
+
+    //攻撃確率の保存用変数
+    private float attackProbability = 0;
+
+    [Header("攻撃後、この値の分の秒数は攻撃の抽選は行わない")]
+    [SerializeField] private float attackCoolDown = 3;
 
     //アニメーションで使うやつ
-    public bool isMelee1;
-    public bool isMelee2;
-    public bool isBackMove;
+    public bool isMelee1 { get; private set; }
+    public bool isMelee2 { get; private set; }
+    public bool isBackMove { get; private set; }
+    public bool isDash { get; private set; }
 
     protected override void Start()
     {
         base.Start();
         attackProbability = attackInitProbability;
-        timeCnt = actionCoolDown;
     }
 
     protected override void Update()
@@ -42,13 +54,8 @@ public class Enemy_1 : Enemy
         base.Update();
 
         MoveAnimControl();
-        
-        if (!isAction)
-        {
-            timeCnt += Time.deltaTime;
-        }
 
-        if (distance <= backDis && !isAction)
+        if (distance <= backActionDis && !isAction)
         {
             if (isBackMove) { return; }
             backMoveCor = StartCoroutine(BackMove());
@@ -57,18 +64,17 @@ public class Enemy_1 : Enemy
         if (distance <= engageDis)
         {
             agent.speed = engageMoveSpeed;
-            if (timeCnt < actionCoolDown) { return; }
 
             if (!isAction)
             {
-                randTime -= Time.deltaTime;
-                if (randTime <= 0)
+                lotteryTime -= Time.deltaTime;
+                if (lotteryTime <= 0)
                 {
                     //行動の抽選で使う
                     rand = Random.Range(1, 101);
 
                     //次の抽選に必要な時間をランダムで決める
-                    randTime = Random.Range(0.5f, 2.1f);
+                    lotteryTime = Random.Range(0.5f, 2.1f);
                     isAction = true;
                 }
             }
@@ -91,7 +97,7 @@ public class Enemy_1 : Enemy
         }
         else
         {
-            agent.speed = initMoveSpeed;
+            agent.speed = enemySO.speed;
             isAction = false;
         }
     }
@@ -116,7 +122,16 @@ public class Enemy_1 : Enemy
         //dotが0より高いと前に進んでいるので前に進むアニメーションを動かす
         else if (dot > 0)
         {
-            isWalking = true;
+            if (distance >= engageDis)
+            {
+                isDash = true;
+                isWalking = false;
+            }
+            else
+            {
+                isWalking = true;
+                isDash = false;
+            }
             isBackMove = false;
         }
         //dotが0より低いと後ろに進むアニメーションを動かす
@@ -145,8 +160,8 @@ public class Enemy_1 : Enemy
             agent.SetDestination(pos);
             yield return null;
         }
-        isBackMove = false;
-        agent.stoppingDistance = initStoopingDis;
+        agent.stoppingDistance = enemySO.stoopingDis;
+        backMoveCor = null;
     }
 
 
@@ -167,7 +182,6 @@ public class Enemy_1 : Enemy
         //一定距離近づくと攻撃する
         if (distance <= attackDis)
         {
-            timeCnt = 0;
             agent.isStopped = true;
             isMelee1 = true;
         }
@@ -192,12 +206,12 @@ public class Enemy_1 : Enemy
     public void AnimEnd()
     {
         isAction = false;
-        agent.stoppingDistance = initStoopingDis;
+        agent.stoppingDistance = enemySO.stoopingDis;
         agent.isStopped = false;
         isMelee1 = false;
         isMelee2 = false;
-        timeCnt = 0;
         rand = 0;
+        lotteryTime = attackCoolDown;
         attackProbability = attackInitProbability;
     }
 

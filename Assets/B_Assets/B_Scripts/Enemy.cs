@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
     protected NavMeshAgent agent;
     protected EnemyAnimatorController animatorContoller;
 
-    [SerializeField] protected float searchDistance;  //探知範囲
-    [SerializeField] protected float contactDistance; //追跡範囲
+    [Header("敵のScriptable Object")]
+    [SerializeField] protected EnemySO enemySO;
 
     //攻撃などのアクションを起こしているかどうか
     protected bool isAction = false;
@@ -18,17 +18,10 @@ public class Enemy : MonoBehaviour
     protected float distance = 0;
 
     //接敵中か（今後常に敵対状態になるかも）
-    public bool isContact = false;
-
-    //プレイヤーを見る動作のスピード
-    private float lookRotationSpeed = 5;
-
-    //NavMeshの初期値
-    protected float initStoopingDis = 3;
-    protected float initMoveSpeed = 3.5f;
+    public bool isContact {  get; protected set; }
 
     //アニメーション用
-    public bool isWalking = false;
+    public bool isWalking {  get; protected set; }
 
     protected virtual void Start()
     {
@@ -52,7 +45,7 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             Quaternion.LookRotation(dir),
-            Time.deltaTime * lookRotationSpeed
+            Time.deltaTime * enemySO.lookRotationSpeed
             );
 
         if (target == null) { return; }
@@ -60,20 +53,18 @@ public class Enemy : MonoBehaviour
 
         if (!isContact)
         {
-            if (distance <= searchDistance)
+            if (distance <= enemySO.searchDistance)
             {
                 isContact = true;
-                isWalking = true;
                 agent.isStopped = false;
             }
         }
         else
         {
             agent.SetDestination(target.position);
-            if (contactDistance <= distance)
+            if (enemySO.contactDistance <= distance)
             {
                 isContact = false;
-                isWalking = false;
                 agent.isStopped = true;
             }
 
