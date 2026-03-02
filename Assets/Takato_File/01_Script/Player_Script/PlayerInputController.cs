@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 /// </summary>
 namespace Takato
 {
-    [RequireComponent(typeof(PlayerInput))]
     public class PlayerInputController : MonoBehaviour
     {
         private InputSystem_Actions playerInputActions; // 入力アクションのインスタンス
