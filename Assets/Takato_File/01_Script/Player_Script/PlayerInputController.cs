@@ -11,6 +11,7 @@ namespace Takato
         private InputSystem_Actions playerInputActions; // 入力アクションのインスタンス
 
         public Vector2 MoveInput { get; private set; } // プレイヤーの移動入力を格納するプロパティ
+        public bool JumpInput { get; private set; } // プレイヤーのジャンプ入力を格納するプロパティ
 
         private void Awake()
         {
@@ -20,6 +21,11 @@ namespace Takato
             playerInputActions.Player.Move.started += OnMoveInput;   // 入力が開始されたときのイベント
             playerInputActions.Player.Move.performed += OnMoveInput; // 入力が実行されたときのイベント
             playerInputActions.Player.Move.canceled += OnMoveInput;  // 入力がキャンセルされたときのイベント
+
+            //Jump入力イベント登録
+            playerInputActions.Player.Jump.started += OnJumpInput;   // 入力が開始されたときのイベント
+            playerInputActions.Player.Jump.performed += OnJumpInput; // 入力が実行されたときのイベント
+            playerInputActions.Player.Jump.canceled += OnJumpInput;  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>
@@ -44,6 +50,14 @@ namespace Takato
         private void OnMoveInput(InputAction.CallbackContext context)
         {
             MoveInput = context.ReadValue<Vector2>();
+        }
+
+        /// <summary>
+        /// プレイヤーのジャンプ入力を処理するメソッド
+        /// </summary>
+        private void OnJumpInput(InputAction.CallbackContext context)
+        {
+            JumpInput = context.ReadValueAsButton();
         }
     }
 }
