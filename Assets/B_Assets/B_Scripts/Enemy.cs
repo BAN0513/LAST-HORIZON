@@ -88,9 +88,14 @@ public class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            agent.isStopped = true;
-            isDeath = true;
+            Death();
         }
+    }
+
+    protected virtual void Death()
+    {
+        agent.isStopped = true;
+        isDeath = true;
     }
 
     //デバッグ用

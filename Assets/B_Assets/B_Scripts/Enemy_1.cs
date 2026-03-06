@@ -135,7 +135,7 @@ public class Enemy_1 : Enemy
                     rand = Random.Range(1, 101);
 
                     //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(0.5f, 2.1f);
+                    lotteryTime = Random.Range(0.5f, 2.0f);
                     isAction = true;
                 }
             }
@@ -204,6 +204,13 @@ public class Enemy_1 : Enemy
             agent.isStopped = true;
             isMelee1 = true;
         }
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+
+        AttackJudgmentEnd();
     }
 
     //ここから下はAnimator関連の関数
