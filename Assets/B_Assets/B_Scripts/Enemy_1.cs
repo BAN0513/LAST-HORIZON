@@ -35,6 +35,9 @@ public class Enemy_1 : Enemy
     //攻撃確率の保存用変数
     private float attackProbability = 0;
 
+    [Header("二段目の攻撃に派生する確率")]
+    [Range(0,100)] [SerializeField] private float melee2Probability = 50;
+
     [Header("攻撃後、この値の分の秒数は攻撃の抽選は行わない")]
     [SerializeField] private float attackCoolDown = 3;
 
@@ -54,7 +57,7 @@ public class Enemy_1 : Enemy
     {
         if (isDeath) { return; }
         base.Update();
-        Debug.Log("飛ばれてる");
+
         //移動アニメーションの変更処理
         MoveAnimControl();
 
@@ -85,6 +88,7 @@ public class Enemy_1 : Enemy
         //dotが0より高いと前に進んでいるので前に進むアニメーションを動かす
         else if (dot > 0)
         {
+            //接敵距離より遠いとダッシュをして、近いと歩く
             if (distance >= engageDis)
             {
                 isDash = true;
@@ -107,6 +111,7 @@ public class Enemy_1 : Enemy
 
     private void BackMoveControl()
     {
+        //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
         if (distance <= backActionDis && !isAction)
         {
             if (isBackMove) { return; }
@@ -118,6 +123,7 @@ public class Enemy_1 : Enemy
     {
         if (distance <= engageDis)
         {
+            //敵のスピードを少しだけ遅くする
             agent.speed = engageMoveSpeed;
 
             if (!isAction)
@@ -141,6 +147,7 @@ public class Enemy_1 : Enemy
                     AttackMove();
                     break;
                 default:
+                    //攻撃じゃなかったら攻撃の確率を上げる
                     if (isAction)
                     {
                         isAction = false;
@@ -163,8 +170,6 @@ public class Enemy_1 : Enemy
 
         while (distance <= backMoveDis)
         {
-            //Debug.Log("Back");
-
             //敵の方向を取る
             Vector3 toTarget = (target.position - transform.position).normalized;
             toTarget.y = 0;
@@ -172,6 +177,7 @@ public class Enemy_1 : Enemy
             //敵の方向と反対方向を取る
             Vector3 pos = transform.position + -toTarget * backMoveDis;
 
+            //キャラクターの後ろを目的地として設定する
             agent.SetDestination(pos);
             yield return null;
         }
@@ -182,8 +188,6 @@ public class Enemy_1 : Enemy
 
     private void AttackMove()
     {
-        //Debug.Log("攻撃");
-
         //もし後退中なら後退を止める
         if (backMoveCor != null)
         {
@@ -191,8 +195,8 @@ public class Enemy_1 : Enemy
             StopCoroutine(backMoveCor);
         }
 
-        //敵の止まる場所を攻撃する位置より少し低く設定する
-        agent.stoppingDistance = attackDis - 1f;
+        //一定距離近づくと止まるのでstoppingDistanceを0にする
+        agent.stoppingDistance = 0;
 
         //一定距離近づくと攻撃する
         if (distance <= attackDis)
@@ -207,7 +211,8 @@ public class Enemy_1 : Enemy
     {
         int rand = Random.Range(1, 101);
 
-        if (rand <= 50)
+        //一定確率で二段目の攻撃に派生する
+        if (rand <= melee2Probability)
         {
             isMelee2 = true;
         }
@@ -217,6 +222,7 @@ public class Enemy_1 : Enemy
         }
     }
 
+    //攻撃のアニメーションが終わったら全部初期化する
     public void AnimEnd()
     {
         isAction = false;
@@ -229,11 +235,13 @@ public class Enemy_1 : Enemy
         attackProbability = attackInitProbability;
     }
 
+    //攻撃判定の出現
     public void AttackJudgmentActive()
     {
         _weaponController.SetColliderActive(true);
     }
 
+    //攻撃判定の終了
     public void AttackJudgmentEnd()
     {
         _weaponController.SetColliderActive(false);

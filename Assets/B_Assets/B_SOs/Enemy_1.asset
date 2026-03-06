@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Enemy_1
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
-  hp: 5
+  maxHP: 3
   damage: 1
-  speed: 3.5
+  moveSpeed: 3
   stoopingDis: 3
   lookRotationSpeed: 5
   searchDistance: 10

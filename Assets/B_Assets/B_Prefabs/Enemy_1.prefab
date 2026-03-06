@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
   enemySO: {fileID: 11400000, guid: 0331490f3c9c0a74bb26783a7fab01d7, type: 2}
+  hp: 0
   _weaponController: {fileID: 8104887120502432443}
   backActionDis: 2
   backMoveDis: 3

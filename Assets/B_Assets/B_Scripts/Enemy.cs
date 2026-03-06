@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected EnemySO enemySO;
 
     //敵のHP
-    public int hp;
+    public int hp { get; private set; }
 
     //攻撃などのアクションを起こしているかどうか
     protected bool isAction = false;
@@ -85,12 +85,18 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         hp -= damage;
-        Debug.Log(hp);
 
         if (hp <= 0)
         {
             agent.isStopped = true;
             isDeath = true;
         }
+    }
+
+    //デバッグ用
+    [ContextMenu("Damage")]
+    public void Damage()
+    {
+        TakeDamage(100);
     }
 }
