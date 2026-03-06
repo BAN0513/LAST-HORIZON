@@ -7,13 +7,13 @@ public class EnemySO : ScriptableObject
         "“G‚ª‚»‚ê‚¼‚ê‚Â’l‚Í“G‚Ìinspector‚Åİ’è")]
 
     [Header("“G‚ÌHP")]
-    public float hp;
+    public int maxHP;
 
     [Header("“G‚ÌUŒ‚—Í")]
     public float damage;
 
     [Header("“G‚Ì“®‚­ƒXƒs[ƒh")]
-    public float speed;
+    public float moveSpeed;
 
     [Header("“G‚ª‚±‚Ì’lˆÈã‚Í‹ß‚Ã‚©‚È‚¢")]
     public float stoopingDis; 

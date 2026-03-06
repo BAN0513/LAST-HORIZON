@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
 
+    //敵のHP
+    public int hp;
+
     //攻撃などのアクションを起こしているかどうか
     protected bool isAction = false;
 
@@ -22,6 +25,7 @@ public class Enemy : MonoBehaviour
 
     //アニメーション用
     public bool isWalking {  get; protected set; }
+    public bool isDeath { get; protected set; }
 
     protected virtual void Start()
     {
@@ -32,10 +36,17 @@ public class Enemy : MonoBehaviour
         distance = Vector3.Distance(transform.position, target.position);
 
         agent.updateRotation = false;
+
+        hp = enemySO.maxHP;
+
+        agent.speed = enemySO.moveSpeed;
+
+        agent.stoppingDistance = enemySO.stoopingDis;
     }
 
     protected virtual void Update()
     {
+
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -68,6 +79,18 @@ public class Enemy : MonoBehaviour
                 agent.isStopped = true;
             }
 
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        Debug.Log(hp);
+
+        if (hp <= 0)
+        {
+            agent.isStopped = true;
+            isDeath = true;
         }
     }
 }

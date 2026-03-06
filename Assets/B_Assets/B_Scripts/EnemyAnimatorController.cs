@@ -10,6 +10,7 @@ public class EnemyAnimatorController : MonoBehaviour
     int isMelee2Hash;
     int isBackMoveHash;
     int isDashHash;
+    int isDeathHash;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class EnemyAnimatorController : MonoBehaviour
         isMelee2Hash   = Animator.StringToHash("isMelee2");
         isBackMoveHash = Animator.StringToHash("isBackMove");
         isDashHash     = Animator.StringToHash("isDash");
+        isDeathHash    = Animator.StringToHash("isDeath");
     }
 
     private void Update()
@@ -31,11 +33,13 @@ public class EnemyAnimatorController : MonoBehaviour
         bool isMelee2   = animator.GetBool(isMelee2Hash);
         bool isBackMove = animator.GetBool(isBackMoveHash);
         bool isDash     = animator.GetBool(isDashHash);
+        bool isDeath    = animator.GetBool(isDeathHash);
 
-        if (enemy.isWalking != isWalking) animator.SetBool(isWalkingHash, enemy.isWalking);
-        if (enemy.isMelee1 != isMelee1) animator.SetBool(isMelee1Hash, enemy.isMelee1);
-        if (enemy.isMelee2 != isMelee2) animator.SetBool(isMelee2Hash, enemy.isMelee2);
+        if (enemy.isWalking != isWalking)   animator.SetBool(isWalkingHash, enemy.isWalking);
+        if (enemy.isMelee1 != isMelee1)     animator.SetBool(isMelee1Hash, enemy.isMelee1);
+        if (enemy.isMelee2 != isMelee2)     animator.SetBool(isMelee2Hash, enemy.isMelee2);
         if (enemy.isBackMove != isBackMove) animator.SetBool(isBackMoveHash, enemy.isBackMove);
-        if (enemy.isDash != isDash) animator.SetBool(isDashHash,enemy.isDash);
+        if (enemy.isDash != isDash)         animator.SetBool(isDashHash,enemy.isDash);
+        if (enemy.isDeath != isDeath)       animator.SetBool(isDeathHash, enemy.isDeath);
     }
 }

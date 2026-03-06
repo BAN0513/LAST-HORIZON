@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy_1 : Enemy
@@ -51,55 +52,17 @@ public class Enemy_1 : Enemy
 
     protected override void Update()
     {
+        if (isDeath) { return; }
         base.Update();
-
+        Debug.Log("飛ばれてる");
+        //移動アニメーションの変更処理
         MoveAnimControl();
 
-        if (distance <= backActionDis && !isAction)
-        {
-            if (isBackMove) { return; }
-            backMoveCor = StartCoroutine(BackMove());
-        }
+        //後ろに下がる行動の処理
+        BackMoveControl();
 
-        if (distance <= engageDis)
-        {
-            agent.speed = engageMoveSpeed;
-
-            if (!isAction)
-            {
-                lotteryTime -= Time.deltaTime;
-                if (lotteryTime <= 0)
-                {
-                    //行動の抽選で使う
-                    rand = Random.Range(1, 101);
-
-                    //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(0.5f, 2.1f);
-                    isAction = true;
-                }
-            }
-
-            //確率で行動を決める
-            switch (rand)
-            {
-                case int r when (r > 0 && r <= attackProbability):
-                    AttackMove();
-                    break;
-                default:
-                    if (isAction)
-                    {
-                        isAction = false;
-                        attackProbability += attackUpProbability;
-                        rand = 0;
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            agent.speed = enemySO.speed;
-            isAction = false;
-        }
+        //交戦時の処理
+        EngageMoveControl();
     }
 
     private void MoveAnimControl()
@@ -139,6 +102,58 @@ public class Enemy_1 : Enemy
         {
             isWalking = false;
             isBackMove = true;
+        }
+    }
+
+    private void BackMoveControl()
+    {
+        if (distance <= backActionDis && !isAction)
+        {
+            if (isBackMove) { return; }
+            backMoveCor = StartCoroutine(BackMove());
+        }
+    }
+
+    private void EngageMoveControl()
+    {
+        if (distance <= engageDis)
+        {
+            agent.speed = engageMoveSpeed;
+
+            if (!isAction)
+            {
+                lotteryTime -= Time.deltaTime;
+                if (lotteryTime <= 0)
+                {
+                    //行動の抽選で使う
+                    rand = Random.Range(1, 101);
+
+                    //次の抽選に必要な時間をランダムで決める
+                    lotteryTime = Random.Range(0.5f, 2.1f);
+                    isAction = true;
+                }
+            }
+
+            //確率で行動を決める
+            switch (rand)
+            {
+                case int r when (r > 0 && r <= attackProbability):
+                    AttackMove();
+                    break;
+                default:
+                    if (isAction)
+                    {
+                        isAction = false;
+                        attackProbability += attackUpProbability;
+                        rand = 0;
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            agent.speed = enemySO.moveSpeed;
+            isAction = false;
         }
     }
 
@@ -188,7 +203,6 @@ public class Enemy_1 : Enemy
     }
 
     //ここから下はAnimator関連の関数
-
     public void Melee2()
     {
         int rand = Random.Range(1, 101);
