@@ -227,6 +227,10 @@ PrefabInstance:
       propertyPath: engageMoveSpeed
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 440826118210196581, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
+      propertyPath: melee2Probability
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 3713859532431908425, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.02882
