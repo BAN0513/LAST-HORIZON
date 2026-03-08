@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "Input_Dv",
+    "maps": [
+        {
+            "name": "PushBottom",
+            "id": "c16a9654-55dc-4330-923e-747580d5c4be",
+            "actions": [
+                {
+                    "name": "Dv_Warp",
+                    "type": "Button",
+                    "id": "d78ff685-0253-4dcb-846c-0ef6c304d659",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "be033e48-efc9-412b-9044-5df42bcc0791",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dv_Warp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
