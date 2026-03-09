@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class Enemy : MonoBehaviour
 
     [Header("ìGÇÃScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
+
+    [Header("ìGÇÃAnimatorController")]
+    [SerializeField] protected EnemyAnimatorController enemyAnimatorController;
+
+    [SerializeField] protected Slider hpSliider;
 
     //ìGÇÃHP
     public int hp { get; private set; }
@@ -34,6 +40,10 @@ public class Enemy : MonoBehaviour
 
         target = GameObject.FindWithTag("Player").transform;
 
+        hpSliider.maxValue = enemySO.maxHP;
+        hpSliider.minValue = 0;
+        hpSliider.value = enemySO.maxHP;
+
         distance = Vector3.Distance(transform.position, target.position);
 
         agent.updateRotation = false;
@@ -54,11 +64,14 @@ public class Enemy : MonoBehaviour
         //èÌÇ…ÉvÉåÉCÉÑÅ[ÇÃï˚å¸Çå©ÇÈÇÊÇ§Ç…Ç∑ÇÈ
         Vector3 dir = target.position - transform.position;
         dir.y = 0;
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(dir),
-            Time.deltaTime * enemySO.lookRotationSpeed
-            );
+        if (dir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(dir),
+                Time.deltaTime * enemySO.lookRotationSpeed
+                );
+        }
 
         if (target == null) { return; }
 
@@ -86,9 +99,11 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         hp -= damage;
+        hpSliider.value = hp;
 
         if (hp <= 0)
         {
+            hpSliider.gameObject.SetActive(false);
             Death();
         }
         else

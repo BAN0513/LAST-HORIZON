@@ -2,47 +2,31 @@ using UnityEngine;
 
 public class EnemyAnimatorController : MonoBehaviour
 {
-    private Enemy_1 enemy;
-    private Animator animator;
+    protected Enemy enemy;
+    protected Animator animator;
 
     int isWalkingHash;
-    int isMelee1Hash;
-    int isMelee2Hash;
-    int isBackMoveHash;
-    int isDashHash;
     int isDeathHash;
     int isHitHash;
 
-    private void Start()
+    protected virtual void Start()
     {
-        enemy = GetComponent<Enemy_1>();
+        enemy = GetComponent<Enemy>();
         animator = GetComponent<Animator>();
 
         //ƒnƒbƒVƒ…‰»
         isWalkingHash  = Animator.StringToHash("isWalking");
-        isMelee1Hash   = Animator.StringToHash("isMelee1");
-        isMelee2Hash   = Animator.StringToHash("isMelee2");
-        isBackMoveHash = Animator.StringToHash("isBackMove");
-        isDashHash     = Animator.StringToHash("isDash");
         isDeathHash    = Animator.StringToHash("isDeath");
         isHitHash      = Animator.StringToHash("isHit");
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         bool isWalking  = animator.GetBool(isWalkingHash);
-        bool isMelee1   = animator.GetBool(isMelee1Hash);
-        bool isMelee2   = animator.GetBool(isMelee2Hash);
-        bool isBackMove = animator.GetBool(isBackMoveHash);
-        bool isDash     = animator.GetBool(isDashHash);
         bool isDeath    = animator.GetBool(isDeathHash);
         bool isHit      = animator.GetBool(isHitHash);
 
         if (enemy.isWalking != isWalking)   animator.SetBool(isWalkingHash, enemy.isWalking);
-        if (enemy.isMelee1 != isMelee1)     animator.SetBool(isMelee1Hash, enemy.isMelee1);
-        if (enemy.isMelee2 != isMelee2)     animator.SetBool(isMelee2Hash, enemy.isMelee2);
-        if (enemy.isBackMove != isBackMove) animator.SetBool(isBackMoveHash, enemy.isBackMove);
-        if (enemy.isDash != isDash)         animator.SetBool(isDashHash,enemy.isDash);
         if (enemy.isDeath != isDeath)       animator.SetBool(isDeathHash, enemy.isDeath);
         if (enemy.isHit != isHit)           animator.SetBool(isHitHash,enemy.isHit);
     }

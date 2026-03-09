@@ -219,7 +219,7 @@ public class Enemy_1 : Enemy
         int rand = Random.Range(1, 101);
 
         //ˆê’èŠm—¦‚Å“ñ’i–Ú‚ÌUŒ‚‚É”h¶‚·‚é
-        if (rand <= melee2Probability)
+        if (rand <= melee2Probability && distance <= 3)
         {
             isMelee2 = true;
         }
