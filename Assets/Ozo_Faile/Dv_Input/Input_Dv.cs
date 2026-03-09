@@ -100,6 +100,24 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FadeIn"",
+                    ""type"": ""Button"",
+                    ""id"": ""f50bd797-f434-4477-93ae-ca9118ec53c2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FadeOut"",
+                    ""type"": ""Button"",
+                    ""id"": ""883283a6-c2f5-4fae-b381-c1492cb4be63"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -113,6 +131,28 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""action"": ""Dv_Warp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d1241e5c-f74e-42ce-9652-d846b95687f1"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FadeIn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cacd8ac8-694e-44ee-9d1b-476021899a97"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FadeOut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +162,8 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         // PushBottom
         m_PushBottom = asset.FindActionMap("PushBottom", throwIfNotFound: true);
         m_PushBottom_Dv_Warp = m_PushBottom.FindAction("Dv_Warp", throwIfNotFound: true);
+        m_PushBottom_FadeIn = m_PushBottom.FindAction("FadeIn", throwIfNotFound: true);
+        m_PushBottom_FadeOut = m_PushBottom.FindAction("FadeOut", throwIfNotFound: true);
     }
 
     ~@Input_Dv()
@@ -203,6 +245,8 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PushBottom;
     private List<IPushBottomActions> m_PushBottomActionsCallbackInterfaces = new List<IPushBottomActions>();
     private readonly InputAction m_PushBottom_Dv_Warp;
+    private readonly InputAction m_PushBottom_FadeIn;
+    private readonly InputAction m_PushBottom_FadeOut;
     /// <summary>
     /// Provides access to input actions defined in input action map "PushBottom".
     /// </summary>
@@ -218,6 +262,14 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PushBottom/Dv_Warp".
         /// </summary>
         public InputAction @Dv_Warp => m_Wrapper.m_PushBottom_Dv_Warp;
+        /// <summary>
+        /// Provides access to the underlying input action "PushBottom/FadeIn".
+        /// </summary>
+        public InputAction @FadeIn => m_Wrapper.m_PushBottom_FadeIn;
+        /// <summary>
+        /// Provides access to the underlying input action "PushBottom/FadeOut".
+        /// </summary>
+        public InputAction @FadeOut => m_Wrapper.m_PushBottom_FadeOut;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -247,6 +299,12 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Dv_Warp.started += instance.OnDv_Warp;
             @Dv_Warp.performed += instance.OnDv_Warp;
             @Dv_Warp.canceled += instance.OnDv_Warp;
+            @FadeIn.started += instance.OnFadeIn;
+            @FadeIn.performed += instance.OnFadeIn;
+            @FadeIn.canceled += instance.OnFadeIn;
+            @FadeOut.started += instance.OnFadeOut;
+            @FadeOut.performed += instance.OnFadeOut;
+            @FadeOut.canceled += instance.OnFadeOut;
         }
 
         /// <summary>
@@ -261,6 +319,12 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Dv_Warp.started -= instance.OnDv_Warp;
             @Dv_Warp.performed -= instance.OnDv_Warp;
             @Dv_Warp.canceled -= instance.OnDv_Warp;
+            @FadeIn.started -= instance.OnFadeIn;
+            @FadeIn.performed -= instance.OnFadeIn;
+            @FadeIn.canceled -= instance.OnFadeIn;
+            @FadeOut.started -= instance.OnFadeOut;
+            @FadeOut.performed -= instance.OnFadeOut;
+            @FadeOut.canceled -= instance.OnFadeOut;
         }
 
         /// <summary>
@@ -308,5 +372,19 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDv_Warp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FadeIn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFadeIn(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FadeOut" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFadeOut(InputAction.CallbackContext context);
     }
 }

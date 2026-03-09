@@ -14,6 +14,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FadeIn",
+                    "type": "Button",
+                    "id": "f50bd797-f434-4477-93ae-ca9118ec53c2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FadeOut",
+                    "type": "Button",
+                    "id": "883283a6-c2f5-4fae-b381-c1492cb4be63",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -25,6 +43,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dv_Warp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d1241e5c-f74e-42ce-9652-d846b95687f1",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FadeIn",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cacd8ac8-694e-44ee-9d1b-476021899a97",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FadeOut",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
