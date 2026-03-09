@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.57403314
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00000004150354
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.44
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -76,6 +76,9 @@ PrefabInstance:
       addedObject: {fileID: 7123454358540223928}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 6648292823297677937}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5417356986428558454}
   m_SourcePrefab: {fileID: 100100000, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
 --- !u!1 &1425466933361359372 stripped
@@ -120,6 +123,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 619c9c37312b9304d9b945a8035aa73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerInputController
+--- !u!114 &6648292823297677937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425466933361359372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbcb9a9a6494e44b8bf7dc62ab47d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
 --- !u!114 &5417356986428558454
 MonoBehaviour:
   m_ObjectHideFlags: 0
