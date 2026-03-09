@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     [Header("敵のAnimatorController")]
     [SerializeField] protected EnemyAnimatorController enemyAnimatorController;
 
+    [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
 
     //敵のHP
@@ -127,6 +128,11 @@ public class Enemy : MonoBehaviour
     public void IsHitAnimEnd()
     {
         isHit = false;
+    }
+
+    public void DeathAnimEnd()
+    {
+        Destroy(gameObject);
     }
 
     //デバッグ用

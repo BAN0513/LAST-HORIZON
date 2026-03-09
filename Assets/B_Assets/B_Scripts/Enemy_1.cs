@@ -24,7 +24,7 @@ public class Enemy_1 : Enemy
     [SerializeField] private float engageMoveSpeed = 1;
 
     //UŒ‚‚É‚±‚Ì’l‚Ì‹——£‚Ü‚Å‹ß‚Ã‚­
-    private float attackDis = 2f;
+    private float attackDis = 1.5f;
 
     [Header("UŒ‚‚ÌŠm—¦")]
     [SerializeField] private float attackInitProbability = 20;
