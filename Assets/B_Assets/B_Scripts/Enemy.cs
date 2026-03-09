@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour
     //アニメーション用
     public bool isWalking {  get; protected set; }
     public bool isDeath { get; protected set; }
+    public bool isHit { get; protected set; }
 
     protected virtual void Start()
     {
@@ -90,6 +91,11 @@ public class Enemy : MonoBehaviour
         {
             Death();
         }
+        else
+        {
+            isHit = true;
+            InitAnim();
+        }
     }
 
     protected virtual void Death()
@@ -98,10 +104,27 @@ public class Enemy : MonoBehaviour
         isDeath = true;
     }
 
+    protected virtual void InitAnim()
+    {
+
+    }
+
+    public void IsHitAnimEnd()
+    {
+        isHit = false;
+    }
+
     //デバッグ用
     [ContextMenu("Damage")]
     public void Damage()
     {
         TakeDamage(100);
+    }
+
+    //デバッグ用
+    [ContextMenu("1Damage")]
+    public void OneDamage()
+    {
+        TakeDamage(1);
     }
 }

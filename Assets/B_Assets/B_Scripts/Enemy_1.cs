@@ -55,7 +55,7 @@ public class Enemy_1 : Enemy
 
     protected override void Update()
     {
-        if (isDeath) { return; }
+        if (isDeath || isHit) { return; }
         base.Update();
 
         //移動アニメーションの変更処理
@@ -225,13 +225,14 @@ public class Enemy_1 : Enemy
         }
         else
         {
-            AnimEnd();
+            InitAnim();
         }
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
-    public void AnimEnd()
+    protected override void InitAnim()
     {
+        base.InitAnim();
         isAction = false;
         agent.stoppingDistance = enemySO.stoopingDis;
         agent.isStopped = false;

@@ -11,6 +11,7 @@ public class EnemyAnimatorController : MonoBehaviour
     int isBackMoveHash;
     int isDashHash;
     int isDeathHash;
+    int isHitHash;
 
     private void Start()
     {
@@ -24,6 +25,7 @@ public class EnemyAnimatorController : MonoBehaviour
         isBackMoveHash = Animator.StringToHash("isBackMove");
         isDashHash     = Animator.StringToHash("isDash");
         isDeathHash    = Animator.StringToHash("isDeath");
+        isHitHash      = Animator.StringToHash("isHit");
     }
 
     private void Update()
@@ -34,6 +36,7 @@ public class EnemyAnimatorController : MonoBehaviour
         bool isBackMove = animator.GetBool(isBackMoveHash);
         bool isDash     = animator.GetBool(isDashHash);
         bool isDeath    = animator.GetBool(isDeathHash);
+        bool isHit      = animator.GetBool(isHitHash);
 
         if (enemy.isWalking != isWalking)   animator.SetBool(isWalkingHash, enemy.isWalking);
         if (enemy.isMelee1 != isMelee1)     animator.SetBool(isMelee1Hash, enemy.isMelee1);
@@ -41,5 +44,6 @@ public class EnemyAnimatorController : MonoBehaviour
         if (enemy.isBackMove != isBackMove) animator.SetBool(isBackMoveHash, enemy.isBackMove);
         if (enemy.isDash != isDash)         animator.SetBool(isDashHash,enemy.isDash);
         if (enemy.isDeath != isDeath)       animator.SetBool(isDeathHash, enemy.isDeath);
+        if (enemy.isHit != isHit)           animator.SetBool(isHitHash,enemy.isHit);
     }
 }
