@@ -10,11 +10,13 @@ public class EnemyHPBarDirection : MonoBehaviour
     {
         canvas = GetComponent<Canvas>();
 
-        target = GameObject.FindWithTag("Player").transform;
+        target = GameObject.FindWithTag("MainCamera").transform;
     }
 
     private void Update()
     {
-        canvas.transform.LookAt(target);
+        Vector3 dir = target.position - transform.position;
+        dir.y = 0;
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 }
