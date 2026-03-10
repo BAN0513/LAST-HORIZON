@@ -13,7 +13,9 @@ namespace Takato
         public bool IsLeftMove { get; private set; }  // プレイヤーが左に移動しているかどうかを示すフラグ
         public bool IsRightMove { get; private set; } // プレイヤーが右に移動しているかどうかを示すフラグ
         public bool IsBackMove { get; private set; }  // プレイヤーが後方に移動しているかどうかを示すフラグ
-        public bool IsJumpMove { get; set; }      // プレイヤーがジャンプしているかどうかを示すフラグ
+        public bool IsJumpMove { get; set; }          // プレイヤーがジャンプしているかどうかを示すフラグ
+        public bool IsBlockMove { get; set; }         // プレイヤーがガードしているかどうかを示すフラグ
+        public bool IsAttackMove { get; set; }         // プレイヤーが攻撃しているかどうかを示すフラグ
 
         private void Awake()
         {
@@ -42,6 +44,26 @@ namespace Takato
         {
             IsJumpMove = isJump;
             animator.SetBool("IsJumpMove", IsJumpMove);
+        }
+
+        /// <summary>
+        /// ガードアニメーション
+        /// </summary>
+        /// <param name="isBlock"></param>
+        public void SetBlock(bool isBlock)
+        {
+            IsBlockMove = isBlock;
+            animator.SetBool("IsBlockMove", IsBlockMove);
+        }
+
+        /// <summary>
+        /// 攻撃アニメーション
+        /// </summary>
+        /// <param name="isAttack"></param>
+        public void SetAttack(bool isAttack)
+        {
+            IsAttackMove = isAttack;
+            animator.SetBool("IsAttackMove", IsAttackMove);
         }
     }
 }

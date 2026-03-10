@@ -9,6 +9,8 @@ namespace Takato
     {
         [Header("(プレイヤー関連のステータス)")]
         [Space(10)]
+        [Header("プレイヤーのHP")]
+        [SerializeField] private int hp;
         [Header("プレイヤーの移動速度")]
         [SerializeField] private float moveSpeed;
         [Header("プレイヤーのジャンプ力")]
@@ -21,7 +23,8 @@ namespace Takato
         private PlayerAnimationController animationController; // プレイヤーのアニメーションを管理するコンポーネント
         private PlayerAnimationController playerAnimationController; // プレイヤーのアニメーションを管理するコンポーネント
 
-        private float verticalVelocity; // プレイヤーの垂直方向の速度
+        private float verticalVelocity;     // プレイヤーの垂直方向の速度
+
 
         private void Awake()
         {
@@ -33,7 +36,28 @@ namespace Takato
 
         private void Update()
         {
+            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
             Move(); // プレイヤーの移動とジャンプを処理
+
+            // 防御入力(長押し)
+            if (inputController.BlockInput)
+            {
+                Block(); // ガードアニメーションを開始
+            }
+            else
+            {
+                playerAnimationController.SetBlock(false); // ガードアニメーションを終了
+            }
+
+            // 攻撃入力(長押し)
+            if (inputController.IsAttackInput)
+            {
+                Attack(); // 攻撃アニメーションを開始
+            }
+            else
+            {
+                playerAnimationController.SetAttack(false); // 攻撃アニメーションを終了
+            }
         }
 
         /// <summary>
@@ -70,8 +94,25 @@ namespace Takato
             movement.y = verticalVelocity;
 
             characterController.Move(movement * Time.deltaTime); // プレイヤーを移動させる
-
             animationController.UpdateAnimation(moveDirection); // アニメーションの状態を更新
         }
-    }
-}
+
+        /// <summary>
+        /// 攻撃アニメーションを開始するメソッド
+        /// </summary>
+        private void Attack()
+        {
+            playerAnimationController.SetAttack(true); // 攻撃アニメーションを開始
+            Debug.Log("攻撃しました！");
+        }
+
+        /// <summary>
+        /// ガードアニメーションを開始するメソッド
+        /// </summary>
+        private void Block()
+        {
+            playerAnimationController.SetBlock(true); // ガードアニメーションを開始
+            Debug.Log("ガードしました！");
+        }
+    } 
+} 
