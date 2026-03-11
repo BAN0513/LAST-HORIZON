@@ -7,39 +7,42 @@ namespace Takato
 {
     public class PlayerAnimationController : MonoBehaviour
     {
-        private Animator animator;
+        private Animator animator; // アニメーターコンポーネント
 
-        public bool IsFrontMove { get; private set; }  // プレイヤーが前方に移動しているかどうかを示すフラグ
-        public bool IsLeftMove { get; private set; }  // プレイヤーが左に移動しているかどうかを示すフラグ
-        public bool IsRightMove { get; private set; } // プレイヤーが右に移動しているかどうかを示すフラグ
-        public bool IsBackMove { get; private set; }  // プレイヤーが後方に移動しているかどうかを示すフラグ
-        public bool IsJumpMove { get; set; }          // プレイヤーがジャンプしているかどうかを示すフラグ
-        public bool IsBlockMove { get; set; }         // プレイヤーがガードしているかどうかを示すフラグ
-        public bool IsAttackMove { get; set; }         // プレイヤーが攻撃しているかどうかを示すフラグ
+        public bool IsFrontMove { get; private set; } // 前進アニメーションの状態
+        public bool IsLeftMove { get; private set; } // 左移動アニメーションの状態
+        public bool IsRightMove { get; private set; } // 右移動アニメーションの状態
+        public bool IsBackMove { get; private set; } // 後退アニメーションの状態
+        public bool IsJumpMove { get; private set; } // ジャンプアニメーションの状態
+        public bool IsBlockMove { get; private set; } // ガードアニメーションの状態
+        public bool IsAttackMove { get; private set; } // 攻撃アニメーションの状態
 
         private void Awake()
         {
-            animator = GetComponent<Animator>(); // Animator コンポーネントを取得
+            animator = GetComponent<Animator>(); // アニメーターコンポーネントを取得
         }
 
         /// <summary>
-        /// アニメーションの状態を更新する
+        /// 移動アニメーションの状態を更新
         /// </summary>
         public void UpdateAnimation(Vector2 moveInput)
         {
-            // 入力方向に応じてフラグを設定
+            // 入力に基づいてアニメーションの状態を更新
             IsFrontMove = moveInput.y > 0;
             IsLeftMove = moveInput.x < 0;
             IsRightMove = moveInput.x > 0;
             IsBackMove = moveInput.y < 0;
 
-            // Animator に値を反映
-            animator.SetBool("IsFrontMove", IsFrontMove);
-            animator.SetBool("IsLeftMove", IsLeftMove);
+            // アニメーターのパラメーターを更新
+            animator.SetBool("IsFrontMove", IsFrontMove); 
+            animator.SetBool("IsLeftMove", IsLeftMove);  
             animator.SetBool("IsRightMove", IsRightMove);
             animator.SetBool("IsBackMove", IsBackMove);
         }
 
+        /// <summary>
+        /// ジャンプアニメーション
+        /// </summary>
         public void SetJump(bool isJump)
         {
             IsJumpMove = isJump;
@@ -49,7 +52,6 @@ namespace Takato
         /// <summary>
         /// ガードアニメーション
         /// </summary>
-        /// <param name="isBlock"></param>
         public void SetBlock(bool isBlock)
         {
             IsBlockMove = isBlock;
@@ -59,7 +61,6 @@ namespace Takato
         /// <summary>
         /// 攻撃アニメーション
         /// </summary>
-        /// <param name="isAttack"></param>
         public void SetAttack(bool isAttack)
         {
             IsAttackMove = isAttack;
