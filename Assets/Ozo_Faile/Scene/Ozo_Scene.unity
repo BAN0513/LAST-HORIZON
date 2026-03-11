@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 274004459}
   - component: {fileID: 274004463}
   - component: {fileID: 274004464}
+  - component: {fileID: 274004465}
   m_Layer: 5
   m_Name: Maneger
   m_TagString: Untagged
@@ -236,9 +237,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeController
   FadeImage: {fileID: 1416608195}
-  FadeSpeed: 0.001
+  FadeSpeed: 0.01
   Fade: 0
-  GoalTime: 2
 --- !u!114 &274004464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +269,18 @@ MonoBehaviour:
   m_DefaultActionMap: PushBottom
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!225 &274004465
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274004458}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,15 +3,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
+/// <summary>
+/// フェードイン・フェードアウト用の管理用クラス
+/// </summary>
 public class FadeController : MonoBehaviour
 {
+    [Header("フェード用画像")]
     public Image FadeImage;
+    //フェードインさせる画像(UI)
+
+    [Header("フェードさせる速度 ( 1 ～ 0.01 )")]
     public float FadeSpeed = 0.01f;
+    //フェードの速度（1から引いていくので0.～で書く必要あり）
+
+    [Header("フェード中か")]
     public bool Fade = false;
-    public float GoalTime = 2;
-    
+    //現在フェード中か
+
     private float a;
-    private float CountTime = 0;
+    //透明度
 
     void Start()
     {
@@ -20,31 +30,23 @@ public class FadeController : MonoBehaviour
 
     private void Update()
     {
+        Fade = StageChage.IsChage;
 
-
-        if(Fade)
-        {
-            StartCoroutine(FadeInPanel());
-        }
-
-        if(!Fade)
+        if (Fade) //Fadeがtrueならフェードアウトを開始する。
         {
             StartCoroutine(FadeOutPanel());
         }
-    }
-
-    public void IsFade()
-    {
-        Fade = true;
-        while (CountTime < GoalTime)
+        if(!Fade) //Fadeがfalseならフェードインを開始する。
         {
-            CountTime += Time.deltaTime;
+            StartCoroutine(FadeInPanel()); 
         }
-        Fade = false;
-        CountTime = 0;
     }
 
-    public IEnumerator FadeInPanel()
+    /// <summary>
+    /// フェードアウト関数（IEnumerator型）
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator FadeOutPanel()
     {
         while (a < 1) 
         {
@@ -53,7 +55,12 @@ public class FadeController : MonoBehaviour
             yield return null;
         }
     }
-    public IEnumerator FadeOutPanel()
+
+    /// <summary>
+    /// フェードイン関数（IEnumerator型）
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator FadeInPanel()
     {
         while (a > 0) 
         {
@@ -61,15 +68,5 @@ public class FadeController : MonoBehaviour
             a -= FadeSpeed;
             yield return null;
         }
-    }
-
-    private void OnFadeIn(InputValue var)
-    {
-        Fade = true;
-    }
-
-    private void OnFadeOut(InputValue var)
-    {
-        Fade = false;
     }
 }
