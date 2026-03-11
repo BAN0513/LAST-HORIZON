@@ -18,46 +18,25 @@ namespace Takato
         [Header("プレイヤーの重力")]
         [SerializeField] private float gravity;
 
-        private PlayerInputController inputController;         // プレイヤーの入力を管理するコンポーネント
-        private CharacterController characterController;       // プレイヤーの移動を管理するコンポーネント
-        private PlayerAnimationController animationController; // プレイヤーのアニメーションを管理するコンポーネント
-        private PlayerAnimationController playerAnimationController; // プレイヤーのアニメーションを管理するコンポーネント
+        private PlayerInputController inputController;         // 入力管理
+        private CharacterController characterController;       // 移動管理
+        private PlayerAnimationController animationController; // アニメーション管理
 
-        private float verticalVelocity;     // プレイヤーの垂直方向の速度
-
+        private float verticalVelocity;     // 垂直方向の速度
 
         private void Awake()
         {
-            inputController = GetComponent<PlayerInputController>();   // プレイヤーの入力を管理するコンポーネントを取得
-            characterController = GetComponent<CharacterController>(); // プレイヤーの移動を管理するコンポーネントを取得
-            animationController = GetComponent<PlayerAnimationController>(); // プレイヤーのアニメーションを管理するコンポーネントを取得
-            playerAnimationController = GetComponent<PlayerAnimationController>(); // プレイヤーのアニメーションを管理するコンポーネントを取得
+            inputController = GetComponent<PlayerInputController>();
+            characterController = GetComponent<CharacterController>();
+            animationController = GetComponent<PlayerAnimationController>();
         }
 
         private void Update()
         {
             hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
-            Move(); // プレイヤーの移動とジャンプを処理
-
-            // 防御入力(長押し)
-            if (inputController.BlockInput)
-            {
-                Block(); // ガードアニメーションを開始
-            }
-            else
-            {
-                playerAnimationController.SetBlock(false); // ガードアニメーションを終了
-            }
-
-            // 攻撃入力(長押し)
-            if (inputController.IsAttackInput)
-            {
-                Attack(); // 攻撃アニメーションを開始
-            }
-            else
-            {
-                playerAnimationController.SetAttack(false); // 攻撃アニメーションを終了
-            }
+            Move(); // 移動とジャンプの処理
+            Block();// 防御処理
+            Attack();// 攻撃処理
         }
 
         /// <summary>
@@ -65,54 +44,65 @@ namespace Takato
         /// </summary>
         private void Move()
         {
-            // 地面にいるかどうかをチェックして、ジャンプや重力の処理を行う
             if (characterController.isGrounded)
             {
-                verticalVelocity = -1f; // 地面にいるときは少しだけ下方向に力を加えて、地面にしっかりと接地させる
+                verticalVelocity = -1f;
 
-                // ジャンプ入力があればジャンプする
                 if (inputController.JumpInput)
                 {
                     verticalVelocity = jumpForce;
-                    playerAnimationController.SetJump(true); // ジャンプアニメーションを開始
+                    animationController.SetJump(true);
                     Debug.Log("ジャンプしました！");
                 }
                 else
                 {
-                    playerAnimationController.SetJump(false); // ジャンプアニメーションを終了
+                    animationController.SetJump(false);
                 }
             }
             else
             {
-                verticalVelocity -= gravity * Time.deltaTime; // 空中にいるときは重力を適用
-                playerAnimationController.SetJump(true); // 空中にいるときはジャンプアニメーションを維持
+                verticalVelocity -= gravity * Time.deltaTime;
+                animationController.SetJump(true);
             }
 
-            // 入力に基づいて移動方向を計算
             Vector2 moveDirection = inputController.MoveInput;
             Vector3 movement = new Vector3(moveDirection.x, 0, moveDirection.y) * moveSpeed;
             movement.y = verticalVelocity;
 
-            characterController.Move(movement * Time.deltaTime); // プレイヤーを移動させる
-            animationController.UpdateAnimation(moveDirection); // アニメーションの状態を更新
+            characterController.Move(movement * Time.deltaTime);
+            animationController.UpdateAnimation(moveDirection);
         }
 
         /// <summary>
-        /// 攻撃アニメーションを開始するメソッド
+        /// 攻撃処理（後から拡張可能）
         /// </summary>
         private void Attack()
         {
-            playerAnimationController.SetAttack(true); // 攻撃アニメーションを開始
-            Debug.Log("攻撃しました！");
+            if (inputController.IsAttackInput)
+            {
+                animationController.SetAttack(true);
+                // 今後、攻撃処理を追加していきます
+            }
+            else
+            {
+                animationController.SetAttack(false);
+            }
         }
 
         /// <summary>
-        /// ガードアニメーションを開始するメソッド
+        /// 防御処理（後から拡張可能）
         /// </summary>
         private void Block()
         {
-            playerAnimationController.SetBlock(true); // ガードアニメーションを開始
-            Debug.Log("ガードしました！");
+            if (inputController.BlockInput)
+            {
+                animationController.SetBlock(true);
+                // 今後、防御処理を追加していきます。
+            }
+            else
+            {
+                animationController.SetBlock(false);
+            }
         }
-    } 
+    }
 } 
