@@ -57,6 +57,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: ba843f89339f1124191b49ae3a1c14a8, type: 3}
+    - target: {fileID: 5866666021909216657, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: df6b6668868da7a4a8bd3b09ffc86645, type: 2}
@@ -148,6 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
   hp: 50
-  moveSpeed: 3
+  moveSpeed: 2
   jumpForce: 5
   gravity: 12.5
