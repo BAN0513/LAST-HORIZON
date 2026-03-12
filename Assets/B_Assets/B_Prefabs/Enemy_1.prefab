@@ -38,6 +38,7 @@ Transform:
   - {fileID: 4884735025811322325}
   - {fileID: 3972691949628727900}
   - {fileID: 8459482820086099072}
+  - {fileID: 2585517044960145431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &2935853688344302785
@@ -99,11 +100,12 @@ MonoBehaviour:
   enemySO: {fileID: 11400000, guid: 0331490f3c9c0a74bb26783a7fab01d7, type: 2}
   enemyAnimatorController: {fileID: 6025648744925135600}
   hpSliider: {fileID: 1878319838695366945}
-  _weaponController: {fileID: 8104887120502432443}
-  backActionDis: 2
-  backMoveDis: 3
+  forward: {fileID: 2585517044960145431}
   engageDis: 8
   engageMoveSpeed: 2
+  backActionDis: 2
+  backMoveDis: 3
+  _weaponController: {fileID: 8104887120502432443}
   attackInitProbability: 20
   attackUpProbability: 20
   melee2Probability: 70
@@ -6643,6 +6645,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 821144900518447926}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8539043516389109870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2585517044960145431}
+  m_Layer: 0
+  m_Name: Forward
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2585517044960145431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8539043516389109870}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3713859532431908425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8691055988269336044
 GameObject:

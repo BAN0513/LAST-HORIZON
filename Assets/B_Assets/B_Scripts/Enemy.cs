@@ -1,4 +1,5 @@
 using System.Collections;
+using Takato;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -7,9 +8,12 @@ public abstract class Enemy : MonoBehaviour
 {
     protected Transform target;
     protected NavMeshAgent agent;
+    protected PlayerController playerController;
+    protected PlayerAnimationController playerAnimationController;
 
     protected int rand;
     protected float lotteryTime;
+    protected float dot;
 
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
@@ -19,6 +23,9 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
+    
+    [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
+    [SerializeField] protected Transform forward;
 
     [Header("接敵距離（この値以下になると攻撃の抽選を開始する）")]
     [SerializeField] protected float engageDis = 5;
@@ -37,8 +44,11 @@ public abstract class Enemy : MonoBehaviour
     //敵のHP
     public int hp { get; private set; }
 
-    //攻撃などのアクションを起こしているかどうか
+    //何かしらアクションが抽選されているかどうか
     protected bool isAction = false;
+
+    //攻撃中
+    protected bool isAtack = false;
 
     //プレイヤーと自身の距離
     protected float distance = 0;
@@ -58,10 +68,16 @@ public abstract class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         target = GameObject.FindWithTag("Player").transform;
+        playerController = target.GetComponent<PlayerController>();
+        playerAnimationController = target.GetComponent<PlayerAnimationController>();
+        
 
-        hpSliider.maxValue = enemySO.maxHP;
-        hpSliider.minValue = 0;
-        hpSliider.value = enemySO.maxHP;
+        if (hpSliider != null)
+        {
+            hpSliider.maxValue = enemySO.maxHP;
+            hpSliider.minValue = 0;
+            hpSliider.value = enemySO.maxHP;
+        }
 
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -79,6 +95,9 @@ public abstract class Enemy : MonoBehaviour
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
 
+        //自身からプレイヤーのDotを取る
+        DotPlayer();
+
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
 
@@ -95,17 +114,33 @@ public abstract class Enemy : MonoBehaviour
         AgentContact();
     }
 
+    private void DotPlayer()
+    {
+        //自身からプレイヤーの方向を取る
+        Vector3 toTarget = (target.position - transform.position).normalized;
+        toTarget.y = 0;
+        //自身の前方方向を取る
+        Vector3 forwardDir = (forward.position - transform.position).normalized;
+        forwardDir.y = 0;
+
+        //内積で方向の一致度を取る
+        dot = Vector3.Dot(toTarget, forwardDir);
+    }
+
     private void LookPlayer()
     {
-        Vector3 dir = target.position - transform.position;
-        dir.y = 0;
-        if (dir != Vector3.zero)
+        if (!isAtack)
         {
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
-                Quaternion.LookRotation(dir),
-                Time.deltaTime * enemySO.lookRotationSpeed
-                );
+            Vector3 dir = target.position - transform.position;
+            dir.y = 0;
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    Time.deltaTime * enemySO.lookRotationSpeed
+                    );
+            }
         }
     }
 
@@ -140,7 +175,7 @@ public abstract class Enemy : MonoBehaviour
         Vector3 moveDir = agent.velocity.normalized;
 
         //内積で方向の一致度を取る
-        float dot = Vector3.Dot(toTarget, moveDir);
+        float moveDot = Vector3.Dot(toTarget, moveDir);
 
         //magunitudeでvelocityの長さを取る（0.1fより下だと動いていない）
         if (agent.velocity.magnitude < 0.1f)
@@ -149,7 +184,7 @@ public abstract class Enemy : MonoBehaviour
             isBackMove = false;
         }
         //dotが0より高いと前に進んでいるので前に進むアニメーションを動かす
-        else if (dot > 0)
+        else if (moveDot > 0)
         {
             //接敵距離より遠いとダッシュをして、近いと歩く
             if (distance >= engageDis)

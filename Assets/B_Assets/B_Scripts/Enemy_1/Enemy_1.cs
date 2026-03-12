@@ -103,6 +103,7 @@ public class Enemy_1 : Enemy
         //一定距離近づくと攻撃する
         if (distance <= attackDis)
         {
+            isAtack = true;
             agent.isStopped = true;
             isMelee1 = true;
         }
@@ -121,7 +122,7 @@ public class Enemy_1 : Enemy
         int rand = Random.Range(1, 101);
 
         //一定確率で二段目の攻撃に派生する
-        if (rand <= melee2Probability && distance <= 3)
+        if (rand <= melee2Probability && distance <= 3 && dot > 3)
         {
             isMelee2 = true;
         }
@@ -134,6 +135,7 @@ public class Enemy_1 : Enemy
     //攻撃のアニメーションが終わったら全部初期化する
     protected override void InitAnim()
     {
+        isAtack = false;
         agent.stoppingDistance = enemySO.stoopingDis;
         lotteryTime = attackCoolDown;
         attackProbability = attackInitProbability;
