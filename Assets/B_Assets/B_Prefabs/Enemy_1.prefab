@@ -100,16 +100,10 @@ MonoBehaviour:
   enemySO: {fileID: 11400000, guid: 0331490f3c9c0a74bb26783a7fab01d7, type: 2}
   enemyAnimatorController: {fileID: 6025648744925135600}
   hpSliider: {fileID: 1878319838695366945}
-  forward: {fileID: 2585517044960145431}
-  engageDis: 8
-  engageMoveSpeed: 2
-  backActionDis: 2
-  backMoveDis: 3
   _weaponController: {fileID: 8104887120502432443}
-  attackInitProbability: 20
-  attackUpProbability: 20
+  forward: {fileID: 2585517044960145431}
+  attackDis: 1.5
   melee2Probability: 70
-  attackCoolDown: 3
 --- !u!114 &6025648744925135600
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -23,21 +23,18 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
-    
+
+    [Header("武器のスクリプト")]
+    [SerializeField] protected WeaponController _weaponController;
+
     [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
     [SerializeField] protected Transform forward;
 
-    [Header("接敵距離（この値以下になると攻撃の抽選を開始する）")]
-    [SerializeField] protected float engageDis = 5;
+    //攻撃時にこの値の距離まで近づく
+    [SerializeField] protected float attackDis = 1.5f;
 
-    [Header("接敵状態時の動くスピード")]
-    [SerializeField] protected float engageMoveSpeed = 1;
-
-    [Header("プレイヤーとの距離が値以下になると下がる行動をする")]
-    [SerializeField] private float backActionDis = 2;
-
-    [Header("下がる行動の時に下がる距離")]
-    [SerializeField] private float backMoveDis = 3;
+    //攻撃確率の保存用変数
+    protected float attackProbability = 0;
 
     protected Coroutine backMoveCor = null;
 
@@ -47,8 +44,8 @@ public abstract class Enemy : MonoBehaviour
     //何かしらアクションが抽選されているかどうか
     protected bool isAction = false;
 
-    //攻撃中
-    protected bool isAtack = false;
+    //プレイヤーを見続けるかどうか
+    protected bool isLookPlayer = true;
 
     //プレイヤーと自身の距離
     protected float distance = 0;
@@ -85,7 +82,7 @@ public abstract class Enemy : MonoBehaviour
 
         hp = enemySO.maxHP;
 
-        agent.speed = enemySO.moveSpeed;
+        agent.speed = enemySO.dashMoveSpeed;
 
         agent.stoppingDistance = enemySO.stoopingDis;
     }
@@ -129,7 +126,7 @@ public abstract class Enemy : MonoBehaviour
 
     private void LookPlayer()
     {
-        if (!isAtack)
+        if (isLookPlayer)
         {
             Vector3 dir = target.position - transform.position;
             dir.y = 0;
@@ -187,7 +184,7 @@ public abstract class Enemy : MonoBehaviour
         else if (moveDot > 0)
         {
             //接敵距離より遠いとダッシュをして、近いと歩く
-            if (distance >= engageDis)
+            if (distance >= enemySO.engageDis)
             {
                 isDash = true;
                 isWalking = false;
@@ -210,7 +207,7 @@ public abstract class Enemy : MonoBehaviour
     private void BackMoveControl()
     {
         //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
-        if (distance <= backActionDis && !isAction)
+        if (distance <= enemySO.backActionDis && !isAction)
         {
             if (isBackMove) { return; }
             backMoveCor = StartCoroutine(BackMove());
@@ -221,14 +218,14 @@ public abstract class Enemy : MonoBehaviour
     {
         agent.stoppingDistance = 0;
 
-        while (distance <= backMoveDis)
+        while (distance <= enemySO.backMoveDis)
         {
             //敵の方向を取る
             Vector3 toTarget = (target.position - transform.position).normalized;
             toTarget.y = 0;
 
             //敵の方向と反対方向を取る
-            Vector3 pos = transform.position + -toTarget * backMoveDis;
+            Vector3 pos = transform.position + -toTarget * enemySO.backMoveDis;
 
             //キャラクターの後ろを目的地として設定する
             agent.SetDestination(pos);
@@ -263,7 +260,39 @@ public abstract class Enemy : MonoBehaviour
         isDeath = true;
     }
 
-    protected abstract void InitAnim();
+    protected virtual void InitAnim()
+    {
+        isLookPlayer = true;
+        agent.stoppingDistance = enemySO.stoopingDis;
+        lotteryTime = enemySO.attackCoolDown;
+        attackProbability = enemySO.attackInitProbability;
+        rand = 0;
+        agent.isStopped = false;
+        isAction = false;
+    }
+
+    //向き補正
+    public void DirCorrection()
+    {
+        isLookPlayer = true;
+    }
+
+    public void DirCorrectionEnd()
+    {
+        isLookPlayer = false;
+    }
+
+    //攻撃判定の出現
+    public void AttackJudgmentActive()
+    {
+        _weaponController.SetColliderActive(true);
+    }
+
+    //攻撃判定の終了
+    public void AttackJudgmentEnd()
+    {
+        _weaponController.SetColliderActive(false);
+    }
 
     public void IsHitAnimEnd()
     {

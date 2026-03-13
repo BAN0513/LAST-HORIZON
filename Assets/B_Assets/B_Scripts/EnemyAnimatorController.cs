@@ -38,4 +38,6 @@ public class EnemyAnimatorController : MonoBehaviour
         if (enemy.isBackMove != isBackMove) animator.SetBool(isBackMoveHash, enemy.isBackMove);
         if (enemy.isDash != isDash)         animator.SetBool(isDashHash, enemy.isDash);
     }
+
+
 }

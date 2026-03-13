@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   maxHP: 50
   damage: 1
-  moveSpeed: 3
+  dashMoveSpeed: 3
+  walkMoveSpeed: 1
   stoopingDis: 3
-  lookRotationSpeed: 1
+  lookRotationSpeed: 2
   searchDistance: 100
   contactDistance: 100
+  engageDis: 5
+  backActionDis: 2
+  backMoveDis: 3
+  attackInitProbability: 20
+  attackUpProbability: 20
+  attackCoolDown: 3
