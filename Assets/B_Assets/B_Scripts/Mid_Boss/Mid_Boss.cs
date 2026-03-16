@@ -132,7 +132,7 @@ public class Mid_Boss : Enemy
     public void Melee2()
     {
         int rand = Random.Range(1, 101);
-        Debug.Log(dot);
+
         //ˆê’èŠm—¦‚Å“ñ’i–Ú‚ÌUŒ‚‚É”h¶‚·‚é
         if (rand <= melee2Probability && distance <= 3)
         {
