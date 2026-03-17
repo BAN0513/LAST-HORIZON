@@ -82,6 +82,7 @@ namespace Takato
         /// </summary>
         private void Attack()
         {
+            // 攻撃入力がある場合、攻撃アニメーションを再生して、武器のコライダーを有効化
             if (inputController.IsAttackInput)
             {
                 animationController.SetAttack(true);
@@ -99,6 +100,7 @@ namespace Takato
         /// </summary>
         private void Block()
         {
+            // 防御入力がある場合、防御アニメーションを再生して、シールドのコライダーを有効化
             if (inputController.BlockInput)
             {
                 animationController.SetBlock(true);

@@ -19,7 +19,7 @@ public class PlayerWeaponController : MonoBehaviour
     public void EnableWeaponCollider()
     {
         weaponCollider.enabled = true;
-        //Debug.Log("コライダーを有効化");
+        Debug.Log("コライダーを有効化");
     }
 
     /// <summary>
@@ -28,7 +28,7 @@ public class PlayerWeaponController : MonoBehaviour
     public void DisableWeaponCollider()
     {
         weaponCollider.enabled = false;
-        //Debug.Log("コライダーを無効化");
+        Debug.Log("コライダーを無効化");
     }
 
     /// <summary>
