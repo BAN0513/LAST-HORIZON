@@ -22,6 +22,7 @@ namespace Takato
         private CharacterController characterController;       // 移動管理
         private PlayerAnimationController animationController; // アニメーション管理
         private PlayerWeaponController weaponController;       // 武器管理
+        private PlayerShieldContoroller shieldController;     // シールド管理
 
         private float verticalVelocity;     // 垂直方向の速度
 
@@ -31,6 +32,7 @@ namespace Takato
             characterController = GetComponent<CharacterController>();
             animationController = GetComponent<PlayerAnimationController>();
             weaponController = GetComponentInChildren<PlayerWeaponController>();
+            shieldController = GetComponentInChildren<PlayerShieldContoroller>();
         }
 
         private void Update()
@@ -84,7 +86,6 @@ namespace Takato
             {
                 animationController.SetAttack(true);
                 weaponController?.EnableWeaponCollider(); // 攻撃入力がある場合、武器のコライダーを有効化
-                // 今後、攻撃処理を追加していきます
             }
             else
             {
@@ -101,11 +102,12 @@ namespace Takato
             if (inputController.BlockInput)
             {
                 animationController.SetBlock(true);
-                // 今後、防御処理を追加していきます。
+                shieldController?.EnableShieldCollider(); // 防御入力がある場合、シールドのコライダーを有効化
             }
             else
             {
                 animationController.SetBlock(false);
+                shieldController?.DisableShieldCollider(); // 防御入力がない場合、シールドのコライダーを無効化
             }
         }
     }
