@@ -18,6 +18,9 @@ public class EnemySO : ScriptableObject
     [Header("“G‚Ì•à‚­ƒXƒs[ƒh")]
     public float walkMoveSpeed;
 
+    [Header("“G‚Ì–hŒä—Í")]
+    public int def;
+
     [Header("“G‚ª‚±‚Ì’lˆÈã‚Í‹ß‚Ã‚©‚È‚¢")]
     public float stoopingDis; 
 

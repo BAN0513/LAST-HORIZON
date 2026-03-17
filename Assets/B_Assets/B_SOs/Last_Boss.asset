@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
-  m_Name: Enemy_1
+  m_Name: Last_Boss
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
-  maxHP: 50
+  maxHP: 1000
   damage: 1
-  dashMoveSpeed: 3
-  walkMoveSpeed: 1
-  def: 10
-  stoopingDis: 3
-  lookRotationSpeed: 5
+  dashMoveSpeed: 5
+  walkMoveSpeed: 3
+  def: 50
+  stoopingDis: 5
+  lookRotationSpeed: 3
   searchDistance: 100
   contactDistance: 100
-  engageDis: 5
+  engageDis: 10
   backActionDis: 2
   backMoveDis: 3
   attackInitProbability: 20
   attackUpProbability: 20
-  attackCoolDown: 3
+  attackCoolDown: 5

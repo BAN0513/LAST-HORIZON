@@ -41,6 +41,34 @@ public abstract class Enemy : MonoBehaviour
     //敵のHP
     public int hp { get; private set; }
 
+    //敵のスピードにかかるデバフ
+    private float debufDEX;
+    public float DebufDEX
+    {
+        get
+        {
+            return debufDEX;
+        }
+        set
+        {
+            debufDEX = value;
+        }
+    }
+
+    //敵の防御力にかかるデバフ
+    private int debufDEF;
+    public int DebufDEF
+    {
+        get
+        {
+            return debufDEF;
+        }
+        set
+        {
+            debufDEF = value;
+        }
+    }
+
     //何かしらアクションが抽選されているかどうか
     protected bool isAction = false;
 
@@ -239,6 +267,9 @@ public abstract class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        damage -= enemySO.def - debufDEF;
+        if (damage <= 0) { return; }
+
         hp -= damage;
         hpSliider.value = hp;
 
@@ -251,6 +282,7 @@ public abstract class Enemy : MonoBehaviour
         {
             isHit = true;
             InitAnim();
+            agent.isStopped = true;
         }
     }
 
@@ -297,6 +329,7 @@ public abstract class Enemy : MonoBehaviour
     public void IsHitAnimEnd()
     {
         isHit = false;
+        agent.isStopped = false;
     }
 
     public void DeathAnimEnd()
@@ -308,7 +341,7 @@ public abstract class Enemy : MonoBehaviour
     [ContextMenu("Damage")]
     public void Damage()
     {
-        TakeDamage(100);
+        TakeDamage(60);
     }
 
     //デバッグ用

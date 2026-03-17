@@ -16,6 +16,7 @@ MonoBehaviour:
   damage: 1
   dashMoveSpeed: 3
   walkMoveSpeed: 1
+  def: 30
   stoopingDis: 3
   lookRotationSpeed: 2
   searchDistance: 100
