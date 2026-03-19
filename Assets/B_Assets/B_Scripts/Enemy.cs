@@ -25,7 +25,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected Slider hpSliider;
 
     [Header("武器のスクリプト")]
-    [SerializeField] protected WeaponController _weaponController;
+    [SerializeField] protected EnemyWeaponController _weaponController;
 
     [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
     [SerializeField] protected Transform forward;

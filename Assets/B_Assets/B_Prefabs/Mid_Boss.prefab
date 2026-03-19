@@ -3034,6 +3034,7 @@ GameObject:
   - component: {fileID: 8079745042246479441}
   - component: {fileID: 4716860384014402527}
   - component: {fileID: 4916235815983510813}
+  - component: {fileID: 8858651600403690647}
   m_Layer: 0
   m_Name: Mid_Boss
   m_TagString: Untagged
@@ -3081,8 +3082,6 @@ MonoBehaviour:
   forward: {fileID: 8913134188470146937}
   attackDis: 1.5
   melee2Probability: 50
-  mahoujin: {fileID: 1176117252312639125, guid: 5761b061daecc52438ffb83b28fd97bf, type: 3}
-  tornado: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
 --- !u!114 &8079745042246479441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3139,6 +3138,29 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!136 &8858651600403690647
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6764533071079696750}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3682368
+  m_Height: 2.416975
+  m_Direction: 1
+  m_Center: {x: -0.023107484, y: 0.70848835, z: -0.080985524}
 --- !u!1 &6858001504629810908
 GameObject:
   m_ObjectHideFlags: 0

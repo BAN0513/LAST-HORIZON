@@ -6,6 +6,7 @@ public class Last_BossAnimatorController : EnemyAnimatorController
 
     int isChantHash;
     int isMagicHash;
+    int isFireHash;
 
     protected override void Start()
     {
@@ -15,6 +16,7 @@ public class Last_BossAnimatorController : EnemyAnimatorController
 
         isChantHash   = Animator.StringToHash("isChant");
         isMagicHash   = Animator.StringToHash("isMagic");
+        isFireHash    = Animator.StringToHash("isFire");
     }
 
     protected override void Update()
@@ -23,8 +25,10 @@ public class Last_BossAnimatorController : EnemyAnimatorController
 
         bool isChant   = animator.GetBool(isChantHash);
         bool isMagic   = animator.GetBool(isMagicHash);
+        bool isFire    = animator.GetBool(isFireHash);
 
         if (last_Boss.isChant != isChant)     animator.SetBool(isChantHash, last_Boss.isChant);
         if (last_Boss.isMagic != isMagic)     animator.SetBool(isMagicHash, last_Boss.isMagic);
+        if (last_Boss.isFire  != isFire)      animator.SetBool(isFireHash,  last_Boss.isFire); 
     }
 }

@@ -4,10 +4,13 @@ public class Last_Boss : Enemy
 {
     [SerializeField] private GameObject magicCircleEffect;
     [SerializeField] private GameObject tornadoEffect;
+    [SerializeField] private GameObject fireEffect;
+    private GameObject magicCircle;
 
     //アニメーションで使うやつ
     public bool isChant { get; private set; }
     public bool isMagic { get; private set; }
+    public bool isFire { get; private set; }
 
     protected override void Start()
     {
@@ -17,7 +20,11 @@ public class Last_Boss : Enemy
 
     protected override void Update()
     {
-        if (isDeath || isHit) { return; }
+        if (isDeath || isHit) 
+        {
+            Destroy(magicCircle);
+            return; 
+        }
         base.Update();
     }
 
@@ -82,8 +89,15 @@ public class Last_Boss : Enemy
         rand = 0;
         isLookPlayer = false;
         agent.isStopped = true;
-        isChant = true;
 
+        if (distance >= 7)
+        {
+            isChant = true;
+        }
+        else
+        {
+            isFire = true;
+        }
     }
 
     protected override void Death()
@@ -96,7 +110,7 @@ public class Last_Boss : Enemy
     //ここから下はAnimator関連の関数
     public void ChantStart()
     {
-        GameObject magicCircle = Instantiate(magicCircleEffect, transform.position, Quaternion.identity);
+        magicCircle = Instantiate(magicCircleEffect, transform.position, Quaternion.identity);
         Destroy(magicCircle, 10);
     }
 
@@ -111,11 +125,22 @@ public class Last_Boss : Enemy
         Destroy(tornado, 15);
     }
 
+    public void Fire()
+    {
+        Vector3 toTarget = target.position - transform.position;
+        Vector3 nor = (toTarget).normalized;
+        Quaternion quaternion = Quaternion.LookRotation(toTarget);
+        GameObject fire = Instantiate(fireEffect, forward.position, quaternion);
+        Rigidbody rb = fire.GetComponent<Rigidbody>();
+        rb.linearVelocity = nor * 5;
+    }
+
     //攻撃のアニメーションが終わったら全部初期化する
     protected override void InitAnim()
     {
         base.InitAnim();
         isChant = false;
         isMagic = false;
+        isFire = false;
     }
 }

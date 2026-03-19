@@ -17,7 +17,7 @@ MonoBehaviour:
   dashMoveSpeed: 5
   walkMoveSpeed: 3
   def: 50
-  stoopingDis: 5
+  stoopingDis: 10
   lookRotationSpeed: 3
   searchDistance: 100
   contactDistance: 100

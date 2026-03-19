@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public class EnemyWeaponController : MonoBehaviour
 {
     private BoxCollider boxCollider; // 武器のコライダー
 
@@ -20,7 +20,7 @@ public class WeaponController : MonoBehaviour
         // 敵のタグに当たった時の処理
         if (other.CompareTag("Player"))
         {
-            Debug.Log("攻撃が当たった");
+            Debug.Log("敵の攻撃が当たった");
         }
     }
 }
