@@ -1194,6 +1194,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1125671580025391354, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2864310820104485418, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1244,31 +1248,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.64400077
+      value: 0.6109998
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9080001
+      value: 0.937
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.12900019
+      value: -0.06700015
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8606819
+      value: 0.860682
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.50914305
+      value: 0.50914294
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.000000801277
+      value: 0.0000006877811
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000041652038
+      value: 0.00000043127665
+      objectReference: {fileID: 0}
+    - target: {fileID: 9086360242446834008, guid: 3c9db6ba79f01344fb5badecdeab408b, type: 3}
+      propertyPath: attackDis
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

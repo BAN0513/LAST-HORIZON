@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   maxHP: 1000
   damage: 1
-  dashMoveSpeed: 5
-  walkMoveSpeed: 3
+  dashMoveSpeed: 2
+  walkMoveSpeed: 1
   def: 50
   stoopingDis: 10
   lookRotationSpeed: 3

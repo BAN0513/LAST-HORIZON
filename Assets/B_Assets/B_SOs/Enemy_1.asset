@@ -15,7 +15,7 @@ MonoBehaviour:
   maxHP: 50
   damage: 1
   dashMoveSpeed: 3
-  walkMoveSpeed: 1
+  walkMoveSpeed: 2
   def: 10
   stoopingDis: 3
   lookRotationSpeed: 5

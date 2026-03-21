@@ -113,6 +113,8 @@ public abstract class Enemy : MonoBehaviour
         agent.speed = enemySO.dashMoveSpeed;
 
         agent.stoppingDistance = enemySO.stoopingDis;
+
+        lotteryTime = enemySO.attackCoolDown;
     }
 
     protected virtual void Update()

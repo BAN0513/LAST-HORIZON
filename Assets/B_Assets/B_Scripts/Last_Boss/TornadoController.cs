@@ -14,11 +14,17 @@ public class TornadoController : MonoBehaviour
     // ‰~‰^“®ŽüŠú
     [SerializeField] private float _period = 2;
 
+    private ParticleSystem particle;
+    private GameObject target;
     private void Start()
     {
         transform.Rotate(-90, 0, 0);
         _center = transform.position;
         _center.y = 0;
+
+        particle = GetComponent<ParticleSystem>();
+        target = GameObject.FindWithTag("Player");
+        particle.trigger.SetCollider(0, target.transform);
     }
 
     private void Update()
@@ -33,11 +39,16 @@ public class TornadoController : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Player"))
+    //    {
+    //        Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
+    //    }
+    //}
+
+    private void OnParticleTrigger()
     {
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
-        }
+        Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
     }
 }

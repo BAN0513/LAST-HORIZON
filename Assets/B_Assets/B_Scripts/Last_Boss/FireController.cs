@@ -20,7 +20,7 @@ public class FireController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("‰Î‚ª“–‚½‚Á‚½");
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Last_Boss : Enemy
@@ -5,12 +6,15 @@ public class Last_Boss : Enemy
     [SerializeField] private GameObject magicCircleEffect;
     [SerializeField] private GameObject tornadoEffect;
     [SerializeField] private GameObject fireEffect;
+    [SerializeField] private GameObject impactEffect;
     private GameObject magicCircle;
 
     //アニメーションで使うやつ
     public bool isChant { get; private set; }
     public bool isMagic { get; private set; }
     public bool isFire { get; private set; }
+    public bool isSlash { get; private set; }
+    public bool isRunJumpAttack {  get; private set; }
 
     protected override void Start()
     {
@@ -20,6 +24,7 @@ public class Last_Boss : Enemy
 
     protected override void Update()
     {
+        //Debug.Log(distance);
         if (isDeath || isHit) 
         {
             Destroy(magicCircle);
@@ -43,28 +48,24 @@ public class Last_Boss : Enemy
                     //行動の抽選で使う
                     rand = Random.Range(1, 101);
 
+                    isAction = true;
+
+                    switch (distance)
+                    {
+                        case float dis when (dis >= 0 && dis <= 3):
+                            ShortDistanceAction();
+                            break;
+                        case float dis when (dis > 3 && dis <= 7):
+                            MediumDistanceAction();
+                            break;
+                        case float dis when (dis > 7 && dis <= 10):
+                            LongDistanceAction();
+                            break;
+                    }
+
                     //次の抽選に必要な時間をランダムで決める
                     lotteryTime = Random.Range(0.5f, 2.0f);
-                    isAction = true;
                 }
-            }
-
-            //確率で行動を決める
-            switch (rand)
-            {
-                case int r when (r > 0 && r <= attackProbability):
-                    AttackMove();
-                    break;
-                case 0:
-                    break;
-                default:
-                    //攻撃じゃなかったら攻撃の確率を上げる
-                    if (isAction)
-                    {
-                        isAction = false;
-                        attackProbability += enemySO.attackUpProbability;
-                    }
-                    break;
             }
         }
         else
@@ -75,28 +76,109 @@ public class Last_Boss : Enemy
         }
     }
 
-
-
-
-    private void AttackMove()
+    private void ShortDistanceAction()
     {
+        //確率で行動を決める
+        switch (rand)
+        {
+            case int r when (r > 0 && r <= attackProbability):
+                StartCoroutine(Slash());
+                break;
+            default:
+                DoNotAttack();
+                break;
+        }
+    }
+
+    private void MediumDistanceAction()
+    {
+        switch (rand)
+        {
+            case int r when (r > 0 && r <= attackProbability):
+                StartCoroutine(Fire());
+                break;
+            default:
+                DoNotAttack();
+                break;
+        }
+    }
+
+    private void LongDistanceAction()
+    {
+        switch (rand)
+        {
+            case int r when (r > 0 && r <= attackProbability / 2):
+                StartCoroutine(Tornado());
+                break;
+            case int r when (r > attackProbability / 2 && r <= attackProbability):
+                StartCoroutine(DashJumpAttack());
+                break;
+            default:
+                DoNotAttack();
+                break;
+        }
+    }
+
+    private void DoNotAttack()
+    {
+        //攻撃じゃなかったら攻撃の確率を上げる
+        isAction = false;
+        attackProbability += enemySO.attackUpProbability;
+
+    }
+
+    IEnumerator Slash()
+    {
+        StopBackMoveCor();
+
+        agent.stoppingDistance = 0;
+
+        if (distance <= attackDis)
+        {
+            agent.isStopped = true;
+            isSlash = true;
+        }
+
+        yield return null;
+    }
+
+    IEnumerator DashJumpAttack()
+    {
+        StopBackMoveCor();
+        isRunJumpAttack = true;
+        isLookPlayer = false;
+        agent.isStopped = true;
+        yield return null;
+    }
+
+    IEnumerator Fire()
+    {
+        StopBackMoveCor();
+        isLookPlayer = false;
+        agent.isStopped = true;
+        isFire = true;
+        yield return null;
+    }
+
+    IEnumerator Tornado()
+    {
+        StopBackMoveCor();
+
+        isLookPlayer = false;
+        agent.isStopped = true;
+        isChant = true;
+
+        yield return null;
+    }
+
+    private void StopBackMoveCor()
+    {
+        //rand = 0;
         //もし後退中なら後退を止める
         if (backMoveCor != null)
         {
             isBackMove = false;
             StopCoroutine(backMoveCor);
-        }
-        rand = 0;
-        isLookPlayer = false;
-        agent.isStopped = true;
-
-        if (distance >= 7)
-        {
-            isChant = true;
-        }
-        else
-        {
-            isFire = true;
         }
     }
 
@@ -125,14 +207,20 @@ public class Last_Boss : Enemy
         Destroy(tornado, 15);
     }
 
-    public void Fire()
+    public void FireSpawn()
     {
-        Vector3 toTarget = target.position - transform.position;
+        Vector3 toTarget = target.position - forward.position;
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
         GameObject fire = Instantiate(fireEffect, forward.position, quaternion);
         Rigidbody rb = fire.GetComponent<Rigidbody>();
         rb.linearVelocity = nor * 5;
+    }
+
+    public void Impact()
+    {
+        GameObject impact = Instantiate(impactEffect, transform.position, Quaternion.identity);
+        Destroy(impact, 1);
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
@@ -142,5 +230,7 @@ public class Last_Boss : Enemy
         isChant = false;
         isMagic = false;
         isFire = false;
+        isSlash = false;
+        isRunJumpAttack = false;
     }
 }
