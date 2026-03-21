@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 /// <summary>
@@ -11,6 +13,11 @@ namespace Ozo
         [Header("プレイヤー追跡")]
         public bool Camera = false;
 
+        [Header("追跡カメラ座標")]
+        public float x = 0;
+        public float y = 0;
+        public float z = 0;
+
         void Update()
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -21,7 +28,7 @@ namespace Ozo
                 float Y = player.transform.position.y;
                 float Z = player.transform.position.z;
 
-                Vector3 v3 = new Vector3(X, Y + 1.5f, Z - 5f);
+                Vector3 v3 = new Vector3(X + x, Y + y, Z + z);
                 transform.position = v3;
             }
             if (!Camera)
