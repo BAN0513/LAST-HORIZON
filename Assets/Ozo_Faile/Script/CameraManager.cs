@@ -21,7 +21,7 @@ namespace Ozo
                 float Y = player.transform.position.y;
                 float Z = player.transform.position.z;
 
-                Vector3 v3 = new Vector3(X, Y, Z - 10f);
+                Vector3 v3 = new Vector3(X, Y + 1.5f, Z - 5f);
                 transform.position = v3;
             }
             if (!Camera)

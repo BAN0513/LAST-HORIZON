@@ -44,11 +44,11 @@ public class StageChage : MonoBehaviour
     {
         
         if (StageNumber == 1)
-            transform.position = new Vector3(0, 1, 15);
+            transform.position = new Vector3(0, 1, 20);
         if (StageNumber == 2)
-            transform.position = new Vector3(-15, 1, 15);
+            transform.position = new Vector3(-50, 1, -10);
         if (StageNumber == 3)
-            transform.position = new Vector3(20, 1, 15);
+            transform.position = new Vector3(50, 1, -10);
         if (StageNumber == 0)
             transform.position = new Vector3(0, 1, 0);
 
@@ -62,6 +62,12 @@ public class StageChage : MonoBehaviour
     private void OnDv_Warp(InputValue var)
     {
         Chage = true;
+    }
+
+    private void OnTriggerStay(Collider collider)
+    {
+        if (collider.gameObject.tag == "Warps")
+            Chage = true;
     }
 
     /// <summary>
