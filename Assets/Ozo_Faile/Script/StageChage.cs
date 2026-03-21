@@ -16,6 +16,8 @@ public class StageChage : MonoBehaviour
 
     public static bool IsChage = false;//FadeController共有用変数
 
+    //public bool EndWarp = false;
+
     private void Start()
     {
         if (StageNumber < 0 || StageNumber > 3)
@@ -27,15 +29,17 @@ public class StageChage : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(Chage)
+        if (Chage)
         {
-            StageNumber++;
-            if (StageNumber > 3) StageNumber = 0;
-            IsChage = true;
+            //IsChage = true;
             Invoke(nameof(Warp), 1f);
-            Chage = false;
         }
     }
+
+    //private void GoWarp()
+    //{
+    //    Invoke(nameof(Warp), 1f);
+    //}
 
     /// <summary>
     /// ステージチェンジ時のワープ関数
@@ -43,14 +47,16 @@ public class StageChage : MonoBehaviour
     private void Warp()
     {
         
-        if (StageNumber == 1)
-            transform.position = new Vector3(0, 1, 20);
-        if (StageNumber == 2)
-            transform.position = new Vector3(-50, 1, -10);
-        if (StageNumber == 3)
-            transform.position = new Vector3(50, 1, -10);
-        if (StageNumber == 0)
-            transform.position = new Vector3(0, 1, 0);
+        if (StageNumber == 1 /*&& !EndWarp*/)
+            transform.position = new Vector3(0, 0, 20);
+        if (StageNumber == 2 /*&& !EndWarp*/)
+            transform.position = new Vector3(-50, 0, -10);
+        if (StageNumber == 3 /*&& !EndWarp*/)
+            transform.position = new Vector3(50, 0, -10);
+        if (StageNumber == 0 /*&& !EndWarp*/)
+            transform.position = new Vector3(0, 0, 0);
+
+        //EndWarp = true;
 
         Invoke(nameof(NotIsChage), 1f);
     }
@@ -64,10 +70,16 @@ public class StageChage : MonoBehaviour
         Chage = true;
     }
 
-    private void OnTriggerStay(Collider collider)
+    private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.tag == "Warps")
+        {
             Chage = true;
+            StageNumber++;
+            if (StageNumber > 3) StageNumber = 0;
+            IsChage = true;
+            //GoWarp();
+        }
     }
 
     /// <summary>
@@ -76,6 +88,8 @@ public class StageChage : MonoBehaviour
     private void NotIsChage()
     {
         IsChage = false; 
+        Chage = false;
+        //EndWarp = false;
     }
 
     private void OnDestroy()
