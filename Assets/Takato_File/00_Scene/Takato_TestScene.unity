@@ -396,6 +396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b79deeb2400e604cb8ae69a7adce159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShieldContoroller
+  damageCutRate: 0
 --- !u!1 &1632952731
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +677,14 @@ PrefabInstance:
       propertyPath: enemySO
       value: 
       objectReference: {fileID: 11400000, guid: 5fb6d6923c23f7e41add6f327d1d2769, type: 2}
+    - target: {fileID: 1878319838695366945, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622748253210100463, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 2864310820104485418, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -784,6 +793,22 @@ PrefabInstance:
     - target: {fileID: 1766420624657473718, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5417356986428558454, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: moveSpeed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642656658678462048, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: attackDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5648563861198748364, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c2413a634b748414e89b777a1095d7cc, type: 2}
+    - target: {fileID: 6648292823297677937, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: animationSmoothTime
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 8466799416408067322, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
       propertyPath: m_Size.x
