@@ -49,14 +49,16 @@ public class StageChage : MonoBehaviour
         
         if (StageNumber == 1 /*&& !EndWarp*/)
             transform.position = new Vector3(0, 0, 20);
-        if (StageNumber == 2 /*&& !EndWarp*/)
+        else if (StageNumber == 2 /*&& !EndWarp*/)
             transform.position = new Vector3(-50, 0, -10);
-        if (StageNumber == 3 /*&& !EndWarp*/)
+        else if (StageNumber == 3 /*&& !EndWarp*/)
             transform.position = new Vector3(50, 0, -10);
-        if (StageNumber == 0 /*&& !EndWarp*/)
+        else if (StageNumber == 0 /*&& !EndWarp*/)
             transform.position = new Vector3(0, 0, 0);
 
         //EndWarp = true;
+
+        Chage = false;
 
         Invoke(nameof(NotIsChage), 1f);
     }
@@ -68,6 +70,9 @@ public class StageChage : MonoBehaviour
     private void OnDv_Warp(InputValue var)
     {
         Chage = true;
+        StageNumber++;
+        if (StageNumber > 3) StageNumber = 0;
+        IsChage = true;
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -88,7 +93,7 @@ public class StageChage : MonoBehaviour
     private void NotIsChage()
     {
         IsChage = false; 
-        Chage = false;
+
         //EndWarp = false;
     }
 
