@@ -1,9 +1,11 @@
+using Takato;
 using UnityEngine;
 
 public class ImpactController : MonoBehaviour
 {
     ParticleSystem particle;
     GameObject target;
+    public int damage;
 
     private void Start()
     {
@@ -16,5 +18,7 @@ public class ImpactController : MonoBehaviour
     private void OnParticleTrigger()
     {
         Debug.Log("è’åÇîgÇ…ìñÇΩÇ¡ÇΩ");
+        PlayerController player = target.GetComponent<PlayerController>();
+        player.TakeDamage(damage);
     }
 }

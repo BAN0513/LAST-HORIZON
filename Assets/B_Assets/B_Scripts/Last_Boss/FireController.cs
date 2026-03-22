@@ -1,8 +1,10 @@
 using System.Collections;
+using Takato;
 using UnityEngine;
 
 public class FireController : MonoBehaviour
 {
+    public int damage;
     private void Start()
     {
         StartCoroutine(DestroyCnt());
@@ -19,7 +21,8 @@ public class FireController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("‰Î‚ª“–‚½‚Á‚½");
+            PlayerController player = other.GetComponent<PlayerController>();
+            player.TakeDamage(damage);
             Destroy(gameObject);
         }
     }
