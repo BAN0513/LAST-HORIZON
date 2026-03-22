@@ -102,7 +102,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FadeIn"",
+                    ""name"": ""Pause"",
                     ""type"": ""Button"",
                     ""id"": ""f50bd797-f434-4477-93ae-ca9118ec53c2"",
                     ""expectedControlType"": """",
@@ -139,7 +139,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FadeIn"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -162,7 +162,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         // PushBottom
         m_PushBottom = asset.FindActionMap("PushBottom", throwIfNotFound: true);
         m_PushBottom_Dv_Warp = m_PushBottom.FindAction("Dv_Warp", throwIfNotFound: true);
-        m_PushBottom_FadeIn = m_PushBottom.FindAction("FadeIn", throwIfNotFound: true);
+        m_PushBottom_Pause = m_PushBottom.FindAction("Pause", throwIfNotFound: true);
         m_PushBottom_FadeOut = m_PushBottom.FindAction("FadeOut", throwIfNotFound: true);
     }
 
@@ -245,7 +245,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PushBottom;
     private List<IPushBottomActions> m_PushBottomActionsCallbackInterfaces = new List<IPushBottomActions>();
     private readonly InputAction m_PushBottom_Dv_Warp;
-    private readonly InputAction m_PushBottom_FadeIn;
+    private readonly InputAction m_PushBottom_Pause;
     private readonly InputAction m_PushBottom_FadeOut;
     /// <summary>
     /// Provides access to input actions defined in input action map "PushBottom".
@@ -263,9 +263,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Dv_Warp => m_Wrapper.m_PushBottom_Dv_Warp;
         /// <summary>
-        /// Provides access to the underlying input action "PushBottom/FadeIn".
+        /// Provides access to the underlying input action "PushBottom/Pause".
         /// </summary>
-        public InputAction @FadeIn => m_Wrapper.m_PushBottom_FadeIn;
+        public InputAction @Pause => m_Wrapper.m_PushBottom_Pause;
         /// <summary>
         /// Provides access to the underlying input action "PushBottom/FadeOut".
         /// </summary>
@@ -299,9 +299,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Dv_Warp.started += instance.OnDv_Warp;
             @Dv_Warp.performed += instance.OnDv_Warp;
             @Dv_Warp.canceled += instance.OnDv_Warp;
-            @FadeIn.started += instance.OnFadeIn;
-            @FadeIn.performed += instance.OnFadeIn;
-            @FadeIn.canceled += instance.OnFadeIn;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
             @FadeOut.started += instance.OnFadeOut;
             @FadeOut.performed += instance.OnFadeOut;
             @FadeOut.canceled += instance.OnFadeOut;
@@ -319,9 +319,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Dv_Warp.started -= instance.OnDv_Warp;
             @Dv_Warp.performed -= instance.OnDv_Warp;
             @Dv_Warp.canceled -= instance.OnDv_Warp;
-            @FadeIn.started -= instance.OnFadeIn;
-            @FadeIn.performed -= instance.OnFadeIn;
-            @FadeIn.canceled -= instance.OnFadeIn;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
             @FadeOut.started -= instance.OnFadeOut;
             @FadeOut.performed -= instance.OnFadeOut;
             @FadeOut.canceled -= instance.OnFadeOut;
@@ -373,12 +373,12 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDv_Warp(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "FadeIn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnFadeIn(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "FadeOut" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

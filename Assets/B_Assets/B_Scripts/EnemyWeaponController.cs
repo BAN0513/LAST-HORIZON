@@ -1,8 +1,10 @@
+using Takato;
 using UnityEngine;
 
 public class EnemyWeaponController : MonoBehaviour
 {
     private BoxCollider boxCollider; // 武器のコライダー
+    public int damage;
 
     private void Start()
     {
@@ -20,7 +22,8 @@ public class EnemyWeaponController : MonoBehaviour
         // 敵のタグに当たった時の処理
         if (other.CompareTag("Player"))
         {
-            Debug.Log("敵の攻撃が当たった");
+            PlayerController player = other.GetComponent<PlayerController>();
+            player.TakeDamage(damage);
         }
     }
 }

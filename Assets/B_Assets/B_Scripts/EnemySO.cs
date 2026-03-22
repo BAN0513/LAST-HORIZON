@@ -10,7 +10,7 @@ public class EnemySO : ScriptableObject
     public int maxHP;
 
     [Header("“G‚ÌUŒ‚—Í")]
-    public float damage;
+    public int damage;
 
     [Header("“G‚Ì‘–‚éƒXƒs[ƒh")]
     public float dashMoveSpeed;

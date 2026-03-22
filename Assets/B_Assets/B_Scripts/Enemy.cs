@@ -115,6 +115,8 @@ public abstract class Enemy : MonoBehaviour
         agent.stoppingDistance = enemySO.stoopingDis;
 
         lotteryTime = enemySO.attackCoolDown;
+
+        _weaponController.damage = enemySO.damage;
     }
 
     protected virtual void Update()
@@ -278,6 +280,7 @@ public abstract class Enemy : MonoBehaviour
         if (hp <= 0)
         {
             hpSliider.gameObject.SetActive(false);
+            isHit = false;
             Death();
         }
         else
@@ -343,7 +346,7 @@ public abstract class Enemy : MonoBehaviour
     [ContextMenu("Damage")]
     public void Damage()
     {
-        TakeDamage(60);
+        TakeDamage(600);
     }
 
     //デバッグ用
