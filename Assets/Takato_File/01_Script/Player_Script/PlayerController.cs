@@ -35,6 +35,11 @@ namespace Takato
             shieldController = GetComponentInChildren<PlayerShieldContoroller>();
         }
 
+        private void Start()
+        {
+            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにするのと初期のHPを設定
+        }
+
         private void Update()
         {
             hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
@@ -78,7 +83,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// 攻撃処理（後から拡張可能）
+        /// 攻撃処理
         /// </summary>
         private void Attack()
         {
@@ -96,7 +101,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// 防御処理（後から拡張可能）
+        /// 防御処理
         /// </summary>
         private void Block()
         {
@@ -111,6 +116,15 @@ namespace Takato
                 animationController.SetBlock(false);
                 shieldController?.DisableShieldCollider(); // 防御入力がない場合、シールドのコライダーを無効化
             }
+        }
+
+        /// <summary>
+        /// プレイヤーがダメージを受ける処理
+        /// </summary>
+        public void TakeDamage(int damage)
+        {
+            hp -= damage;
+            Debug.Log($"プレイヤーは{damage}のダメージを受けました！残りHP: {hp}");
         }
     }
 } 

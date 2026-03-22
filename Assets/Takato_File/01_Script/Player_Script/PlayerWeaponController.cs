@@ -5,7 +5,13 @@ using UnityEngine;
 /// </summary>
 public class PlayerWeaponController : MonoBehaviour
 {
-    private CapsuleCollider weaponCollider;
+    [Header("武器のステータス")]
+    [Space(10)]
+    [Header("武器の攻撃力")]
+    [SerializeField] private float attackDamage;
+
+
+    private CapsuleCollider weaponCollider; // 武器のコライダー
 
     private void Start()
     {
@@ -38,7 +44,13 @@ public class PlayerWeaponController : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("攻撃が当たった");
+            //Enemyのコンポーネントを取得してダメージを与える
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage((int)attackDamage); //与えるダメージ
+                Debug.Log("敵にダメージを与えました！");
+            }
         }
     }
 }
