@@ -1,3 +1,4 @@
+using Takato;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
@@ -16,6 +17,7 @@ public class TornadoController : MonoBehaviour
 
     private ParticleSystem particle;
     private GameObject target;
+    public int damage;
     private void Start()
     {
         transform.Rotate(-90, 0, 0);
@@ -50,5 +52,7 @@ public class TornadoController : MonoBehaviour
     private void OnParticleTrigger()
     {
         Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
+        PlayerController player = target.GetComponent<PlayerController>();
+        player.TakeDamage(damage);
     }
 }

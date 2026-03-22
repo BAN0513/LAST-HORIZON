@@ -204,6 +204,8 @@ public class Last_Boss : Enemy
     public void Magic()
     {
         GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
+        TornadoController tornadoController = tornado.GetComponent<TornadoController>();
+        tornadoController.damage = enemySO.damage;
         Destroy(tornado, 15);
     }
 
@@ -213,6 +215,8 @@ public class Last_Boss : Enemy
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
         GameObject fire = Instantiate(fireEffect, forward.position, quaternion);
+        FireController fireController = fire.GetComponent<FireController>();
+        fireController.damage = enemySO.damage;
         Rigidbody rb = fire.GetComponent<Rigidbody>();
         rb.linearVelocity = nor * 5;
     }
@@ -220,6 +224,8 @@ public class Last_Boss : Enemy
     public void Impact()
     {
         GameObject impact = Instantiate(impactEffect, transform.position, Quaternion.identity);
+        ImpactController impactController = impact.GetComponent<ImpactController>();
+        impactController.damage = enemySO.damage;
         Destroy(impact, 1);
     }
 
