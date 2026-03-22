@@ -25,7 +25,6 @@ public class PlayerShieldContoroller : MonoBehaviour
     public void EnableShieldCollider()
     {
         shieldCollider.enabled = true; // シールドのコライダーを有効化
-        ReceiveAttack(0, null);        // ダメージカット率を適用するためにダミーの攻撃を受ける
         Debug.Log("シールドのコライダーを有効化");
     }
 
