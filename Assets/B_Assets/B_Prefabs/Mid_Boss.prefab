@@ -2595,7 +2595,7 @@ GameObject:
   - component: {fileID: 2320539358034341674}
   m_Layer: 0
   m_Name: Shield
-  m_TagString: Untagged
+  m_TagString: Shield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2732,7 +2732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7e56f827168c84a9ffd036f162d323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyShieldController
-  enemy: {fileID: 0}
+  damageCutRate: 0.5
 --- !u!1 &5903175605236720100
 GameObject:
   m_ObjectHideFlags: 0

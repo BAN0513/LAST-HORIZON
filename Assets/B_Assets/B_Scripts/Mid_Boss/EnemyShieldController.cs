@@ -11,7 +11,9 @@ public class EnemyShieldController : MonoBehaviour
         }
     }
     private BoxCollider boxCollider;
-    private float damageCutRate;
+
+    [Header("ダメージのカット率")]
+    [SerializeField] private float damageCutRate;
 
     private void Start()
     {
