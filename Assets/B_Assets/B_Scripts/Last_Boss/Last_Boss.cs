@@ -224,7 +224,7 @@ public class Last_Boss : Enemy
     public void Impact()
     {
         GameObject impact = Instantiate(impactEffect, transform.position, Quaternion.identity);
-        ImpactController impactController = impact.GetComponent<ImpactController>();
+        ImpactController impactController = impact.GetComponentInChildren<ImpactController>();
         impactController.damage = enemySO.damage;
         Destroy(impact, 1);
     }
