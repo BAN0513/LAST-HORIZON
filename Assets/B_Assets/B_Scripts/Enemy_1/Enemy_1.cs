@@ -38,7 +38,7 @@ public class Enemy_1 : Enemy
                     rand = Random.Range(1, 101);
 
                     //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(0.5f, 2.0f);
+                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                     isAction = true;
                 }
             }

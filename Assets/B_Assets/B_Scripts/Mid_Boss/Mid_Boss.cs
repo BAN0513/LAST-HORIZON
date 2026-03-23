@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class Mid_Boss : Enemy
@@ -6,6 +7,8 @@ public class Mid_Boss : Enemy
 
     [Header("二段目の攻撃に派生する確率")]
     [Range(0, 100)][SerializeField] private float melee2Probability = 50;
+
+    private EnemyShieldController _shieldController;
 
     //アニメーションで使うやつ
     public bool isMelee1 { get; private set; }
@@ -17,6 +20,9 @@ public class Mid_Boss : Enemy
     {
         base.Start();
         attackProbability = enemySO.attackInitProbability;
+
+        _shieldController = GetComponentInChildren<EnemyShieldController>();
+        _shieldController.Enemy = this;
     }
 
     protected override void Update()
@@ -28,16 +34,20 @@ public class Mid_Boss : Enemy
 
     private void CheckPlayerAttack()
     {
+        float blockDistance = 3;  //この値より距離が遠いとブロックしない
+        float blockDot = 0.5f;    //この値よりDotが低いとブロックしない
+
         if (isAction) 
         {
             isBlock = false;
         }
-        else if (playerAnimationController.IsAttackMove && distance <= 3 && dot > 0.5f)
+        else if (playerAnimationController.IsAttackMove && distance <= blockDistance && dot > blockDot)
         {
 
             isBlock = true;
             agent.isStopped = true;
             isLookPlayer = false;
+            _shieldController.SetColliderActive(true);
 
         }
     }
@@ -58,7 +68,7 @@ public class Mid_Boss : Enemy
                     rand = Random.Range(1, 101);
 
                     //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(0.5f, 2.0f);
+                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                     isAction = true;
                 }
             }
@@ -110,11 +120,14 @@ public class Mid_Boss : Enemy
             agent.isStopped = true;
             isLookPlayer = false;
             rand = 0;
-            if (dot >= 0.4f && !is360Attack)
+
+            float attackDot = 0.4f;
+
+            if (dot >= attackDot && !is360Attack)
             {
                 isMelee1 = true;
             }
-            else if (dot < 0.4f && !isMelee1)
+            else if (dot < attackDot && !isMelee1)
             {
                 is360Attack = true;
             }
@@ -132,11 +145,13 @@ public class Mid_Boss : Enemy
     public void Melee2()
     {
         int rand = Random.Range(1, 101);
+        float secondAttackDis = 3;     //この値より距離が遠いと二段目の攻撃に派生しない
+        float secondAttackDot = 0.4f;  //この値よりDotが高いと前方攻撃、低いと360度攻撃
 
         //一定確率で二段目の攻撃に派生する
-        if (rand <= melee2Probability && distance <= 3)
+        if (rand <= melee2Probability && distance <= secondAttackDis)
         {
-            if (dot >= 0.4f)
+            if (dot >= secondAttackDot)
             {
                 isMelee2 = true;
             }
@@ -158,6 +173,7 @@ public class Mid_Boss : Enemy
         isMelee1 = false;
         isMelee2 = false;
         is360Attack = false;
+        isBlock = false;
     }
 
     public void BlockEnd()
@@ -165,5 +181,6 @@ public class Mid_Boss : Enemy
         agent.isStopped = false;
         isBlock = false;
         isLookPlayer = true;
+        _shieldController.SetColliderActive(false);
     }
 }

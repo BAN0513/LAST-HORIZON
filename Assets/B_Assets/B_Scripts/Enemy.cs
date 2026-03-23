@@ -13,6 +13,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected int rand;
     protected float lotteryTime;
+    protected float lotteryMinTime = 0.5f;
+    protected float lotteryMaxTime = 2.0f;
     protected float dot;
 
     [Header("“G‚ÌScriptable Object")]

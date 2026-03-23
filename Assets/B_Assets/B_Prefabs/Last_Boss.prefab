@@ -130,6 +130,8 @@ MonoBehaviour:
   tornadoEffect: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
   fireEffect: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
   impactEffect: {fileID: 3856664211485569777, guid: 21e0af4b08cd8114b898e08c2f625120, type: 3}
+  shortDis: 3
+  mediumDis: 6
 --- !u!114 &8082187950281949759
 MonoBehaviour:
   m_ObjectHideFlags: 0

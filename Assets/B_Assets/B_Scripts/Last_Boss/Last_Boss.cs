@@ -9,6 +9,12 @@ public class Last_Boss : Enemy
     [SerializeField] private GameObject impactEffect;
     private GameObject magicCircle;
 
+    [Header("0～この値までは近距離攻撃")]
+    [SerializeField] private float shortDis = 3;
+    [Header("shortDisからこの値までを中距離攻撃")]
+    [SerializeField] private float mediumDis = 6;
+    //mediumDis～engageDisまでは遠距離攻撃
+
     //アニメーションで使うやつ
     public bool isChant { get; private set; }
     public bool isMagic { get; private set; }
@@ -52,19 +58,19 @@ public class Last_Boss : Enemy
 
                     switch (distance)
                     {
-                        case float dis when (dis >= 0 && dis <= 3):
+                        case float dis when (dis >= 0 && dis <= shortDis):
                             ShortDistanceAction();
                             break;
-                        case float dis when (dis > 3 && dis <= 7):
+                        case float dis when (dis > shortDis && dis <= mediumDis):
                             MediumDistanceAction();
                             break;
-                        case float dis when (dis > 7 && dis <= 10):
+                        case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
                             LongDistanceAction();
                             break;
                     }
 
                     //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(0.5f, 2.0f);
+                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
         }
@@ -135,7 +141,7 @@ public class Last_Boss : Enemy
 
         if (distance <= attackDis)
         {
-            agent.isStopped = true;
+            LookPlayerChange(true);
             isSlash = true;
         }
 
@@ -144,31 +150,32 @@ public class Last_Boss : Enemy
 
     IEnumerator DashJumpAttack()
     {
-        StopBackMoveCor();
+        LookPlayerChange(false);
         isRunJumpAttack = true;
-        isLookPlayer = false;
-        agent.isStopped = true;
         yield return null;
     }
 
     IEnumerator Fire()
     {
-        StopBackMoveCor();
-        isLookPlayer = false;
-        agent.isStopped = true;
+        LookPlayerChange(false);
         isFire = true;
         yield return null;
     }
 
     IEnumerator Tornado()
     {
-        StopBackMoveCor();
-
-        isLookPlayer = false;
-        agent.isStopped = true;
+        LookPlayerChange(false);
         isChant = true;
 
         yield return null;
+    }
+
+    private void LookPlayerChange(bool isLook)
+    {
+        StopBackMoveCor();
+
+        isLookPlayer = isLook;
+        agent.isStopped = true;
     }
 
     private void StopBackMoveCor()

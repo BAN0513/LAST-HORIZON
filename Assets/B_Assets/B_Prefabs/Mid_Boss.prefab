@@ -1216,6 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96ebfb9257b8d343805b152fed005b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  damage: 0
 --- !u!54 &4190060173083068693
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2591,6 +2592,7 @@ GameObject:
   - component: {fileID: 2786618821181845231}
   - component: {fileID: 5200791684342616071}
   - component: {fileID: 1525626043896070277}
+  - component: {fileID: 2320539358034341674}
   m_Layer: 0
   m_Name: Shield
   m_TagString: Untagged
@@ -2687,7 +2689,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 0.619827, y: 0.7489861, z: 0.13070595}
   m_Center: {x: 0.000058591366, y: 0.3758127, z: -0.07039857}
@@ -2718,6 +2720,19 @@ ParentConstraint:
   m_Sources:
   - sourceTransform: {fileID: 5496594521743038161}
     weight: 1
+--- !u!114 &2320539358034341674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5863698640793866934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7e56f827168c84a9ffd036f162d323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyShieldController
+  enemy: {fileID: 0}
 --- !u!1 &5903175605236720100
 GameObject:
   m_ObjectHideFlags: 0
