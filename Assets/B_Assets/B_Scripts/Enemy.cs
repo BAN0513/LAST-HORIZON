@@ -283,6 +283,7 @@ public abstract class Enemy : MonoBehaviour
         {
             hpSliider.gameObject.SetActive(false);
             isHit = false;
+            InitAnim();
             Death();
         }
         else
