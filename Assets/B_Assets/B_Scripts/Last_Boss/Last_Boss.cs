@@ -113,12 +113,12 @@ public class Last_Boss : Enemy
     {
         switch (rand)
         {
-            //case int r when (r > 0 && r <= attackProbability / 2):
-            //    StartCoroutine(Tornado());
-            //    break;
             case int r when (r > 0 && r <= attackProbability):
-                StartCoroutine(DashJumpAttack());
+                StartCoroutine(Tornado());
                 break;
+            //case int r when (r > 0 && r <= attackProbability):
+            //    StartCoroutine(DashJumpAttack());
+            //    break;
             default:
                 DoNotAttack();
                 break;
