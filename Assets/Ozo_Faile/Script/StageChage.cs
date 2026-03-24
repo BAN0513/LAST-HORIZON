@@ -33,6 +33,7 @@ public class StageChage : MonoBehaviour
         {
             //IsChage = true;
             Invoke(nameof(Warp), 1f);
+            Chage = false;
         }
     }
 
@@ -58,7 +59,7 @@ public class StageChage : MonoBehaviour
 
         //EndWarp = true;
 
-        Chage = false;
+
 
         Invoke(nameof(NotIsChage), 1f);
     }
