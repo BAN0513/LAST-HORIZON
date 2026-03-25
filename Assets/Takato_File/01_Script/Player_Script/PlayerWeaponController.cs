@@ -5,6 +5,9 @@ using UnityEngine;
 /// </summary>
 public class PlayerWeaponController : MonoBehaviour
 {
+    [Header("プレイヤーの武器制御")]
+    [Space(10)]
+
     [Header("装備中の武器")]
     [SerializeField] private Weapon equippedWeapon;
 
@@ -16,8 +19,7 @@ public class PlayerWeaponController : MonoBehaviour
 
     private void Start()
     {
-        // 武器を生成して装備
-        EquipWeapon();
+        EquipWeapon(); // 武器を生成して装備
     }
 
     /// <summary>
@@ -28,7 +30,7 @@ public class PlayerWeaponController : MonoBehaviour
         // 既存の武器がシーン上に存在する場合のみ削除
         if (equippedWeapon != null && equippedWeapon.gameObject.scene.IsValid())
         {
-            Destroy(equippedWeapon.gameObject);
+            Destroy(equippedWeapon.gameObject); // 既存の武器を削除
         }
 
         if (weaponPrefab != null && weaponFolder != null)
@@ -52,7 +54,7 @@ public class PlayerWeaponController : MonoBehaviour
     {
         if (equippedWeapon != null)
         {
-            equippedWeapon.EnableCollider();
+            equippedWeapon.EnableCollider(); // 武器のコライダーを有効化
         }
     }
 
@@ -63,7 +65,7 @@ public class PlayerWeaponController : MonoBehaviour
     {
         if (equippedWeapon != null)
         {
-            equippedWeapon.DisableCollider();
+            equippedWeapon.DisableCollider(); // 武器のコライダーを無効化
         }
     }
 

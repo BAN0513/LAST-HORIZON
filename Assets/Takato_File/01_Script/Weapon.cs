@@ -11,10 +11,12 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float baseAttackDamage;
 
     [Header("熟練度")]
+    [Header("最低熟練度")]
     [SerializeField] private int weaponLevel;
+    [Header("最大熟練度")]
     [SerializeField] private int maxLevel;
 
-    private Collider weaponCollider;
+    private Collider weaponCollider; // 武器のコライダー
 
     private void Awake()
     {

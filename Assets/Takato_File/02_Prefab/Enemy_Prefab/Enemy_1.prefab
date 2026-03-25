@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
-  enemySO: {fileID: 11400000, guid: 906bea648f70694419e367fdb6869811, type: 2}
+  enemySO: {fileID: 11400000, guid: 5fb6d6923c23f7e41add6f327d1d2769, type: 2}
   enemyAnimatorController: {fileID: 6025648744925135600}
   hpSliider: {fileID: 1878319838695366945}
   _weaponController: {fileID: 8104887120502432443}
@@ -3259,7 +3259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.12274051, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.12156868, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
