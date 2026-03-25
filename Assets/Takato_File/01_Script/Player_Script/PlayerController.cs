@@ -10,7 +10,7 @@ namespace Takato
         [Header("(プレイヤー関連のステータス)")]
         [Space(10)]
         [Header("プレイヤーのHP")]
-        [SerializeField] private int hp;
+        [SerializeField] private int maxHp;
         [Header("プレイヤーの移動速度")]
         [SerializeField] private float moveSpeed;
         [Header("プレイヤーのジャンプ力")]
@@ -24,7 +24,9 @@ namespace Takato
         private PlayerWeaponController weaponController;       // 武器管理
         private PlayerShieldContoroller shieldController;     // シールド管理
 
-        private float verticalVelocity;     // 垂直方向の速度
+        private float verticalVelocity;      // 垂直方向の速度
+        private int hp;                      // プレイヤーの現在のHP
+        [SerializeField] private PlayerHPBar hpBar;           // HPバーの管理
 
         private void Awake()
         {
@@ -37,8 +39,10 @@ namespace Takato
 
         private void Start()
         {
-            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにするのと初期のHPを設定
+            hp = maxHp;
+            hpBar.SetHP(hp, maxHp); // 初期値を反映
         }
+
 
         private void Update()
         {
@@ -124,6 +128,8 @@ namespace Takato
         public void TakeDamage(int damage)
         {
             hp -= damage;
+            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
+            hpBar.SetHP(hp, maxHp); // HPバーを更新
             Debug.Log($"プレイヤーは{damage}のダメージを受けました！残りHP: {hp}");
         }
     }

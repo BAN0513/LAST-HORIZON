@@ -19,11 +19,13 @@ public class EnemyWeaponController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // “G‚Ìƒ^ƒO‚É“–‚½‚Á‚½‚Ìˆ—
         if (other.CompareTag("Player"))
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            player.TakeDamage(damage);
+            PlayerController player = other.GetComponentInParent<PlayerController>();
+            if (player != null)
+            {
+                player.TakeDamage(damage);
+            }
         }
     }
 }
