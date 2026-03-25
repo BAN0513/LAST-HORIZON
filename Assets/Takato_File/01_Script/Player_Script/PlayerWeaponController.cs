@@ -5,18 +5,44 @@ using UnityEngine;
 /// </summary>
 public class PlayerWeaponController : MonoBehaviour
 {
-    [Header("武器のステータス")]
-    [Space(10)]
-    [Header("武器の攻撃力")]
-    [SerializeField] private float attackDamage;
+    [Header("装備中の武器")]
+    [SerializeField] private Weapon equippedWeapon;
 
+    [Header("武器生成用プレハブ")]
+    [SerializeField] private Weapon weaponPrefab;
 
-    private CapsuleCollider weaponCollider; // 武器のコライダー
+    [Header("武器を格納する親オブジェクト")]
+    [SerializeField] private Transform weaponFolder;
 
     private void Start()
     {
-        weaponCollider = GetComponent<CapsuleCollider>(); // 武器のコライダーを取得
-        weaponCollider.enabled = false;                   // 初期状態では武器のコライダーを無効化
+        // 武器を生成して装備
+        EquipWeapon();
+    }
+
+    /// <summary>
+    /// 武器を生成して装備する
+    /// </summary>
+    public void EquipWeapon()
+    {
+        // 既存の武器がシーン上に存在する場合のみ削除
+        if (equippedWeapon != null && equippedWeapon.gameObject.scene.IsValid())
+        {
+            Destroy(equippedWeapon.gameObject);
+        }
+
+        if (weaponPrefab != null && weaponFolder != null)
+        {
+            // プレハブから武器を生成し、WeaponFolderの子にする
+            Weapon newWeapon = Instantiate(weaponPrefab, weaponFolder);
+            newWeapon.transform.localPosition = Vector3.zero;
+            newWeapon.transform.localRotation = Quaternion.identity;
+            equippedWeapon = newWeapon;
+        }
+        else
+        {
+            Debug.LogWarning("weaponPrefab または weaponFolder が設定されていません。");
+        }
     }
 
     /// <summary>
@@ -24,8 +50,10 @@ public class PlayerWeaponController : MonoBehaviour
     /// </summary>
     public void EnableWeaponCollider()
     {
-        weaponCollider.enabled = true;
-        Debug.Log("コライダーを有効化");
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.EnableCollider();
+        }
     }
 
     /// <summary>
@@ -33,24 +61,21 @@ public class PlayerWeaponController : MonoBehaviour
     /// </summary>
     public void DisableWeaponCollider()
     {
-        weaponCollider.enabled = false;
-        Debug.Log("コライダーを無効化");
+        if (equippedWeapon != null)
+        {
+            equippedWeapon.DisableCollider();
+        }
     }
 
     /// <summary>
-    /// 敵のタグに当たった時の処理
+    /// 武器の熟練度を上げる
     /// </summary>
-    private void OnTriggerEnter(Collider other)
+    public void LevelUpWeapon()
     {
-        if (other.CompareTag("Enemy"))
+        if (equippedWeapon != null)
         {
-            //Enemyのコンポーネントを取得してダメージを与える
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage((int)attackDamage); //与えるダメージ
-                Debug.Log("敵にダメージを与えました！");
-            }
+            equippedWeapon.LevelUp();
+            Debug.Log($"武器のレベルが{equippedWeapon.WeaponLevel}になりました！");
         }
     }
 }
