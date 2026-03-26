@@ -56,7 +56,18 @@ public class PlayerRagdollController : MonoBehaviour
     /// </summary>
     public void ActivateRagdoll()
     {
-        SetRagdollActive(true);
+        SetRagdollActive(true); // ラグドール化
+
+        // 物理挙動を自然にするために現在の速度をラグドールのRigidbodyに伝える
+        var mainRb = GetComponent<Rigidbody>();
+        if (mainRb != null)
+        {
+            foreach (var rb in ragdollRigidbodies)
+            {
+               rb.linearVelocity = mainRb.linearVelocity;
+                rb.angularVelocity = mainRb.angularVelocity;
+            }
+        }
 
         // 武器の暴れ対策
         var weapon = GetComponentInChildren<Weapon>();

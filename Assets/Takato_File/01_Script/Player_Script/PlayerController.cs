@@ -75,7 +75,7 @@ namespace Takato
                 }
                 else
                 {
-                    animationController.SetJump(false);
+                    animationController.SetJump(false); // 地面にいるときはジャンプアニメーションをオフ
                 }
             }
             else
@@ -142,9 +142,18 @@ namespace Takato
             Debug.Log($"プレイヤーは{damage}のダメージを受けました！残りHP: {hp}");
         }
 
+        /// <summary>
+        /// プレイヤーが死亡したときの処理
+        /// </summary>
         private void Die()
         {
-            Debug.Log("プレイヤーは死亡しました...");
+            //操作を無効化
+            inputController.enabled = false;
+            animationController.enabled = false;
+            weaponController?.DisableWeaponCollider(); // 武器のコライダーを無効化
+            shieldController?.DisableShieldCollider(); // シールドのコライダーを無効化
+            
+            Debug.Log("プレイヤーは死亡しました");
             PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();
             if (ragdollController != null)
             {

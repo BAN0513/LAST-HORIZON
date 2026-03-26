@@ -14,13 +14,13 @@ public class Weapon : MonoBehaviour
     [Header("最大レベル")]
     [SerializeField] private int maxLevel;
 
-    private Collider weaponCollider;
+    private Collider weaponCollider;  // 武器のコライダー
     private bool isAttacking = false; // 攻撃中かどうか
 
     private void Awake()
     {
-        weaponCollider = GetComponent<Collider>();
-        DisableCollider();
+        weaponCollider = GetComponent<Collider>();  // 武器のコライダーを取得
+        DisableCollider();                          // 初期状態ではコライダーを無効化
     }
 
     /// <summary>
@@ -53,6 +53,9 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 攻撃力を計算して返すプロパティ
+    /// </summary>
     public float AttackDamage
     {
         get
