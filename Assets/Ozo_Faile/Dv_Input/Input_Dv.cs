@@ -118,6 +118,15 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""type"": ""Value"",
+                    ""id"": ""b26dd2b3-9934-4f0c-bc02-82e632865316"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -153,6 +162,61 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""action"": ""FadeOut"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""3D Vector"",
+                    ""id"": ""abc6af10-bff6-49d8-a8df-a7fe8765c8a7"",
+                    ""path"": ""3DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""2c921dcb-b49a-4d44-bc95-813e74aa3d87"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""8ff7e6d0-38fe-4350-be8d-0bc8bfeeaba0"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""forward"",
+                    ""id"": ""f08ff5bb-ee78-49e3-8834-5df84e54f576"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""backward"",
+                    ""id"": ""6c06b25a-40c3-47af-8c25-61d69e8218f7"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -192,6 +256,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         m_PushBottom_Dv_Warp = m_PushBottom.FindAction("Dv_Warp", throwIfNotFound: true);
         m_PushBottom_Pause = m_PushBottom.FindAction("Pause", throwIfNotFound: true);
         m_PushBottom_FadeOut = m_PushBottom.FindAction("FadeOut", throwIfNotFound: true);
+        m_PushBottom_WASD = m_PushBottom.FindAction("WASD", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Decision = m_UI.FindAction("Decision", throwIfNotFound: true);
@@ -279,6 +344,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
     private readonly InputAction m_PushBottom_Dv_Warp;
     private readonly InputAction m_PushBottom_Pause;
     private readonly InputAction m_PushBottom_FadeOut;
+    private readonly InputAction m_PushBottom_WASD;
     /// <summary>
     /// Provides access to input actions defined in input action map "PushBottom".
     /// </summary>
@@ -302,6 +368,10 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PushBottom/FadeOut".
         /// </summary>
         public InputAction @FadeOut => m_Wrapper.m_PushBottom_FadeOut;
+        /// <summary>
+        /// Provides access to the underlying input action "PushBottom/WASD".
+        /// </summary>
+        public InputAction @WASD => m_Wrapper.m_PushBottom_WASD;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -337,6 +407,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @FadeOut.started += instance.OnFadeOut;
             @FadeOut.performed += instance.OnFadeOut;
             @FadeOut.canceled += instance.OnFadeOut;
+            @WASD.started += instance.OnWASD;
+            @WASD.performed += instance.OnWASD;
+            @WASD.canceled += instance.OnWASD;
         }
 
         /// <summary>
@@ -357,6 +430,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @FadeOut.started -= instance.OnFadeOut;
             @FadeOut.performed -= instance.OnFadeOut;
             @FadeOut.canceled -= instance.OnFadeOut;
+            @WASD.started -= instance.OnWASD;
+            @WASD.performed -= instance.OnWASD;
+            @WASD.canceled -= instance.OnWASD;
         }
 
         /// <summary>
@@ -514,6 +590,13 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnFadeOut(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "WASD" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWASD(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

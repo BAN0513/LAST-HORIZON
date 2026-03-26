@@ -18,6 +18,8 @@ public class StageChage : MonoBehaviour
 
     //public bool EndWarp = false;
 
+    private CharacterController _CharacterController;
+
     private void Start()
     {
         if (StageNumber < 0 || StageNumber > 3)
@@ -27,13 +29,17 @@ public class StageChage : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        _CharacterController = GetComponent<CharacterController>();
+    }
+
     private void FixedUpdate()
     {
         if (Chage)
         {
             //IsChage = true;
             Invoke(nameof(Warp), 1f);
-            Chage = false;
         }
     }
 
@@ -47,7 +53,9 @@ public class StageChage : MonoBehaviour
     /// </summary>
     private void Warp()
     {
-        
+        //一旦キャラクターコントロールを無効化する
+        _CharacterController.enabled = false;
+
         if (StageNumber == 1 /*&& !EndWarp*/)
             transform.position = new Vector3(0, 0, 20);
         else if (StageNumber == 2 /*&& !EndWarp*/)
@@ -59,7 +67,7 @@ public class StageChage : MonoBehaviour
 
         //EndWarp = true;
 
-
+        Chage = false;
 
         Invoke(nameof(NotIsChage), 1f);
     }
@@ -93,8 +101,8 @@ public class StageChage : MonoBehaviour
     /// </summary>
     private void NotIsChage()
     {
-        IsChage = false; 
-
+        IsChage = false;
+        _CharacterController.enabled = false;
         //EndWarp = false;
     }
 
