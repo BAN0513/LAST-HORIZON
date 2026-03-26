@@ -11,6 +11,8 @@ namespace Takato
         [Space(10)]
         [Header("プレイヤーのHP")]
         [SerializeField] private int maxHp;
+        [Header("プレイヤーのHPバーのスクリプトが入ってる物を入れる")]
+        [SerializeField] private PlayerHPBar hpBar;       
         [Header("プレイヤーの移動速度")]
         [SerializeField] private float moveSpeed;
         [Header("プレイヤーのジャンプ力")]
@@ -24,9 +26,9 @@ namespace Takato
         private PlayerWeaponController weaponController;       // 武器管理
         private PlayerShieldContoroller shieldController;     // シールド管理
 
-        private float verticalVelocity;      // 垂直方向の速度
-        private int hp;                      // プレイヤーの現在のHP
-        [SerializeField] private PlayerHPBar hpBar;           // HPバーの管理
+        private float verticalVelocity;                       // 垂直方向の速度
+        private int hp;                                       // プレイヤーの現在のHP
+        private bool isBlocking = false;                      // 防御中かどうか
 
         private void Awake()
         {
@@ -79,7 +81,8 @@ namespace Takato
             }
 
             Vector2 moveDirection = inputController.MoveInput;
-            Vector3 movement = new Vector3(moveDirection.x, 0, moveDirection.y) * moveSpeed;
+            float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed; // 防御中は移動速度を低下
+            Vector3 movement = new Vector3(moveDirection.x, 0, moveDirection.y) * currentMoveSpeed;
             movement.y = verticalVelocity;
 
             characterController.Move(movement * Time.deltaTime);
@@ -114,11 +117,13 @@ namespace Takato
             {
                 animationController.SetBlock(true);
                 shieldController?.EnableShieldCollider(); // 防御入力がある場合、シールドのコライダーを有効化
+                isBlocking = true; // 防御中フラグを立てる
             }
             else
             {
                 animationController.SetBlock(false);
                 shieldController?.DisableShieldCollider(); // 防御入力がない場合、シールドのコライダーを無効化
+                isBlocking = false; // 防御中フラグを下げる
             }
         }
 
