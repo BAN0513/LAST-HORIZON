@@ -52,6 +52,10 @@ namespace Takato
             Move(); // 移動とジャンプの処理
             Block();// 防御処理
             Attack();// 攻撃処理
+            if (hp <= 0)
+            {
+                Die(); // HPが0以下になったら死亡処理
+            }
         }
 
         /// <summary>
@@ -136,6 +140,21 @@ namespace Takato
             hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
             hpBar.SetHP(hp, maxHp); // HPバーを更新
             Debug.Log($"プレイヤーは{damage}のダメージを受けました！残りHP: {hp}");
+        }
+
+        private void Die()
+        {
+            Debug.Log("プレイヤーは死亡しました...");
+            PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();
+            if (ragdollController != null)
+            {
+                ragdollController.ActivateRagdoll(); // ラグドールを有効化して死亡表現
+            }
+            else
+            {
+                // ラグドールがない場合は、単純にオブジェクトを非表示にする
+                gameObject.SetActive(false);
+            }
         }
     }
 } 

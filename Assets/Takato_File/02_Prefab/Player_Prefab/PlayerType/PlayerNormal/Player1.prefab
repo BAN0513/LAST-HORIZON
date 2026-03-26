@@ -41,7 +41,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: -0.57149
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -49,7 +49,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.44
+      value: -6.67
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -82,6 +82,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_Name
       value: Player1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_TagString
@@ -197,11 +201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 100
+  maxHp: 1
+  hpBar: {fileID: 0}
   moveSpeed: 1.5
   jumpForce: 5
   gravity: 12.5
-  hpBar: {fileID: 0}
 --- !u!114 &5076607181567321952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,10 +310,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4181694190815117815, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2256920794111764236, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7541390467362416193}
     - targetCorrespondingSourceObject: {fileID: 2256920794111764236, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6839562711532050687}
@@ -324,6 +332,27 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2256920794111764236, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
   m_PrefabInstance: {fileID: 5730902560175639821}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &7541390467362416193
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5826092225718397441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5, y: 1.5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6839562711532050687
 MonoBehaviour:
   m_ObjectHideFlags: 0
