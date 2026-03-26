@@ -15,6 +15,9 @@ public class Last_Boss : Enemy
     [SerializeField] private float mediumDis = 6;
     //mediumDis～engageDisまでは遠距離攻撃
 
+    private bool bigTrickReady = false;
+    private bool bigTrickUsed = false;
+
     //アニメーションで使うやつ
     public bool isChant { get; private set; }
     public bool isMagic { get; private set; }
@@ -51,22 +54,29 @@ public class Last_Boss : Enemy
                 lotteryTime -= Time.deltaTime;
                 if (lotteryTime <= 0)
                 {
-                    //行動の抽選で使う
-                    rand = Random.Range(1, 101);
-
-                    isAction = true;
-
-                    switch (distance)
+                    if (bigTrickReady)
                     {
-                        case float dis when (dis >= 0 && dis <= shortDis):
-                            ShortDistanceAction();
-                            break;
-                        case float dis when (dis > shortDis && dis <= mediumDis):
-                            MediumDistanceAction();
-                            break;
-                        case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
-                            LongDistanceAction();
-                            break;
+                        StartCoroutine(Tornado());
+                    }
+                    else
+                    {
+                        //行動の抽選で使う
+                        rand = Random.Range(1, 101);
+
+                        isAction = true;
+
+                        switch (distance)
+                        {
+                            case float dis when (dis >= 0 && dis <= shortDis):
+                                ShortDistanceAction();
+                                break;
+                            case float dis when (dis > shortDis && dis <= mediumDis):
+                                MediumDistanceAction();
+                                break;
+                            case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
+                                LongDistanceAction();
+                                break;
+                        }
                     }
 
                     //次の抽選に必要な時間をランダムで決める
@@ -113,12 +123,12 @@ public class Last_Boss : Enemy
     {
         switch (rand)
         {
-            case int r when (r > 0 && r <= attackProbability):
-                StartCoroutine(Tornado());
-                break;
             //case int r when (r > 0 && r <= attackProbability):
-            //    StartCoroutine(DashJumpAttack());
+            //    StartCoroutine(Tornado());
             //    break;
+            case int r when (r > 0 && r <= attackProbability):
+                StartCoroutine(DashJumpAttack());
+                break;
             default:
                 DoNotAttack();
                 break;
@@ -212,7 +222,9 @@ public class Last_Boss : Enemy
     {
         GameObject tornado = Instantiate(tornadoEffect, transform.position, Quaternion.identity);
         TornadoController tornadoController = tornado.GetComponent<TornadoController>();
-        tornadoController.damage = enemySO.damage;
+        tornadoController.Damage = enemySO.damage;
+        bigTrickUsed = true;
+        bigTrickReady = false;
         Destroy(tornado, 15);
     }
 
@@ -221,10 +233,14 @@ public class Last_Boss : Enemy
         Vector3 toTarget = target.position - forward.position;
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
+
         GameObject fire = Instantiate(fireEffect, forward.position, quaternion);
         FireController fireController = fire.GetComponent<FireController>();
-        fireController.damage = enemySO.damage;
+        fireController.Damage = enemySO.damage;
+        fireController.Player = playerController;
+
         Rigidbody rb = fire.GetComponent<Rigidbody>();
+
         rb.linearVelocity = nor * 5;
     }
 
@@ -245,5 +261,10 @@ public class Last_Boss : Enemy
         isFire = false;
         isSlash = false;
         isRunJumpAttack = false;
+
+        if (hp <= enemySO.maxHP / 2 && !bigTrickUsed)
+        {
+            bigTrickReady = true;
+        }
     }
 }

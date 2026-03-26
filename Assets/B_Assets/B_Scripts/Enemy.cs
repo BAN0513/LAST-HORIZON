@@ -118,7 +118,8 @@ public abstract class Enemy : MonoBehaviour
 
         lotteryTime = enemySO.attackCoolDown;
 
-        _weaponController.damage = enemySO.damage;
+        _weaponController.Damage = enemySO.damage;
+        _weaponController.Player = playerController;
     }
 
     protected virtual void Update()
@@ -273,7 +274,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        damage -= enemySO.def - debufDEF;
+        damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }
 
         hp -= damage;

@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 1025591888720807644}
   - component: {fileID: 5058665711621990972}
   - component: {fileID: 8779465866527136624}
-  - component: {fileID: 9044113073740074474}
-  - component: {fileID: 7203203224460769246}
   - component: {fileID: 1309278099852101724}
   m_Layer: 0
   m_Name: TornadoEffect
@@ -4839,48 +4837,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!65 &9044113073740074474
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686693669452320046}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.23875928, y: 0.5183817, z: 1.7001551}
-  m_Center: {x: 0.033499658, y: 0.05904568, z: 1.3528908}
---- !u!65 &7203203224460769246
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1686693669452320046}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 0.20888197, y: 0.23666525, z: 0.5108038}
-  m_Center: {x: 0.085385054, y: 0.04137738, z: 0.24459815}
 --- !u!114 &1309278099852101724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4893,6 +4849,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3bcbc6b001d1d64abe1f7a806696c58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TornadoController
-  _center: {x: 0, y: 0, z: 0}
   _axis: {x: 0.3, y: 1, z: 0.3}
-  _period: 2
+  attractionDis: 10
+  attractionPower: 3

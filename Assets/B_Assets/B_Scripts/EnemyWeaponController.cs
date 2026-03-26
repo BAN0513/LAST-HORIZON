@@ -4,7 +4,22 @@ using UnityEngine;
 public class EnemyWeaponController : MonoBehaviour
 {
     private BoxCollider boxCollider; // 武器のコライダー
-    public int damage;
+    private int damage;
+    public int Damage
+    {
+        set
+        {
+            damage = value;
+        }
+    }
+    private PlayerController player;
+    public PlayerController Player
+    {
+        set
+        {
+            player = value;
+        }
+    }
 
     private void Start()
     {
@@ -19,10 +34,15 @@ public class EnemyWeaponController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Shield"))
         {
-            PlayerController player = other.GetComponentInParent<PlayerController>();
-            if (player != null)
+            PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+
+            if (shield != null)
+            {
+                shield.ReceiveAttack(damage,player);
+            }
+            else
             {
                 player.TakeDamage(damage);
             }

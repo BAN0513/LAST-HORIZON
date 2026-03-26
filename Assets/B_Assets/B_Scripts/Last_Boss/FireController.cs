@@ -4,7 +4,23 @@ using UnityEngine;
 
 public class FireController : MonoBehaviour
 {
-    public int damage;
+    private int damage;
+    public int Damage
+    {
+        set
+        {
+            damage = value;
+        }
+    }
+    private PlayerController player;
+    public PlayerController Player
+    {
+        set
+        {
+            player = value;
+        }
+    }
+
     private void Start()
     {
         StartCoroutine(DestroyCnt());
@@ -19,10 +35,18 @@ public class FireController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Shield"))
         {
-            PlayerController player = other.GetComponent<PlayerController>();
-            player.TakeDamage(damage);
+            PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+
+            if (shield != null)
+            {
+                shield.ReceiveAttack(damage, player);
+            }
+            else
+            {
+                player.TakeDamage(damage);
+            }
             Destroy(gameObject);
         }
     }

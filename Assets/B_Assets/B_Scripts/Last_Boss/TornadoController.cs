@@ -7,17 +7,31 @@ using static UnityEngine.GraphicsBuffer;
 public class TornadoController : MonoBehaviour
 {
     // ’†S“_
-    [SerializeField] private Vector3 _center;
+    private Vector3 _center;
 
-    // ‰ñ“]²
-    [SerializeField] private Vector3 _axis = Vector3.forward;
+    [Header("‰ñ“]²")]
+    [SerializeField] private Vector3 _axis;
 
     // ‰~‰^“®üŠú
-    [SerializeField] private float _period = 2;
+    private float _period = 2;
+
+    private float distance;
+    [Header("ˆø‚«Šñ‚¹‚ÉŠª‚«‚Ü‚ê‚é‹——£")]
+    [SerializeField] private float attractionDis = 10;
+
+    [Header("ˆø‚«Šñ‚¹‚é—Í")]
+    [SerializeField] private float attractionPower = 1;
 
     private ParticleSystem particle;
     private GameObject target;
-    public int damage;
+    private int damage;
+    public int Damage
+    {
+        set
+        {
+            damage = value;
+        }
+    }
     private void Start()
     {
         transform.Rotate(-90, 0, 0);
@@ -31,23 +45,20 @@ public class TornadoController : MonoBehaviour
 
     private void Update()
     {
-
         // ’†S“_center‚Ìü‚è‚ğA²axis‚ÅAperiodüŠú‚Å‰~‰^“®
         transform.RotateAround(
             _center,
             _axis,
             360 / _period * Time.deltaTime
         );
+
+        distance = Vector3.Distance(transform.position, target.transform.position);
+        if (distance <= attractionDis)
+        {
+            Debug.Log("ˆø‚«Šñ‚¹‚ç‚ê‚éII");
+            target.transform.position = Vector3.MoveTowards(target.transform.position,transform.position, attractionPower * Time.deltaTime);
+        }
     }
-
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Player"))
-    //    {
-    //        Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
-    //    }
-    //}
 
     private void OnParticleTrigger()
     {
