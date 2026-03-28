@@ -41,7 +41,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.57149
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -49,7 +49,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.67
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -81,11 +81,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_Name
-      value: Player1
+      value: Player1_Normal
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_TagString
@@ -280,7 +280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4794505183277177674, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.01
+      value: -0.053
       objectReference: {fileID: 0}
     - target: {fileID: 4794505183277177674, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -365,4 +365,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b79deeb2400e604cb8ae69a7adce159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShieldContoroller
-  damageCutRate: 0
+  damageCutRate: 0.5

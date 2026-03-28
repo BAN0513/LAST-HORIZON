@@ -19,6 +19,8 @@ namespace Takato
         [SerializeField] private float jumpForce;
         [Header("プレイヤーの重力")]
         [SerializeField] private float gravity;
+        [Header("プレイヤーのダメージカット率")]
+        [SerializeField] private float damageCutRate;
 
         private PlayerInputController inputController;         // 入力管理
         private CharacterController characterController;       // 移動管理
@@ -136,10 +138,10 @@ namespace Takato
         /// </summary>
         public void TakeDamage(int damage)
         {
-            hp -= damage;
-            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
+            int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate)); // ダメージカット率を適用
+            hp -= finalDamage;
             hpBar.SetHP(hp, maxHp); // HPバーを更新
-            Debug.Log($"プレイヤーは{damage}のダメージを受けました！残りHP: {hp}");
+            Debug.Log($"プレイヤーは{finalDamage}のダメージを受けました。現在のHP: {hp}/{maxHp}");
         }
 
         /// <summary>

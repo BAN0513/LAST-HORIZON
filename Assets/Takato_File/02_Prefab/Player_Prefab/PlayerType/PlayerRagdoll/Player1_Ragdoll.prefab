@@ -85,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4794505183277177674, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.01
+      value: -0.057
       objectReference: {fileID: 0}
     - target: {fileID: 4794505183277177674, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
       propertyPath: m_LocalRotation.w
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b79deeb2400e604cb8ae69a7adce159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShieldContoroller
-  damageCutRate: 0
+  damageCutRate: 0.5
 --- !u!4 &4615037765249963174 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4794505183277177674, guid: 25b984454ce7825479a4c49ffc97aad6, type: 3}
@@ -181,7 +181,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.02
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.44
+      value: -7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -994,7 +994,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 1
+  maxHp: 100
   hpBar: {fileID: 0}
   moveSpeed: 1.5
   jumpForce: 5
