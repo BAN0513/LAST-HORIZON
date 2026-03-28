@@ -3,87 +3,90 @@ using UnityEngine;
 /// <summary>
 /// 武器のクラス
 /// </summary>
-public class Weapon : MonoBehaviour
+namespace Takato
 {
-    [Header("武器ステータス")]
-    [Space(10)]
-    [Header("基本攻撃力")]
-    [SerializeField] private float baseAttackDamage;
-    [Header("現在レベル")]
-    [SerializeField] private int weaponLevel;
-    [Header("最大レベル")]
-    [SerializeField] private int maxLevel;
-
-    private Collider weaponCollider;  // 武器のコライダー
-    private bool isAttacking = false; // 攻撃中かどうか
-
-    private void Awake()
+    public class Weapon : MonoBehaviour
     {
-        weaponCollider = GetComponent<Collider>();  // 武器のコライダーを取得
-        DisableCollider();                          // 初期状態ではコライダーを無効化
-    }
+        [Header("武器ステータス")]
+        [Space(10)]
+        [Header("基本攻撃力")]
+        [SerializeField] private float baseAttackDamage;
+        [Header("現在レベル")]
+        [SerializeField] private int weaponLevel;
+        [Header("最大レベル")]
+        [SerializeField] private int maxLevel;
 
-    /// <summary>
-    /// コライダーを有効化
-    /// </summary>
-    public void EnableCollider()
-    {
-        weaponCollider.enabled = true;
-        isAttacking = true; // 攻撃開始
-    }
+        private Collider weaponCollider;  // 武器のコライダー
+        private bool isAttacking = false; // 攻撃中かどうか
 
-    /// <summary>
-    /// コライダーを無効化
-    /// </summary>
-    public void DisableCollider()
-    {
-        weaponCollider.enabled = false;
-        isAttacking = false; // 攻撃終了
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!isAttacking) return; // 攻撃中のみ判定
-
-        // ここで敵かどうか判定し、ダメージ処理
-        var enemy = other.GetComponent<Enemy>();
-        if (enemy != null)
+        private void Awake()
         {
-            enemy.TakeDamage((int)AttackDamage);
+            weaponCollider = GetComponent<Collider>();  // 武器のコライダーを取得
+            DisableCollider();                          // 初期状態ではコライダーを無効化
         }
-    }
 
-    /// <summary>
-    /// 基本攻撃力を設定するメソッド
-    /// </summary>
-    public void SetAttackDamage(float value)
-    {
-        baseAttackDamage = value;
-    }
-
-    /// <summary>
-    /// 攻撃力を計算して返すプロパティ
-    /// </summary>
-    public float AttackDamage
-    {
-        get
+        /// <summary>
+        /// コライダーを有効化
+        /// </summary>
+        public void EnableCollider()
         {
-            // レベルや強化に応じて計算
-            return baseAttackDamage + weaponLevel * 2f;
+            weaponCollider.enabled = true;
+            isAttacking = true; // 攻撃開始
         }
-    }
 
-    public int WeaponLevel => weaponLevel; // 現在の武器レベルを取得
-    public int MaxLevel => maxLevel;       // 最大レベルを取得
-
-    /// <summary>
-    /// 武器のレベルを上げるメソッド
-    /// </summary>
-    public void LevelUp()
-    {
-        if (weaponLevel < maxLevel)
+        /// <summary>
+        /// コライダーを無効化
+        /// </summary>
+        public void DisableCollider()
         {
-            weaponLevel++;
+            weaponCollider.enabled = false;
+            isAttacking = false; // 攻撃終了
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!isAttacking) return; // 攻撃中のみ判定
+
+            // ここで敵かどうか判定し、ダメージ処理
+            var enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage((int)AttackDamage);
+            }
+        }
+
+        /// <summary>
+        /// 基本攻撃力を設定するメソッド
+        /// </summary>
+        public void SetAttackDamage(float value)
+        {
+            baseAttackDamage = value;
+        }
+
+        /// <summary>
+        /// 攻撃力を計算して返すプロパティ
+        /// </summary>
+        public float AttackDamage
+        {
+            get
+            {
+                // レベルや強化に応じて計算
+                return baseAttackDamage + weaponLevel * 2f;
+            }
+        }
+
+        public int WeaponLevel => weaponLevel; // 現在の武器レベルを取得
+        public int MaxLevel => maxLevel;       // 最大レベルを取得
+
+        /// <summary>
+        /// 武器のレベルを上げるメソッド
+        /// </summary>
+        public void LevelUp()
+        {
+            if (weaponLevel < maxLevel)
+            {
+                weaponLevel++;
+            }
         }
     }
 }
