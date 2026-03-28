@@ -128,6 +128,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5076607181567321952}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3735351674530302138}
   m_SourcePrefab: {fileID: 100100000, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
 --- !u!4 &485407463738669205 stripped
 Transform:
@@ -206,6 +209,7 @@ MonoBehaviour:
   moveSpeed: 1.5
   jumpForce: 5
   gravity: 12.5
+  damageCutRate: 0
 --- !u!114 &5076607181567321952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +225,22 @@ MonoBehaviour:
   equippedWeapon: {fileID: 652992532764787591, guid: 12ec5980e6722b14a828ea18dcb77559, type: 3}
   weaponPrefab: {fileID: 652992532764787591, guid: 12ec5980e6722b14a828ea18dcb77559, type: 3}
   weaponFolder: {fileID: 4060838846220353406}
+--- !u!114 &3735351674530302138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425466933361359372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40e1c765535f6f442a6054bd4a2ad358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
+  skillCooldown: 0
+  attackBuffMultiplier: 1.25
+  defenseBuffCutRate: 0.25
+  skillDuration: 10
 --- !u!4 &4986975286277837470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}

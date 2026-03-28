@@ -54,6 +54,14 @@ public class Weapon : MonoBehaviour
     }
 
     /// <summary>
+    /// 基本攻撃力を設定するメソッド
+    /// </summary>
+    public void SetAttackDamage(float value)
+    {
+        baseAttackDamage = value;
+    }
+
+    /// <summary>
     /// 攻撃力を計算して返すプロパティ
     /// </summary>
     public float AttackDamage

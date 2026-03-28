@@ -14,7 +14,9 @@ namespace Takato
         public bool JumpInput { get; private set; }      // プレイヤーのジャンプ入力を格納するプロパティ
         public bool BlockInput { get; private set; }     //プレイヤーのガード入力を格納するプロパティ
         public bool IsAttackInput { get; private set; }  //プレイヤーの攻撃入力を格納するプロパティ
-                                                        
+        public bool IsSkillInput { get; private set; }   //プレイヤーのスキル入力を格納するプロパティ
+        public bool IsSkill2Input { get; private set; }  //プレイヤーのスキル2入力を格納するプロパティ
+
         private void Awake()
         {
             playerInputActions = new InputSystem_Actions(); // 入力アクションのインスタンスを作成
@@ -38,6 +40,16 @@ namespace Takato
             playerInputActions.Player.Attack.started += context => IsAttackInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント
             playerInputActions.Player.Attack.performed += context => IsAttackInput = context.ReadValueAsButton(); // 入力が実行されたときのイベント
             playerInputActions.Player.Attack.canceled += context => IsAttackInput = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //Skill入力イベント登録
+            playerInputActions.Player.Skill.started += context => IsSkillInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Skill.performed += context => IsSkillInput = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Skill.canceled += context => IsSkillInput = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //Skill2入力イベント登録
+            playerInputActions.Player.Skill2.started += context => IsSkill2Input = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Skill2.performed += context => IsSkill2Input = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Skill2.canceled += context => IsSkill2Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>

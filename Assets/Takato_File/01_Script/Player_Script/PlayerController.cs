@@ -27,6 +27,7 @@ namespace Takato
         private PlayerAnimationController animationController; // アニメーション管理
         private PlayerWeaponController weaponController;       // 武器管理
         private PlayerShieldContoroller shieldController;     // シールド管理
+        private PlayerSkill playerSkill;                       // スキル管理
 
         private float verticalVelocity;                       // 垂直方向の速度
         private int hp;                                       // プレイヤーの現在のHP
@@ -39,6 +40,7 @@ namespace Takato
             animationController = GetComponent<PlayerAnimationController>();
             weaponController = GetComponentInChildren<PlayerWeaponController>();
             shieldController = GetComponentInChildren<PlayerShieldContoroller>();
+            playerSkill= GetComponent<PlayerSkill>();
         }
 
         private void Start()
@@ -54,6 +56,16 @@ namespace Takato
             Move(); // 移動とジャンプの処理
             Block();// 防御処理
             Attack();// 攻撃処理
+            if (inputController.IsSkillInput && playerSkill != null)
+            {
+                playerSkill.ActivateAttackBuff(); // Skillボタンで攻撃バフ
+                Debug.Log("攻撃バフを発動しました！");
+            }
+            if (inputController.IsSkill2Input && playerSkill != null)
+            {
+                playerSkill.ActivateDefenseBuff(); // Skill2ボタンで防御バフ
+                Debug.Log("防御バフを発動しました！");
+            }
             if (hp <= 0)
             {
                 Die(); // HPが0以下になったら死亡処理
@@ -131,6 +143,22 @@ namespace Takato
                 shieldController?.DisableShieldCollider(); // 防御入力がない場合、シールドのコライダーを無効化
                 isBlocking = false; // 防御中フラグを下げる
             }
+        }
+
+        /// <summary>
+        /// ダメージカット率を取得するメソッド
+        /// </summary>
+        public float GetDamageCutRate()
+        {
+            return damageCutRate;
+        }
+
+        /// <summary>
+        /// ダメージカット率を設定するメソッド
+        /// </summary>
+        public void SetDamageCutRate(float value)
+        {
+            damageCutRate = Mathf.Clamp01(value);
         }
 
         /// <summary>
