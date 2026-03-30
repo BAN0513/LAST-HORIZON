@@ -371,6 +371,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2358147367758148827}
   m_SourcePrefab: {fileID: 100100000, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+--- !u!4 &107417326686127886 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5465940246521907071, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+  m_PrefabInstance: {fileID: 5379396701765910641}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &682390783149092153 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4332706925441422008, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
@@ -1030,7 +1035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef8f86eaddc93054db7f8b99ba7e39dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRagdollController
-  ragdollRoot: {fileID: 5561327279060494234}
+  ragdollRoot: {fileID: 107417326686127886}
 --- !u!114 &9061681695293084057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,12 +1051,14 @@ MonoBehaviour:
   skillCooldown: 0
   attackBuffMultiplier: 1.25
   defenseBuffCutRate: 0.25
-  skillDuration: 10
+  skillDuration: 5
   attackBuffMultiplierPerLevel: 0.2
   defenseBuffCutRatePerLevel: 0.2
   skillDurationPerLevel: 0.3
   skillLevel: 1
   maxSkillLevel: 10
+  attackBuffEffect: {fileID: 8848207047497641950, guid: 84fb8221f686852419960ea644539a1e, type: 3}
+  defenseBuffEffect: {fileID: 1813967872689060148, guid: f0a738431d3d95e40be0466b9229191a, type: 3}
 --- !u!1 &5240033511132561975 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9070493210130169274, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
@@ -1254,11 +1261,6 @@ CharacterJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!4 &5561327279060494234 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
-  m_PrefabInstance: {fileID: 5379396701765910641}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5986084378294468537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
