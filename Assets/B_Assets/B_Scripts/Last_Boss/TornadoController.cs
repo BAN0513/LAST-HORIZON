@@ -55,7 +55,6 @@ public class TornadoController : MonoBehaviour
         distance = Vector3.Distance(transform.position, target.transform.position);
         if (distance <= attractionDis)
         {
-            Debug.Log("ˆø‚«Šñ‚¹‚ç‚ê‚éII");
             target.transform.position = Vector3.MoveTowards(target.transform.position,transform.position, attractionPower * Time.deltaTime);
         }
     }

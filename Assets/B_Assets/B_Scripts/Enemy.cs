@@ -120,6 +120,8 @@ public abstract class Enemy : MonoBehaviour
 
         _weaponController.Damage = enemySO.damage;
         _weaponController.Player = playerController;
+
+        transform.position = SaveManager.Instance.save.playerPosition;
     }
 
     protected virtual void Update()
@@ -354,9 +356,9 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //デバッグ用
-    [ContextMenu("1Damage")]
-    public void OneDamage()
+    [ContextMenu("ReturnTitle")]
+    public void ReturnTitle()
     {
-        TakeDamage(1);
+        SaveManager.Instance.SaveButton(1);
     }
 }

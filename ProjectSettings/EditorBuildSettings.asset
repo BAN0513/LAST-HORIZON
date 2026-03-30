@@ -14,6 +14,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Ozo_Faile/Scene/Ozo_Scene.unity
     guid: bc4d5e3e1be42eb4daf0a954278cb7f1
+  - enabled: 1
+    path: Assets/B_Assets/B_Scene/B_TitleScene.unity
+    guid: 27bf8bde359135747af74f7f7c7064b7
+  - enabled: 1
+    path: Assets/B_Assets/B_Scene/B_TestScene.unity
+    guid: c183e2f345995ab44ac0d64a472995fe
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

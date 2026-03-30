@@ -12,6 +12,7 @@ public class ImpactController : MonoBehaviour
         particle = GetComponent<ParticleSystem>();
         target = GameObject.FindWithTag("Player");
         
+        if (target == null) { return; }
         particle.trigger.SetCollider(0, target.transform);
     }
 

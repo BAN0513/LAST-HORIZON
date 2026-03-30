@@ -131,7 +131,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -4727,13 +4727,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4171468405231022394}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5091431, y: 0.00000018272465, z: 0.00000031097687, w: 0.8606819}
-  m_LocalPosition: {x: 0.6440009, y: 0.9080001, z: -0.12900025}
+  m_LocalRotation: {x: 0.21420294, y: 0.008038477, z: 0.19978583, w: 0.9561057}
+  m_LocalPosition: {x: 0.69914913, y: 0.7917127, z: 0.0003002882}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3713859532431908425}
-  m_LocalEulerAnglesHint: {x: 61.214, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45.901, y: -41.706, z: -12.859}
 --- !u!33 &3644063011777999305
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4801,12 +4801,12 @@ ParentConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.64400053, y: 0.908, z: -0.129}
-  m_RotationAtRest: {x: 61.213524, y: 0.00008583063, z: 0.000096559466}
+  m_TranslationAtRest: {x: 0.049, y: 0.813, z: 0.261}
+  m_RotationAtRest: {x: 45.907024, y: -40.51046, z: -12.464792}
   m_TranslationOffsets:
-  - {x: -0.09439501, y: -0.22247875, z: 0.09787989}
+  - {x: 0.073958635, y: -0.26445198, z: 0.04150659}
   m_RotationOffsets:
-  - {x: 17.904856, y: 82.07708, z: -39.658844}
+  - {x: -7.725494, y: 109.786835, z: -16.667337}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
