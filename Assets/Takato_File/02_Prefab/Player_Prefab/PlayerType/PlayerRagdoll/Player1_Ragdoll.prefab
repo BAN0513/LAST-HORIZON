@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251070002848180712}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.23, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.25, y: 0.08, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5986084378294468537}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1001 &180822841413717996
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -395,10 +395,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.11760615
+  m_Radius: 0.06934779
   m_Height: 0.4704246
   m_Direction: 1
-  m_Center: {x: 0, y: 0.2352123, z: 0}
+  m_Center: {x: 0.0018108562, y: 0.23521228, z: -0.0000000039852184}
 --- !u!54 &368589407198427301
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -501,10 +501,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.12510604
+  m_Radius: 0.08517456
   m_Height: 0.4170201
   m_Direction: 1
-  m_Center: {x: 0, y: 0.20851006, z: 0}
+  m_Center: {x: -0.0068001524, y: 0.2085114, z: -1.35615e-10}
 --- !u!54 &3722519926952208750
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -602,10 +602,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.13342957
+  m_Radius: 0.07738817
   m_Height: 0.6671479
   m_Direction: 1
-  m_Center: {x: 0, y: 0.33357394, z: 0}
+  m_Center: {x: -0.000000006949375, y: 0.33357397, z: -0.0013889719}
 --- !u!54 &3694698389116453086
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -703,8 +703,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.19646773, y: 0.28836802, z: 0.28396696}
-  m_Center: {x: 0.0002648756, y: -0.14418401, z: -0.0059905946}
+  m_Size: {x: 0.15416889, y: 0.2458072, z: 0.28396696}
+  m_Center: {x: 0.0057910085, y: -0.1654652, z: -0.005990595}
 --- !u!54 &1834688402043846343
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -901,8 +901,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.19646797, y: 0.27770406, z: 0.2827921}
-  m_Center: {x: 0.00034290552, y: 0.36797342, z: -0.027864322}
+  m_Size: {x: 0.17055675, y: 0.29040945, z: 0.2827921}
+  m_Center: {x: 0.0062021054, y: 0.33538914, z: -0.027864322}
 --- !u!54 &5683389662869212527
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -954,7 +954,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.7
-  m_Radius: 0.25
+  m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -997,12 +997,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 100
+  maxHp: 30
   hpBar: {fileID: 0}
   moveSpeed: 1.5
   jumpForce: 5
   gravity: 12.5
-  damageCutRate: 0.75
+  damageCutRate: 0
 --- !u!114 &3912137197816338048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1047,6 +1047,11 @@ MonoBehaviour:
   attackBuffMultiplier: 1.25
   defenseBuffCutRate: 0.25
   skillDuration: 10
+  attackBuffMultiplierPerLevel: 0.2
+  defenseBuffCutRatePerLevel: 0.2
+  skillDurationPerLevel: 0.3
+  skillLevel: 1
+  maxSkillLevel: 10
 --- !u!1 &5240033511132561975 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -9070493210130169274, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
@@ -1071,10 +1076,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.14035542
-  m_Height: 0.7017771
+  m_Radius: 0.07335663
+  m_Height: 0.70177716
   m_Direction: 1
-  m_Center: {x: 0, y: 0.35088855, z: 0}
+  m_Center: {x: -0.000000004422671, y: 0.35088882, z: -0.008121305}
 --- !u!54 &8422498528019842462
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1173,9 +1178,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.031519763
-  m_Height: 0.12607905
+  m_Height: 0.10982807
   m_Direction: 1
-  m_Center: {x: 0, y: 0.06303953, z: 0}
+  m_Center: {x: -1.9208278e-10, y: 0.054913983, z: -3.034647e-10}
 --- !u!54 &796439852562516417
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1283,10 +1288,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.11760636
+  m_Radius: 0.07586472
   m_Height: 0.47042543
   m_Direction: 1
-  m_Center: {x: 0, y: 0.23521271, z: 0}
+  m_Center: {x: 0.0045502046, y: 0.23521271, z: 0.0000000032250351}
 --- !u!54 &2765283832423531619
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1384,10 +1389,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.125106
-  m_Height: 0.41702002
+  m_Radius: 0.08727427
+  m_Height: 0.41702005
   m_Direction: 1
-  m_Center: {x: 0, y: 0.20851001, z: 0}
+  m_Center: {x: 0.0075686276, y: 0.20851001, z: -1.2729305e-10}
 --- !u!54 &4865955246221191526
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1486,9 +1491,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.031519692
-  m_Height: 0.12607877
+  m_Height: 0.112017974
   m_Direction: 1
-  m_Center: {x: 0, y: 0.063039385, z: 0}
+  m_Center: {x: -5.84805e-11, y: 0.056008965, z: 0.0000000028376679}
 --- !u!54 &3625081394941572990
 Rigidbody:
   m_ObjectHideFlags: 0

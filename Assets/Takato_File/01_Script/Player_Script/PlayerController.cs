@@ -32,6 +32,7 @@ namespace Takato
         private float verticalVelocity;                       // 垂直方向の速度
         private int hp;                                       // プレイヤーの現在のHP
         private bool isBlocking = false;                      // 防御中かどうか
+        private bool isDead = false;                          // 死亡しているかどうか
 
         private void Awake()
         {
@@ -77,6 +78,8 @@ namespace Takato
         //カメラの向いてる方向に移動するのとカメラの向いてる方向にプレイヤーの向きを変えるのを同時に行うようにする
         private void LateUpdate()
         {
+            if(isDead) return; // 死亡している場合は向きを変えない
+
             Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0; // 水平面上の方向に制限
             if (cameraForward.sqrMagnitude > 0.01f)
@@ -196,12 +199,15 @@ namespace Takato
         /// </summary>
         private void Die()
         {
+            isDead = true; // 死亡フラグを立てる
+
             //操作を無効化
             inputController.enabled = false;
             animationController.enabled = false;
             weaponController?.DisableWeaponCollider(); // 武器のコライダーを無効化
             shieldController?.DisableShieldCollider(); // シールドのコライダーを無効化
             
+
             Debug.Log("プレイヤーは死亡しました");
             PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();
             if (ragdollController != null)

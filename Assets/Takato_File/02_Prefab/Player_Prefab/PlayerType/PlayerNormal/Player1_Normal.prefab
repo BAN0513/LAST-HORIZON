@@ -24,13 +24,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3788282948510769616}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.23, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.25, y: 0.08, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 485407463738669205}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1001 &2236370704135915357
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,7 +161,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.7
-  m_Radius: 0.25
+  m_Radius: 0.2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -241,6 +241,11 @@ MonoBehaviour:
   attackBuffMultiplier: 1.25
   defenseBuffCutRate: 0.25
   skillDuration: 10
+  attackBuffMultiplierPerLevel: 0
+  defenseBuffCutRatePerLevel: 0
+  skillDurationPerLevel: 0
+  skillLevel: 0
+  maxSkillLevel: 0
 --- !u!4 &4986975286277837470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
