@@ -34,7 +34,6 @@ namespace Takato
         /// <summary>
         /// ラグドールの有効/無効を切り替える
         /// </summary>
-        /// <param name="active">trueでラグドール化</param>
         public void SetRagdollActive(bool active)
         {
             // Animatorの有効/無効
@@ -48,7 +47,7 @@ namespace Takato
             }
             foreach (var col in ragdollColliders)
             {
-                // 自身のCollider（例: CharacterController）は除外
+                // 自身のColliderは無効化しない。
                 if (col.gameObject == this.gameObject) continue;
                 col.enabled = active;
             }
@@ -59,27 +58,32 @@ namespace Takato
         /// </summary>
         public void ActivateRagdoll()
         {
-            SetRagdollActive(true); // ラグドール化
+            //Animatorを無効化
+            if (animator != null)
+                animator.enabled = false;
 
-            // 物理挙動を自然にするために現在の速度をラグドールのRigidbodyに伝える
+            //RigidbodyとColliderを物理化
+            foreach (var rb in ragdollRigidbodies)
+                rb.isKinematic = false;
+            foreach (var col in ragdollColliders)
+                if (col.gameObject != this.gameObject) col.enabled = true;
+
+            //速度伝播（rootボーンのみ）
             var mainRb = GetComponent<Rigidbody>();
-            if (mainRb != null)
+            if (mainRb != null && ragdollRigidbodies.Length > 0)
             {
-                foreach (var rb in ragdollRigidbodies)
-                {
-                    rb.linearVelocity = mainRb.linearVelocity;
-                    rb.angularVelocity = mainRb.angularVelocity;
-                }
+                ragdollRigidbodies[0].linearVelocity = mainRb.linearVelocity; // 速度を伝える
+                ragdollRigidbodies[0].angularVelocity = mainRb.angularVelocity; // 回転速度を伝える
             }
 
             // 武器の暴れ対策
             var weapon = GetComponentInChildren<Weapon>();
             if (weapon != null)
             {
-                var rb = weapon.GetComponent<Rigidbody>();
-                if (rb != null) rb.isKinematic = true;
-                var col = weapon.GetComponent<Collider>();
-                if (col != null) col.enabled = false;
+                var rb = weapon.GetComponent<Rigidbody>();  // 武器のRigidbodyを取得
+                if (rb != null) rb.isKinematic = true;      // 武器を物理化しない
+                var col = weapon.GetComponent<Collider>();  // 武器のColliderを取得
+                if (col != null) col.enabled = false;       // 武器のColliderを無効化
             }
         }
     }
