@@ -9,6 +9,7 @@ public class PausManeger : MonoBehaviour
     public GameObject PauseTextImage;
 
     public bool IsPause = false;
+    public static bool ToPause = false;
 
     public void PauseGame()
     {
@@ -32,11 +33,13 @@ public class PausManeger : MonoBehaviour
         {
             PauseGame();
             IsPause = true;
+            ToPause = true;
         }
         else if(IsPause)
         {
             ResumeGame();
             IsPause = false;
+            ToPause = false;
         }
     }
 }

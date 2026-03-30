@@ -232,6 +232,15 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Select"",
+                    ""type"": ""Value"",
+                    ""id"": ""371ed297-528c-47ee-9401-9d2ed8db34ab"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -245,6 +254,105 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""action"": ""Decision"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WS"",
+                    ""id"": ""8fa67739-613e-4bef-b044-5a4dcc8dd556"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""680e8dc1-ceac-49f2-887d-87b6916c4711"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f41b13a5-7f44-4b3a-9025-76cdb1342e81"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""255e57f0-bffb-4487-974e-4e67b7215888"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""413bb31a-6ffd-4211-8cc4-ec01242bcc49"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8e5eafda-ea11-43b2-aea1-7af01b3d9a03"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""8848b1f7-8f35-41eb-a8bf-160d8a7380cc"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""6362f6ab-9ba5-43e9-85ae-428efd1ea437"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""dc5ca6fd-2cf0-462f-929b-ffc2c4c0b32c"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -260,6 +368,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Decision = m_UI.FindAction("Decision", throwIfNotFound: true);
+        m_UI_Select = m_UI.FindAction("Select", throwIfNotFound: true);
     }
 
     ~@Input_Dv()
@@ -471,6 +580,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Decision;
+    private readonly InputAction m_UI_Select;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -486,6 +596,10 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Decision".
         /// </summary>
         public InputAction @Decision => m_Wrapper.m_UI_Decision;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/Select".
+        /// </summary>
+        public InputAction @Select => m_Wrapper.m_UI_Select;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -515,6 +629,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Decision.started += instance.OnDecision;
             @Decision.performed += instance.OnDecision;
             @Decision.canceled += instance.OnDecision;
+            @Select.started += instance.OnSelect;
+            @Select.performed += instance.OnSelect;
+            @Select.canceled += instance.OnSelect;
         }
 
         /// <summary>
@@ -529,6 +646,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Decision.started -= instance.OnDecision;
             @Decision.performed -= instance.OnDecision;
             @Decision.canceled -= instance.OnDecision;
+            @Select.started -= instance.OnSelect;
+            @Select.performed -= instance.OnSelect;
+            @Select.canceled -= instance.OnSelect;
         }
 
         /// <summary>
@@ -612,5 +732,12 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDecision(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Select" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelect(InputAction.CallbackContext context);
     }
 }
