@@ -32,6 +32,11 @@ namespace Takato
         [Header("スキル最大レベル")]
         [SerializeField] private int maxSkillLevel;
 
+        [Header("攻撃スキルのパーティクル")]
+        [SerializeField] private ParticleSystem attackBuffEffect;
+        [Header("防御スキルのパーティクル")]
+        [SerializeField] private ParticleSystem defenseBuffEffect;
+
         private float skillTimer; // スキルのクールタイム管理
         private bool isSkillActive; // スキルが現在発動中かどうか
 
@@ -78,6 +83,12 @@ namespace Takato
             var weapon = GetEquippedWeapon();
             if (weapon == null) return;
 
+            /// 攻撃力アップのエフェクトをスキル発動中に武器の位置に生成
+            if(attackBuffEffect != null)
+            {
+                Instantiate(attackBuffEffect, weapon.transform.position, Quaternion.identity, weapon.transform);
+            }
+
             int level = skillLevel;
 
             float levelAttackBuffMultiplier = attackBuffMultiplier + attackBuffMultiplierPerLevel * (level - 1);
@@ -97,6 +108,12 @@ namespace Takato
         public void ActivateDefenseBuff()
         {
             if (skillTimer > 0f || isSkillActive || playerController == null) return;
+
+            /// 防御力アップのエフェクトをスキル発動中にプレイヤーの位置に生成
+            if(defenseBuffEffect != null)
+            {
+                Instantiate(defenseBuffEffect, transform.position, Quaternion.identity, transform);
+            }
 
             int level = skillLevel;
 
