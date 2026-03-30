@@ -37,6 +37,9 @@ namespace Takato
         [Header("防御スキルのパーティクル")]
         [SerializeField] private ParticleSystem defenseBuffEffect;
 
+        private ParticleSystem activeAttackBuffEffect; // 現在再生中の攻撃スキルエフェクト
+        private ParticleSystem activeDefenseBuffEffect; // 現在再生中の防御スキルエフェクト
+
         private float skillTimer; // スキルのクールタイム管理
         private bool isSkillActive; // スキルが現在発動中かどうか
 
@@ -83,10 +86,12 @@ namespace Takato
             var weapon = GetEquippedWeapon();
             if (weapon == null) return;
 
-            /// 攻撃力アップのエフェクトをスキル発動中に武器の位置に生成
-            if(attackBuffEffect != null)
+            // エフェクトをインスタンス化して再生
+            if (attackBuffEffect != null && weapon != null)
             {
-                Instantiate(attackBuffEffect, weapon.transform.position, Quaternion.identity, weapon.transform);
+                activeAttackBuffEffect = Instantiate(attackBuffEffect, weapon.transform);
+                activeAttackBuffEffect.transform.localPosition = Vector3.zero;
+                activeAttackBuffEffect.Play();
             }
 
             int level = skillLevel;
@@ -109,10 +114,12 @@ namespace Takato
         {
             if (skillTimer > 0f || isSkillActive || playerController == null) return;
 
-            /// 防御力アップのエフェクトをスキル発動中にプレイヤーの位置に生成
-            if(defenseBuffEffect != null)
+            // エフェクトをインスタンス化して再生
+            if (defenseBuffEffect != null)
             {
-                Instantiate(defenseBuffEffect, transform.position, Quaternion.identity, transform);
+                activeDefenseBuffEffect = Instantiate(defenseBuffEffect, transform);
+                activeDefenseBuffEffect.transform.localPosition = Vector3.zero;
+                activeDefenseBuffEffect.Play();
             }
 
             int level = skillLevel;
@@ -129,7 +136,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// スキル効果終了
+        /// スキルの効果終了
         /// </summary>
         private void EndSkill()
         {
@@ -141,6 +148,19 @@ namespace Takato
             if (playerController != null && originalDamageCutRate >= 0)
             {
                 playerController.SetDamageCutRate(originalDamageCutRate);
+            }
+            // エフェクトを停止＆破棄
+            if (activeAttackBuffEffect != null)
+            {
+                activeAttackBuffEffect.Stop();
+                Destroy(activeAttackBuffEffect.gameObject);
+                activeAttackBuffEffect = null;
+            }
+            if (activeDefenseBuffEffect != null)
+            {
+                activeDefenseBuffEffect.Stop();
+                Destroy(activeDefenseBuffEffect.gameObject);
+                activeDefenseBuffEffect = null;
             }
             isSkillActive = false;
             originalAttackDamage = 0;

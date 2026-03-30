@@ -204,12 +204,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 1
+  maxHp: 30
   hpBar: {fileID: 0}
   moveSpeed: 1.5
   jumpForce: 5
   gravity: 12.5
-  damageCutRate: 0
+  damageCutRate: 0.5
 --- !u!114 &5076607181567321952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,14 +240,14 @@ MonoBehaviour:
   skillCooldown: 0
   attackBuffMultiplier: 1.25
   defenseBuffCutRate: 0.25
-  skillDuration: 10
-  attackBuffMultiplierPerLevel: 0
-  defenseBuffCutRatePerLevel: 0
-  skillDurationPerLevel: 0
-  skillLevel: 0
-  maxSkillLevel: 0
-  attackBuffEffect: {fileID: 0}
-  defenseBuffEffect: {fileID: 0}
+  skillDuration: 5
+  attackBuffMultiplierPerLevel: 0.2
+  defenseBuffCutRatePerLevel: 0.2
+  skillDurationPerLevel: 0.3
+  skillLevel: 1
+  maxSkillLevel: 10
+  attackBuffEffect: {fileID: 8848207047497641950, guid: 84fb8221f686852419960ea644539a1e, type: 3}
+  defenseBuffEffect: {fileID: 1813967872689060148, guid: f0a738431d3d95e40be0466b9229191a, type: 3}
 --- !u!4 &4986975286277837470 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
