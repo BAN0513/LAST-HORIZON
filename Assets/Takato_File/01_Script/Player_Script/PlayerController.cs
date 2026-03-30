@@ -47,6 +47,8 @@ namespace Takato
         {
             hp = maxHp;
             hpBar.SetHP(hp, maxHp); // 初期値を反映
+            Cursor.lockState = CursorLockMode.Locked; // カーソルをロック
+            Cursor.visible = false; // カーソルを非表示
         }
 
 
@@ -69,6 +71,17 @@ namespace Takato
             if (hp <= 0)
             {
                 Die(); // HPが0以下になったら死亡処理
+            }
+        }
+
+        //カメラの向いてる方向に移動するのとカメラの向いてる方向にプレイヤーの向きを変えるのを同時に行うようにする
+        private void LateUpdate()
+        {
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0; // 水平面上の方向に制限
+            if (cameraForward.sqrMagnitude > 0.01f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cameraForward), Time.deltaTime * 10f);
             }
         }
 
@@ -100,7 +113,11 @@ namespace Takato
 
             Vector2 moveDirection = inputController.MoveInput;
             float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed; // 防御中は移動速度を低下
-            Vector3 movement = new Vector3(moveDirection.x, 0, moveDirection.y) * currentMoveSpeed;
+
+            // プレイヤーの向いている方向に移動
+            Vector3 forward = transform.forward;
+            Vector3 right = transform.right;
+            Vector3 movement = (forward * moveDirection.y + right * moveDirection.x) * currentMoveSpeed;
             movement.y = verticalVelocity;
 
             characterController.Move(movement * Time.deltaTime);
@@ -171,6 +188,8 @@ namespace Takato
             hpBar.SetHP(hp, maxHp); // HPバーを更新
             Debug.Log($"プレイヤーは{finalDamage}のダメージを受けました。現在のHP: {hp}/{maxHp}");
         }
+
+        
 
         /// <summary>
         /// プレイヤーが死亡したときの処理

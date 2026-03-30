@@ -16,6 +16,7 @@ namespace Takato
         public bool IsAttackInput { get; private set; }  //プレイヤーの攻撃入力を格納するプロパティ
         public bool IsSkillInput { get; private set; }   //プレイヤーのスキル入力を格納するプロパティ
         public bool IsSkill2Input { get; private set; }  //プレイヤーのスキル2入力を格納するプロパティ
+        public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
 
         private void Awake()
         {
@@ -50,6 +51,11 @@ namespace Takato
             playerInputActions.Player.Skill2.started += context => IsSkill2Input = context.ReadValueAsButton();   // 入力が開始されたときのイベント
             playerInputActions.Player.Skill2.performed += context => IsSkill2Input = context.ReadValueAsButton(); // 入力が実行されたときのイベント
             playerInputActions.Player.Skill2.canceled += context => IsSkill2Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //Look入力イベント登録
+            playerInputActions.Player.Look.started += context => LookInput = context.ReadValue<Vector2>();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Look.performed += context => LookInput = context.ReadValue<Vector2>(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Look.canceled += context => LookInput = context.ReadValue<Vector2>();  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>
@@ -82,6 +88,14 @@ namespace Takato
         private void OnJumpInput(InputAction.CallbackContext context)
         {
             JumpInput = context.ReadValueAsButton();
+        }
+
+        /// <summary>
+        /// プレイヤーの視点入力を処理するメソッド
+        /// </summary>
+        private void OnLookInput(InputAction.CallbackContext context)
+        {
+            LookInput = context.ReadValue<Vector2>();
         }
     }
 }
