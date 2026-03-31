@@ -39,16 +39,6 @@ public class SelectManeger : MonoBehaviour
         }
     }
 
-
-    private void OnDecision(InputValue var)
-    {
-        if (PausManeger.ToPause)
-        {
-            IsDecision = true;
-            Debug.Log("決定");
-        }
-    }
-
     private void OnSelect(InputValue var)
     {
         if (PausManeger.ToPause)
