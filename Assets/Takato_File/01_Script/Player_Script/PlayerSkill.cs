@@ -87,14 +87,15 @@ namespace Takato
             if (weapon == null) return;
 
             // エフェクトをインスタンス化して再生
-            if (attackBuffEffect != null && weapon != null)
+            if (attackBuffEffect != null)
             {
-                activeAttackBuffEffect = Instantiate(attackBuffEffect, weapon.transform);
+                activeAttackBuffEffect = Instantiate(attackBuffEffect, transform);
                 activeAttackBuffEffect.transform.localPosition = Vector3.zero;
                 activeAttackBuffEffect.Play();
+
             }
 
-            int level = skillLevel;
+            int level = skillLevel; //武器のレベルに応じた倍率を計算
 
             float levelAttackBuffMultiplier = attackBuffMultiplier + attackBuffMultiplierPerLevel * (level - 1);
             currentSkillDuration = skillDuration + skillDurationPerLevel * (level - 1);
@@ -122,7 +123,7 @@ namespace Takato
                 activeDefenseBuffEffect.Play();
             }
 
-            int level = skillLevel;
+            int level = skillLevel; //武器のレベルに応じたダメージカット率を計算
 
             float levelDefenseBuffCutRate = defenseBuffCutRate + defenseBuffCutRatePerLevel * (level - 1);
             currentSkillDuration = skillDuration + skillDurationPerLevel * (level - 1);
