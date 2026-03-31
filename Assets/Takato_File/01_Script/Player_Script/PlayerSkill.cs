@@ -9,6 +9,10 @@ namespace Takato
     {
         [Header("スキルのステータス")]
         [Space(10)]
+
+        [Header("基本スキルの詳細")]
+        [Space(10)]
+
         [Header("スキルのクールタイム")]
         [SerializeField] private float skillCooldown;
         [Header("攻撃スキルの上昇倍率(基準値)")]
@@ -36,6 +40,15 @@ namespace Takato
         [SerializeField] private ParticleSystem attackBuffEffect;
         [Header("防御スキルのパーティクル")]
         [SerializeField] private ParticleSystem defenseBuffEffect;
+        [Space(10)]
+
+        [Header("魔法スキルの詳細")]
+        [Space(10)]
+        [Header("魔法スキル用ホーミング弾Prefab")]
+        [SerializeField] private HomingProjectile homingProjectilePrefab;
+        [Header("ホーミング弾の発射位置")]
+        [SerializeField] private Transform projectileSpawnPoint;
+
 
         private ParticleSystem activeAttackBuffEffect; // 現在再生中の攻撃スキルエフェクト
         private ParticleSystem activeDefenseBuffEffect; // 現在再生中の防御スキルエフェクト
@@ -71,7 +84,7 @@ namespace Takato
                 currentSkillDuration -= Time.deltaTime;
                 if (currentSkillDuration <= 0f)
                 {
-                    EndSkill();
+                    EndSkill(); // スキルの効果終了
                 }
             }
         }
@@ -134,6 +147,48 @@ namespace Takato
             isSkillActive = true;
             currentSkillDuration = Mathf.Max(currentSkillDuration, 0.1f);
             skillTimer = skillCooldown;
+        }
+
+        /// <summary>
+        /// 魔法スキル発動
+        /// </summary>
+        public void ActivateMagicHomingSkill()
+        {
+            if (skillTimer > 0f || isSkillActive) return;
+
+            // 近くの敵を探す（例：最も近いEnemyタグのオブジェクト）
+            GameObject targetEnemy = FindClosestEnemy();
+            if (targetEnemy == null) return;
+
+            // ホーミング弾を生成
+            HomingProjectile projectile = Instantiate(
+                homingProjectilePrefab,
+                projectileSpawnPoint != null ? projectileSpawnPoint.position : transform.position + transform.forward,
+                Quaternion.identity
+            );
+            projectile.SetTarget(targetEnemy.transform);
+
+            // クールタイム設定
+            skillTimer = skillCooldown;
+        }
+
+        // 近くの敵を探すユーティリティ
+        private GameObject FindClosestEnemy()
+        {
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            GameObject closest = null;
+            float minDist = float.MaxValue;
+            Vector3 currentPos = transform.position;
+            foreach (GameObject enemy in enemies)
+            {
+                float dist = Vector3.Distance(enemy.transform.position, currentPos);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = enemy;
+                }
+            }
+            return closest;
         }
 
         /// <summary>

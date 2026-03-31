@@ -59,16 +59,24 @@ namespace Takato
             Move(); // 移動とジャンプの処理
             Block();// 防御処理
             Attack();// 攻撃処理
+
             if (inputController.IsSkillInput && playerSkill != null)
             {
-                playerSkill.ActivateAttackBuff(); // Skillボタンで攻撃バフ
+                playerSkill.ActivateAttackBuff();           // Skillボタンで攻撃バフ
                 Debug.Log("攻撃バフを発動しました！");
             }
             if (inputController.IsSkill2Input && playerSkill != null)
             {
-                playerSkill.ActivateDefenseBuff(); // Skill2ボタンで防御バフ
+                playerSkill.ActivateDefenseBuff();          // Skill2ボタンで防御バフ
                 Debug.Log("防御バフを発動しました！");
             }
+            if(inputController.IsSkill3Input && playerSkill != null)
+            {
+                playerSkill.ActivateMagicHomingSkill();     // Skill3ボタンで魔法スキル
+                Debug.Log("ホーミング弾を発動しました！");
+            }
+
+            // HPが0以下になったら死亡処理を呼び出す
             if (hp <= 0)
             {
                 Die(); // HPが0以下になったら死亡処理
