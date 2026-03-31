@@ -42,6 +42,18 @@ namespace Takato
 
         [Header("魔法スキル")]
         [Space(5)]
+        [Header("魔法スキルのダメージ(基準値)")]
+        [SerializeField] private float magicSkillDamage;
+        [Header("魔法スキルのレベルごとの火力加算値")]
+        [SerializeField] private float magicSkillDamagePerLevel;
+        [Header("魔法スキルの弾スピード(基準値)")]
+        [SerializeField] private float magicProjectileSpeed;
+        [Header("魔法スキルのレベルごとのスピード加算値")]
+        [SerializeField] private float magicProjectileSpeedPerLevel;
+        [Header("魔法スキルの回転速度(基準値)")]
+        [SerializeField] private float magicProjectileRotationSpeed;
+        [Header("魔法スキルのレベルごとの回転速度加算値")]
+        [SerializeField] private float magicProjectileRotationSpeedPerLevel;
         [Header("魔法スキルのクールタイム")]
         [SerializeField] private float magicSkillCooldown;
         [Header("魔法スキル用ホーミング弾Prefab")]
@@ -174,6 +186,11 @@ namespace Takato
                 Quaternion.identity
             );
             projectile.SetTarget(targetEnemy.transform);
+
+            // ホーミング弾のステータスを設定
+            projectile.damage = magicSkillDamage + magicSkillDamagePerLevel * (skillLevel - 1);
+            projectile.speed = magicProjectileSpeed + magicProjectileSpeedPerLevel * (skillLevel - 1);
+            projectile.rotationSpeed = magicProjectileRotationSpeed + magicProjectileRotationSpeedPerLevel * (skillLevel - 1);
 
             // クールタイム設定
             skillTimer = magicSkillCooldown;

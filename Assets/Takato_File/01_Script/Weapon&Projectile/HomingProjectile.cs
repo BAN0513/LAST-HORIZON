@@ -5,10 +5,16 @@ using UnityEngine;
 /// </summary>
 public class HomingProjectile : MonoBehaviour
 {
+    [HideInInspector]
     public float speed;         // 弾の速度
+    [HideInInspector]
     public float rotationSpeed; // ホーミングの回転速度
-    private Transform target;   // ターゲットの位置
+    [HideInInspector]
+    public float damage;        // 弾のダメージ量
 
+
+    private Transform target;   // ターゲットの位置
+  
     /// <summary>
     /// ターゲットを設定するメソッド
     /// </summary>
@@ -39,7 +45,11 @@ public class HomingProjectile : MonoBehaviour
     {
         if (other.CompareTag("Enemy")) // 敵に衝突した場合
         {
-            // ダメージ処理などをここに追加
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(Mathf.RoundToInt(damage));
+            }
             Destroy(gameObject); // 弾を破壊
         }
     }
