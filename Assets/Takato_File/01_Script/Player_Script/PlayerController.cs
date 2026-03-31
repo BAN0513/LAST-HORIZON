@@ -55,6 +55,7 @@ namespace Takato
 
         private void Update()
         {
+
             hp = Mathf.Max(hp, 0); // HP‚ª0–¢–‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚é
             Move(); // ˆÚ“®‚ÆƒWƒƒƒ“ƒv‚Ìˆ—
             Block();// –hŒäˆ—

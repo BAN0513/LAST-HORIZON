@@ -5,9 +5,9 @@ using UnityEngine;
 /// </summary>
 public class HomingProjectile : MonoBehaviour
 {
-    public float speed; // 弾の速度
+    public float speed;         // 弾の速度
     public float rotationSpeed; // ホーミングの回転速度
-    private Transform target; // ターゲットの位置
+    private Transform target;   // ターゲットの位置
 
     /// <summary>
     /// ターゲットを設定するメソッド

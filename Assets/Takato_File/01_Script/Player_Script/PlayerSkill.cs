@@ -10,59 +10,66 @@ namespace Takato
         [Header("スキルのステータス")]
         [Space(10)]
 
-        [Header("基本スキルの詳細")]
-        [Space(10)]
-
-        [Header("スキルのクールタイム")]
-        [SerializeField] private float skillCooldown;
+        [Header("攻撃スキル")]
+        [Space(5)]
+        [Header("攻撃スキルのクールタイム")]
+        [SerializeField] private float attackSkillCooldown;
         [Header("攻撃スキルの上昇倍率(基準値)")]
         [SerializeField] private float attackBuffMultiplier;
-        [Header("防御スキルのダメージカット率(基準値)")]
-        [SerializeField] private float defenseBuffCutRate;
-        [Header("スキルの持続時間(基準値)")]
-        [SerializeField] private float skillDuration;
-
-        [Header("レベルごとの上昇倍率加算値")]
-        [Space(10)]
-        [Header("レベルごとの攻撃力アップ倍率加算値")]
-        [SerializeField] private float attackBuffMultiplierPerLevel;
-        [Header("レベルごとのダメージカット加算値")]
-        [SerializeField] private float defenseBuffCutRatePerLevel;
-        [Header("レベルごとの効果時間加算値")]
-        [SerializeField] private float skillDurationPerLevel;
-
-        [Header("スキルレベル")]
-        [SerializeField] private int skillLevel;
-        [Header("スキル最大レベル")]
-        [SerializeField] private int maxSkillLevel;
-
+        [Header("攻撃スキルの持続時間(基準値)")]
+        [SerializeField] private float attackSkillDuration;
         [Header("攻撃スキルのパーティクル")]
         [SerializeField] private ParticleSystem attackBuffEffect;
+        [Header("攻撃スキルのレベルごとの倍率加算値")]
+        [SerializeField] private float attackBuffMultiplierPerLevel;
+        [Header("攻撃スキルのレベルごとの効果時間加算値")]
+        [SerializeField] private float attackSkillDurationPerLevel;
+
+        [Header("防御スキル")]
+        [Space(5)]
+        [Header("防御スキルのクールタイム")]
+        [SerializeField] private float defenseSkillCooldown;
+        [Header("防御スキルのダメージカット率(基準値)")]
+        [SerializeField] private float defenseBuffCutRate;
+        [Header("防御スキルの持続時間(基準値)")]
+        [SerializeField] private float defenseSkillDuration;
         [Header("防御スキルのパーティクル")]
         [SerializeField] private ParticleSystem defenseBuffEffect;
-        [Space(10)]
+        [Header("防御スキルのレベルごとのカット加算値")]
+        [SerializeField] private float defenseBuffCutRatePerLevel;
+        [Header("防御スキルのレベルごとの効果時間加算値")]
+        [SerializeField] private float defenseSkillDurationPerLevel;
 
-        [Header("魔法スキルの詳細")]
-        [Space(10)]
+        [Header("魔法スキル")]
+        [Space(5)]
+        [Header("魔法スキルのクールタイム")]
+        [SerializeField] private float magicSkillCooldown;
         [Header("魔法スキル用ホーミング弾Prefab")]
         [SerializeField] private HomingProjectile homingProjectilePrefab;
         [Header("ホーミング弾の発射位置")]
         [SerializeField] private Transform projectileSpawnPoint;
 
+        [Header("スキル共通")]
+        [Space(5)]
+        [Header("スキルレベル")]
+        [SerializeField] private int skillLevel;
+        [Header("スキル最大レベル")]
+        [SerializeField] private int maxSkillLevel;
 
-        private ParticleSystem activeAttackBuffEffect; // 現在再生中の攻撃スキルエフェクト
-        private ParticleSystem activeDefenseBuffEffect; // 現在再生中の防御スキルエフェクト
 
-        private float skillTimer; // スキルのクールタイム管理
-        private bool isSkillActive; // スキルが現在発動中かどうか
+        private ParticleSystem activeAttackBuffEffect;      // 現在再生中の攻撃スキルエフェクト
+        private ParticleSystem activeDefenseBuffEffect;     // 現在再生中の防御スキルエフェクト
 
-        private PlayerWeaponController weaponController; // 武器管理クラスへの参照
-        private Takato.PlayerController playerController;// プレイヤー管理クラスへの参照
+        private float skillTimer;                           // スキルのクールタイム管理
+        private bool isSkillActive;                         // スキルが現在発動中かどうか
 
-        private float originalAttackDamage; // スキル発動前の攻撃力を保存する変数
-        private float originalDamageCutRate; // スキル発動前のダメージカット率を保存する変数
+        private PlayerWeaponController weaponController;    // 武器管理クラスへの参照
+        private Takato.PlayerController playerController;   // プレイヤー管理クラスへの参照
 
-        private float currentSkillDuration; // 現在のスキルの持続時間を管理する変数
+        private float originalAttackDamage;                 // スキル発動前の攻撃力を保存する変数
+        private float originalDamageCutRate;                // スキル発動前のダメージカット率を保存する変数
+
+        private float currentSkillDuration;                 // 現在のスキルの持続時間を管理する変数
 
         private void Start()
         {
@@ -111,14 +118,14 @@ namespace Takato
             int level = skillLevel; //武器のレベルに応じた倍率を計算
 
             float levelAttackBuffMultiplier = attackBuffMultiplier + attackBuffMultiplierPerLevel * (level - 1);
-            currentSkillDuration = skillDuration + skillDurationPerLevel * (level - 1);
+            currentSkillDuration = attackSkillCooldown + attackSkillDuration * (level - 1);
 
             originalAttackDamage = weapon.AttackDamage;
             weapon.SetAttackDamage(originalAttackDamage * levelAttackBuffMultiplier);
 
             isSkillActive = true;
             currentSkillDuration = Mathf.Max(currentSkillDuration, 0.1f);
-            skillTimer = skillCooldown;
+            skillTimer = attackSkillCooldown;
         }
 
         /// <summary>
@@ -139,14 +146,14 @@ namespace Takato
             int level = skillLevel; //武器のレベルに応じたダメージカット率を計算
 
             float levelDefenseBuffCutRate = defenseBuffCutRate + defenseBuffCutRatePerLevel * (level - 1);
-            currentSkillDuration = skillDuration + skillDurationPerLevel * (level - 1);
+            currentSkillDuration = attackSkillCooldown + attackSkillDuration * (level - 1);
 
             originalDamageCutRate = playerController.GetDamageCutRate();
             playerController.SetDamageCutRate(originalDamageCutRate + levelDefenseBuffCutRate);
 
             isSkillActive = true;
             currentSkillDuration = Mathf.Max(currentSkillDuration, 0.1f);
-            skillTimer = skillCooldown;
+            skillTimer = defenseSkillCooldown;
         }
 
         /// <summary>
@@ -156,7 +163,7 @@ namespace Takato
         {
             if (skillTimer > 0f || isSkillActive) return;
 
-            // 近くの敵を探す（例：最も近いEnemyタグのオブジェクト）
+            // 近くの敵を探す（最も近いEnemyタグのオブジェクト）
             GameObject targetEnemy = FindClosestEnemy();
             if (targetEnemy == null) return;
 
@@ -169,7 +176,7 @@ namespace Takato
             projectile.SetTarget(targetEnemy.transform);
 
             // クールタイム設定
-            skillTimer = skillCooldown;
+            skillTimer = magicSkillCooldown;
         }
 
         // 近くの敵を探すユーティリティ

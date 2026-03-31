@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5475343328863229358}
   - component: {fileID: 8199411495623552802}
   - component: {fileID: 3651757713296906836}
+  - component: {fileID: 4936766150601922115}
   - component: {fileID: 8825622566448534756}
   m_Layer: 0
   m_Name: MagicBall
@@ -113,6 +114,33 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &4936766150601922115
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733091912561977032}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8825622566448534756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,5 +153,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425a66d112e9dcc43afa54a8e96cac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomingProjectile
-  speed: 1
+  speed: 3
   rotationSpeed: 1
