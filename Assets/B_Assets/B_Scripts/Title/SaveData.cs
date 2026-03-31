@@ -5,6 +5,7 @@ using UnityEngine;
 [Serializable]
 public class SaveData
 {
+    public float playTime;
     public int level;
     public int stage;
     public float currentHealth;

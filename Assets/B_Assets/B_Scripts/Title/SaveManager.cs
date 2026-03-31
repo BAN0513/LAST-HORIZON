@@ -68,6 +68,12 @@ public class SaveManager : MonoBehaviour
 
                 Debug.Log("Load successful!");
             }
+            else
+            {
+                //セーブデータが存在しない場合は新しく作る
+                save = new SaveData();
+                SceneManager.LoadScene("B_TestScene");
+            }
         }
     }
 

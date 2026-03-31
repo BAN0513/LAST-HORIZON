@@ -287,6 +287,7 @@ public abstract class Enemy : MonoBehaviour
             hpSliider.gameObject.SetActive(false);
             isHit = false;
             InitAnim();
+            SaveManager.Instance.SaveButton(3);
             Death();
         }
         else
@@ -359,6 +360,6 @@ public abstract class Enemy : MonoBehaviour
     [ContextMenu("ReturnTitle")]
     public void ReturnTitle()
     {
-        SaveManager.Instance.SaveButton(1);
+        SaveManager.Instance.SaveButton(3);
     }
 }
