@@ -1234,6 +1234,18 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: skillLevel
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicSkillDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: defenseBuffCutRate
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
       propertyPath: magicSkillCooldown
       value: 5
       objectReference: {fileID: 0}
@@ -1250,6 +1262,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicProjectileSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
       propertyPath: projectileSpawnPoint
       value: 
       objectReference: {fileID: 849772383}
@@ -1258,8 +1274,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8825622566448534756, guid: 073ba091a113c554caf7b6b49ce70bd7, type: 3}
     - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicSkillDamagePerLevel
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: defenseBuffCutRatePerLevel
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: attackSkillDurationPerLevel
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: attackBuffMultiplierPerLevel
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
       propertyPath: defenseSkillDurationPerLevel
-      value: 0.2
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicProjectileRotationSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicProjectileSpeedPerLevel
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: magicProjectileRotationSpeedPerLevel
+      value: 1.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
