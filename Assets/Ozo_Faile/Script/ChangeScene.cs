@@ -7,12 +7,12 @@ public class ChangeScene : MonoBehaviour
 
     public string SeneName;
 
-    public void OnDecision (InputValue var)
+    private void OnDecision (InputValue var)
     {
         Load();
     }
 
-    public void Load()
+    private void Load()
     {
         SceneManager.LoadScene(SeneName);
     }

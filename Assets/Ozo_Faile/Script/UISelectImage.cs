@@ -1,80 +1,175 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class UISelectImage : MonoBehaviour
 {
 
     [Header("セーブ")]
-    public Sprite SaveimageON;
-    public Sprite SaveimageOFF;
+    [SerializeField] private UnityEngine.UI.Image Saveimage;
+    [SerializeField] private Sprite[] Sprite_Save;            // UIの画像（配列）0:OFF 1:ON
 
     [Header("ロード")]
-    public Sprite LoadimageON;
-    public Sprite LoadimageOFF;
+    [SerializeField] private UnityEngine.UI.Image Loadimage;
+    [SerializeField] private Sprite[] Sprite_Load;            // UIの画像（配列）0:OFF 1:ON
+
 
     [Header("マニュアル")]
-    public Sprite ManualimageON;
-    public Sprite ManualimageOFF;
+    [SerializeField] private UnityEngine.UI.Image Manualimage;
+    [SerializeField] private Sprite[] Sprite_Manual;            // UIの画像（配列）0:OFF 1:ON
+
 
     [Header("システム")]
-    public Sprite SystemimageON;
-    public Sprite SystemimageOFF;
+    [SerializeField] private UnityEngine.UI.Image Systemimage;
+    [SerializeField] private Sprite[] Sprite_System;            // UIの画像（配列）0:OFF 1:ON
+
 
     [Header("タイトル")]
-    public Sprite TitleimageON;
-    public Sprite TitleimageOFF;
+    [SerializeField] private UnityEngine.UI.Image Titleimage;
+    [SerializeField] private Sprite[] Sprite_Title;            // UIの画像（配列）0:OFF 1:ON
+
+    public string SeneName;
 
     public bool on = false;
 
     private void Update()
     {
-        if (on && SelectManeger.IsDecision)
-        {
-            Debug.Log("セーブ画面");
-        }
         if (PausManeger.ToPause)
         {
             on = true;
             switch (SelectManeger.SelectNo)
             {
                 case 1:
-                    GetComponent<SpriteRenderer>().sprite = SaveimageON;
-                    GetComponent<SpriteRenderer>().sprite = LoadimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = ManualimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = SystemimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = TitleimageOFF;
+                    SelectSaveON();
+                    SelectLoadOFF();
+                    SelectManualOFF();
+                    SelectSystemOFF();
+                    SelectTitleOFF();
+                    if (SelectManeger.IsDecision)
+                    {
+                        Debug.Log("セーブ画面");
+                    }
                     break;
                 case 2:
-                    GetComponent<SpriteRenderer>().sprite = SaveimageON;
-                    GetComponent<SpriteRenderer>().sprite = LoadimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = ManualimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = SystemimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = TitleimageOFF;
+                    SelectSaveOFF();
+                    SelectLoadON();
+                    SelectManualOFF();
+                    SelectSystemOFF();
+                    SelectTitleOFF();
+                    if (SelectManeger.IsDecision)
+                    {
+                        Debug.Log("ロード画面");
+                    }
                     break;
                 case 3:
-                    GetComponent<SpriteRenderer>().sprite = SaveimageON;
-                    GetComponent<SpriteRenderer>().sprite = LoadimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = ManualimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = SystemimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = TitleimageOFF;
+                    SelectSaveOFF();
+                    SelectLoadOFF();
+                    SelectManualON();
+                    SelectSystemOFF();
+                    SelectTitleOFF();
+                    if (SelectManeger.IsDecision)
+                    {
+                        Debug.Log("マニュアル画面");
+                    }
                     break;
                 case 4:
-                    GetComponent<SpriteRenderer>().sprite = SaveimageON;
-                    GetComponent<SpriteRenderer>().sprite = LoadimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = ManualimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = SystemimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = TitleimageOFF;
+                    SelectSaveOFF();
+                    SelectLoadOFF();
+                    SelectManualOFF();
+                    SelectSystemON();
+                    SelectTitleOFF();
+                    if (SelectManeger.IsDecision)
+                    {
+                        Debug.Log("システム画面");
+                    }
                     break;
                 case 5:
-                    GetComponent<SpriteRenderer>().sprite = SaveimageON;
-                    GetComponent<SpriteRenderer>().sprite = LoadimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = ManualimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = SystemimageOFF;
-                    GetComponent<SpriteRenderer>().sprite = TitleimageOFF;
+                    SelectSaveOFF();
+                    SelectLoadOFF();
+                    SelectManualOFF();
+                    SelectSystemOFF();
+                    SelectTitleON();
+                    if (SelectManeger.IsDecision)
+                    {
+                        Debug.Log("タイトル画面");
+                    }
                     break;
             }
 
         }
         else
             on = false;
+    }
+
+    private void OnDecision(InputValue var)
+    {
+        if (PausManeger.ToPause)
+        {
+            switch (SelectManeger.SelectNo)
+            {
+                case 1:
+                        Debug.Log("セーブ画面");
+                    break;
+                case 2:
+                        Debug.Log("ロード画面");
+                    break;
+                case 3:
+                        Debug.Log("マニュアル画面");
+                    break;
+                case 4:
+                        Debug.Log("システム画面");
+                    break;
+                case 5:
+                        Debug.Log("タイトル画面");
+                    Load();
+                    break;
+            }
+        }
+    }
+
+    private void Load()
+    {
+        SceneManager.LoadScene(SeneName);
+    }
+
+    private void SelectSaveON()
+    {
+        Saveimage.sprite = Sprite_Save[1];
+    }
+    private void SelectSaveOFF()
+    {
+        Saveimage.sprite = Sprite_Save[0];
+    }
+    private void SelectLoadON()
+    {
+        Loadimage.sprite = Sprite_Load[1];
+    }
+    private void SelectLoadOFF()
+    {
+        Loadimage.sprite = Sprite_Load[0];
+    }
+    private void SelectManualON()
+    {
+        Manualimage.sprite = Sprite_Manual[1];
+    }
+    private void SelectManualOFF()
+    {
+        Manualimage.sprite = Sprite_Manual[0];
+    }
+    private void SelectSystemON()
+    {
+        Systemimage.sprite = Sprite_System[1];
+    }
+    private void SelectSystemOFF()
+    {
+        Systemimage.sprite = Sprite_System[0];
+    }
+    private void SelectTitleON()
+    {
+        Titleimage.sprite = Sprite_Title[1];
+    }
+    private void SelectTitleOFF()
+    {
+        Titleimage.sprite = Sprite_Title[0];
     }
 }
