@@ -8,7 +8,7 @@ namespace Takato
         [Space(10)]
         [Header("スキル名")]
         public string skillName;
-        [Header("スキルの説明")]
+        [Header("スキルのクールタイム")]
         public float cooldown;
 
         // スキル発動時の共通インターフェース

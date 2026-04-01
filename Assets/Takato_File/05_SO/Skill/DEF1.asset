@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d5bdd86e180e4f40ac53cb3f2a12bf7, type: 3}
-  m_Name: ATK1
-  m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
-  skillName: ATK1
-  cooldown: 3
-  baseBuffMultiplier: 1.05
-  buffMultiplierPerLevel: 1.1
+  m_Script: {fileID: 11500000, guid: 1cc66893b6abbca4f9bc2f4036b466f8, type: 3}
+  m_Name: DEF1
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
+  skillName: DEF1
+  cooldown: 15
+  baseCutRate: 0.05
+  cutRatePerLevel: 0.1
   baseDuration: 5
   durationPerLevel: 1
-  effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
+  effectPrefab: {fileID: 3280519133390621004, guid: 868b6d9162ac6244987109c436ef9ac6, type: 3}
   skillLevel: 5
   maxSkillLevel: 10

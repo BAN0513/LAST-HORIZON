@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_1_Takato
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   maxHP: 50
-  damage: 10
+  damage: 15
   dashMoveSpeed: 4
   walkMoveSpeed: 2
   def: 2

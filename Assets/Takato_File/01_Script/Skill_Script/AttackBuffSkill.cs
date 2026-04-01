@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace Takato
 {
+    /// <summary>
+    /// 攻撃力を一定時間上げるスキルのクラス
+    /// </summary>
     [CreateAssetMenu(menuName = "Takato/Skill/AttackBuffSkill")]
     public class AttackBuffSkill : SkillBase
     {

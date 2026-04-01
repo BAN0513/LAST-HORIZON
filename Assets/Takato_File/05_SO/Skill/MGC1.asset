@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28a6a1b0a98e524998939df7cd3df65, type: 3}
+  m_Name: MGC1
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.MGCSkill
+  skillName: MGC1
+  cooldown: 5
+  homingProjectilePrefab: {fileID: 8825622566448534756, guid: 073ba091a113c554caf7b6b49ce70bd7, type: 3}
+  magicEffectPrefab: {fileID: 3280519133390621004, guid: 808a38a53e32a97499afb18d10727df9, type: 3}
+  baseProjectileSpeed: 2
+  baseHomingRotationSpeed: 2
+  baseProjectileDamage: 10
+  skillLevel: 5
+  maxSkillLevel: 10
+  damagePerLevel: 1
+  speedPerLevel: 1

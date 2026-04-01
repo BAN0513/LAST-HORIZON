@@ -969,29 +969,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e1c765535f6f442a6054bd4a2ad358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
-  attackSkillCooldown: 5
-  attackBuffMultiplier: 1.25
-  attackSkillDuration: 0
-  attackBuffEffect: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
-  attackBuffMultiplierPerLevel: 1.2
-  attackSkillDurationPerLevel: 1.2
-  defenseSkillCooldown: 5
-  defenseBuffCutRate: 1.2
-  defenseSkillDuration: 5
-  defenseBuffEffect: {fileID: 3280519133390621004, guid: 868b6d9162ac6244987109c436ef9ac6, type: 3}
-  defenseBuffCutRatePerLevel: 1.2
-  defenseSkillDurationPerLevel: 1.4
-  magicSkillDamage: 10
-  magicSkillDamagePerLevel: 1.5
-  magicProjectileSpeed: 5
-  magicProjectileSpeedPerLevel: 1.5
-  magicProjectileRotationSpeed: 5
-  magicProjectileRotationSpeedPerLevel: 1.7
-  magicSkillCooldown: 5
-  homingProjectilePrefab: {fileID: 8825622566448534756, guid: 073ba091a113c554caf7b6b49ce70bd7, type: 3}
-  projectileSpawnPoint: {fileID: 5965716930244222659}
-  skillLevel: 5
-  maxSkillLevel: 10
+  skills:
+  - {fileID: 11400000, guid: 0053ec1db2167454b824f5653c16aaca, type: 2}
+  - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
+  - {fileID: 11400000, guid: d99d47df083abf64fae0e1122525da03, type: 2}
 --- !u!1 &5918869648423950159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
