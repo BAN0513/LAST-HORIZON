@@ -122,6 +122,8 @@ public abstract class Enemy : MonoBehaviour
         _weaponController.Player = playerController;
 
         transform.position = SaveManager.Instance.save.playerPosition;
+
+        RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
     }
 
     protected virtual void Update()
