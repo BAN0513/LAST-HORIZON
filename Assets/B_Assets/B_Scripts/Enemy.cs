@@ -121,9 +121,8 @@ public abstract class Enemy : MonoBehaviour
         _weaponController.Damage = enemySO.damage;
         _weaponController.Player = playerController;
 
-        transform.position = SaveManager.Instance.save.playerPosition;
-
-        RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
+        //‰æ–Ê‚Ì–¾‚é‚³•ÏXiŒã‚Å•Ê‚Ì‚Æ‚±‚É‘‚­j
+        //RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
     }
 
     protected virtual void Update()

@@ -7,6 +7,10 @@ public class SaveManager : MonoBehaviour
     public static SaveManager Instance {  get; private set; }
     public SaveData save;
 
+    //プレイ時間計測用
+    private float playTimeCnt = 0;
+    private bool isPlay = false;
+
     void Awake()
     {
         if (Instance == null)
@@ -20,7 +24,15 @@ public class SaveManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        save = new SaveData();
+        //save = new SaveData();
+    }
+
+    private void Update()
+    {
+        if (isPlay)
+        {
+            playTimeCnt += Time.deltaTime;
+        }
     }
 
     public void SaveGame(SaveData data, int slot)
@@ -39,32 +51,34 @@ public class SaveManager : MonoBehaviour
     public void LoadGame(int slot, bool isNewGame)
     {
         string path = Application.persistentDataPath + $"/save_{slot}.json";
+        playTimeCnt = 0;
 
         //初期化
         if (isNewGame)
         {
             save = new SaveData();
-            SceneManager.LoadScene("B_TestScene");
+            SceneManager.LoadScene("Ozo_Scene");
         }
         else
         {
             // セーブファイルが存在するか確認
             if (File.Exists(path))
             {
-                Debug.Log(path);
-
                 // ファイルからJSON文字列を読み込む
                 string json = File.ReadAllText(path);
 
                 // JSON文字列からGameDataオブジェクトに復元
                 save = JsonUtility.FromJson<SaveData>(json);
 
-                SceneManager.LoadScene("B_TestScene");
+                SceneManager.LoadScene("Ozo_Scene");
 
                 // --- ここで復元したデータをゲームに反映させる ---
-                // 例：
-                // FindObjectOfType<GameManager>().currentLevel = gameData.level;
-                // --------------------------------------------------
+
+                //levelやstageは各スクリプトのスタートで反映する
+                //PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+                //player.transform.position = save.playerPosition;
+
+                playTimeCnt = save.playTime;
 
                 Debug.Log("Load successful!");
             }
@@ -72,18 +86,23 @@ public class SaveManager : MonoBehaviour
             {
                 //セーブデータが存在しない場合は新しく作る
                 save = new SaveData();
-                SceneManager.LoadScene("B_TestScene");
+                SceneManager.LoadScene("Ozo_Scene");
             }
         }
+        isPlay = true;
     }
 
     public void SaveButton(int slot)
     {
+        isPlay = false;
+
         // --- ここで現在のゲーム状態をgameDataオブジェクトに反映させる ---
-        // 例：
-        // gameData.level = FindObjectOfType<GameManager>().currentLevel;
-        GameObject target = GameObject.FindWithTag("Enemy");
+        GameObject target = GameObject.FindWithTag("Player");
+        StageChage stage = target.GetComponent<StageChage>();
+
+        save.playTime = playTimeCnt;
         save.playerPosition = target.transform.position;
+        save.stage = stage.StageNumber;
         // ----------------------------------------------------------
 
         SaveGame(save, slot);
@@ -93,5 +112,24 @@ public class SaveManager : MonoBehaviour
     public void LoadButton(int slot, bool isNewGame)
     {
         LoadGame(slot,isNewGame);
+    }
+
+    //デバッグ用
+    [ContextMenu("ReturnTitle_save1")]
+    public void ReturnTitle_save1()
+    {
+        SaveManager.Instance.SaveButton(1);
+    }
+
+    [ContextMenu("ReturnTitle_save2")]
+    public void ReturnTitle_save2()
+    {
+        SaveManager.Instance.SaveButton(2);
+    }
+
+    [ContextMenu("ReturnTitle_3")]
+    public void ReturnTitle_3()
+    {
+        SaveManager.Instance.SaveButton(3);
     }
 }

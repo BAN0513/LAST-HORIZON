@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using NUnit.Framework.Interfaces;
 
 public class TitleManager : MonoBehaviour
 {
@@ -12,23 +13,25 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private CanvasGroup groupStart;
     [SerializeField] private CanvasGroup groupLoad;
     [SerializeField] private CanvasGroup groupSystem;
+
     [SerializeField] private Button startButton;
     [SerializeField] private Button loadButton;
+
     [SerializeField] private Slider sliderSE;
     [SerializeField] private Slider sliderBGM;
     [SerializeField] private Slider sliderLight;
-
+    [SerializeField] private Text[] playTimeText;
     private SystemManager system;
+    private bool isMouseControl = false;
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        EventSystem.current.firstSelectedGameObject = startButton.gameObject;
-        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
+        //EventSystem.current.firstSelectedGameObject = startButton.gameObject;
+        EventSystem.current.SetSelectedGameObject(null);
 
         system = SystemManager.instance;
-
         groupStart.alpha = 1.0f;
         ChangeInteractable(groupLoad, false);
         groupLoad.alpha = 0;
@@ -49,6 +52,29 @@ public class TitleManager : MonoBehaviour
         sliderSE.value = system.volueSE * 10 - 10;
         sliderBGM.value = system.volueBGM * 10 - 10;
         sliderLight.value = system.valueLight * 10 - 10;
+
+        for (int i = 0; i < playTimeText.Length; i++)
+        {
+            string path = Application.persistentDataPath + $"/save_{i + 1}.json";
+
+            // ファイルからJSON文字列を読み込む
+            string json = File.ReadAllText(path);
+
+            // JSON文字列からGameDataオブジェクトに復元
+            SaveData save = JsonUtility.FromJson<SaveData>(json);
+
+            float time = save.playTime / 3600;
+            float notVery = save.playTime % 3600;
+            float minute = notVery / 60;
+            float second = notVery % 60;
+
+            playTimeText[i].text = $"{Mathf.FloorToInt(time)} : {Mathf.FloorToInt(minute)} : {Mathf.FloorToInt(second)}";
+        }
+    }
+
+    private void Update()
+    {
+        Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     public void OnNewGameButton()
@@ -59,16 +85,70 @@ public class TitleManager : MonoBehaviour
     public void OnContinueButton()
     {
         ChangeInteractable(groupStart, false);
-        StartCoroutine(StartImageOutLoadImageIn());
-        //SaveManager.Instance.LoadButton(1,false);
+        groupLoad.transform.SetAsLastSibling();
+        StartCoroutine(FadeInOutControl(groupLoad, groupStart, loadButton.gameObject));
     }
 
-    IEnumerator StartImageOutLoadImageIn()
+    public void OnSlotButton(int slot)
     {
-        yield return StartCoroutine(Fade(1, 0, groupStart));
-        yield return StartCoroutine(Fade(0, 1, groupLoad));
-        ChangeInteractable(groupLoad, true);
-        EventSystem.current.SetSelectedGameObject(loadButton.gameObject);
+        SaveManager.Instance.LoadButton(slot,false);
+    }
+
+    public void OnLoadBackButton()
+    {
+        ChangeInteractable(groupLoad, false);
+
+        StartCoroutine(FadeInOutControl(groupStart, groupLoad, startButton.gameObject));
+    }
+
+    public void OnSystemButton()
+    {
+        ChangeInteractable(groupStart, false);
+        groupSystem.transform.SetAsLastSibling();
+        StartCoroutine(FadeInOutControl(groupSystem, groupStart, sliderSE.gameObject));
+    }
+
+    public void OnSystemBackButton()
+    {
+        ChangeInteractable(groupSystem, false);
+
+        StartCoroutine(FadeInOutControl(groupStart, groupSystem, startButton.gameObject));
+    }
+
+
+    public void SEChange()
+    {
+        float seValue = sliderSE.value / 10 + 1;
+        system.volueSE = seValue;
+    }
+
+    public void BGMChange()
+    {
+        float bgmValue = sliderBGM.value / 10 + 1;
+        system.volueBGM = bgmValue;
+    }
+
+    public void LightChange()
+    {
+        float lightValue = sliderLight.value / 10 + 1;
+        RenderSettings.ambientIntensity = lightValue;
+        system.valueLight = lightValue;
+    }
+
+    IEnumerator FadeInOutControl(CanvasGroup inGroup, CanvasGroup outGroup, GameObject setSelectObj)
+    {
+        yield return StartCoroutine(Fade(1, 0, outGroup));
+        yield return StartCoroutine(Fade(0, 1, inGroup));
+        ChangeInteractable(inGroup, true);
+
+
+        EventSystem.current.SetSelectedGameObject(null);
+
+    }
+
+    private void ChangeInteractable(CanvasGroup canvasGroup, bool active)
+    {
+        canvasGroup.interactable = active;
     }
 
     IEnumerator Fade(float start, float end, CanvasGroup group)
@@ -95,78 +175,69 @@ public class TitleManager : MonoBehaviour
         group.alpha = cl.a;
     }
 
-    public void OnSlotButton(int slot)
+    private void OnEsc(InputValue value)
     {
-        SaveManager.Instance.LoadButton(slot,false);
+        if (groupLoad.alpha == 1)
+        {
+            OnLoadBackButton();
+        }
+        else if (groupSystem.alpha == 1)
+        {
+            OnSystemBackButton();
+        }
     }
 
-    public void OnLoadBackButton()
+    private void OnPoint(InputValue value)
     {
-        ChangeInteractable(groupLoad, false);
-
-        StartCoroutine(OnLoadBack());
+        Cursor.visible = true;
+        EventSystem.current.SetSelectedGameObject(null);
+        GroupBlockRayCast(true);
+        isMouseControl = true;
     }
 
-    IEnumerator OnLoadBack()
+    private void OnNavigate(InputValue value)
     {
-        yield return StartCoroutine(Fade(1, 0, groupLoad));
-        yield return StartCoroutine(Fade(0, 1, groupStart));
-
-        ChangeInteractable(groupStart, true);
-        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+        if (isMouseControl)
+        {
+            Cursor.visible = false;
+            GroupBlockRayCast(false);
+            isMouseControl = false;
+        }
+        else if (EventSystem.current.currentSelectedGameObject == null)
+        {
+            StartCoroutine(Navigate());
+        }
     }
 
-    public void OnSystemButton()
+    IEnumerator Navigate()
     {
-        ChangeInteractable(groupStart, false);
-        StartCoroutine(StartImageOutSystemImageIn());
+        EventSystem.current.sendNavigationEvents = false;
+        if (groupStart.alpha == 1)
+        {
+            EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+        }
+        else if (groupLoad.alpha == 1)
+        {
+            EventSystem.current.SetSelectedGameObject(loadButton.gameObject);
+        }
+        else if (groupSystem.alpha == 1)
+        {
+            EventSystem.current.SetSelectedGameObject(sliderSE.gameObject);
+        }
+        yield return new WaitForSeconds(0.1f);
+        EventSystem.current.sendNavigationEvents = true;
+        isMouseControl = false;
     }
 
-    IEnumerator StartImageOutSystemImageIn()
+    private void ChangeblocksRaycasts(CanvasGroup canvasGroup, bool active)
     {
-        yield return StartCoroutine(Fade(1, 0, groupStart));
-        yield return StartCoroutine(Fade(0, 1, groupSystem));
-        ChangeInteractable(groupSystem, true);
-        EventSystem.current.SetSelectedGameObject(sliderSE.gameObject);
+        canvasGroup.blocksRaycasts = active;
     }
 
-    public void OnSystemBackButton()
+    private void GroupBlockRayCast(bool active)
     {
-        ChangeInteractable(groupSystem, false);
-
-        StartCoroutine(OnSystemBack());
-    }
-
-    IEnumerator OnSystemBack()
-    {
-        yield return StartCoroutine(Fade(1, 0, groupSystem));
-        yield return StartCoroutine(Fade(0, 1, groupStart));
-
-        ChangeInteractable(groupStart, true);
-        EventSystem.current.SetSelectedGameObject(startButton.gameObject);
-    }
-
-    public void SEChange()
-    {
-        float seValue = sliderSE.value / 10 + 1;
-        system.volueSE = seValue;
-    }
-
-    public void BGMChange()
-    {
-        float bgmValue = sliderBGM.value / 10 + 1;
-        system.volueBGM = bgmValue;
-    }
-
-    public void LightChange()
-    {
-        float lightValue = sliderLight.value / 10 + 1;
-        RenderSettings.ambientIntensity = lightValue;
-        system.valueLight = lightValue;
-    }
-
-    private void ChangeInteractable(CanvasGroup canvasGroup, bool active)
-    {
-        canvasGroup.interactable = active;
+        groupStart.blocksRaycasts = active;
+        groupLoad.blocksRaycasts = active;
+        groupSystem.blocksRaycasts = active;
     }
 }
