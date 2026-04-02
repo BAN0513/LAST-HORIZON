@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d5bdd86e180e4f40ac53cb3f2a12bf7, type: 3}
   m_Name: ATK3
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
-  skillName: 
+  skillName: ATK3
   cooldown: 0
+  moveSpeedBuff: 1.05
   baseBuffMultiplier: 0
   buffMultiplierPerLevel: 0
   baseDuration: 5

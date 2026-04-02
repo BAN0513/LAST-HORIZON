@@ -278,6 +278,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SaveManager_Copy
       objectReference: {fileID: 0}
+    - target: {fileID: 2763300123831096515, guid: d5a6fc2f7a922544ca2f409666cd498c, type: 3}
+      propertyPath: save.skills.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2763300123831096515, guid: d5a6fc2f7a922544ca2f409666cd498c, type: 3}
+      propertyPath: 'save.skills.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 0053ec1db2167454b824f5653c16aaca, type: 2}
+    - target: {fileID: 2763300123831096515, guid: d5a6fc2f7a922544ca2f409666cd498c, type: 3}
+      propertyPath: 'save.skills.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
+    - target: {fileID: 2763300123831096515, guid: d5a6fc2f7a922544ca2f409666cd498c, type: 3}
+      propertyPath: 'save.skills.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: d99d47df083abf64fae0e1122525da03, type: 2}
     - target: {fileID: 4528869489163600425, guid: d5a6fc2f7a922544ca2f409666cd498c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.16251
@@ -1260,7 +1276,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 721200651015905698, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
