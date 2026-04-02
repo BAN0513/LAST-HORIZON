@@ -136,6 +136,18 @@ namespace Takato
         }
 
         /// <summary>
+        /// プレイヤーの移動速度を取得するメソッド
+        /// </summary>
+        public float GetMoveSpeed()
+        {
+            return moveSpeed; // プレイヤーの移動速度を返す
+        }
+        public void SetMoveSpeed(float value)
+        {
+            moveSpeed = value; // プレイヤーの移動速度を設定する
+        }
+
+        /// <summary>
         /// 攻撃処理
         /// </summary>
         private void Attack()

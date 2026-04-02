@@ -47,9 +47,33 @@ namespace Takato
 
             player.StartCoroutine(ApplyDefenceBuff(player, effect, cutRate, duration));
 
+            // 移動速度バフを適用
+            if (moveSpeedBuff > 0)
+            {
+                player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
+            }
+
             Debug.Log($"{skillName} 発動: Lv{level} ダメージカット率{cutRate:P0}, {duration}秒");
         }
 
+        /// <summary>
+        /// 移動速度バフを適用するコルーチン
+        /// </summary>
+        private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
+        {
+            float originalSpeed = player.GetMoveSpeed();
+            player.SetMoveSpeed(originalSpeed + speedBuff);
+
+            yield return new WaitForSeconds(duration);
+
+            player.SetMoveSpeed(originalSpeed);
+        }
+
+
+
+        /// <summary>
+        /// 防御力バフを適用するコルーチン
+        /// </summary>
         private IEnumerator ApplyDefenceBuff(PlayerController player, ParticleSystem effect, float cutRate, float duration)
         {
             float originalCutRate = player.GetDamageCutRate();

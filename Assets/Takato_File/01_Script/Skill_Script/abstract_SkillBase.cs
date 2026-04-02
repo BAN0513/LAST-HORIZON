@@ -10,6 +10,8 @@ namespace Takato
         public string skillName;
         [Header("スキルのクールタイム")]
         public float cooldown;
+        [Header("スキル発動時の移動速度のバフ(共通ステータス)")]
+        public float moveSpeedBuff;
 
         // スキル発動時の共通インターフェース
         public abstract void Activate(PlayerController player);

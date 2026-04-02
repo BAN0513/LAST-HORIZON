@@ -1,5 +1,6 @@
 using Takato;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// 魔法攻撃を管理するクラス
@@ -51,7 +52,7 @@ namespace Takato
                 return;
             }
 
-            // FirePointを自動取得（なければplayerの前方）
+            // FirePointを自動取得
             Transform autoFirePoint = player.transform.Find("FirePoint");
             Vector3 spawnPos = autoFirePoint != null
                 ? autoFirePoint.position
@@ -69,9 +70,30 @@ namespace Takato
             projectile.damage = projectileDamage;
             projectile.SetTarget(targetEnemy.transform);
 
-            Debug.Log($"{skillName}（Lv.{skillLevel}）スキルが {player.name} によって発動されました。");
+            // 移動速度バフを適用
+            if (moveSpeedBuff > 0)
+            {
+                float duration = 5.0f;
+                player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
+            }
+            Debug.Log($"{skillName} 発動: Lv{skillLevel} ダメージ{projectileDamage}, 速度{projectileSpeed}");
         }
 
+        /// <summary>
+        /// 移動速度バフを適用するコルーチン
+        /// </summary>
+        private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
+        {
+            float originalSpeed = player.GetMoveSpeed();    // プレイヤーの現在の移動速度を取得
+            player.SetMoveSpeed(originalSpeed + speedBuff); // 移動速度を上げる
+            yield return new WaitForSeconds(duration);      // 指定した時間待つ
+            player.SetMoveSpeed(originalSpeed);             // 移動速度を元に戻す
+        }
+
+
+        /// <summary>
+        /// 指定した位置から最も近い敵を探すメソッド
+        /// </summary>
         private Enemy FindNearestEnemy(Vector3 fromPosition)
         {
             Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);

@@ -33,30 +33,50 @@ namespace Takato
         public override void Activate(PlayerController player)
         {
             ParticleSystem effect = null;
-            // エフェクトをプレイヤーの位置に生成
             if (effectPrefab != null)
             {
                 effect = Instantiate(effectPrefab, player.transform.position, Quaternion.identity);
-                effect.transform.SetParent(player.transform); // プレイヤーに追従させる
+                effect.transform.SetParent(player.transform);
                 effect.Play();
             }
 
-            // レベルに応じた倍率・効果時間を計算
             int level = Mathf.Clamp(skillLevel, 1, maxSkillLevel);
             float buffMultiplier = baseBuffMultiplier + buffMultiplierPerLevel * (level - 1);
             float duration = baseDuration + durationPerLevel * (level - 1);
 
-            // 武器の攻撃力を上げる
             var weapon = player.GetComponentInChildren<Weapon>();
             if (weapon != null)
             {
                 player.StartCoroutine(ApplyAttackBuff(weapon, effect, buffMultiplier, duration));
             }
 
+            // 移動速度バフを適用
+            if (moveSpeedBuff > 0)
+            {
+                player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
+            }
+
             Debug.Log($"{skillName} 発動: Lv{level} 攻撃力{buffMultiplier}倍, {duration}秒");
         }
 
-        // 攻撃力バフのコルーチン
+
+
+        /// <summary>
+        /// 移動速度バフのコルーチン
+        /// </summary>
+        private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
+        {
+            float originalSpeed = player.GetMoveSpeed();
+            player.SetMoveSpeed(originalSpeed + speedBuff);
+
+            yield return new WaitForSeconds(duration);
+
+            player.SetMoveSpeed(originalSpeed);
+        }
+
+        /// <summary>
+        /// 攻撃力バフのコルーチン
+        /// </summary>
         private IEnumerator ApplyAttackBuff(Weapon weapon, ParticleSystem effect, float buffMultiplier, float duration)
         {
             float originalBaseAttack = GetBaseAttackDamage(weapon);
@@ -77,7 +97,9 @@ namespace Takato
             }
         }
 
-        // WeaponのprivateなbaseAttackDamageをリフレクションで取得
+        /// <summary>
+        /// WeaponクラスのbaseAttackDamageをリフレクションで取得するメソッド
+        /// </summary>
         private float GetBaseAttackDamage(Weapon weapon)
         {
             var field = typeof(Weapon).GetField("baseAttackDamage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
