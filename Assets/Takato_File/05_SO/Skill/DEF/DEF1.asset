@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DEF1
   m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
   skillName: DEF1
+  cost: 25
   cooldown: 15
   moveSpeedBuff: 1.05
   baseCutRate: 0.05

@@ -8,6 +8,8 @@ namespace Takato
         [Space(10)]
         [Header("スキル名")]
         public string skillName;
+        [Header("スキルの発動コスト")]
+        public int cost;
         [Header("スキルのクールタイム")]
         public float cooldown;
         [Header("スキル発動時の移動速度のバフ(共通ステータス)")]

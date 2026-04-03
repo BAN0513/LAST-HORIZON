@@ -11,8 +11,12 @@ namespace Takato
         [Space(10)]
         [Header("プレイヤーのHP")]
         [SerializeField] private int maxHp;
+        [Header("現在のスキルコスト")]
+        [SerializeField] private int currentCost;
         [Header("プレイヤーのHPバーのスクリプトが入ってる物を入れる")]
-        [SerializeField] private PlayerHPBar hpBar;       
+        [SerializeField] private PlayerHPBar hpBar;
+        [Header("プレイヤーの現在のコストを見るためのText")]
+        [SerializeField] private TMPro.TextMeshProUGUI costText;
         [Header("プレイヤーの移動速度")]
         [SerializeField] private float moveSpeed;
         [Header("プレイヤーのジャンプ力")]
@@ -26,7 +30,7 @@ namespace Takato
         private CharacterController characterController;       // 移動管理
         private PlayerAnimationController animationController; // アニメーション管理
         private PlayerWeaponController weaponController;       // 武器管理
-        private PlayerShieldContoroller shieldController;     // シールド管理
+        private PlayerShieldContoroller shieldController;      // シールド管理
         private PlayerSkill playerSkill;                       // スキル管理
 
         private float verticalVelocity;                       // 垂直方向の速度
@@ -50,6 +54,8 @@ namespace Takato
             hpBar.SetHP(hp, maxHp); // 初期値を反映
             Cursor.lockState = CursorLockMode.Locked; // カーソルをロック
             Cursor.visible = false; // カーソルを非表示
+
+            costText.text = $"Cost: {currentCost}"; // 初期コストを表示
         }
 
 
@@ -73,6 +79,10 @@ namespace Takato
             if (inputController.IsSkill3Input && playerSkill != null)
             {
                 playerSkill.ActivateSkill(2, this);
+            }
+            if(inputController.IsSkill4Input && playerSkill != null)
+            {
+                playerSkill.ActivateSkill(3, this);
             }
 
 
@@ -190,7 +200,7 @@ namespace Takato
         /// </summary>
         public float GetDamageCutRate()
         {
-            return damageCutRate;
+            return damageCutRate; // ダメージカット率を返す
         }
 
         /// <summary>
@@ -212,7 +222,29 @@ namespace Takato
             Debug.Log($"プレイヤーは{finalDamage}のダメージを受けました。現在のHP: {hp}/{maxHp}");
         }
 
-        
+        /// <summary>
+        /// 現在のスキルコストを取得するメソッド
+        /// </summary>
+        public int GetCurrentCost()
+        {
+            return currentCost;
+        }
+
+        /// <summary>
+        /// スキルコストを消費する処理
+        /// </summary>
+        public void ConsumeCost(int value)
+        {
+            currentCost = Mathf.Max(0, currentCost - value); // コストが0未満にならないようにする
+            costText.text = $"Cost: {currentCost}"; // コストの表示を更新
+        }
+
+        // 必要に応じてコスト回復メソッドも追加する予定
+        public void RecoverCost(int value)
+        {
+            currentCost += value;
+        }
+
 
         /// <summary>
         /// プレイヤーが死亡したときの処理

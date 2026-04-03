@@ -32,6 +32,14 @@ namespace Takato
         /// </summary>
         public override void Activate(PlayerController player)
         {
+            // コストチェック
+            if (player.GetCurrentCost() < cost)
+            {
+                Debug.Log($"{skillName}：コスト不足で発動できません。必要コスト：{cost}、現在：{player.GetCurrentCost()}");
+                return;
+            }
+            player.ConsumeCost(cost);//コストを消費
+
             ParticleSystem effect = null;
             if (effectPrefab != null)
             {

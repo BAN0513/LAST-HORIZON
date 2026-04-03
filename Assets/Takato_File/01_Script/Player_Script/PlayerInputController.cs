@@ -17,6 +17,7 @@ namespace Takato
         public bool IsSkillInput { get; private set; }   //プレイヤーのスキル入力を格納するプロパティ
         public bool IsSkill2Input { get; private set; }  //プレイヤーのスキル2入力を格納するプロパティ
         public bool IsSkill3Input { get; private set; }  //プレイヤーのスキル3入力を格納するプロパティ
+        public bool IsSkill4Input { get; private set; }  //プレイヤーのアルティメットスキル入力を格納するプロパティ
         public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
 
         private void Awake()
@@ -57,6 +58,11 @@ namespace Takato
             playerInputActions.Player.Skill3.started += context => IsSkill3Input = context.ReadValueAsButton();   // 入力が開始されたときのイベント
             playerInputActions.Player.Skill3.performed += context => IsSkill3Input = context.ReadValueAsButton(); // 入力が実行されたときのイベント
             playerInputActions.Player.Skill3.canceled += context => IsSkill3Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //Skill4入力イベント登録
+            playerInputActions.Player.Ult.started += context => IsSkill4Input = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Ult.performed += context => IsSkill4Input = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Ult.canceled += context => IsSkill4Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
 
             //Look入力イベント登録
             playerInputActions.Player.Look.started += context => LookInput = context.ReadValue<Vector2>();   // 入力が開始されたときのイベント

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ATK2
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
   skillName: ATK2
+  cost: 25
   cooldown: 0
   moveSpeedBuff: 1.05
   baseBuffMultiplier: 0

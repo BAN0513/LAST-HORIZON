@@ -193,7 +193,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7643953047098054301}
   m_Layer: 0
-  m_Name: FirePoin
+  m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

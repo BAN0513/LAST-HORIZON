@@ -34,6 +34,14 @@ namespace Takato
 
         public override void Activate(PlayerController player)
         {
+            // コストチェック
+            if (player.GetCurrentCost() < cost)
+            {
+                Debug.Log($"{skillName}：コスト不足で発動できません。必要コスト：{cost}、現在：{player.GetCurrentCost()}");
+                return;
+            }
+            player.ConsumeCost(cost);//コストを消費
+
             // 魔法攻撃のエフェクトを生成
             if (magicEffectPrefab != null)
             {
@@ -52,8 +60,8 @@ namespace Takato
                 return;
             }
 
-            // FirePointを自動取得
-            Transform autoFirePoint = player.transform.Find("FirePoint");
+            // FirePointを階層を問わず自動取得
+            Transform autoFirePoint = FindDeepChild(player.transform, "FirePoint");
             Vector3 spawnPos = autoFirePoint != null
                 ? autoFirePoint.position
                 : player.transform.position + player.transform.forward;
@@ -109,6 +117,22 @@ namespace Takato
                 }
             }
             return nearest;
+        }
+
+        /// <summary>
+        /// 指定した名前の子Transformを階層を問わず再帰的に探す
+        /// </summary>
+        private Transform FindDeepChild(Transform parent, string name)
+        {
+            foreach (Transform child in parent)
+            {
+                if (child.name == name)
+                    return child;
+                var result = FindDeepChild(child, name);
+                if (result != null)
+                    return result;
+            }
+            return null;
         }
 
         /// <summary>

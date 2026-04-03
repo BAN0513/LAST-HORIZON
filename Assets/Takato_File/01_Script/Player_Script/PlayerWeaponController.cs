@@ -20,6 +20,9 @@ namespace Takato
         [Header("武器を格納する親オブジェクト")]
         [SerializeField] private Transform weaponFolder;
 
+        [HideInInspector]
+        public Weapon EquippedWeapon => equippedWeapon;
+
         private void Start()
         {
             EquipWeapon(); // 武器を生成して装備

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MGC1
   m_EditorClassIdentifier: Assembly-CSharp::Takato.MGCSkill
   skillName: MGC1
+  cost: 25
   cooldown: 5
   moveSpeedBuff: 1.05
   homingProjectilePrefab: {fileID: 8825622566448534756, guid: 073ba091a113c554caf7b6b49ce70bd7, type: 3}

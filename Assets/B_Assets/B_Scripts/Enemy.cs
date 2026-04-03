@@ -112,8 +112,6 @@ public abstract class Enemy : MonoBehaviour
 
         hp = enemySO.maxHP;
 
-        agent.speed = enemySO.dashMoveSpeed;
-
         agent.stoppingDistance = enemySO.stoopingDis;
 
         lotteryTime = enemySO.attackCoolDown;
@@ -203,42 +201,36 @@ public abstract class Enemy : MonoBehaviour
 
     private void MoveAnimControl()
     {
-        //自身からプレイヤーの方向を取る
         Vector3 toTarget = (target.position - transform.position).normalized;
-
-        //自身の動く方向を取る
         Vector3 moveDir = agent.velocity.normalized;
-
-        //内積で方向の一致度を取る
         float moveDot = Vector3.Dot(toTarget, moveDir);
 
-        //magunitudeでvelocityの長さを取る（0.1fより下だと動いていない）
         if (agent.velocity.magnitude < 0.1f)
         {
             isWalking = false;
             isBackMove = false;
         }
-        //dotが0より高いと前に進んでいるので前に進むアニメーションを動かす
         else if (moveDot > 0)
         {
-            //接敵距離より遠いとダッシュをして、近いと歩く
             if (distance >= enemySO.engageDis)
             {
                 isDash = true;
                 isWalking = false;
+                SetDashSpeed(); // ダッシュ速度に設定
             }
             else
             {
                 isWalking = true;
                 isDash = false;
+                SetWalkSpeed(); // 歩き速度に設定
             }
             isBackMove = false;
         }
-        //dotが0より低いと後ろに進むアニメーションを動かす
         else
         {
             isWalking = false;
             isBackMove = true;
+            SetWalkSpeed(); // 後退も歩き速度で
         }
     }
 
@@ -298,6 +290,40 @@ public abstract class Enemy : MonoBehaviour
             agent.isStopped = true;
         }
     }
+
+    //移動速度の倍率
+    protected float moveSpeedMultiplier = 1.0f;
+    public float MoveSpeedMultiplier
+    {
+        get => moveSpeedMultiplier;
+        set
+        {
+            moveSpeedMultiplier = value;
+
+            // 必ず現在の速度を再設定
+            if (isDash)
+                SetDashSpeed();
+            else if (isWalking || isBackMove)
+                SetWalkSpeed();
+            else
+                SetWalkSpeed(); // 停止時もwalk速度
+        }
+    }
+
+    // NavMeshAgentの速度を更新するメソッド
+    protected void SetDashSpeed()
+    {
+        if (agent != null && enemySO != null)
+            agent.speed = enemySO.dashMoveSpeed * moveSpeedMultiplier;
+    }
+
+    // NavMeshAgentの速度を更新するメソッド
+    protected void SetWalkSpeed()
+    {
+        if (agent != null && enemySO != null)
+            agent.speed = enemySO.walkMoveSpeed * moveSpeedMultiplier;
+    }
+
 
     protected virtual void Death()
     {
