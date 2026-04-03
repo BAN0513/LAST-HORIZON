@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c0df579fda02c4ca48b89c48030df2, type: 3}
   m_Name: Ult1
   m_EditorClassIdentifier: Assembly-CSharp::Takato.UltSkill
-  skillName: 
-  cost: 0
-  cooldown: 0
+  skillName: Ult1
+  cost: 70
+  cooldown: 140
   moveSpeedBuff: 0
-  level: 0
-  baseAttackBuff: 0
-  baseDuration: 0
-  baseDamage: 0
-  attackBuffPerLevel: 0
-  durationPerLevel: 0
-  damagePerLevel: 0
-  debuffDefValue: 0
-  debuffDuration: 0
+  level: 10
+  baseAttackBuff: 0.1
+  baseDuration: 5
+  baseDamage: 80
+  attackBuffPerLevel: 0.5
+  durationPerLevel: 1
+  damagePerLevel: 5
+  moveSpeedDebuffPerLevel: 0.2
+  debuffDefValue: 20
+  debuffDuration: 5

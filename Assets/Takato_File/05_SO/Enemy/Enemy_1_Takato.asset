@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Enemy_1_Takato
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
-  maxHP: 50
+  maxHP: 1500
   damage: 15
-  dashMoveSpeed: 4
+  dashMoveSpeed: 3
   walkMoveSpeed: 2
   def: 2
   stoopingDis: 2
