@@ -39,7 +39,9 @@ public class SaveManager : MonoBehaviour
     public void NewGame()
     {
         save = new SaveData();
-        SceneManager.LoadScene("Ozo_Scene");
+        playTimeCnt = 0;
+        isPlay = true;
+        SceneManager.LoadScene("B_TestScene");
     }
 
     public void SaveGame(int slot)
@@ -48,11 +50,11 @@ public class SaveManager : MonoBehaviour
 
         // --- ここで現在のゲーム状態をgameDataオブジェクトに反映させる ---
         GameObject target = GameObject.FindWithTag("Player");
-        StageChage stage = target.GetComponent<StageChage>();
+        //StageChage stage = target.GetComponent<StageChage>();
 
         save.playTime = playTimeCnt;
         save.playerPosition = target.transform.position;
-        save.stage = stage.StageNumber;
+        //save.stage = stage.StageNumber;
         // ----------------------------------------------------------
 
         string json = JsonUtility.ToJson(save, true);
@@ -81,7 +83,7 @@ public class SaveManager : MonoBehaviour
             // JSON文字列からGameDataオブジェクトに復元
             save = JsonUtility.FromJson<SaveData>(json);
 
-            SceneManager.LoadScene("Ozo_Scene");
+            SceneManager.LoadScene("B_TestScene");
 
             // --- ここで復元したデータをゲームに反映させる ---
 
@@ -97,7 +99,7 @@ public class SaveManager : MonoBehaviour
         {
             //セーブデータが存在しない場合は新しく作る
             save = new SaveData();
-            SceneManager.LoadScene("Ozo_Scene");
+            SceneManager.LoadScene("B_TestScene");
         }
 
         isPlay = true;

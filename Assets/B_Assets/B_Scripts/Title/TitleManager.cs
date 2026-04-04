@@ -32,8 +32,8 @@ public class TitleManager : MonoBehaviour
 
     private void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = false;
         //EventSystem.current.firstSelectedGameObject = startButton.gameObject;
         EventSystem.current.SetSelectedGameObject(null);
 
