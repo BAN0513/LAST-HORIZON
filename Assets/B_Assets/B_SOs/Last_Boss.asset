@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Last_Boss
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
-  maxHP: 1
+  maxHP: 1000
   damage: 1
   dashMoveSpeed: 2
   walkMoveSpeed: 1
-  def: 0
+  def: 50
   stoopingDis: 8
   lookRotationSpeed: 3
   searchDistance: 100

@@ -27,7 +27,7 @@ public class Enemy_1 : Enemy
         if (distance <= enemySO.engageDis)
         {
             //“G‚ÌƒXƒs[ƒh‚ð­‚µ‚¾‚¯’x‚­‚·‚é
-            agent.speed = enemySO.walkMoveSpeed - DebufDEX;
+            agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 
             if (!isAction)
             {
@@ -63,7 +63,7 @@ public class Enemy_1 : Enemy
         }
         else
         {
-            agent.speed = enemySO.dashMoveSpeed - DebufDEX;
+            agent.speed = enemySO.dashMoveSpeed * DebufDEX;
             isAction = false;
             rand = 0;
         }

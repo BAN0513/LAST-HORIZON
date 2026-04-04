@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using NUnit.Framework.Interfaces;
+using TMPro;
 
 public class TitleManager : MonoBehaviour
 {
@@ -18,8 +18,14 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private Button loadButton;
 
     [SerializeField] private Slider sliderSE;
+    [SerializeField] private TMP_InputField textSE;
+
     [SerializeField] private Slider sliderBGM;
+    [SerializeField] private TMP_InputField textBGM;
+
     [SerializeField] private Slider sliderLight;
+    [SerializeField] private TMP_InputField textLight;
+
     [SerializeField] private Text[] playTimeText;
     private SystemManager system;
     private bool isMouseControl = false;
@@ -41,17 +47,9 @@ public class TitleManager : MonoBehaviour
         float lightValue = system.valueLight;
         RenderSettings.ambientIntensity = lightValue;
 
-        sliderSE.minValue = 0;
-        sliderBGM.minValue = 0;
-        sliderLight.minValue = 0;
-
-        sliderSE.maxValue = 10;
-        sliderBGM.maxValue = 10;
-        sliderLight.maxValue = 10;
-
-        sliderSE.value = system.volueSE * 10 - 10;
-        sliderBGM.value = system.volueBGM * 10 - 10;
-        sliderLight.value = system.valueLight * 10 - 10;
+        SystemUISetting(sliderSE, textSE, system.volueSE);
+        SystemUISetting(sliderBGM, textBGM, system.volueBGM);
+        SystemUISetting(sliderLight, textLight, lightValue);
 
         for (int i = 0; i < playTimeText.Length; i++)
         {
@@ -72,14 +70,17 @@ public class TitleManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void SystemUISetting(Slider slider, TMP_InputField text, float value)
     {
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
+        slider.minValue = 0;
+        slider.maxValue = 10;
+        slider.value = value * 10 - 10;
+        text.text = slider.value.ToString();
     }
 
     public void OnNewGameButton()
     {
-        SaveManager.Instance.LoadButton(1,true);
+        SaveManager.Instance.NewGame();
     }
 
     public void OnContinueButton()
@@ -91,7 +92,7 @@ public class TitleManager : MonoBehaviour
 
     public void OnSlotButton(int slot)
     {
-        SaveManager.Instance.LoadButton(slot,false);
+        SaveManager.Instance.LoadGame(slot);
     }
 
     public void OnLoadBackButton()
@@ -120,11 +121,14 @@ public class TitleManager : MonoBehaviour
     {
         float seValue = sliderSE.value / 10 + 1;
         system.volueSE = seValue;
+        textSE.text = sliderSE.value.ToString("F0");
     }
+
 
     public void BGMChange()
     {
         float bgmValue = sliderBGM.value / 10 + 1;
+        textBGM.text = sliderBGM.value.ToString("F0");
         system.volueBGM = bgmValue;
     }
 
@@ -132,7 +136,45 @@ public class TitleManager : MonoBehaviour
     {
         float lightValue = sliderLight.value / 10 + 1;
         RenderSettings.ambientIntensity = lightValue;
+        textLight.text = sliderLight.value.ToString("F0");
         system.valueLight = lightValue;
+    }
+
+
+    private void SliderMove(TMP_InputField text, Slider slider)
+    {
+        if (text.text == "")
+        {
+            text.text = slider.value.ToString("F0");
+        }
+        else
+        {
+            float num = float.Parse(text.text);
+            if (num < 0 || num > 10)
+            {
+                text.text = slider.value.ToString("F0");
+            }
+            else
+            {
+                slider.value = num;
+            }
+        }
+
+    }
+
+    public void SETextChange()
+    {
+        SliderMove(textSE, sliderSE);   
+    }
+
+    public void BGMTextChange()
+    {
+        SliderMove(textBGM, sliderBGM);
+    }
+
+    public void LightTextChange()
+    {
+        SliderMove(textLight, sliderLight);
     }
 
     IEnumerator FadeInOutControl(CanvasGroup inGroup, CanvasGroup outGroup, GameObject setSelectObj)

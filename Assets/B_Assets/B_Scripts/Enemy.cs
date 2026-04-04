@@ -44,7 +44,7 @@ public abstract class Enemy : MonoBehaviour
     public int hp { get; private set; }
 
     //敵のスピードにかかるデバフ
-    private float debufDEX;
+    private float debufDEX = 1.0f;
     public float DebufDEX
     {
         get
@@ -145,6 +145,8 @@ public abstract class Enemy : MonoBehaviour
 
         //追跡するかしないかを調整する関数
         AgentContact();
+
+        Debug.Log(agent.speed);
     }
 
     private void DotPlayer()
@@ -280,7 +282,6 @@ public abstract class Enemy : MonoBehaviour
             hpSliider.gameObject.SetActive(false);
             isHit = false;
             InitAnim();
-            SaveManager.Instance.SaveButton(3);
             Death();
         }
         else
@@ -314,14 +315,14 @@ public abstract class Enemy : MonoBehaviour
     protected void SetDashSpeed()
     {
         if (agent != null && enemySO != null)
-            agent.speed = enemySO.dashMoveSpeed * moveSpeedMultiplier;
+            debufDEX = moveSpeedMultiplier;
     }
 
     // NavMeshAgentの速度を更新するメソッド
     protected void SetWalkSpeed()
     {
         if (agent != null && enemySO != null)
-            agent.speed = enemySO.walkMoveSpeed * moveSpeedMultiplier;
+            debufDEX = moveSpeedMultiplier;
     }
 
 
@@ -381,12 +382,5 @@ public abstract class Enemy : MonoBehaviour
     public void Damage()
     {
         TakeDamage(600);
-    }
-
-    //デバッグ用
-    [ContextMenu("ReturnTitle")]
-    public void ReturnTitle()
-    {
-        SaveManager.Instance.SaveButton(3);
     }
 }

@@ -280,6 +280,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3735351674530302138, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3735351674530302138, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
+      propertyPath: 'skills.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 093d7a4a808d9b643b0182000ec132b5, type: 2}
     - target: {fileID: 5417356986428558454, guid: 5cc2017e2bab8834da418701f16bc99c, type: 3}
       propertyPath: hpBar
       value: 
