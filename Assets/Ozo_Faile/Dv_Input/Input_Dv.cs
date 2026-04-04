@@ -144,7 +144,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d1241e5c-f74e-42ce-9652-d846b95687f1"",
-                    ""path"": ""<Keyboard>/i"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
