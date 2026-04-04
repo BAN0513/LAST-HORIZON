@@ -111,7 +111,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""FadeOut"",
+                    ""name"": ""GameOver"",
                     ""type"": ""Button"",
                     ""id"": ""883283a6-c2f5-4fae-b381-c1492cb4be63"",
                     ""expectedControlType"": """",
@@ -159,7 +159,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FadeOut"",
+                    ""action"": ""GameOver"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -363,7 +363,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         m_PushBottom = asset.FindActionMap("PushBottom", throwIfNotFound: true);
         m_PushBottom_Dv_Warp = m_PushBottom.FindAction("Dv_Warp", throwIfNotFound: true);
         m_PushBottom_Pause = m_PushBottom.FindAction("Pause", throwIfNotFound: true);
-        m_PushBottom_FadeOut = m_PushBottom.FindAction("FadeOut", throwIfNotFound: true);
+        m_PushBottom_GameOver = m_PushBottom.FindAction("GameOver", throwIfNotFound: true);
         m_PushBottom_WASD = m_PushBottom.FindAction("WASD", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -452,7 +452,7 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
     private List<IPushBottomActions> m_PushBottomActionsCallbackInterfaces = new List<IPushBottomActions>();
     private readonly InputAction m_PushBottom_Dv_Warp;
     private readonly InputAction m_PushBottom_Pause;
-    private readonly InputAction m_PushBottom_FadeOut;
+    private readonly InputAction m_PushBottom_GameOver;
     private readonly InputAction m_PushBottom_WASD;
     /// <summary>
     /// Provides access to input actions defined in input action map "PushBottom".
@@ -474,9 +474,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Pause => m_Wrapper.m_PushBottom_Pause;
         /// <summary>
-        /// Provides access to the underlying input action "PushBottom/FadeOut".
+        /// Provides access to the underlying input action "PushBottom/GameOver".
         /// </summary>
-        public InputAction @FadeOut => m_Wrapper.m_PushBottom_FadeOut;
+        public InputAction @GameOver => m_Wrapper.m_PushBottom_GameOver;
         /// <summary>
         /// Provides access to the underlying input action "PushBottom/WASD".
         /// </summary>
@@ -513,9 +513,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
-            @FadeOut.started += instance.OnFadeOut;
-            @FadeOut.performed += instance.OnFadeOut;
-            @FadeOut.canceled += instance.OnFadeOut;
+            @GameOver.started += instance.OnGameOver;
+            @GameOver.performed += instance.OnGameOver;
+            @GameOver.canceled += instance.OnGameOver;
             @WASD.started += instance.OnWASD;
             @WASD.performed += instance.OnWASD;
             @WASD.canceled += instance.OnWASD;
@@ -536,9 +536,9 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
-            @FadeOut.started -= instance.OnFadeOut;
-            @FadeOut.performed -= instance.OnFadeOut;
-            @FadeOut.canceled -= instance.OnFadeOut;
+            @GameOver.started -= instance.OnGameOver;
+            @GameOver.performed -= instance.OnGameOver;
+            @GameOver.canceled -= instance.OnGameOver;
             @WASD.started -= instance.OnWASD;
             @WASD.performed -= instance.OnWASD;
             @WASD.canceled -= instance.OnWASD;
@@ -704,12 +704,12 @@ public partial class @Input_Dv: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPause(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "FadeOut" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "GameOver" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnFadeOut(InputAction.CallbackContext context);
+        void OnGameOver(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "WASD" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

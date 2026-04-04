@@ -48,6 +48,7 @@ public class UISelectImage : MonoBehaviour
                     if (SelectManeger.IsDecision)
                     {
                         Debug.Log("セーブ画面");
+                        SelectManeger.IsDecision = false;
                     }
                     break;
                 case 2:
@@ -59,6 +60,7 @@ public class UISelectImage : MonoBehaviour
                     if (SelectManeger.IsDecision)
                     {
                         Debug.Log("ロード画面");
+                        SelectManeger.IsDecision = false;
                     }
                     break;
                 case 3:
@@ -70,6 +72,7 @@ public class UISelectImage : MonoBehaviour
                     if (SelectManeger.IsDecision)
                     {
                         Debug.Log("マニュアル画面");
+                        SelectManeger.IsDecision = false;
                     }
                     break;
                 case 4:
@@ -81,6 +84,7 @@ public class UISelectImage : MonoBehaviour
                     if (SelectManeger.IsDecision)
                     {
                         Debug.Log("システム画面");
+                        SelectManeger.IsDecision = false;
                     }
                     break;
                 case 5:
@@ -92,6 +96,9 @@ public class UISelectImage : MonoBehaviour
                     if (SelectManeger.IsDecision)
                     {
                         Debug.Log("タイトル画面");
+                        SelectManeger.IsDecision = false;
+                        Time.timeScale = 1;
+                        Load();
                     }
                     break;
             }
@@ -99,32 +106,6 @@ public class UISelectImage : MonoBehaviour
         }
         else
             on = false;
-    }
-
-    private void OnDecision(InputValue var)
-    {
-        if (PausManeger.ToPause)
-        {
-            switch (SelectManeger.SelectNo)
-            {
-                case 1:
-                        Debug.Log("セーブ画面");
-                    break;
-                case 2:
-                        Debug.Log("ロード画面");
-                    break;
-                case 3:
-                        Debug.Log("マニュアル画面");
-                    break;
-                case 4:
-                        Debug.Log("システム画面");
-                    break;
-                case 5:
-                        Debug.Log("タイトル画面");
-                    Load();
-                    break;
-            }
-        }
     }
 
     private void Load()

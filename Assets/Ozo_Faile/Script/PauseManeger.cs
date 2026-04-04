@@ -8,8 +8,15 @@ public class PausManeger : MonoBehaviour
     public GameObject BackBrownImage;
     public GameObject PauseTextImage;
 
+    [Header("ゲームオーバー画面の各UI")]
+    public GameObject GameOverBackImage;
+    public GameObject GameOverTextImage;
+
     public bool IsPause = false;
     public static bool ToPause = false;
+
+    public bool IsGameOver = false;
+    public static bool ToGameOver = false;
 
     public void PauseGame()
     {
@@ -27,19 +34,49 @@ public class PausManeger : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    public void EndGame()
+    {
+        GameOverBackImage.SetActive(true);
+        GameOverTextImage.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ResetGame()
+    {
+        GameOverBackImage.SetActive(false);
+        GameOverTextImage.SetActive(false);
+        Time.timeScale = 1;
+    }
+
     private void OnPause(InputValue var)
     {
-        if(!IsPause)
+        if(!IsPause && !IsGameOver)
         {
             PauseGame();
             IsPause = true;
             ToPause = true;
         }
-        else if(IsPause)
+        else if(IsPause && !IsGameOver)
         {
             ResumeGame();
             IsPause = false;
             ToPause = false;
+        }
+    }
+
+    private void OnGameOver(InputValue var)
+    {
+        if (!IsGameOver && !IsPause)
+        {
+            EndGame();
+            IsGameOver = true;
+            ToGameOver = true;
+        }
+        else if (IsGameOver && !IsPause)
+        {
+            ResetGame();
+            IsGameOver = false;
+            ToGameOver = false;
         }
     }
 }

@@ -13,6 +13,12 @@ public class SelectManeger : MonoBehaviour
     public static bool IsDecision = false;
     public static int SelectNo = 1;
 
+    private void Start()
+    {
+        IsDecision = false;
+        SelectNo = 1;
+    }
+
     private void Update()
     {
         if(PausManeger.ToPause)
@@ -37,6 +43,12 @@ public class SelectManeger : MonoBehaviour
             }
 
         }
+    }
+
+    private void OnDecision(InputValue var)
+    {
+        if(PausManeger.ToPause && !IsDecision)
+        IsDecision = true;
     }
 
     private void OnSelect(InputValue var)

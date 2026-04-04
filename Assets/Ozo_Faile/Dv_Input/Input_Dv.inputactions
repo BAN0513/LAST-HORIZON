@@ -25,7 +25,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "FadeOut",
+                    "name": "GameOver",
                     "type": "Button",
                     "id": "883283a6-c2f5-4fae-b381-c1492cb4be63",
                     "expectedControlType": "",
@@ -73,7 +73,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FadeOut",
+                    "action": "GameOver",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
