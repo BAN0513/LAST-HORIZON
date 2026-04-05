@@ -1379,10 +1379,6 @@ PrefabInstance:
       propertyPath: costText
       value: 
       objectReference: {fileID: 94267764}
-    - target: {fileID: 4319136025616011422, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
-      propertyPath: currentCost
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5899827493166609428, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
       propertyPath: m_Name
       value: Player1_Ragdoll_Night
@@ -1427,17 +1423,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
-      propertyPath: skills.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8611447818778448829, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
-      propertyPath: 'skills.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 093d7a4a808d9b643b0182000ec132b5, type: 2}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 721200651015905698, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
