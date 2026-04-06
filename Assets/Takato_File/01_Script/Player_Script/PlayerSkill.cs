@@ -38,5 +38,23 @@ namespace Takato
             skills[index].Activate(player);
             skillCooldownTimers[index] = skills[index].cooldown;
         }
+
+        /// <summary>
+        /// スキルをセットするメソッド
+        /// </summary>
+        public void SetSkill(int slotindex, SkillBase skill)
+        {
+            if (slotindex < 0 || slotindex >= skills.Count) return;
+            skills[slotindex] = skill;
+        }
+        /// <summary>
+        /// スキルを取得するメソッド
+        /// </summary>
+        public SkillBase GetSkill(int slotIndex)
+        {
+            if (slotIndex < 0 || slotIndex >= skills.Count) return null;
+            return skills[slotIndex];
+        }
+
     }
 }

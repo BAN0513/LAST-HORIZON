@@ -52,8 +52,8 @@ namespace Takato
         {
             hp = maxHp;
             hpBar.SetHP(hp, maxHp); // 初期値を反映
-            Cursor.lockState = CursorLockMode.Locked; // カーソルをロック
-            Cursor.visible = false; // カーソルを非表示
+            //Cursor.lockState = CursorLockMode.Locked; // カーソルをロック
+            //Cursor.visible = false; // カーソルを非表示
 
             costText.text = $"Cost: {currentCost}"; // 初期コストを表示
         }
