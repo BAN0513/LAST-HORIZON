@@ -40,6 +40,14 @@ namespace Takato
         }
 
         /// <summary>
+        /// スキルスロットの数を取得するプロパティ
+        /// </summary>
+        public int SkillSlotCount
+        {
+            get { return skills.Count; }
+        }
+
+        /// <summary>
         /// スキルをセットするメソッド
         /// </summary>
         public void SetSkill(int slotindex, SkillBase skill)

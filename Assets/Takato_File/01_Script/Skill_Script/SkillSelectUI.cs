@@ -12,21 +12,42 @@ public class SkillSelectUI : MonoBehaviour
     [SerializeField] private GameObject skillIconPrefab;
 
     [Header("装備スロットUI")]
-    [SerializeField] private List<Button> skillSlotButtons; // 左側のスロット
-    [SerializeField] private List<Image> skillSlotImages;   // スロットに表示するアイコン
-    [SerializeField] private Sprite emptySlotSprite;        // 空スロット用画像
+    [SerializeField] private Transform slotParent; // スロットを並べる親
+    [SerializeField] private GameObject slotPrefab; // スロット用Prefab
+    [SerializeField] private Sprite emptySlotSprite; // 空スロット用画像
 
+    private List<Button> skillSlotButtons = new List<Button>();
+    private List<Image> skillSlotImages = new List<Image>();
     private SkillBase selectedSkill;
 
     void Start()
     {
+        GenerateSkillSlots();
         RefreshOwnedSkills();
-        for (int i = 0; i < skillSlotButtons.Count; i++)
-        {
-            int slot = i;
-            skillSlotButtons[i].onClick.AddListener(() => OnSkillSlotClicked(slot));
-        }
         RefreshSkillSlots();
+    }
+
+    // スロットを所持スキル数分生成
+    void GenerateSkillSlots()
+    {
+        // 既存のスロットを削除
+        foreach (Transform child in slotParent)
+            Destroy(child.gameObject);
+
+        skillSlotButtons.Clear();
+        skillSlotImages.Clear();
+
+        int slotCount = Mathf.Min(skillSlotButtons.Count, skillSlotImages.Count, playerSkill.SkillSlotCount);
+        for (int i = 0; i < slotCount; i++)
+        {
+            var go = Instantiate(slotPrefab, slotParent);
+            var btn = go.GetComponent<Button>();
+            var img = go.GetComponent<Image>();
+            int slot = i;
+            btn.onClick.AddListener(() => OnSkillSlotClicked(slot));
+            skillSlotButtons.Add(btn);
+            skillSlotImages.Add(img);
+        }
     }
 
     // 所持スキル一覧をUIに表示
@@ -47,7 +68,6 @@ public class SkillSelectUI : MonoBehaviour
     void OnSkillIconSelected(SkillBase skill)
     {
         selectedSkill = skill;
-        // ここで選択中のスキルをハイライト表示などしても良い
     }
 
     // スロットが押された時
@@ -65,21 +85,19 @@ public class SkillSelectUI : MonoBehaviour
     // スロットUIの表示更新
     void RefreshSkillSlots()
     {
-        for (int i = 0; i < skillSlotButtons.Count; i++)
+        int slotCount = Mathf.Min(skillSlotButtons.Count, skillSlotImages.Count, playerSkill.SkillSlotCount);
+        for (int i = 0; i < slotCount; i++)
         {
             var skill = playerSkill.GetSkill(i);
             if (skill != null)
             {
-                // skillSlotImages[i].sprite = skill.icon; // アイコンを使う場合
+                // skillSlotImages[i].sprite = skill.icon;
                 skillSlotImages[i].color = Color.white;
-                // スキル名表示が不要なら下記を削除
-                // skillSlotImages[i].GetComponentInChildren<Text>().text = skill.skillName;
             }
             else
             {
                 skillSlotImages[i].sprite = emptySlotSprite;
                 skillSlotImages[i].color = Color.gray;
-                // skillSlotImages[i].GetComponentInChildren<Text>().text = "";
             }
         }
     }
