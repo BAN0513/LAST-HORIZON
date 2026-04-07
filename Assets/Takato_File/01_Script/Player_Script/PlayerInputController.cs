@@ -19,6 +19,7 @@ namespace Takato
         public bool IsSkill3Input { get; private set; }  //プレイヤーのスキル3入力を格納するプロパティ
         public bool IsSkill4Input { get; private set; }  //プレイヤーのアルティメットスキル入力を格納するプロパティ
         public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
+        public bool IsInventoryInput { get; private set; } // プレイヤーのインベントリ入力を格納するプロパティ
 
         private void Awake()
         {
@@ -68,6 +69,11 @@ namespace Takato
             playerInputActions.Player.Look.started += context => LookInput = context.ReadValue<Vector2>();   // 入力が開始されたときのイベント
             playerInputActions.Player.Look.performed += context => LookInput = context.ReadValue<Vector2>(); // 入力が実行されたときのイベント
             playerInputActions.Player.Look.canceled += context => LookInput = context.ReadValue<Vector2>();  // 入力がキャンセルされたときのイベント
+
+            //Inventory入力イベント登録
+            playerInputActions.Player.Inventory.started += context => IsInventoryInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Inventory.performed += context => IsInventoryInput = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Inventory.canceled += context => IsInventoryInput = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>

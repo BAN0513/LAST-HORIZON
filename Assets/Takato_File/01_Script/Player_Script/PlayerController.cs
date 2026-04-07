@@ -25,6 +25,8 @@ namespace Takato
         [SerializeField] private float gravity;
         [Header("プレイヤーのダメージカット率")]
         [SerializeField] private float damageCutRate;
+        [Header("Skill Select UI")]
+        [SerializeField] private SkillSelectUI skillSelectUI;
 
         private PlayerInputController inputController;         // 入力管理
         private CharacterController characterController;       // 移動管理
@@ -37,6 +39,8 @@ namespace Takato
         private int hp;                                       // プレイヤーの現在のHP
         private bool isBlocking = false;                      // 防御中かどうか
         private bool isDead = false;                          // 死亡しているかどうか
+        private bool isSkillUIOpen = false;                   // スキル選択UIが開いているかどうか
+        private bool prevInventoryOpen = false;               // 前フレームのインベントリ入力状態を保存する変数
 
         private void Awake()
         {
@@ -85,6 +89,12 @@ namespace Takato
                 playerSkill.ActivateSkill(3, this);
             }
 
+            // スキル選択UIのトグル
+            if (inputController.IsInventoryInput && !prevInventoryOpen)
+            {
+                ToggleSkillUI(); // インベントリ入力があったらスキル選択UIの表示/非表示を切り替える
+            }
+            prevInventoryOpen = inputController.IsInventoryInput; // 現在のインベントリ入力状態を保存
 
             // HPが0以下になったら死亡処理を呼び出す
             if (hp <= 0)
@@ -93,7 +103,18 @@ namespace Takato
             }
         }
 
-        //カメラの向いてる方向に移動するのとカメラの向いてる方向にプレイヤーの向きを変えるのを同時に行うようにする
+        /// <summary>
+        /// スキル選択UIの表示/非表示を切り替えるメソッド
+        /// </summary>
+        private void ToggleSkillUI()
+        {
+            isSkillUIOpen = !isSkillUIOpen; // UIの開閉状態をトグル
+            skillSelectUI.ShowUI(isSkillUIOpen); // UIの表示/非表示を切り替える
+        }
+
+        /// <summary>
+        /// LateUpdateは、Updateの後に呼び出されるため、プレイヤーの移動やアニメーションが更新された後にカメラの向きを調整することができる。
+        /// </summary>
         private void LateUpdate()
         {
             if(isDead) return; // 死亡している場合は向きを変えない

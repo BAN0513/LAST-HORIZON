@@ -15,7 +15,7 @@ namespace Takato
 
         private void Awake()
         {
-            skillCooldownTimers = new float[skills.Count];
+            skillCooldownTimers = new float[skills.Count]; // スキルの数に合わせてクールダウンタイマーの配列を初期化
         }
 
         private void Update()
@@ -23,7 +23,9 @@ namespace Takato
             for (int i = 0; i < skillCooldownTimers.Length; i++)
             {
                 if (skillCooldownTimers[i] > 0)
-                    skillCooldownTimers[i] -= Time.deltaTime;
+                {
+                    skillCooldownTimers[i] -= Time.deltaTime; // クールダウンタイマーを減少させる
+                }     
             }
         }
 
@@ -44,7 +46,7 @@ namespace Takato
         /// </summary>
         public int SkillSlotCount
         {
-            get { return skills.Count; }
+            get { return skills.Count; } // スキルスロットの数を返す
         }
 
         /// <summary>

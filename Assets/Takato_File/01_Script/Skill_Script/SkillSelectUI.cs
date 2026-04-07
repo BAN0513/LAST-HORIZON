@@ -16,15 +16,32 @@ public class SkillSelectUI : MonoBehaviour
     [SerializeField] private GameObject slotPrefab; // スロット用Prefab
     [SerializeField] private Sprite emptySlotSprite; // 空スロット用画像
 
-    private List<Button> skillSlotButtons = new List<Button>();
-    private List<Image> skillSlotImages = new List<Image>();
-    private SkillBase selectedSkill;
+    [Header("Ui Canvas")]
+    [SerializeField] private Canvas skillSelectCanvas;
+
+    private List<Button> skillSlotButtons = new List<Button>(); // スロットのボタンコンポーネントを保持
+    private List<Image> skillSlotImages = new List<Image>();    // スロットの画像コンポーネントを保持
+    private SkillBase selectedSkill;                            // 現在選択されているスキル
 
     void Start()
     {
-        GenerateSkillSlots();
-        RefreshOwnedSkills();
-        RefreshSkillSlots();
+        GenerateSkillSlots(); // スロットを生成
+        RefreshOwnedSkills(); // 所持スキルを表示
+        RefreshSkillSlots();  // スロットの表示を更新
+
+        ShowUI(false);        // 最初はUIを非表示にする
+    }
+
+    public void ShowUI(bool show)
+    {
+        if(skillSelectCanvas != null)
+        {
+            skillSelectCanvas.enabled = show; // UIの表示/非表示を切り替える
+        }
+        else
+        {
+            gameObject.SetActive(show); // Canvasがない場合はGameObject自体を切り替える
+        }
     }
 
     // スロットを所持スキル数分生成
@@ -34,8 +51,8 @@ public class SkillSelectUI : MonoBehaviour
         foreach (Transform child in slotParent)
             Destroy(child.gameObject);
 
-        skillSlotButtons.Clear();
-        skillSlotImages.Clear();
+        skillSlotButtons.Clear(); // ボタンリストをクリア
+        skillSlotImages.Clear();  // 画像リストをクリア
 
         int slotCount = Mathf.Min(skillSlotButtons.Count, skillSlotImages.Count, playerSkill.SkillSlotCount);
         for (int i = 0; i < slotCount; i++)
