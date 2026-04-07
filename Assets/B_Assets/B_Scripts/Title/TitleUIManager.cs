@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
 
-public class TitleManager : MonoBehaviour
+public class TitleUIManager : MonoBehaviour
 {
+    public static TitleUIManager Instance { get; private set; }
+
     private SaveData saveData;
 
     [SerializeField] private CanvasGroup groupStart;
@@ -28,14 +30,24 @@ public class TitleManager : MonoBehaviour
 
     [SerializeField] private Text[] playTimeText;
     private SystemManager system;
-    private bool isMouseControl = false;
+    private bool isGamePadConnection = false;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = false;
-        //EventSystem.current.firstSelectedGameObject = startButton.gameObject;
-        EventSystem.current.SetSelectedGameObject(null);
+        Cursor.visible = true;
 
         system = SystemManager.instance;
         groupStart.alpha = 1.0f;
@@ -68,6 +80,22 @@ public class TitleManager : MonoBehaviour
 
             playTimeText[i].text = $"{Mathf.FloorToInt(time)} : {Mathf.FloorToInt(minute)} : {Mathf.FloorToInt(second)}";
         }
+
+        // デバイス一覧を取得
+        foreach (var device in InputSystem.devices)
+        {
+            // デバイス名をログ出力
+            Debug.Log(device.name);
+
+            if (device.name == "Keyboar")
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                isGamePadConnection = true;
+                EventSystem.current.firstSelectedGameObject = startButton.gameObject;
+                EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+            }
+        }
     }
 
     private void SystemUISetting(Slider slider, TMP_InputField text, float value)
@@ -78,38 +106,38 @@ public class TitleManager : MonoBehaviour
         text.text = slider.value.ToString();
     }
 
-    public void OnNewGameButton()
+    public void NewGame()
     {
         SaveManager.Instance.NewGame();
     }
 
-    public void OnContinueButton()
+    public void Continue()
     {
         ChangeInteractable(groupStart, false);
         groupLoad.transform.SetAsLastSibling();
         StartCoroutine(FadeInOutControl(groupLoad, groupStart, loadButton.gameObject));
     }
 
-    public void OnSlotButton(int slot)
+    public void Slot(int slot)
     {
         SaveManager.Instance.LoadGame(slot);
     }
 
-    public void OnLoadBackButton()
+    public void LoadBack()
     {
         ChangeInteractable(groupLoad, false);
 
         StartCoroutine(FadeInOutControl(groupStart, groupLoad, startButton.gameObject));
     }
 
-    public void OnSystemButton()
+    public void System()
     {
         ChangeInteractable(groupStart, false);
         groupSystem.transform.SetAsLastSibling();
         StartCoroutine(FadeInOutControl(groupSystem, groupStart, sliderSE.gameObject));
     }
 
-    public void OnSystemBackButton()
+    public void SystemBack()
     {
         ChangeInteractable(groupSystem, false);
 
@@ -152,6 +180,8 @@ public class TitleManager : MonoBehaviour
             float num = float.Parse(text.text);
             if (num < 0 || num > 10)
             {
+                RectTransform rect = text.GetComponent<RectTransform>();
+                rect.right = new Vector3(0, 0, 0);
                 text.text = slider.value.ToString("F0");
             }
             else
@@ -181,11 +211,11 @@ public class TitleManager : MonoBehaviour
     {
         yield return StartCoroutine(Fade(1, 0, outGroup));
         yield return StartCoroutine(Fade(0, 1, inGroup));
+        if (isGamePadConnection)
+        {
+            EventSystem.current.SetSelectedGameObject(setSelectObj);
+        }
         ChangeInteractable(inGroup, true);
-
-
-        EventSystem.current.SetSelectedGameObject(null);
-
     }
 
     private void ChangeInteractable(CanvasGroup canvasGroup, bool active)
@@ -221,65 +251,11 @@ public class TitleManager : MonoBehaviour
     {
         if (groupLoad.alpha == 1)
         {
-            OnLoadBackButton();
+            LoadBack();
         }
         else if (groupSystem.alpha == 1)
         {
-            OnSystemBackButton();
+            SystemBack();
         }
-    }
-
-    private void OnPoint(InputValue value)
-    {
-        Cursor.visible = true;
-        EventSystem.current.SetSelectedGameObject(null);
-        GroupBlockRayCast(true);
-        isMouseControl = true;
-    }
-
-    private void OnNavigate(InputValue value)
-    {
-        if (isMouseControl)
-        {
-            Cursor.visible = false;
-            GroupBlockRayCast(false);
-            isMouseControl = false;
-        }
-        else if (EventSystem.current.currentSelectedGameObject == null)
-        {
-            StartCoroutine(Navigate());
-        }
-    }
-
-    IEnumerator Navigate()
-    {
-        EventSystem.current.sendNavigationEvents = false;
-        if (groupStart.alpha == 1)
-        {
-            EventSystem.current.SetSelectedGameObject(startButton.gameObject);
-        }
-        else if (groupLoad.alpha == 1)
-        {
-            EventSystem.current.SetSelectedGameObject(loadButton.gameObject);
-        }
-        else if (groupSystem.alpha == 1)
-        {
-            EventSystem.current.SetSelectedGameObject(sliderSE.gameObject);
-        }
-        yield return new WaitForSeconds(0.1f);
-        EventSystem.current.sendNavigationEvents = true;
-        isMouseControl = false;
-    }
-
-    private void ChangeblocksRaycasts(CanvasGroup canvasGroup, bool active)
-    {
-        canvasGroup.blocksRaycasts = active;
-    }
-
-    private void GroupBlockRayCast(bool active)
-    {
-        groupStart.blocksRaycasts = active;
-        groupLoad.blocksRaycasts = active;
-        groupSystem.blocksRaycasts = active;
     }
 }
