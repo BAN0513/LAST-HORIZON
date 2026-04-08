@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cc66893b6abbca4f9bc2f4036b466f8, type: 3}
-  m_Name: DEF1
+  m_Name: DEF3
   m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
   skillName: DEF1
-  cost: 5
-  cooldown: 10
-  moveSpeedBuff: 0
-  baseCutRate: 0.15
-  cutRatePerLevel: 0.035
+  cost: 15
+  cooldown: 30
+  moveSpeedBuff: 1.05
+  baseCutRate: 0.1
+  cutRatePerLevel: 0.03
   baseDuration: 10
   durationPerLevel: 1
   effectPrefab: {fileID: 3280519133390621004, guid: 868b6d9162ac6244987109c436ef9ac6, type: 3}
