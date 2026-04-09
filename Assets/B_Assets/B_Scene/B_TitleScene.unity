@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 85783629}
   - component: {fileID: 85783628}
   - component: {fileID: 85783627}
+  - component: {fileID: 85783630}
   m_Layer: 5
   m_Name: InputField (TMP) SE
   m_TagString: Untagged
@@ -467,19 +468,7 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1007304957}
-        m_TargetAssemblyTypeName: TitleManager, Assembly-CSharp
-        m_MethodName: SETextChange
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -557,6 +546,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 85783625}
   m_CullTransparentMesh: 1
+--- !u!114 &85783630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85783625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f9ba38b6d72a84fa3a4add8e8fcc20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputFieldTypeSet
+  type: 0
 --- !u!1 &120428128
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,6 +1300,7 @@ GameObject:
   - component: {fileID: 400473929}
   - component: {fileID: 400473928}
   - component: {fileID: 400473930}
+  - component: {fileID: 400473931}
   m_Layer: 0
   m_Name: UIControl
   m_TagString: Untagged
@@ -1345,6 +1348,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221ede77d82d35a4bbfae00dd2138e93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SliderControl
+  parentObj: {fileID: 1007304961}
+--- !u!114 &400473931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400473927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfc5e39f3e4a0242bec0f491a061c52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputFieldControl
   parentObj: {fileID: 1007304961}
 --- !u!1 &406630463
 GameObject:
@@ -1957,6 +1973,7 @@ GameObject:
   - component: {fileID: 752982142}
   - component: {fileID: 752982141}
   - component: {fileID: 752982140}
+  - component: {fileID: 752982143}
   m_Layer: 5
   m_Name: InputField (TMP) BGM
   m_TagString: Untagged
@@ -2045,19 +2062,7 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1007304957}
-        m_TargetAssemblyTypeName: TitleUIManager, Assembly-CSharp
-        m_MethodName: BGMTextChange
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -2135,6 +2140,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 752982138}
   m_CullTransparentMesh: 1
+--- !u!114 &752982143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752982138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f9ba38b6d72a84fa3a4add8e8fcc20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputFieldTypeSet
+  type: 1
 --- !u!1 &755968505
 GameObject:
   m_ObjectHideFlags: 0
@@ -4500,7 +4518,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1413064383}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6028,7 +6046,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1987611586}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6542,6 +6560,7 @@ GameObject:
   - component: {fileID: 2107995051}
   - component: {fileID: 2107995050}
   - component: {fileID: 2107995049}
+  - component: {fileID: 2107995052}
   m_Layer: 5
   m_Name: InputField (TMP) Light
   m_TagString: Untagged
@@ -6630,19 +6649,7 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1007304957}
-        m_TargetAssemblyTypeName: TitleUIManager, Assembly-CSharp
-        m_MethodName: LightTextChange
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -6720,6 +6727,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107995047}
   m_CullTransparentMesh: 1
+--- !u!114 &2107995052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2107995047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f9ba38b6d72a84fa3a4add8e8fcc20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputFieldTypeSet
+  type: 2
 --- !u!1 &2108369977
 GameObject:
   m_ObjectHideFlags: 0
