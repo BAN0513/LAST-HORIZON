@@ -13,9 +13,16 @@ namespace Takato
 
         private float[] skillCooldownTimers; // 各スキルのクールダウンタイマー
 
+
         private void Awake()
         {
-            skillCooldownTimers = new float[skills.Count]; // スキルの数に合わせてクールダウンタイマーの配列を初期化
+            // スロット数分の要素がなければnullで埋める
+            int slotCount = Mathf.Max(skills.Count, 4); // 最低4スロット確保
+            while (skills.Count < slotCount)
+            {
+                skills.Add(null);
+            }
+            skillCooldownTimers = new float[skills.Count];
         }
 
         private void Update()
@@ -54,8 +61,13 @@ namespace Takato
         /// </summary>
         public void SetSkill(int slotindex, SkillBase skill)
         {
-            if (slotindex < 0 || slotindex >= skills.Count) return;
+            if (slotindex < 0 || slotindex >= skills.Count)
+            {
+                Debug.LogWarning($"SetSkill: slotindex {slotindex} が無効です（skills.Count={skills.Count}）");
+                return;
+            }
             skills[slotindex] = skill;
+            Debug.Log($"SetSkill: スロット{slotindex}に「{(skill != null ? skill.skillName : "なし")}」をセットしました。");
         }
         /// <summary>
         /// スキルを取得するメソッド

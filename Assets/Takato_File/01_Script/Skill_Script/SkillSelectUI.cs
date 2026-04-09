@@ -19,42 +19,45 @@ public class SkillSelectUI : MonoBehaviour
     [Header("Ui Canvas")]
     [SerializeField] private Canvas skillSelectCanvas;
 
-    private List<Button> skillSlotButtons = new List<Button>(); // スロットのボタンコンポーネントを保持
-    private List<Image> skillSlotImages = new List<Image>();    // スロットの画像コンポーネントを保持
-    private SkillBase selectedSkill;                            // 現在選択されているスキル
+    private List<Button> skillSlotButtons = new List<Button>(); //スロットのButtonコンポーネント（クリック判定用）
+    private List<Image> skillSlotImages = new List<Image>(); //スロットのImageコンポーネント（アイコン表示用）
+    private SkillBase selectedSkill;    //選択中のスキル（UI上でハイライト等したい場合用）
+    private int selectedSlotIndex = 0; //選択中のスロット番号
 
     void Start()
     {
-        GenerateSkillSlots(); // スロットを生成
-        RefreshOwnedSkills(); // 所持スキルを表示
-        RefreshSkillSlots();  // スロットの表示を更新
-
-        ShowUI(false);        // 最初はUIを非表示にする
+        GenerateSkillSlots(); //スロットを生成
+        RefreshOwnedSkills(); //所持スキルを表示
+        RefreshSkillSlots();  //スロットの表示を更新
+        ShowUI(false);        //最初は非表示
     }
 
+    /// <summary>
+    /// スキル選択UIの表示切替
+    /// </summary>
+    /// <param name="show"></param>
     public void ShowUI(bool show)
     {
-        if(skillSelectCanvas != null)
+        if (skillSelectCanvas != null)
         {
-            skillSelectCanvas.enabled = show; // UIの表示/非表示を切り替える
+            skillSelectCanvas.enabled = show;
         }
         else
         {
-            gameObject.SetActive(show); // Canvasがない場合はGameObject自体を切り替える
+            gameObject.SetActive(show);
         }
     }
 
     // スロットを所持スキル数分生成
     void GenerateSkillSlots()
     {
-        // 既存のスロットを削除
         foreach (Transform child in slotParent)
             Destroy(child.gameObject);
 
-        skillSlotButtons.Clear(); // ボタンリストをクリア
-        skillSlotImages.Clear();  // 画像リストをクリア
+        skillSlotButtons.Clear();
+        skillSlotImages.Clear();
 
-        int slotCount = Mathf.Min(skillSlotButtons.Count, skillSlotImages.Count, playerSkill.SkillSlotCount);
+        int slotCount = playerSkill.SkillSlotCount;
         for (int i = 0; i < slotCount; i++)
         {
             var go = Instantiate(slotPrefab, slotParent);
@@ -73,6 +76,7 @@ public class SkillSelectUI : MonoBehaviour
         foreach (Transform child in ownedSkillsPanel)
             Destroy(child.gameObject);
 
+        // ここで必ず bringSkill.GetOwnedSkills() の要素をそのまま渡す
         foreach (var skill in bringSkill.GetOwnedSkills())
         {
             var go = Instantiate(skillIconPrefab, ownedSkillsPanel);
@@ -81,28 +85,44 @@ public class SkillSelectUI : MonoBehaviour
         }
     }
 
-    // スキルアイコンが押された時
+
+    /// <summary>
+    /// スキルアイコンが選択されたときの処理
+    /// </summary>
     void OnSkillIconSelected(SkillBase skill)
     {
+        if (selectedSlotIndex >= 0 && selectedSlotIndex < playerSkill.SkillSlotCount)
+        {
+            int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(skill);
+            if (ownedIndex < 0)
+            {
+                Debug.LogWarning($"選択されたSkillBase({skill?.skillName})はownedSkillsリストに存在しません。参照が一致していない可能性があります。");
+                // ここで bringSkill.GetOwnedSkills() の全要素と skill を比較してみる
+                int i = 0;
+                foreach (var s in bringSkill.GetOwnedSkills())
+                {
+                    Debug.Log($"ownedSkills[{i}]: {s?.skillName} ({s?.GetInstanceID()}) 選択: {skill?.skillName} ({skill?.GetInstanceID()}) 一致: {ReferenceEquals(s, skill)}");
+                    i++;
+                }
+                return;
+            }
+            bringSkill.SwapSkillWithPlayerSkill(ownedIndex, selectedSlotIndex, playerSkill);
+            RefreshOwnedSkills();
+            RefreshSkillSlots();
+        }
         selectedSkill = skill;
     }
 
     // スロットが押された時
     void OnSkillSlotClicked(int slotIndex)
     {
-        if (selectedSkill == null) return;
-        int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(selectedSkill);
-        if (ownedIndex >= 0)
-        {
-            bringSkill.SetSkillToPlayerSkill(ownedIndex, slotIndex, playerSkill);
-            RefreshSkillSlots();
-        }
+        selectedSlotIndex = slotIndex; // 選択中スロットを記憶
     }
 
     // スロットUIの表示更新
     void RefreshSkillSlots()
     {
-        int slotCount = Mathf.Min(skillSlotButtons.Count, skillSlotImages.Count, playerSkill.SkillSlotCount);
+        int slotCount = playerSkill.SkillSlotCount;
         for (int i = 0; i < slotCount; i++)
         {
             var skill = playerSkill.GetSkill(i);
@@ -117,5 +137,13 @@ public class SkillSelectUI : MonoBehaviour
                 skillSlotImages[i].color = Color.gray;
             }
         }
+    }
+
+    /// <summary>
+    /// 所持スキルとプレイヤースキルのスロットを入れ替えるメソッド
+    /// </summary>
+    public void SwapSkillWithPlayerSkill(int ownedSkillIndex, int playerSkillSlot, PlayerSkill playerSkill)
+    {
+       
     }
 }

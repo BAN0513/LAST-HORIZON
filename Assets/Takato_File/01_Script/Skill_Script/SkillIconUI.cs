@@ -20,13 +20,19 @@ public class SkillIconUI : MonoBehaviour
     {
         this.skill = skill;
         this.onClick = onClick;
-        //nameText.text = skill.skillName;
-        // iconImage.sprite = skill.icon; // SkillBaseにiconがあれば
+        // 必要ならUI表示もここで
+
+        var btn = GetComponent<Button>();
+        if (btn != null)
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(OnClick);
+        }
     }
 
     /// <summary>
     /// アイコンがクリックされたときに呼ばれるメソッド
-    /// </summary>
+    /// </summary>#
     public void OnClick()
     {
         onClick?.Invoke(skill);
