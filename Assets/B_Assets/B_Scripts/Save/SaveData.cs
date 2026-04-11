@@ -6,6 +6,13 @@ using UnityEngine;
 [Serializable]
 public class SaveData
 {
+    public enum Character
+    {
+        Sword,
+        GreateSword,
+        Wizard
+    }
+    public Character character;
     public float playTime;
     public int level;
     public int stage;
@@ -14,8 +21,9 @@ public class SaveData
     public List<SkillBase> skills;
 
     // コンストラクタで初期値を設定
-    public SaveData()
+    public SaveData(Character character)
     {
+        this.character = character;
         this.playTime = 0;
         this.level = 1;
         this.stage = 0;

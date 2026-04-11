@@ -36,9 +36,9 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    public void NewGame()
+    public void NewGame(SaveData.Character character)
     {
-        save = new SaveData();
+        save = new SaveData(character);
         playTimeCnt = 0;
         isPlay = true;
         SceneManager.LoadScene("B_TestScene");
@@ -80,7 +80,7 @@ public class SaveManager : MonoBehaviour
             // ファイルからJSON文字列を読み込む
             string json = File.ReadAllText(path);
 
-            // JSON文字列からGameDataオブジェクトに復元
+            // JSON文字列からSaveDataオブジェクトに復元
             save = JsonUtility.FromJson<SaveData>(json);
 
             SceneManager.LoadScene("B_TestScene");
@@ -95,12 +95,12 @@ public class SaveManager : MonoBehaviour
 
             Debug.Log("Load successful!");
         }
-        else
-        {
-            //セーブデータが存在しない場合は新しく作る
-            save = new SaveData();
-            SceneManager.LoadScene("B_TestScene");
-        }
+        //else
+        //{
+        //    //セーブデータが存在しない場合は新しく作る
+        //    save = new SaveData();
+        //    SceneManager.LoadScene("B_TestScene");
+        //}
 
         isPlay = true;
     }

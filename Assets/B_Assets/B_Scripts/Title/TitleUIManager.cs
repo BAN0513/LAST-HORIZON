@@ -15,9 +15,14 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] private CanvasGroup groupStart;
     [SerializeField] private CanvasGroup groupLoad;
     [SerializeField] private CanvasGroup groupSystem;
+    [SerializeField] private CanvasGroup groupCharacterSelect;
 
     [SerializeField] private Button startButton;
     [SerializeField] private Button loadButton;
+
+    [SerializeField] private Button swordButton;
+    [SerializeField] private Button greatSwordButton;
+    [SerializeField] private Button wizardButton;
 
     [SerializeField] private Slider sliderSE;
     [SerializeField] private TMP_InputField textSE;
@@ -48,6 +53,7 @@ public class TitleUIManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        groupStart.transform.SetAsLastSibling();
 
         system = SystemManager.instance;
         groupStart.alpha = 1.0f;
@@ -55,6 +61,8 @@ public class TitleUIManager : MonoBehaviour
         groupLoad.alpha = 0;
         ChangeInteractable(groupSystem, false);
         groupSystem.alpha = 0;
+        ChangeInteractable (groupCharacterSelect, false);
+        groupCharacterSelect.alpha = 0;
 
         float lightValue = system.valueLight;
         RenderSettings.ambientIntensity = lightValue;
@@ -108,7 +116,17 @@ public class TitleUIManager : MonoBehaviour
 
     public void NewGame()
     {
-        SaveManager.Instance.NewGame();
+        //SaveManager.Instance.NewGame();
+        ChangeInteractable(groupStart, false);
+        groupCharacterSelect.transform.SetAsLastSibling();
+        StartCoroutine(FadeInOutControl(groupCharacterSelect, groupStart, swordButton.gameObject));
+    }
+
+    public void CharacterSelectBack()
+    {
+        ChangeInteractable(groupCharacterSelect, false);
+
+        StartCoroutine(FadeInOutControl(groupStart, groupCharacterSelect, startButton.gameObject));
     }
 
     public void Continue()
@@ -142,6 +160,22 @@ public class TitleUIManager : MonoBehaviour
         ChangeInteractable(groupSystem, false);
 
         StartCoroutine(FadeInOutControl(groupStart, groupSystem, startButton.gameObject));
+    }
+
+    public void CharacterSelect(ButtonControl.ButtonType type)
+    {
+        switch (type)
+        {
+            case ButtonControl.ButtonType.Characetr_Sword:
+                SaveManager.Instance.NewGame(SaveData.Character.Sword);
+                break;
+            case ButtonControl.ButtonType.Character_GreatSword:
+                SaveManager.Instance.NewGame(SaveData.Character.GreateSword);
+                break;
+            case ButtonControl.ButtonType.Character_Wizard:
+                SaveManager.Instance.NewGame(SaveData.Character.Wizard);
+                break;
+        }
     }
 
 
@@ -256,6 +290,10 @@ public class TitleUIManager : MonoBehaviour
         else if (groupSystem.alpha == 1)
         {
             SystemBack();
+        }
+        else if (groupCharacterSelect.alpha == 1)
+        {
+            CharacterSelectBack();
         }
     }
 }

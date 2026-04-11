@@ -17,7 +17,10 @@ public class ButtonControl : MonoBehaviour
         System,
         Load_Slot,
         Loab_Back,
-        System_Back
+        System_Back,
+        Characetr_Sword,
+        Character_GreatSword,
+        Character_Wizard
     }
 
     Dictionary<ButtonType, Action> buttonDict = new Dictionary<ButtonType, Action>();
@@ -29,6 +32,9 @@ public class ButtonControl : MonoBehaviour
         buttonDict[ButtonType.System] = () => TitleUIManager.Instance.System();
         buttonDict[ButtonType.Loab_Back] = () => TitleUIManager.Instance.LoadBack();
         buttonDict[ButtonType.System_Back] = () => TitleUIManager.Instance.SystemBack();
+        buttonDict[ButtonType.Characetr_Sword] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Characetr_Sword);
+        buttonDict[ButtonType.Character_GreatSword] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Character_GreatSword);
+        buttonDict[ButtonType.Character_Wizard] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Character_Wizard);
 
         foreach (var type in parentObj.GetComponentsInChildren<ButtonTypeSet>())
         {
