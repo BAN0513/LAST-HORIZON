@@ -43,6 +43,7 @@ namespace Takato
         {
             if (index < 0 || index >= skills.Count) return;
             if (skillCooldownTimers[index] > 0) return;
+            if (skills[index] == null) return;
 
             skills[index].Activate(player);
             skillCooldownTimers[index] = skills[index].cooldown;
