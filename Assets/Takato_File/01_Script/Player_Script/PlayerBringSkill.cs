@@ -13,25 +13,6 @@ namespace Takato
         [SerializeField] private List<SkillBase> ownedSkills = new List<SkillBase>();
 
         /// <summary>
-        /// スキルを所持リストに追加
-        /// </summary>
-        public void AddSkill(SkillBase skill)
-        {
-            if (!ownedSkills.Contains(skill))
-            {
-                ownedSkills.Add(skill);
-            }
-        }
-
-        /// <summary>
-        /// スキルを所持リストから削除
-        /// </summary>
-        public void RemoveSkill(SkillBase skill)
-        {
-            ownedSkills.Remove(skill);
-        }
-
-        /// <summary>
         /// 所持スキルリストを取得
         /// </summary>
         public List<SkillBase> GetOwnedSkills()
@@ -52,8 +33,21 @@ namespace Takato
             SkillBase ownedSkill = ownedSkills[ownedSkillIndex];
             SkillBase slotSkill = playerSkill.GetSkill(playerSkillSlot);
 
-            // 入れ替え
-            ownedSkills[ownedSkillIndex] = slotSkill;
+            // 所持リストからドラッグしたスキルを取り除く
+            ownedSkills.RemoveAt(ownedSkillIndex);
+
+            // スロットに元々入っていたスキルがあれば、インベントリに戻す。
+            if (slotSkill != null)
+            {
+                if (!ownedSkills.Contains(slotSkill))
+                {
+                    // 取り除いた位置と同じ位置に戻す
+                    int insertIndex = Mathf.Clamp(ownedSkillIndex, 0, ownedSkills.Count);
+                    ownedSkills.Insert(insertIndex, slotSkill);
+                }
+            }
+
+            // スロットにドラッグしてきたスキルをセット
             playerSkill.SetSkill(playerSkillSlot, ownedSkill);
 
             // デバッグログ
