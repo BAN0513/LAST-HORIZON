@@ -37,6 +37,8 @@ public class TitleUIManager : MonoBehaviour
     private SystemManager system;
     private bool isGamePadConnection = false;
 
+    private FadeManager fadeManager;
+
     private void Awake()
     {
         if (Instance == null)
@@ -95,6 +97,7 @@ public class TitleUIManager : MonoBehaviour
             // デバイス名をログ出力
             Debug.Log(device.name);
 
+            //GamePadに後々変更する。今はデバッグ用でKeybordを使用する
             if (device.name == "Keyboar")
             {
                 Cursor.lockState = CursorLockMode.Locked;
@@ -104,6 +107,8 @@ public class TitleUIManager : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(startButton.gameObject);
             }
         }
+
+        fadeManager = FadeManager.instance;
     }
 
     private void SystemUISetting(Slider slider, TMP_InputField text, float value)
@@ -243,8 +248,8 @@ public class TitleUIManager : MonoBehaviour
 
     IEnumerator FadeInOutControl(CanvasGroup inGroup, CanvasGroup outGroup, GameObject setSelectObj)
     {
-        yield return StartCoroutine(Fade(1, 0, outGroup));
-        yield return StartCoroutine(Fade(0, 1, inGroup));
+        yield return StartCoroutine(fadeManager.Fade(1, 0, outGroup));
+        yield return StartCoroutine(fadeManager.Fade(0, 1, inGroup));
         if (isGamePadConnection)
         {
             EventSystem.current.SetSelectedGameObject(setSelectObj);
@@ -255,30 +260,6 @@ public class TitleUIManager : MonoBehaviour
     private void ChangeInteractable(CanvasGroup canvasGroup, bool active)
     {
         canvasGroup.interactable = active;
-    }
-
-    IEnumerator Fade(float start, float end, CanvasGroup group)
-    {
-        Time.timeScale = 1.0f;
-        float fadeDuration = 1;
-
-        float t = 0f;
-        Color cl;
-        cl.a = start;
-
-        while (t < 1f)
-        {
-            t += Time.deltaTime / fadeDuration;
-            cl.a = Mathf.Lerp(start, end, t);
-
-            group.alpha = cl.a;
-
-            yield return null;
-        }
-
-        cl.a = end;
-
-        group.alpha = cl.a;
     }
 
     private void OnEsc(InputValue value)

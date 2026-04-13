@@ -12,6 +12,8 @@ public class SaveManager : MonoBehaviour
     private float playTimeCnt = 0;
     private bool isPlay = false;
 
+    private FadeManager fadeManager;
+
     void Awake()
     {
         if (Instance == null)
@@ -28,6 +30,11 @@ public class SaveManager : MonoBehaviour
         //save = new SaveData();
     }
 
+    private void Start()
+    {
+        fadeManager = FadeManager.instance;
+    }
+
     private void Update()
     {
         if (isPlay)
@@ -41,7 +48,7 @@ public class SaveManager : MonoBehaviour
         save = new SaveData(character);
         playTimeCnt = 0;
         isPlay = true;
-        SceneManager.LoadScene("B_TestScene");
+        StartCoroutine(fadeManager.SceneFadeIn("B_TestScene"));
     }
 
     public void SaveGame(int slot)
@@ -64,7 +71,7 @@ public class SaveManager : MonoBehaviour
         // JSON文字列をファイルに書き込む
         File.WriteAllText(path, json);
 
-        SceneManager.LoadScene("B_TitleScene");
+        StartCoroutine(fadeManager.SceneFadeIn("B_TitleScene"));
 
         Debug.Log("Save successful! Path: " + path);
     }
@@ -83,7 +90,7 @@ public class SaveManager : MonoBehaviour
             // JSON文字列からSaveDataオブジェクトに復元
             save = JsonUtility.FromJson<SaveData>(json);
 
-            SceneManager.LoadScene("B_TestScene");
+            StartCoroutine(fadeManager.SceneFadeIn("B_TestScene"));
 
             // --- ここで復元したデータをゲームに反映させる ---
 
