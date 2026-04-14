@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DEF2
   m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
   skillName: DEF2
+  skillIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   cost: 20
   cooldown: 40
   moveSpeedBuff: 0

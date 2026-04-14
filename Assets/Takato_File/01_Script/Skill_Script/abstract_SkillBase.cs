@@ -8,6 +8,8 @@ namespace Takato
         [Space(10)]
         [Header("スキル名")]
         public string skillName;
+        [Header("スキルの画像")]
+        public Sprite skillIcon;
         [Header("スキルの発動コスト")]
         public int cost;
         [Header("スキルのクールタイム")]

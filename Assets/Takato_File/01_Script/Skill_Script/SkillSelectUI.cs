@@ -4,57 +4,56 @@ using System.Collections.Generic;
 using Takato;
 
 /// <summary>
-/// スキル選択UI（ドラッグ＆ドロップ専用）
+/// スキル選択UI全体制御
 /// </summary>
 public class SkillSelectUI : MonoBehaviour
 {
-    [Header("所持スキルUI")]
+    [Header("持っているスキルUI")]
     [SerializeField] private PlayerBringSkill bringSkill;
     [SerializeField] private PlayerSkill playerSkill;
-    [SerializeField] private Transform ownedSkillsPanel; // ScrollViewのContent
+    [SerializeField] private Transform ownedSkillsPanel;
     [SerializeField] private GameObject skillIconPrefab;
 
     [Header("装備スロットUI")]
-    [SerializeField] private Transform slotParent; // スロットを並べる親
-    [SerializeField] private GameObject slotPrefab; // スロット用Prefab
-    [SerializeField] private Sprite emptySlotSprite; // 空スロット用画像
+    [SerializeField] private Transform slotParent;
+    [SerializeField] private GameObject slotPrefab;
+    [SerializeField] private Sprite emptySlotSprite;
 
     [Header("Ui Canvas")]
     [SerializeField] private Canvas skillSelectCanvas;
 
-    private List<Image> skillSlotImages = new List<Image>(); //スロットのImageコンポーネント（アイコン表示用）
+    private List<Image> skillSlotImages = new List<Image>();
 
     void Start()
     {
-        GenerateSkillSlots(); //スロットを生成
-        RefreshOwnedSkills(); //所持スキルを表示
-        RefreshSkillSlots();  //スロットの表示を更新
-        ShowUI(false);        //最初は非表示
+        GenerateSkillSlots(); // スロット生成
+        RefreshOwnedSkills(); // 所持スキル表示
+        RefreshSkillSlots();  // スロット表示更新
+        ShowUI(false);        // 最初は非表示
     }
 
     /// <summary>
-    /// スキル選択UIの表示切替
+    /// UI表示切替
     /// </summary>
-    /// <param name="show"></param>
     public void ShowUI(bool show)
     {
         if (skillSelectCanvas != null)
         {
-            skillSelectCanvas.enabled = show;
+            skillSelectCanvas.enabled = show; // Canvasの有効/無効でUI全体の表示を切り替え
         }
         else
         {
-            gameObject.SetActive(show);
+            gameObject.SetActive(show); // Canvasがない場合はGameObjectのActiveで切り替え
         }
     }
 
-    // スロットを所持スキル数分生成
+    // スロットを生成
     void GenerateSkillSlots()
     {
         foreach (Transform child in slotParent)
             Destroy(child.gameObject);
 
-        skillSlotImages.Clear();
+        skillSlotImages.Clear(); // 既存のスロットイメージリストをクリア
 
         int slotCount = playerSkill.SkillSlotCount;
         for (int i = 0; i < slotCount; i++)
@@ -63,7 +62,7 @@ public class SkillSelectUI : MonoBehaviour
             var img = go.GetComponent<Image>();
             skillSlotImages.Add(img);
 
-            // ドロップハンドラ追加
+            // ドロップハンドラ設定
             var dropHandler = go.GetComponent<SkillSlotDropHandler>();
             if (dropHandler == null)
                 dropHandler = go.AddComponent<SkillSlotDropHandler>();
@@ -72,7 +71,7 @@ public class SkillSelectUI : MonoBehaviour
         }
     }
 
-    // 所持スキル一覧をUIに表示
+    // 所持スキル一覧を表示
     void RefreshOwnedSkills()
     {
         foreach (Transform child in ownedSkillsPanel)
@@ -82,11 +81,11 @@ public class SkillSelectUI : MonoBehaviour
         {
             var go = Instantiate(skillIconPrefab, ownedSkillsPanel);
             var iconUI = go.GetComponent<SkillIconUI>();
-            iconUI.Setup(skill); // コールバック不要
+            iconUI.Setup(skill); // 表示セット
         }
     }
 
-    // スロットUIの表示更新
+    // 装備スロットの表示更新
     void RefreshSkillSlots()
     {
         int slotCount = playerSkill.SkillSlotCount;
@@ -95,8 +94,8 @@ public class SkillSelectUI : MonoBehaviour
             var skill = playerSkill.GetSkill(i);
             if (skill != null)
             {
-                // skillSlotImages[i].sprite = skill.icon;
-                skillSlotImages[i].color = Color.white;
+                skillSlotImages[i].sprite = skill.skillIcon;
+                skillSlotImages[i].color = skill.skillIcon != null ? Color.white : Color.clear;
             }
             else
             {
@@ -107,14 +106,14 @@ public class SkillSelectUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ドラッグ＆ドロップでスキルがスロットにドロップされた時の処理
+    /// ドラッグでスキルがスロットにドロップされた時の処理
     /// </summary>
     public void OnSkillIconDropped(SkillBase skill, int slotIndex)
     {
         int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(skill);
         if (ownedIndex < 0) return;
         bringSkill.SwapSkillWithPlayerSkill(ownedIndex, slotIndex, playerSkill);
-        RefreshOwnedSkills();
-        RefreshSkillSlots();
+        RefreshOwnedSkills(); // 所持スキルUI更新
+        RefreshSkillSlots();  // スロットUI更新
     }
 }

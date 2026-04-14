@@ -5,34 +5,36 @@ using Takato;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// スキルアイコンUI（ドラッグ＆ドロップ専用）
+/// スキルアイコンUI（ドラッグ方式）
 /// </summary>
 public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("スキルアイコンUI")]
     [SerializeField] private Image iconImage;
-    [Header("スキル名テキスト")]
+    [Header("スキル表示テキスト")]
     [SerializeField] private TMP_Text nameText;
 
     private SkillBase skill;
 
-    // ドラッグ用
+    // 所持スキル参照
     public SkillBase Skill => skill;
     private CanvasGroup canvasGroup;
     private Transform originalParent;
     private Vector2 originalPosition;
 
     /// <summary>
-    /// スキルアイコンUIをセットアップする
+    /// UIにスキル情報をセットする
     /// </summary>
     public void Setup(SkillBase skill)
     {
-        this.skill = skill;
+        this.skill = skill; // 引数のスキルをフィールドに保存
 
         if (iconImage != null && skill != null)
         {
-            // 必要に応じてアイコン画像をセット
-            // iconImage.sprite = skill.icon;
+            // ScriptableObjectのskillIconをUIに反映
+            iconImage.sprite = skill.skillIcon;
+            iconImage.enabled = skill.skillIcon != null;
+            iconImage.color = skill.skillIcon != null ? Color.white : Color.clear;
         }
         if (nameText != null && skill != null)
         {
@@ -44,31 +46,31 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     }
 
     /// <summary>
-    /// ドラッグ開始時にアイコンをUIの最前面に移動させ、元の位置を保存する
+    /// ドラッグ開始
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;
         originalPosition = transform.localPosition;
         canvasGroup.blocksRaycasts = false;
-        transform.SetParent(transform.root); // UIの最前面に
+        transform.SetParent(transform.root); // ルートへ移動して描画優先
     }
 
     /// <summary>
-    /// ドラッグ中はアイコンをマウス位置に追従させる
+    /// ドラッグ中
     /// </summary>
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position;
+        transform.position = eventData.position; // ドラッグ中はマウス位置に追従
     }
 
     /// <summary>
-    /// ドラッグ終了時に元の位置に戻す
+    /// ドラッグ終了
     /// </summary>
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
         transform.SetParent(originalParent);
-        transform.localPosition = originalPosition;
+        transform.localPosition = originalPosition; // ドロップ先で位置が変わる可能性があるから、元の位置に戻す
     }
 }
