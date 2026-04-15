@@ -63,10 +63,13 @@ public class StageChage : MonoBehaviour
     /// <param name="var"></param>
     private void OnDv_Warp(InputValue var)
     {
-        Chage = true;
-        StageNumber++;
-        if (StageNumber > 3) StageNumber = 0;
-        IsChage = true;
+        if (!PausManeger.ToPause && !PausManeger.ToGameOver)
+        {
+            Chage = true;
+            StageNumber++;
+            if (StageNumber > 3) StageNumber = 0;
+            IsChage = true;
+        }
     }
 
     private void OnTriggerEnter(Collider collider)

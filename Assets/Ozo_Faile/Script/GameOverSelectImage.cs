@@ -21,6 +21,8 @@ public class GameOverSelectImage : MonoBehaviour
 
     public static int SelectNo = 1;
 
+    public static bool GameOverButtonNow;
+
     private void Start()
     {
         GameOverIsDecision = false;
@@ -68,7 +70,7 @@ public class GameOverSelectImage : MonoBehaviour
 
     private void OnSelect(InputValue var)
     {
-        if (PausManeger.ToGameOver)
+        if (PausManeger.ToGameOver && !GameOverButtonNow)
         {
             Vector2 InputValue = var.Get<Vector2>();
 

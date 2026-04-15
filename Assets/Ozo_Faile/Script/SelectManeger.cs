@@ -13,6 +13,8 @@ public class SelectManeger : MonoBehaviour
     public static bool IsDecision = false;
     public static int SelectNo = 1;
 
+    public static bool PausButtonNow;
+
     private void Start()
     {
         IsDecision = false;
@@ -53,7 +55,7 @@ public class SelectManeger : MonoBehaviour
 
     private void OnSelect(InputValue var)
     {
-        if (PausManeger.ToPause)
+        if (PausManeger.ToPause && !PausButtonNow)
         {
             Vector2 InputValue = var.Get<Vector2>();
 
