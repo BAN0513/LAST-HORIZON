@@ -62,6 +62,12 @@ public class SaveManager : MonoBehaviour
         save.playTime = playTimeCnt;
         save.playerPosition = target.transform.position;
         //save.stage = stage.StageNumber;
+
+        WarpPointerController warpPointerController = target.GetComponentInChildren<WarpPointerController>();
+        if (warpPointerController != null)
+        {
+            save.warpPointName = warpPointerController.warpObj.name;
+        }
         // ----------------------------------------------------------
 
         string json = JsonUtility.ToJson(save, true);

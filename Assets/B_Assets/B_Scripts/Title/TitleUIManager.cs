@@ -107,8 +107,14 @@ public class TitleUIManager : MonoBehaviour
                 EventSystem.current.SetSelectedGameObject(startButton.gameObject);
             }
         }
+       
 
         fadeManager = FadeManager.instance;
+    }
+
+    private void Update()
+    {
+        Debug.Log(EventSystem.current.currentSelectedGameObject);
     }
 
     private void SystemUISetting(Slider slider, TMP_InputField text, float value)
@@ -130,7 +136,7 @@ public class TitleUIManager : MonoBehaviour
     public void CharacterSelectBack()
     {
         ChangeInteractable(groupCharacterSelect, false);
-
+        groupStart.transform.SetAsLastSibling();
         StartCoroutine(FadeInOutControl(groupStart, groupCharacterSelect, startButton.gameObject));
     }
 
@@ -149,7 +155,7 @@ public class TitleUIManager : MonoBehaviour
     public void LoadBack()
     {
         ChangeInteractable(groupLoad, false);
-
+        groupStart.transform.SetAsLastSibling();
         StartCoroutine(FadeInOutControl(groupStart, groupLoad, startButton.gameObject));
     }
 
@@ -163,7 +169,7 @@ public class TitleUIManager : MonoBehaviour
     public void SystemBack()
     {
         ChangeInteractable(groupSystem, false);
-
+        groupStart.transform.SetAsLastSibling();
         StartCoroutine(FadeInOutControl(groupStart, groupSystem, startButton.gameObject));
     }
 
@@ -276,5 +282,11 @@ public class TitleUIManager : MonoBehaviour
         {
             CharacterSelectBack();
         }
+    }
+
+    //これがないとESCでスタート画面に戻るとスタートボタンが選択された状態になってしまう
+    private void OnClick(InputValue value)
+    {
+        EventSystem.current.SetSelectedGameObject(null);
     }
 }

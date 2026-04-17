@@ -19,6 +19,7 @@ public class SaveData
     public float currentHealth;
     public Vector3 playerPosition;
     public List<SkillBase> skills;
+    public string warpPointName;
 
     // コンストラクタで初期値を設定
     public SaveData(Character character)

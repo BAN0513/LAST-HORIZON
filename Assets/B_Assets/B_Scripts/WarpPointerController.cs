@@ -11,7 +11,19 @@ public class WarpPointerController : MonoBehaviour
     {
         player = GetComponentInParent<PlayerController>();
 
-        gameObject.SetActive(false);
+        SaveManager saveManager = SaveManager.Instance;
+
+        GameObject saveWarpPoint = GameObject.Find(saveManager.save.warpPointName);
+        warpObj = saveWarpPoint;
+
+        if (warpObj == null)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+        }
     }
 
     private void Update()
@@ -23,10 +35,10 @@ public class WarpPointerController : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
-    public void SetWarpPoint(GameObject destinetion)
+    public void SetWarpPoint(GameObject warpPoint)
     {
         gameObject.SetActive(true);
-        warpObj = destinetion;
+        warpObj = warpPoint;
     }
 
     public void DestroyWarpPoint()
