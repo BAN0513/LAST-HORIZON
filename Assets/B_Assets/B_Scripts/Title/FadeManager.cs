@@ -21,6 +21,12 @@ public class FadeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    //これを入れないとバグが起きてしまう
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= SceneFadeOut;
+    }
+
     private void Start()
     {
         //シーンが遷移されたときにSceneFadeOutを呼ぶ

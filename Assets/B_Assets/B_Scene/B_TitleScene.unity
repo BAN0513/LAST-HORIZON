@@ -8145,6 +8145,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4773420886967931904, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8368639255512370105, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
