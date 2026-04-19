@@ -46,6 +46,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerBringSkill
   ownedSkills:
   - {fileID: 11400000, guid: 0053ec1db2167454b824f5653c16aaca, type: 2}
-  - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
-  - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
-  - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
+  - {fileID: 11400000, guid: bdd89086969f47044af1d3e5c85f77a8, type: 2}
+  - {fileID: 11400000, guid: d33e15c561fef7e49ab1182dce54d1fd, type: 2}
+  - {fileID: 11400000, guid: b6cf28d15d0cb24418b32c418b02255c, type: 2}

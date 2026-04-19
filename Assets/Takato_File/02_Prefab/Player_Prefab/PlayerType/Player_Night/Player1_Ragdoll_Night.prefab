@@ -897,6 +897,7 @@ MonoBehaviour:
   jumpForce: 5
   gravity: 12.5
   damageCutRate: 0.5
+  skillSelectUI: {fileID: 0}
 --- !u!114 &9195856261803714679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -942,6 +943,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
   - {fileID: 11400000, guid: d99d47df083abf64fae0e1122525da03, type: 2}
   - {fileID: 11400000, guid: 093d7a4a808d9b643b0182000ec132b5, type: 2}
+  - {fileID: 0}
 --- !u!1 &5918869648423950159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}

@@ -5,33 +5,44 @@ using Takato;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// スキルアイコンUI（ドラッグ方式）
+/// スキルアイコンUI（ドラッグ用）
 /// </summary>
 public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("スキルアイコンUI")]
     [SerializeField] private Image iconImage;
-    [Header("スキル表示テキスト")]
+    [Header("スキル表示名")]
     [SerializeField] private TMP_Text nameText;
 
     private SkillBase skill;
 
-    // 所持スキル参照
+    // スキル参照プロパティ
     public SkillBase Skill => skill;
     private CanvasGroup canvasGroup;
     private Transform originalParent;
     private Vector2 originalPosition;
 
+    // 追加: SkillSelectUI 参照（ドラッグ終了でスロットをリセットするため）
+    private SkillSelectUI skillSelectUI;
+
     /// <summary>
-    /// UIにスキル情報をセットする
+    /// SkillSelectUI をセットするメソッド
+    /// </summary>
+    public void SetSkillSelectUI(SkillSelectUI ui)
+    {
+        skillSelectUI = ui;
+    }
+
+    /// <summary>
+    /// UI表示セットアップ
     /// </summary>
     public void Setup(SkillBase skill)
     {
-        this.skill = skill; // 引数のスキルをフィールドに保存
+        this.skill = skill; // 所持スキルを保持
 
         if (iconImage != null && skill != null)
         {
-            // ScriptableObjectのskillIconをUIに反映
+            // ScriptableObject の skillIcon を UI に反映
             iconImage.sprite = skill.skillIcon;
             iconImage.enabled = skill.skillIcon != null;
             iconImage.color = skill.skillIcon != null ? Color.white : Color.clear;
@@ -53,7 +64,7 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         originalParent = transform.parent;
         originalPosition = transform.localPosition;
         canvasGroup.blocksRaycasts = false;
-        transform.SetParent(transform.root); // ルートへ移動して描画優先
+        transform.SetParent(transform.root); // ルートに移動して描画順を確保
     }
 
     /// <summary>
@@ -61,7 +72,7 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     /// </summary>
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = eventData.position; // ドラッグ中はマウス位置に追従
+        transform.position = eventData.position;
     }
 
     /// <summary>
@@ -71,6 +82,10 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         canvasGroup.blocksRaycasts = true;
         transform.SetParent(originalParent);
-        transform.localPosition = originalPosition; // ドロップ先で位置が変わる可能性があるから、元の位置に戻す
+        transform.localPosition = originalPosition;
+
+        // 追加: ドラッグ終了時に必ずスロット表示をリフレッシュして
+        // プレビュー状態（skillSlotSprite 表示）を解除する
+        skillSelectUI?.RefreshSkillSlots();
     }
 }
