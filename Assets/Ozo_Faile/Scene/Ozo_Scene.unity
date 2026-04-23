@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1135,6 +1135,7 @@ GameObject:
   - component: {fileID: 274004464}
   - component: {fileID: 274004465}
   - component: {fileID: 274004466}
+  - component: {fileID: 274004467}
   m_Layer: 5
   m_Name: Maneger
   m_TagString: Untagged
@@ -1309,6 +1310,34 @@ MonoBehaviour:
   GameOverTextImage: {fileID: 1719021939}
   IsPause: 0
   IsGameOver: 0
+--- !u!114 &274004467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274004458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c337ab4fd26b79f46b9a998527b34e1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverAnim
+  GameOverRect: {fileID: 1719021940}
+  TitleRect: {fileID: 67319150}
+  ContinueRect: {fileID: 420725775}
+  GameOverImage: {fileID: 1719021941}
+  TitleImage: {fileID: 67319154}
+  ContinueImage: {fileID: 420725779}
+  MoveSpeed: 1
+  MoveSpeed2: 0.5
+  FadeSpeed: 0.01
+  WaitTime: 0.5
+  StartPosG: {x: 0, y: -800}
+  StartPosT: {x: 0, y: -380}
+  StartPosC: {x: 0, y: -560}
+  GameOverPos: {x: 0, y: -400}
+  TitlePos: {x: 0, y: -190}
+  ContinuePos: {x: 0, y: -280}
 --- !u!1 &297336140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2167,7 +2196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5386,7 +5415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

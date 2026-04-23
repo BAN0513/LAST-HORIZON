@@ -18,6 +18,15 @@ public class PausManeger : MonoBehaviour
     public bool IsGameOver = false;
     public static bool ToGameOver = false;
 
+    public void Start()
+    {
+        IsPause = false;
+        ToPause = false;
+
+        IsGameOver = false;
+        ToGameOver = false;
+    }
+
     public void PauseGame()
     {
         BackImage.SetActive(true);
@@ -38,7 +47,7 @@ public class PausManeger : MonoBehaviour
     {
         GameOverBackImage.SetActive(true);
         GameOverTextImage.SetActive(true);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     public void ResetGame()

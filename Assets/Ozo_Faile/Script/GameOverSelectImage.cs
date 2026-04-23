@@ -31,7 +31,7 @@ public class GameOverSelectImage : MonoBehaviour
 
     void Update()
     {
-        if (PausManeger.ToGameOver)
+        if (PausManeger.ToGameOver && GameOverAnim.IsSelect)
         {
             switch (SelectNo)
             {
