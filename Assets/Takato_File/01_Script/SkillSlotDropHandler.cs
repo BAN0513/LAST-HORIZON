@@ -146,7 +146,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
             }
 
             // データのスワップと最終的なUI更新はSkillSelectUI側で行う
-            skillSelectUI.OnSkillIconDropped(iconUI.Skill, slotIndex);
+            skillSelectUI.OnSkillIconDropped(iconUI, slotIndex);
         }
     }
 
@@ -172,7 +172,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
 
         if (slotSkill != null)
         {
-            // スロットに既にスキルがある場合はスロット表示（ハンドラの優先度に従う）
+            // スロットに既にスキルがある場合はスロット表示
             if (skillSlotSprite != null)
             {
                 targetSprite = skillSlotSprite;
@@ -191,7 +191,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         }
         else
         {
-            // スロットが空ならドラッグ中のアイコンを優先表示（プレビュー）
+            // スロットが空ならドラッグ中のアイコンを優先表示
             var iconUI = dragged.GetComponent<SkillIconUI>();
             if (iconUI != null && iconUI.Skill != null)
             {
@@ -213,8 +213,8 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
             }
         }
 
-        img.sprite = targetSprite;
-        img.color = targetSprite != null ? targetColor : Color.clear;
+      img.sprite = targetSprite;
+      img.color = targetColor != null ? targetColor : Color.clear;
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         var img = GetSlotImage();
         if (img == null) return;
 
-        // 指が離れた（プレビュー解除）時は、このスロットの「現在の状態」に戻す（全体Refreshではなくこのスロットのみ）
+        // ドラッグしていないときは何もしない
         if (skillSelectUI == null)
         {
             // SkillSelectUI が無いなら既定の empty 表示へ

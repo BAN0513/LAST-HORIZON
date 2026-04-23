@@ -17,7 +17,7 @@ namespace Takato
         /// </summary>
         public List<SkillBase> GetOwnedSkills()
         {
-            return ownedSkills;
+            return new List<SkillBase>(ownedSkills); // 所持スキルのコピーを返す。
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK1
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
   skillName: ATK1
-  skillIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  skillIcon: {fileID: -722861831, guid: 938116a57a6e0f4438defb619d81c07d, type: 3}
   cost: 10
   cooldown: 10
   moveSpeedBuff: 1.05

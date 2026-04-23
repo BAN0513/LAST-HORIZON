@@ -54,7 +54,7 @@ public class SkillSelectUI : MonoBehaviour
         // 表示するタイミングで必ず最新の状態に描画する
         if (show)
         {
-            RefreshSkillSlots();
+            RefreshSkillSlots(); //スロットの表示更新
         }
     }
 
@@ -186,11 +186,13 @@ public class SkillSelectUI : MonoBehaviour
     /// <summary>
     /// ドラッグでスキルがスロットにドロップされた時の処理
     /// </summary>
-    public void OnSkillIconDropped(SkillBase skill, int slotIndex)
+    public void OnSkillIconDropped(SkillIconUI iconUI, int slotIndex)
     {
-        int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(skill);
+        int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(iconUI.Skill);
         if (ownedIndex < 0) return;
         bringSkill.SwapSkillWithPlayerSkill(ownedIndex, slotIndex, playerSkill);
+        Destroy(iconUI.gameObject); // ドロップされたアイコンは消す
+
         RefreshOwnedSkills(); // 所持スキルUI更新
         RefreshSkillSlots();  // スロットUI更新
     }
