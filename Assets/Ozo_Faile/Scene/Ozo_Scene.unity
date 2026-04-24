@@ -1338,6 +1338,8 @@ MonoBehaviour:
   GameOverPos: {x: 0, y: -400}
   TitlePos: {x: 0, y: -190}
   ContinuePos: {x: 0, y: -280}
+  FadeImage: {fileID: 1546528594}
+  speed: 0.01
 --- !u!1 &297336140
 GameObject:
   m_ObjectHideFlags: 0

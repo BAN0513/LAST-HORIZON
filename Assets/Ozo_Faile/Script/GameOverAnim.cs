@@ -18,7 +18,7 @@ public class GameOverAnim : MonoBehaviour
     [SerializeField] private float WaitTime = 1.0f;
 
     public static bool IsSelect;
-    private bool AnimTrue = false;
+    //private bool AnimTrue = false;
 
     [SerializeField] private Vector2 StartPosG;
     [SerializeField] private Vector2 StartPosT;
@@ -28,8 +28,28 @@ public class GameOverAnim : MonoBehaviour
     [SerializeField] private Vector2 TitlePos;
     [SerializeField] private Vector2 ContinuePos;
 
+    [SerializeField] Image FadeImage;
+
+    [SerializeField] float speed = 0.01f;
+
+    private float alfa;
+    private float red, green, blue;
+
+    //private bool FadeIn;
+    //private bool FadeOut;
+
+
     void Start()
     {
+        //FadeIn = false;
+        //FadeOut = true;
+
+        red = FadeImage.GetComponent<Image>().color.r;
+        green = FadeImage.GetComponent<Image>().color.g;
+        blue = FadeImage.GetComponent<Image>().color.b;
+
+        FadeImage.GetComponent<Image>().color = new Color(red, green, blue, 0.0f);
+
         IsSelect = false;
 
         GameOverRect.anchoredPosition = StartPosG;
@@ -45,7 +65,9 @@ public class GameOverAnim : MonoBehaviour
     {
         if (PausManeger.ToGameOver)
         {
-            StartCoroutine(GameOverAnimation());
+            FadeImage.GetComponent<Image>().color = new Color(red, green, blue, alfa);
+            if (alfa < 1.0f) alfa += speed;
+            if (alfa > 1.0f) StartCoroutine(GameOverAnimation());
         }
     }
 
