@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK3
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
   skillName: ATK3
-  skillIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  skillIcon: {fileID: -71747335, guid: e10be31b1d4d5f146999ad1136c21101, type: 3}
   cost: 15
   cooldown: 0
   moveSpeedBuff: 1.05
@@ -21,6 +21,6 @@ MonoBehaviour:
   buffMultiplierPerLevel: 0
   baseDuration: 5
   durationPerLevel: 1
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
   skillLevel: 1
   maxSkillLevel: 5

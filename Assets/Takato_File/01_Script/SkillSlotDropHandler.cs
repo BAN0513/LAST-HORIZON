@@ -1,39 +1,39 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
 /// <summary>
-/// ƒXƒLƒ‹ƒXƒƒbƒg‚ÉƒXƒLƒ‹ƒAƒCƒRƒ“‚ªƒhƒƒbƒv‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ğs‚¤ƒNƒ‰ƒX
-/// iƒvƒŒƒrƒ…[‹@”\Fƒhƒ‰ƒbƒO’†‚ÉƒXƒƒbƒgã‚ÅSO‚ÌSprite‚ğ•\¦j
+/// ã‚¹ã‚­ãƒ«ã‚¹ãƒ­ãƒƒãƒˆã«ã‚¹ã‚­ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ãŒãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸã¨ãã®å‡¦ç†ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹
+/// ï¼ˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼æ©Ÿèƒ½ï¼šãƒ‰ãƒ©ãƒƒã‚°ä¸­ã«ã‚¹ãƒ­ãƒƒãƒˆä¸Šã§SOã®Spriteã‚’è¡¨ç¤ºï¼‰
 /// </summary>
 public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    [Header("ƒvƒŒƒCƒ„[‘¤‚ÌƒXƒLƒ‹ƒXƒƒbƒg‚ÌƒCƒ“ƒfƒbƒNƒX")]
+    [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ã®ã‚¹ã‚­ãƒ«ã‚¹ãƒ­ãƒƒãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹")]
     public int slotIndex;
-    [Header("ƒXƒLƒ‹‚ª“ü‚Á‚Ä‚¢‚é‚ÌSprite")]
+    [Header("ã‚¹ã‚­ãƒ«ãŒå…¥ã£ã¦ã„ã‚‹æ™‚ã®Sprite")]
     public Sprite skillSlotSprite;
-    [Header("ƒXƒLƒ‹‚ª“ü‚Á‚Ä‚¢‚È‚¢‚ÌSprite")]
+    [Header("ã‚¹ã‚­ãƒ«ãŒå…¥ã£ã¦ã„ãªã„æ™‚ã®Sprite")]
     public Sprite emptySlotSprite;
-    [Header("ƒXƒLƒ‹‘I‘ğUI‚ÌQÆ")]
+    [Header("ã‚¹ã‚­ãƒ«é¸æŠUIã®å‚ç…§")]
     public SkillSelectUI skillSelectUI;
 
-    // ‚±‚ÌƒXƒƒbƒg‚Ì•\¦ImageQÆ
+    // ã“ã®ã‚¹ãƒ­ãƒƒãƒˆã®è¡¨ç¤ºImageå‚ç…§
     private Image cachedImage;
 
     public void Start()
     {
-        // Å‰‚ÉƒXƒƒbƒg‚ÉƒXƒLƒ‹‚ª“ü‚Á‚Ä‚¢‚éê‡‚Ì•\¦‚ğ‰Šú‰»
+        // æœ€åˆã«ã‚¹ãƒ­ãƒƒãƒˆã«ã‚¹ã‚­ãƒ«ãŒå…¥ã£ã¦ã„ã‚‹å ´åˆã®è¡¨ç¤ºã‚’åˆæœŸåŒ–
         var img = GetSlotImage();
         if (img == null) return;
 
-        // skillSelectUI ‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚ÎƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌƒXƒƒbƒg“à—e‚ğQÆ‚µ‚Ä•\¦‚ğŒˆ’è‚·‚é
+        // skillSelectUI ãŒè¨­å®šã•ã‚Œã¦ã„ã‚Œã°ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®ã‚¹ãƒ­ãƒƒãƒˆå†…å®¹ã‚’å‚ç…§ã—ã¦è¡¨ç¤ºã‚’æ±ºå®šã™ã‚‹
         if (skillSelectUI != null)
         {
             var slotSkill = skillSelectUI.GetSlotSkill(slotIndex);
             if (slotSkill != null)
             {
-                // ƒXƒLƒ‹‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚éê‡‚Íƒnƒ“ƒhƒ‰‚Ì skillSlotSprite ‚ğ—DæA‚È‚¯‚ê‚Î SO ‚ÌƒAƒCƒRƒ“‚ğg—p
+                // ã‚¹ã‚­ãƒ«ãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ãƒãƒ³ãƒ‰ãƒ©ã® skillSlotSprite ã‚’å„ªå…ˆã€ãªã‘ã‚Œã° SO ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä½¿ç”¨
                 if (skillSlotSprite != null)
                 {
                     img.sprite = skillSlotSprite;
@@ -59,7 +59,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
             }
             else
             {
-                // ƒXƒƒbƒg‚ª‹ó‚È‚ç emptySlotSprite ‚ğ—Dæ‚µ‚Ä•\¦
+                // ã‚¹ãƒ­ãƒƒãƒˆãŒç©ºãªã‚‰ emptySlotSprite ã‚’å„ªå…ˆã—ã¦è¡¨ç¤º
                 if (emptySlotSprite != null)
                 {
                     img.sprite = emptySlotSprite;
@@ -75,7 +75,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
             }
         }
 
-        // skillSelectUI ‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍAƒnƒ“ƒhƒ‰‚Ì skillSlotSprite ‚ğ—Dæ‚µ‚Ä•\¦
+        // skillSelectUI ãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã€ãƒãƒ³ãƒ‰ãƒ©ã® skillSlotSprite ã‚’å„ªå…ˆã—ã¦è¡¨ç¤º
         if (skillSlotSprite != null)
         {
             img.sprite = skillSlotSprite;
@@ -92,25 +92,25 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
             img.color = Color.clear;
         }
     }
-    // SkillSelectUI‚©‚ç–¾¦“I‚É‹¤—L‚·‚é‚½‚ß‚ÌSetter‚ğ—pˆÓ
+    // SkillSelectUIã‹ã‚‰æ˜ç¤ºçš„ã«å…±æœ‰ã™ã‚‹ãŸã‚ã®Setterã‚’ç”¨æ„
     public void SetCachedImage(Image image)
     {
-        cachedImage = image; // ‚±‚ê‚ÅSkillSelectUI‚Æ“¯‚¶ImageQÆ‚ğ‹¤—L‚Å‚«‚é
+        cachedImage = image; // ã“ã‚Œã§SkillSelectUIã¨åŒã˜Imageå‚ç…§ã‚’å…±æœ‰ã§ãã‚‹
     }
 
     /// <summary>
-    /// ƒXƒƒbƒg‚ÌImageƒRƒ“ƒ|[ƒlƒ“ƒg‚ğƒLƒƒƒbƒVƒ…‚µ‚Äæ“¾‚·‚é
+    /// ã‚¹ãƒ­ãƒƒãƒˆã®Imageã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã—ã¦å–å¾—ã™ã‚‹
     /// </summary>
     private Image GetSlotImage()
     {
         if (cachedImage != null) return cachedImage;
-        // ”ñƒAƒNƒeƒBƒu‚Èq‚àŠÜ‚ß‚ÄŒŸõ‚·‚é
+        // éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªå­ã‚‚å«ã‚ã¦æ¤œç´¢ã™ã‚‹
         cachedImage = GetComponent<Image>() ?? GetComponentInChildren<Image>(true);
         return cachedImage;
     }
 
     /// <summary>
-    /// ƒXƒLƒ‹ƒAƒCƒRƒ“‚ªƒhƒƒbƒv‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Ño‚³‚ê‚éƒƒ\ƒbƒh
+    /// ã‚¹ã‚­ãƒ«ã‚¢ã‚¤ã‚³ãƒ³ãŒãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸã¨ãã«å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     public void OnDrop(PointerEventData eventData)
     {
@@ -119,7 +119,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         var iconUI = dragged.GetComponent<SkillIconUI>();
         if (iconUI != null)
         {
-            // ƒhƒƒbƒv’¼Œã‚Í•K‚¸ƒXƒLƒ‹‚ª“ü‚Á‚Ä‚¢‚é‚ÌSprite‚ğ—Dæ•\¦
+            // ãƒ‰ãƒ­ãƒƒãƒ—ç›´å¾Œã¯å¿…ãšã‚¹ã‚­ãƒ«ãŒå…¥ã£ã¦ã„ã‚‹æ™‚ã®Spriteã‚’å„ªå…ˆè¡¨ç¤º
             var img = GetSlotImage();
             if (img != null)
             {
@@ -145,13 +145,13 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
                 }
             }
 
-            // ƒf[ƒ^‚ÌƒXƒƒbƒv‚ÆÅI“I‚ÈUIXV‚ÍSkillSelectUI‘¤‚Ås‚¤
+            // ãƒ‡ãƒ¼ã‚¿ã®ã‚¹ãƒ¯ãƒƒãƒ—ã¨æœ€çµ‚çš„ãªUIæ›´æ–°ã¯SkillSelectUIå´ã§è¡Œã†
             skillSelectUI.OnSkillIconDropped(iconUI, slotIndex);
         }
     }
 
     /// <summary>
-    /// ƒhƒ‰ƒbƒO’†‚ÉƒXƒƒbƒgã‚É“ü‚Á‚½‚çƒvƒŒƒrƒ…[•\¦
+    /// ãƒ‰ãƒ©ãƒƒã‚°ä¸­ã«ã‚¹ãƒ­ãƒƒãƒˆä¸Šã«å…¥ã£ãŸã‚‰ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤º
     /// </summary>
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -160,11 +160,11 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         var img = GetSlotImage();
         if (img == null) return;
 
-        // ƒhƒ‰ƒbƒO‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Í‰½‚à‚µ‚È‚¢iƒvƒŒƒrƒ…[‚Ì‚İj
+        // ãƒ‰ãƒ©ãƒƒã‚°ã—ã¦ã„ãªã„ã¨ãã¯ä½•ã‚‚ã—ãªã„ï¼ˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ã¿ï¼‰
         var dragged = eventData.pointerDrag;
         if (dragged == null) return;
 
-        // Œ»İƒXƒƒbƒg‚ÉƒZƒbƒg‚³‚ê‚Ä‚¢‚éƒXƒLƒ‹‚ğæ“¾
+        // ç¾åœ¨ã‚¹ãƒ­ãƒƒãƒˆã«ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ã‚’å–å¾—
         var slotSkill = skillSelectUI.GetSlotSkill(slotIndex);
 
         Sprite targetSprite = null;
@@ -172,7 +172,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
 
         if (slotSkill != null)
         {
-            // ƒXƒƒbƒg‚ÉŠù‚ÉƒXƒLƒ‹‚ª‚ ‚éê‡‚ÍƒXƒƒbƒg•\¦
+            // ã‚¹ãƒ­ãƒƒãƒˆã«æ—¢ã«ã‚¹ã‚­ãƒ«ãŒã‚ã‚‹å ´åˆã¯ã‚¹ãƒ­ãƒƒãƒˆè¡¨ç¤º
             if (skillSlotSprite != null)
             {
                 targetSprite = skillSlotSprite;
@@ -191,7 +191,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         }
         else
         {
-            // ƒXƒƒbƒg‚ª‹ó‚È‚çƒhƒ‰ƒbƒO’†‚ÌƒAƒCƒRƒ“‚ğ—Dæ•\¦
+            // ã‚¹ãƒ­ãƒƒãƒˆãŒç©ºãªã‚‰ãƒ‰ãƒ©ãƒƒã‚°ä¸­ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚’å„ªå…ˆè¡¨ç¤º
             var iconUI = dragged.GetComponent<SkillIconUI>();
             if (iconUI != null && iconUI.Skill != null)
             {
@@ -218,17 +218,17 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
     }
 
     /// <summary>
-    /// ƒhƒ‰ƒbƒO‚ª—£‚ê‚½‚çƒXƒƒbƒg‚ğŒ³‚Ìó‘Ô‚É–ß‚·
+    /// ãƒ‰ãƒ©ãƒƒã‚°ãŒé›¢ã‚ŒãŸã‚‰ã‚¹ãƒ­ãƒƒãƒˆã‚’å…ƒã®çŠ¶æ…‹ã«æˆ»ã™
     /// </summary>
     public void OnPointerExit(PointerEventData eventData)
     {
         var img = GetSlotImage();
         if (img == null) return;
 
-        // ƒhƒ‰ƒbƒO‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚Í‰½‚à‚µ‚È‚¢
+        // ãƒ‰ãƒ©ãƒƒã‚°ã—ã¦ã„ãªã„ã¨ãã¯ä½•ã‚‚ã—ãªã„
         if (skillSelectUI == null)
         {
-            // SkillSelectUI ‚ª–³‚¢‚È‚çŠù’è‚Ì empty •\¦‚Ö
+            // SkillSelectUI ãŒç„¡ã„ãªã‚‰æ—¢å®šã® empty è¡¨ç¤ºã¸
             if (emptySlotSprite != null)
             {
                 img.sprite = emptySlotSprite;
@@ -245,7 +245,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         var slotSkill = skillSelectUI.GetSlotSkill(slotIndex);
         if (slotSkill != null)
         {
-            // ƒXƒƒbƒg‚ÉƒXƒLƒ‹‚ª‚ ‚éê‡‚Íƒnƒ“ƒhƒ‰—Dæ‚Å•\¦
+            // ã‚¹ãƒ­ãƒƒãƒˆã«ã‚¹ã‚­ãƒ«ãŒã‚ã‚‹å ´åˆã¯ãƒãƒ³ãƒ‰ãƒ©å„ªå…ˆã§è¡¨ç¤º
             if (skillSlotSprite != null)
             {
                 img.sprite = skillSlotSprite;
@@ -269,7 +269,7 @@ public class SkillSlotDropHandler : MonoBehaviour, IDropHandler, IPointerEnterHa
         }
         else
         {
-            // ƒXƒƒbƒg‚ª‹ó‚È‚ç•K‚¸ emptySlotSprite‚É–ß‚·
+            // ã‚¹ãƒ­ãƒƒãƒˆãŒç©ºãªã‚‰å¿…ãš emptySlotSpriteã«æˆ»ã™
             if (emptySlotSprite != null)
             {
                 img.sprite = emptySlotSprite;
