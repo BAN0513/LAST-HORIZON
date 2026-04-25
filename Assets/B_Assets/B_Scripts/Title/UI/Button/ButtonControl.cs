@@ -9,6 +9,7 @@ public class ButtonControl : MonoBehaviour
     [SerializeField] private Transform parentObj;
 
     private Button button;
+    private TitleUIManager t;
 
     public enum ButtonType
     {
@@ -20,21 +21,27 @@ public class ButtonControl : MonoBehaviour
         System_Back,
         Characetr_Sword,
         Character_GreatSword,
-        Character_Wizard
+        Character_Wizard,
+        Character_SelectCheckNo,
+        Character_SelectCheckYes
     }
 
     Dictionary<ButtonType, Action> buttonDict = new Dictionary<ButtonType, Action>();
 
     private void Start()
     {
-        buttonDict[ButtonType.NewGame] = () => TitleUIManager.Instance.NewGame();
-        buttonDict[ButtonType.Continue] = () => TitleUIManager.Instance.Continue();
-        buttonDict[ButtonType.System] = () => TitleUIManager.Instance.System();
-        buttonDict[ButtonType.Loab_Back] = () => TitleUIManager.Instance.LoadBack();
-        buttonDict[ButtonType.System_Back] = () => TitleUIManager.Instance.SystemBack();
-        buttonDict[ButtonType.Characetr_Sword] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Characetr_Sword);
-        buttonDict[ButtonType.Character_GreatSword] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Character_GreatSword);
-        buttonDict[ButtonType.Character_Wizard] = () => TitleUIManager.Instance.CharacterSelect(ButtonType.Character_Wizard);
+        t = TitleUIManager.Instance;
+
+        buttonDict[ButtonType.NewGame]                  = () => StartCoroutine(t.FadeInOutControl(t.groupCharacterSelect, t.groupStart, t.screenCharaSelect));
+        buttonDict[ButtonType.Continue]                 = () => StartCoroutine(t.FadeInOutControl(t.groupLoad, t.groupStart, t.screenLoad));
+        buttonDict[ButtonType.System]                   = () => StartCoroutine(t.FadeInOutControl(t.groupSystem, t.groupStart, t.screenSystem));
+        buttonDict[ButtonType.Loab_Back]                = () => StartCoroutine(t.FadeInOutControl(t.groupStart, t.groupLoad, t.screenStart));
+        buttonDict[ButtonType.System_Back]              = () => StartCoroutine(t.FadeInOutControl(t.groupStart, t.groupSystem, t.screenStart));
+        buttonDict[ButtonType.Characetr_Sword]          = () => t.CharacterSelect(ButtonType.Characetr_Sword);
+        buttonDict[ButtonType.Character_GreatSword]     = () => t.CharacterSelect(ButtonType.Character_GreatSword);
+        buttonDict[ButtonType.Character_Wizard]         = () => t.CharacterSelect(ButtonType.Character_Wizard);
+        buttonDict[ButtonType.Character_SelectCheckNo]  = () => StartCoroutine(t.FadeInOutControl(null, t.groupCharacterSelectCheck, t.screenCharaSelect, t.groupCharacterSelect));
+        buttonDict[ButtonType.Character_SelectCheckYes] = () => t.CharacterSelectCheck_YES();
 
         foreach (var type in parentObj.GetComponentsInChildren<ButtonTypeSet>())
         {
@@ -49,7 +56,7 @@ public class ButtonControl : MonoBehaviour
     {
         if (type == ButtonType.Load_Slot)
         {
-            TitleUIManager.Instance.Slot(index);
+            t.Slot(index);
             return;
         }
 

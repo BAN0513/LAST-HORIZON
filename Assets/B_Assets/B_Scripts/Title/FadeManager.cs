@@ -47,6 +47,7 @@ public class FadeManager : MonoBehaviour
 
     public IEnumerator Fade(float start, float end, CanvasGroup group)
     {
+        if (group == null) { yield break; }
         Time.timeScale = 1.0f;
         float fadeDuration = 1;
 

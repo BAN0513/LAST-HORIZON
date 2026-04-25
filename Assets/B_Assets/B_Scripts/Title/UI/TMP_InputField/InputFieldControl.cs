@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InputFieldControl : MonoBehaviour
 {
     [SerializeField] private Transform parentObj;
-
+    private TitleUIManager t;
     public enum InputFieldType
     {
         SE,
@@ -19,9 +18,11 @@ public class InputFieldControl : MonoBehaviour
 
     private void Start()
     {
-        inputFieldDictDict[InputFieldType.SE] = () => TitleUIManager.Instance.SETextChange();
-        inputFieldDictDict[InputFieldType.BGM] = () => TitleUIManager.Instance.BGMTextChange();
-        inputFieldDictDict[InputFieldType.Light] = () => TitleUIManager.Instance.LightTextChange();
+        t = TitleUIManager.Instance;
+
+        inputFieldDictDict[InputFieldType.SE]    = () => t.SliderMove(t.textSE, t.sliderSE);
+        inputFieldDictDict[InputFieldType.BGM]   = () => t.SliderMove(t.textBGM, t.sliderBGM);
+        inputFieldDictDict[InputFieldType.Light] = () => t.SliderMove(t.textLight, t.sliderLight);
 
         foreach (var type in parentObj.GetComponentsInChildren<InputFieldTypeSet>())
         {

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class SliderControl : MonoBehaviour
 {
     [SerializeField] private Transform parentObj;
+    private TitleUIManager t;
 
     public enum SlideerType
     {
@@ -18,9 +19,11 @@ public class SliderControl : MonoBehaviour
 
     private void Start()
     {
-        sliderDict[SlideerType.SE] = () => TitleUIManager.Instance.SEChange();
-        sliderDict[SlideerType.BGM] = () => TitleUIManager.Instance.BGMChange();
-        sliderDict[SlideerType.Light] = () => TitleUIManager.Instance.LightChange();
+        t = TitleUIManager.Instance;
+
+        sliderDict[SlideerType.SE]    = () => t.SystemChage(t.sliderSE, t.textSE, t.SEChange);
+        sliderDict[SlideerType.BGM]   = () => t.SystemChage(t.sliderBGM, t.textBGM, t.BGMChange);
+        sliderDict[SlideerType.Light] = () => t.SystemChage(t.sliderLight, t.textLight, t.LightChange);
 
         foreach (var type in parentObj.GetComponentsInChildren<SliderTypeSet>())
         {

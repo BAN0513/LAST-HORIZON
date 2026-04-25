@@ -5,39 +5,52 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
 public class TitleUIManager : MonoBehaviour
 {
     public static TitleUIManager Instance { get; private set; }
 
     private SaveData saveData;
-
-    [SerializeField] private CanvasGroup groupStart;
-    [SerializeField] private CanvasGroup groupLoad;
-    [SerializeField] private CanvasGroup groupSystem;
-    [SerializeField] private CanvasGroup groupCharacterSelect;
-
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button loadButton;
-
-    [SerializeField] private Button swordButton;
-    [SerializeField] private Button greatSwordButton;
-    [SerializeField] private Button wizardButton;
-
-    [SerializeField] private Slider sliderSE;
-    [SerializeField] private TMP_InputField textSE;
-
-    [SerializeField] private Slider sliderBGM;
-    [SerializeField] private TMP_InputField textBGM;
-
-    [SerializeField] private Slider sliderLight;
-    [SerializeField] private TMP_InputField textLight;
-
-    [SerializeField] private Text[] playTimeText;
+    private FadeManager fadeManager;
     private SystemManager system;
+
+    [Header("タイトル画面のキャンバスグループ")]
+    public CanvasGroup groupStart;
+    public CanvasGroup groupLoad;
+    public CanvasGroup groupSystem;
+    public CanvasGroup groupCharacterSelect;
+    public CanvasGroup groupCharacterSelectCheck;
+
+    [Header("コントローラーで操作するときに一番初めに選択されるオブジェクト")]
+    public GameObject screenStart;
+    public GameObject screenLoad;
+    public GameObject screenSystem;
+    public GameObject screenCharaSelect;
+    public GameObject screenCharaSelectCheck;
+
+    [Header("スライダーの調整で使う者たち")]
+    public Slider sliderSE;
+    public TMP_InputField textSE;
+
+    public Slider sliderBGM;
+    public TMP_InputField textBGM;
+
+    public Slider sliderLight;
+    public TMP_InputField textLight;
+
+    [Header("ロード画面でプレイ時間を書くためのもの")]
+    [SerializeField] private Text[] playTimeText;
+
+    [Header("CharacterSelect画面で使う確認用のイメージ画像")]
+    [SerializeField] private Sprite[] charaCheckSprites;
+
+    [Header("CharacterSelect画面の確認用画像を表示するイメージ")]
+    [SerializeField] private Image charaCheckImage;
+
+    //コントローラーが接続されているかどうか
     private bool isGamePadConnection = false;
 
-    private FadeManager fadeManager;
 
     private void Awake()
     {
@@ -53,19 +66,16 @@ public class TitleUIManager : MonoBehaviour
 
     private void Start()
     {
+        system = SystemManager.instance;
+        fadeManager = FadeManager.instance;
+
+        //マウスは自由に動かせるようにする
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        groupStart.transform.SetAsLastSibling();
 
-        system = SystemManager.instance;
-        groupStart.alpha = 1.0f;
-        ChangeInteractable(groupLoad, false);
-        groupLoad.alpha = 0;
-        ChangeInteractable(groupSystem, false);
-        groupSystem.alpha = 0;
-        ChangeInteractable (groupCharacterSelect, false);
-        groupCharacterSelect.alpha = 0;
+        CanvasGroupSetting();
 
+        //画面の明るさの設定
         float lightValue = system.valueLight;
         RenderSettings.ambientIntensity = lightValue;
 
@@ -73,24 +83,50 @@ public class TitleUIManager : MonoBehaviour
         SystemUISetting(sliderBGM, textBGM, system.volueBGM);
         SystemUISetting(sliderLight, textLight, lightValue);
 
+        SetPlayTimeText();
+
+        CheckDevice();
+    }
+
+    //CanvasGroupの設定
+    private void CanvasGroupSetting()
+    {
+        groupStart.transform.SetAsLastSibling();
+        groupStart.alpha = 1.0f;
+        ChangeInteractable(groupLoad, false);
+        groupLoad.alpha = 0;
+        ChangeInteractable(groupSystem, false);
+        groupSystem.alpha = 0;
+        ChangeInteractable(groupCharacterSelect, false);
+        groupCharacterSelect.alpha = 0;
+        ChangeInteractable(groupCharacterSelectCheck, false);
+        groupCharacterSelectCheck.alpha = 0;
+    }
+
+    //Load画面のプレイ時間の設定
+    private void SetPlayTimeText()
+    {
         for (int i = 0; i < playTimeText.Length; i++)
         {
+            //詳しくはSaveManagerみる。
             string path = Application.persistentDataPath + $"/save_{i + 1}.json";
-
-            // ファイルからJSON文字列を読み込む
             string json = File.ReadAllText(path);
-
-            // JSON文字列からGameDataオブジェクトに復元
             SaveData save = JsonUtility.FromJson<SaveData>(json);
 
+            //時間の計算
             float time = save.playTime / 3600;
             float notVery = save.playTime % 3600;
             float minute = notVery / 60;
             float second = notVery % 60;
 
+            //Textに時間設定
             playTimeText[i].text = $"{Mathf.FloorToInt(time)} : {Mathf.FloorToInt(minute)} : {Mathf.FloorToInt(second)}";
         }
+    }
 
+    //仕様デバイスのチェック
+    private void CheckDevice()
+    {
         // デバイス一覧を取得
         foreach (var device in InputSystem.devices)
         {
@@ -100,23 +136,20 @@ public class TitleUIManager : MonoBehaviour
             //GamePadに後々変更する。今はデバッグ用でKeybordを使用する
             if (device.name == "Keyboar")
             {
+                //キーボードじゃなかったらカーソルをロックして見えなくする
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
+
                 isGamePadConnection = true;
-                EventSystem.current.firstSelectedGameObject = startButton.gameObject;
-                EventSystem.current.SetSelectedGameObject(startButton.gameObject);
+
+                //スティックで動かせるようにオブジェクトを選択状態にする
+                EventSystem.current.firstSelectedGameObject = screenStart;
+                EventSystem.current.SetSelectedGameObject(screenStart);
             }
         }
-       
-
-        fadeManager = FadeManager.instance;
     }
 
-    private void Update()
-    {
-        Debug.Log(EventSystem.current.currentSelectedGameObject);
-    }
-
+    //System画面のスライダーとテキストの調整
     private void SystemUISetting(Slider slider, TMP_InputField text, float value)
     {
         slider.minValue = 0;
@@ -125,96 +158,73 @@ public class TitleUIManager : MonoBehaviour
         text.text = slider.value.ToString();
     }
 
-    public void NewGame()
-    {
-        //SaveManager.Instance.NewGame();
-        ChangeInteractable(groupStart, false);
-        groupCharacterSelect.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupCharacterSelect, groupStart, swordButton.gameObject));
-    }
-
-    public void CharacterSelectBack()
-    {
-        ChangeInteractable(groupCharacterSelect, false);
-        groupStart.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupStart, groupCharacterSelect, startButton.gameObject));
-    }
-
-    public void Continue()
-    {
-        ChangeInteractable(groupStart, false);
-        groupLoad.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupLoad, groupStart, loadButton.gameObject));
-    }
-
+    //Load画面のスロットが押されたときの処理
     public void Slot(int slot)
     {
         SaveManager.Instance.LoadGame(slot);
     }
 
-    public void LoadBack()
-    {
-        ChangeInteractable(groupLoad, false);
-        groupStart.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupStart, groupLoad, startButton.gameObject));
-    }
-
-    public void System()
-    {
-        ChangeInteractable(groupStart, false);
-        groupSystem.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupSystem, groupStart, sliderSE.gameObject));
-    }
-
-    public void SystemBack()
-    {
-        ChangeInteractable(groupSystem, false);
-        groupStart.transform.SetAsLastSibling();
-        StartCoroutine(FadeInOutControl(groupStart, groupSystem, startButton.gameObject));
-    }
-
+    //CharacterSelect画面でCharacterのボタンが押されたときの処理
     public void CharacterSelect(ButtonControl.ButtonType type)
     {
+        //確認画面を出す
+        StartCoroutine(FadeInOutControl(groupCharacterSelectCheck, null, screenCharaSelectCheck, null, groupCharacterSelect));
+
+        //確認画面の文字を設定
         switch (type)
         {
             case ButtonControl.ButtonType.Characetr_Sword:
-                SaveManager.Instance.NewGame(SaveData.Character.Sword);
+                charaCheckImage.sprite = charaCheckSprites[0];
                 break;
             case ButtonControl.ButtonType.Character_GreatSword:
-                SaveManager.Instance.NewGame(SaveData.Character.GreateSword);
+                charaCheckImage.sprite = charaCheckSprites[1];
                 break;
             case ButtonControl.ButtonType.Character_Wizard:
-                SaveManager.Instance.NewGame(SaveData.Character.Wizard);
+                charaCheckImage.sprite = charaCheckSprites[2];
                 break;
         }
     }
 
-
-    public void SEChange()
+    //確認画面でYesが押されたときの処理
+    public void CharacterSelectCheck_YES()
     {
-        float seValue = sliderSE.value / 10 + 1;
-        system.volueSE = seValue;
-        textSE.text = sliderSE.value.ToString("F0");
+        //剣士
+        if (charaCheckImage.sprite == charaCheckSprites[0])
+        {
+            SaveManager.Instance.NewGame(SaveData.Character.Sword);
+        }
+        //大剣使い
+        else if (charaCheckImage.sprite == charaCheckSprites[1])
+        {
+            SaveManager.Instance.NewGame(SaveData.Character.GreateSword);
+        }
+        //魔法使い
+        else
+        {
+            SaveManager.Instance.NewGame(SaveData.Character.Wizard);
+        }
     }
 
-
-    public void BGMChange()
+    //Sliderが動かされた時呼ばれるの処理
+    public void SystemChage(Slider slider, TMP_InputField text, Action<float> action)
     {
-        float bgmValue = sliderBGM.value / 10 + 1;
-        textBGM.text = sliderBGM.value.ToString("F0");
-        system.volueBGM = bgmValue;
+        float value = slider.value / 10 + 1;
+        text.text = slider.value.ToString("F0");
+        action(value);
     }
 
-    public void LightChange()
+    public void SEChange(float value) { system.volueSE = value; }
+
+    public void BGMChange(float value) { system.volueBGM = value; }
+
+    public void LightChange(float value) 
     {
-        float lightValue = sliderLight.value / 10 + 1;
-        RenderSettings.ambientIntensity = lightValue;
-        textLight.text = sliderLight.value.ToString("F0");
-        system.valueLight = lightValue;
+        system.valueLight = value;
+        RenderSettings.ambientIntensity = value;
     }
 
-
-    private void SliderMove(TMP_InputField text, Slider slider)
+    //Textが書き換えられたときにSliderを動かす処理
+    public void SliderMove(TMP_InputField text, Slider slider)
     {
         if (text.text == "")
         {
@@ -237,56 +247,70 @@ public class TitleUIManager : MonoBehaviour
 
     }
 
-    public void SETextChange()
+    //notFadeGroupはFadeはしないけど判定は消したりつけたりしたいときに使う
+    public IEnumerator FadeInOutControl(CanvasGroup inGroup, CanvasGroup outGroup, GameObject setSelectObj, CanvasGroup notFadeInGroup = null, CanvasGroup notFadeOutGroup = null)
     {
-        SliderMove(textSE, sliderSE);   
-    }
+        //FadeInするグループがあれば一番下に持っていく
+        if (inGroup != null) { inGroup.transform.SetAsLastSibling(); }
 
-    public void BGMTextChange()
-    {
-        SliderMove(textBGM, sliderBGM);
-    }
+        //FadeOutしないけど判定は消す
+        if (notFadeOutGroup != null) { ChangeInteractable(notFadeOutGroup, false); }
+        //FadeOutするグループの判定を消す
+        ChangeInteractable(outGroup, false);
 
-    public void LightTextChange()
-    {
-        SliderMove(textLight, sliderLight);
-    }
-
-    IEnumerator FadeInOutControl(CanvasGroup inGroup, CanvasGroup outGroup, GameObject setSelectObj)
-    {
+        //FadeIn,FadeOutする
         yield return StartCoroutine(fadeManager.Fade(1, 0, outGroup));
         yield return StartCoroutine(fadeManager.Fade(0, 1, inGroup));
+
+        //GamePadが接続されているならFadeInの後オブジェクトを選択された状態にする
         if (isGamePadConnection)
         {
             EventSystem.current.SetSelectedGameObject(setSelectObj);
         }
+
+        //FadeInしたグループの判定を出す
         ChangeInteractable(inGroup, true);
+
+        //FadeInしないけど判定出したり、一番下に持って行ったりする
+        if (notFadeInGroup != null) { ChangeInteractable(notFadeInGroup, true); }
+        if (notFadeInGroup != null) { notFadeInGroup.transform.SetAsLastSibling(); }
     }
 
+    //判定の変更
     private void ChangeInteractable(CanvasGroup canvasGroup, bool active)
     {
+        if (canvasGroup == null) { return; }
         canvasGroup.interactable = active;
     }
 
+    //ESCキーが押されたときの処理
     private void OnEsc(InputValue value)
     {
+        //Load->Start
         if (groupLoad.alpha == 1)
         {
-            LoadBack();
+            StartCoroutine(FadeInOutControl(groupStart, groupLoad, screenStart));
         }
+        //System->Start
         else if (groupSystem.alpha == 1)
         {
-            SystemBack();
+            StartCoroutine(FadeInOutControl(groupStart, groupSystem, screenStart));
         }
+        //CharacterSelectCheckを消す
+        else if (groupCharacterSelectCheck.alpha == 1)
+        {
+            StartCoroutine(FadeInOutControl(null, groupCharacterSelectCheck, screenCharaSelect, groupCharacterSelect, null));
+        }
+        //CharacterSelect->Start
         else if (groupCharacterSelect.alpha == 1)
         {
-            CharacterSelectBack();
+            StartCoroutine(FadeInOutControl(groupStart, groupCharacterSelect, screenStart));
         }
     }
 
     //これがないとESCでスタート画面に戻るとスタートボタンが選択された状態になってしまう
     private void OnClick(InputValue value)
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        if (!isGamePadConnection) EventSystem.current.SetSelectedGameObject(null);
     }
 }
