@@ -67,6 +67,35 @@ namespace Takato
         {
 
             hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
+
+            // スキル選択UIのトグル入力は常に処理
+            if (inputController.IsInventoryInput && !prevInventoryOpen)
+            {
+                ToggleSkillUI(); // インベントリ入力があったらスキル選択UIの表示/非表示を切り替える
+            }
+            prevInventoryOpen = inputController.IsInventoryInput; // 現在のインベントリ入力状態を保存
+
+            // HPが0以下なら死亡処理
+            if (hp <= 0)
+            {
+                Die(); // HPが0以下になったら死亡処理
+                return;
+            }
+
+            // スキル選択UIが開いている間はプレイヤー操作を受け付けない
+            if (isSkillUIOpen)
+            {
+                // 残存する可能性のある攻撃/防御状態やコライダーを安全にリセット
+                animationController.SetAttack(false);
+                animationController.SetBlock(false);
+                animationController.SetJump(false);
+                weaponController?.DisableWeaponCollider();
+                shieldController?.DisableShieldCollider();
+                isBlocking = false;
+                return;
+            }
+
+            // 通常の入力処理
             Move(); // 移動とジャンプの処理
             Block();// 防御処理
             Attack();// 攻撃処理
@@ -88,19 +117,6 @@ namespace Takato
             {
                 playerSkill.ActivateSkill(3, this);
             }
-
-            // スキル選択UIのトグル
-            if (inputController.IsInventoryInput && !prevInventoryOpen)
-            {
-                ToggleSkillUI(); // インベントリ入力があったらスキル選択UIの表示/非表示を切り替える
-            }
-            prevInventoryOpen = inputController.IsInventoryInput; // 現在のインベントリ入力状態を保存
-
-            // HPが0以下になったら死亡処理を呼び出す
-            if (hp <= 0)
-            {
-                Die(); // HPが0以下になったら死亡処理
-            }
         }
 
         /// <summary>
@@ -110,6 +126,8 @@ namespace Takato
         {
             isSkillUIOpen = !isSkillUIOpen; // UIの開閉状態をトグル
             skillSelectUI.ShowUI(isSkillUIOpen); // UIの表示/非表示を切り替える
+
+            inputController.IsLookEnabled = !isSkillUIOpen; // UIが開いているときは視点入力を無効化、閉じているときは有効化
         }
 
         /// <summary>
@@ -117,8 +135,10 @@ namespace Takato
         /// </summary>
         private void LateUpdate()
         {
-            if(isDead) return; // 死亡している場合は向きを変えない
+            // 死亡またはスキル選択UIが開いている場合は視点操作をスキップ
+            if (isDead || isSkillUIOpen) return;
 
+            if (Camera.main == null) return;
             Vector3 cameraForward = Camera.main.transform.forward;
             cameraForward.y = 0; // 水平面上の方向に制限
             if (cameraForward.sqrMagnitude > 0.01f)

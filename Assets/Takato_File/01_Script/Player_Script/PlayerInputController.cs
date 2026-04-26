@@ -21,6 +21,39 @@ namespace Takato
         public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
         public bool IsInventoryInput { get; private set; } // プレイヤーのインベントリ入力を格納するプロパティ
 
+        // 内部バックフィールド
+        private bool isLookEnabled = false;
+
+        // 外部から視点入力を受け付けるかを制御するフラグ
+        public bool IsLookEnabled
+        {
+            get => isLookEnabled;
+            set
+            {
+                isLookEnabled = value;
+
+                if (playerInputActions != null)
+                {
+                    if (isLookEnabled)
+                    {
+                        // Look アクションを有効化
+                        playerInputActions.Player.Look.Enable();
+                        // 新 Input System のマウスを有効化
+                        if (UnityEngine.InputSystem.Mouse.current != null)
+                            UnityEngine.InputSystem.InputSystem.EnableDevice(UnityEngine.InputSystem.Mouse.current);
+                    }
+                    else
+                    {
+                        // Look アクションを無効化
+                        playerInputActions.Player.Look.Disable();
+                        // 新 Input System のマウスを無効化
+                        if (UnityEngine.InputSystem.Mouse.current != null)
+                            UnityEngine.InputSystem.InputSystem.DisableDevice(UnityEngine.InputSystem.Mouse.current);
+                    }
+                }
+            }
+        }
+
         private void Awake()
         {
             playerInputActions = new InputSystem_Actions(); // 入力アクションのインスタンスを作成
@@ -66,9 +99,9 @@ namespace Takato
             playerInputActions.Player.Ult.canceled += context => IsSkill4Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
 
             //Look入力イベント登録
-            playerInputActions.Player.Look.started += context => LookInput = context.ReadValue<Vector2>();   // 入力が開始されたときのイベント
-            playerInputActions.Player.Look.performed += context => LookInput = context.ReadValue<Vector2>(); // 入力が実行されたときのイベント
-            playerInputActions.Player.Look.canceled += context => LookInput = context.ReadValue<Vector2>();  // 入力がキャンセルされたときのイベント
+            playerInputActions.Player.Look.started += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
+            playerInputActions.Player.Look.performed += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
+            playerInputActions.Player.Look.canceled += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
 
             //Inventory入力イベント登録
             playerInputActions.Player.Inventory.started += context => IsInventoryInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント

@@ -939,10 +939,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
   skills:
-  - {fileID: 11400000, guid: 0053ec1db2167454b824f5653c16aaca, type: 2}
-  - {fileID: 11400000, guid: fedd063ee6b07f947b59076aeda7a092, type: 2}
-  - {fileID: 11400000, guid: d99d47df083abf64fae0e1122525da03, type: 2}
-  - {fileID: 11400000, guid: 093d7a4a808d9b643b0182000ec132b5, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
 --- !u!1 &5918869648423950159 stripped
 GameObject:
