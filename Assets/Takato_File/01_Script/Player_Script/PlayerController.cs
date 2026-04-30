@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// プレイヤーの動きを管理するクラス
-/// </summary>
 namespace Takato
 {
     public class PlayerController : MonoBehaviour
@@ -27,20 +24,22 @@ namespace Takato
         [SerializeField] private float damageCutRate;
         [Header("Skill Select UI")]
         [SerializeField] private SkillSelectUI skillSelectUI;
+        [Header("Look Orbit Controller(Cinemachineカメラ入れてください)")]
+        [SerializeField] private Behaviour lookOrbitController; 
 
-        private PlayerInputController inputController;         // 入力管理
-        private CharacterController characterController;       // 移動管理
-        private PlayerAnimationController animationController; // アニメーション管理
-        private PlayerWeaponController weaponController;       // 武器管理
-        private PlayerShieldContoroller shieldController;      // シールド管理
-        private PlayerSkill playerSkill;                       // スキル管理
+        private PlayerInputController inputController;
+        private CharacterController characterController;
+        private PlayerAnimationController animationController;
+        private PlayerWeaponController weaponController;
+        private PlayerShieldContoroller shieldController;
+        private PlayerSkill playerSkill;
 
-        private float verticalVelocity;                       // 垂直方向の速度
-        private int hp;                                       // プレイヤーの現在のHP
-        private bool isBlocking = false;                      // 防御中かどうか
-        private bool isDead = false;                          // 死亡しているかどうか
-        private bool isSkillUIOpen = false;                   // スキル選択UIが開いているかどうか
-        private bool prevInventoryOpen = false;               // 前フレームのインベントリ入力状態を保存する変数
+        private float verticalVelocity; // ジャンプと重力の処理に使用する垂直速度
+        private int hp;                 // プレイヤーの現在のHP
+        private bool isBlocking = false;// 防御中かどうかを管理するフラグ
+        private bool isDead = false;    // 死亡フラグ
+        private bool isSkillUIOpen = false;// スキル選択UIが開いているかどうかを管理するフラグ
+        private bool prevInventoryOpen = false;// 前フレームのインベントリの開閉状態を管理するフラグ
 
         private void Awake()
         {
@@ -55,52 +54,41 @@ namespace Takato
         private void Start()
         {
             hp = maxHp;
-            hpBar.SetHP(hp, maxHp); // 初期値を反映
-            //Cursor.lockState = CursorLockMode.Locked; // カーソルをロック
-            //Cursor.visible = false; // カーソルを非表示
-
-            costText.text = $"Cost: {currentCost}"; // 初期コストを表示
+            hpBar.SetHP(hp, maxHp);
+            costText.text = $"Cost: {currentCost}";
         }
-
 
         private void Update()
         {
+            hp = Mathf.Max(hp, 0);
 
-            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
-
-            // スキル選択UIのトグル入力は常に処理
             if (inputController.IsInventoryInput && !prevInventoryOpen)
             {
-                ToggleSkillUI(); // インベントリ入力があったらスキル選択UIの表示/非表示を切り替える
+                ToggleSkillUI();
             }
-            prevInventoryOpen = inputController.IsInventoryInput; // 現在のインベントリ入力状態を保存
+            prevInventoryOpen = inputController.IsInventoryInput;
 
-            // HPが0以下なら死亡処理
             if (hp <= 0)
             {
-                Die(); // HPが0以下になったら死亡処理
+                Die(); // HPが0以下になったら死亡処理を行う
                 return;
             }
 
-            // スキル選択UIが開いている間はプレイヤー操作を受け付けない
             if (isSkillUIOpen)
             {
-                // 残存する可能性のある攻撃/防御状態やコライダーを安全にリセット
-                animationController.SetAttack(false);
-                animationController.SetBlock(false);
-                animationController.SetJump(false);
-                weaponController?.DisableWeaponCollider();
-                shieldController?.DisableShieldCollider();
+                animationController.SetAttack(false); // スキルUIが開いているときは攻撃アニメーションをオフ
+                animationController.SetBlock(false); // スキルUIが開いているときは防御アニメーションをオフ
+                animationController.SetJump(false);  // スキルUIが開いているときはジャンプアニメーションをオフ
+                weaponController?.DisableWeaponCollider(); // スキルUIが開いているときは武器のコライダーを無効化
+                shieldController?.DisableShieldCollider(); // スキルUIが開いているときはシールドのコライダーを無効化
                 isBlocking = false;
                 return;
             }
 
-            // 通常の入力処理
-            Move(); // 移動とジャンプの処理
-            Block();// 防御処理
-            Attack();// 攻撃処理
+            Move(); // 移動処理は常に行う
+            Block();// 防御処理は常に行う
+            Attack();// 攻撃処理は常に行う
 
-            // スキル入力の処理
             if (inputController.IsSkillInput && playerSkill != null)
             {
                 playerSkill.ActivateSkill(0, this);
@@ -120,14 +108,37 @@ namespace Takato
         }
 
         /// <summary>
-        /// スキル選択UIの表示/非表示を切り替えるメソッド
+        /// スキル選択UIの表示切替と、それに伴う入力制御やカーソルの状態を管理するメソッド
         /// </summary>
         private void ToggleSkillUI()
         {
-            isSkillUIOpen = !isSkillUIOpen; // UIの開閉状態をトグル
-            skillSelectUI.ShowUI(isSkillUIOpen); // UIの表示/非表示を切り替える
+            isSkillUIOpen = !isSkillUIOpen;
+            skillSelectUI.ShowUI(isSkillUIOpen);
 
-            inputController.IsLookEnabled = !isSkillUIOpen; // UIが開いているときは視点入力を無効化、閉じているときは有効化
+            // ゲーム入力を止めて、UI マップを有効化／無効化
+            inputController.SetGameplayEnabled(!isSkillUIOpen);
+            inputController.SetUIEnabled(isSkillUIOpen);
+
+            // Look アクションも確実に切る
+            inputController.IsLookEnabled = !isSkillUIOpen;
+
+            // Cinemachine 側の Look を無効化
+            if (lookOrbitController != null)
+            {
+                lookOrbitController.enabled = !isSkillUIOpen;
+            }
+
+            // カーソルの表示とロック
+            if (isSkillUIOpen)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         /// <summary>
@@ -314,4 +325,4 @@ namespace Takato
             }
         }
     }
-} 
+}

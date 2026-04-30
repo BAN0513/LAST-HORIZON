@@ -4,9 +4,6 @@ using TMPro;
 using Takato;
 using UnityEngine.EventSystems;
 
-/// <summary>
-/// スキルアイコンUI（ドラッグ用）
-/// </summary>
 public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [Header("スキルアイコンUI")]
@@ -24,6 +21,9 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     // 追加: SkillSelectUI 参照（ドラッグ終了でスロットをリセットするため）
     private SkillSelectUI skillSelectUI;
+
+    // ドラッグ時に移す親Canvas参照（nullなら従来動作）
+    private Canvas parentCanvas;
 
     /// <summary>
     /// SkillSelectUI をセットするメソッド
@@ -46,6 +46,9 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             iconImage.sprite = skill.skillIcon;
             iconImage.enabled = skill.skillIcon != null;
             iconImage.color = skill.skillIcon != null ? Color.white : Color.clear;
+
+            // 明示的に RaycastTarget を有効にしておく
+            iconImage.raycastTarget = true;
         }
         if (nameText != null && skill != null)
         {
@@ -54,6 +57,9 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
             canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
+        // 所属する Canvas をキャッシュ（ドラッグ中の親として使う）
+        parentCanvas = GetComponentInParent<Canvas>();
     }
 
     /// <summary>
@@ -63,8 +69,14 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     {
         originalParent = transform.parent;
         originalPosition = transform.localPosition;
-        canvasGroup.blocksRaycasts = false;
-        transform.SetParent(transform.root); // ルートに移動して描画順を確保
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = false;
+
+        // 安定的に Canvas の直下へ移す
+        if (parentCanvas != null)
+            transform.SetParent(parentCanvas.transform, true);
+        else
+            transform.SetParent(transform.root, true);
     }
 
     /// <summary>
@@ -80,12 +92,13 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     /// </summary>
     public void OnEndDrag(PointerEventData eventData)
     {
-        canvasGroup.blocksRaycasts = true;
+        if (canvasGroup != null)
+            canvasGroup.blocksRaycasts = true;
+
         transform.SetParent(originalParent);
         transform.localPosition = originalPosition;
 
-        // 追加: ドラッグ終了時に必ずスロット表示をリフレッシュして
-        // プレビュー状態（skillSlotSprite 表示）を解除する
+        // ドラッグ終了時にスロット表示を更新
         skillSelectUI?.RefreshSkillSlots();
     }
 }

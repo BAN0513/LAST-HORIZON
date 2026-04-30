@@ -27,28 +27,22 @@ namespace Takato
         // 外部から視点入力を受け付けるかを制御するフラグ
         public bool IsLookEnabled
         {
-            get => isLookEnabled;
+            get => isLookEnabled; // 現在の状態を返す
             set
             {
-                isLookEnabled = value;
+                isLookEnabled = value; // 状態を更新
 
                 if (playerInputActions != null)
                 {
                     if (isLookEnabled)
                     {
-                        // Look アクションを有効化
+                        // Look アクションのみ有効化
                         playerInputActions.Player.Look.Enable();
-                        // 新 Input System のマウスを有効化
-                        if (UnityEngine.InputSystem.Mouse.current != null)
-                            UnityEngine.InputSystem.InputSystem.EnableDevice(UnityEngine.InputSystem.Mouse.current);
                     }
                     else
                     {
-                        // Look アクションを無効化
+                        // Look アクションのみ無効化
                         playerInputActions.Player.Look.Disable();
-                        // 新 Input System のマウスを無効化
-                        if (UnityEngine.InputSystem.Mouse.current != null)
-                            UnityEngine.InputSystem.InputSystem.DisableDevice(UnityEngine.InputSystem.Mouse.current);
                     }
                 }
             }
@@ -110,11 +104,29 @@ namespace Takato
         }
 
         /// <summary>
+        /// プレイヤーの入力を有効/無効にするためのメソッド
+        /// </summary>
+        public void SetGamePlayEnable(bool isEnable)
+        {
+            if (isEnable)
+            {
+                playerInputActions.Player.Enable(); // ゲームプレイ入力を有効にする
+            }
+            else
+            {
+                playerInputActions.Player.Disable(); // ゲームプレイ入力を無効にする
+            }
+        }
+
+
+        /// <summary>
         /// プレイヤーの入力を有効にするためのメソッド
         /// </summary>
         private void OnEnable()
         {
+            // デフォルトはゲームプレイ入力を有効、UIは無効にしておく
             playerInputActions.Player.Enable();
+            playerInputActions.UI.Disable();
         }
 
         /// <summary>
@@ -123,6 +135,7 @@ namespace Takato
         private void OnDisable()
         {
             playerInputActions.Player.Disable();
+            playerInputActions.UI.Disable();
         }
 
         /// <summary>
@@ -147,6 +160,26 @@ namespace Takato
         private void OnLookInput(InputAction.CallbackContext context)
         {
             LookInput = context.ReadValue<Vector2>();
+        }
+
+        /// <summary>
+        /// ゲームプレイ (Player) アクションマップを有効/無効にします。
+        /// </summary>
+        public void SetGameplayEnabled(bool enabled)
+        {
+            if (playerInputActions == null) return;
+            if (enabled) playerInputActions.Player.Enable();
+            else playerInputActions.Player.Disable();
+        }
+
+        /// <summary>
+        /// UI アクションマップを有効/無効にします（UI表示時に有効にする）。
+        /// </summary>
+        public void SetUIEnabled(bool enabled)
+        {
+            if (playerInputActions == null) return;
+            if (enabled) playerInputActions.UI.Enable();
+            else playerInputActions.UI.Disable();
         }
     }
 }
