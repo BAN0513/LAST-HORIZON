@@ -19,7 +19,7 @@ public class SkillIconUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     private Transform originalParent;
     private Vector2 originalPosition;
 
-    // 追加: SkillSelectUI 参照（ドラッグ終了でスロットをリセットするため）
+    //SkillSelectUI 参照（ドラッグ終了でスロットをリセットするため）
     private SkillSelectUI skillSelectUI;
 
     // ドラッグ時に移す親Canvas参照（nullなら従来動作）

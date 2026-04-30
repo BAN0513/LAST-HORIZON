@@ -53,9 +53,17 @@ namespace Takato
 
         private void Start()
         {
-            hp = maxHp;
-            hpBar.SetHP(hp, maxHp);
-            costText.text = $"Cost: {currentCost}";
+            hp = maxHp;             // HPを最大値で初期化
+            hpBar.SetHP(hp, maxHp); // HPバーを初期化
+
+            //カーソルをロックして非表示にする
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            if (costText != null)
+            {
+                costText.text = $"Cost: {currentCost}";
+            }
         }
 
         private void Update()
@@ -64,7 +72,7 @@ namespace Takato
 
             if (inputController.IsInventoryInput && !prevInventoryOpen)
             {
-                ToggleSkillUI();
+                ToggleSkillUI(); // インベントリ入力が押されたときにスキルUIの表示切替を行う
             }
             prevInventoryOpen = inputController.IsInventoryInput;
 
@@ -128,16 +136,16 @@ namespace Takato
                 lookOrbitController.enabled = !isSkillUIOpen;
             }
 
-            // カーソルの表示とロック
+            // カーソルのロックと表示を切り替える
             if (isSkillUIOpen)
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None; // カーソルのロックを解除して表示する
+                Cursor.visible = true;                  // カーソルを表示する
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked; // カーソルをロックして非表示にする
+                Cursor.visible = false;                   // カーソルを非表示にする
             }
         }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1806922553609889847}
   - component: {fileID: 6241548126687145132}
   m_Layer: 5
-  m_Name: InventorySkill
+  m_Name: Player_InventorySkil(Old)l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

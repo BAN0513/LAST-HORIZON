@@ -174,12 +174,44 @@ namespace Takato
 
         /// <summary>
         /// UI アクションマップを有効/無効にします（UI表示時に有効にする）。
+        /// デフォルトでは UI を有効にしても Inventory アクションは無効化しません。
+        /// 必要に応じて keepInventory を false にして UI 表示時に Inventory を無効化できます。
         /// </summary>
-        public void SetUIEnabled(bool enabled)
+        public void SetUIEnabled(bool enabled, bool keepInventory = true)
         {
             if (playerInputActions == null) return;
-            if (enabled) playerInputActions.UI.Enable();
-            else playerInputActions.UI.Disable();
+
+            if (enabled)
+            {
+                playerInputActions.UI.Enable();
+
+                // スキルUIなどを開いたときでもインベントリ入力を維持したい場合はここで明示的に有効化する
+                if (keepInventory)
+                {
+                    playerInputActions.Player.Inventory.Enable();
+                }
+                else
+                {
+                    // 明示的に無効にしたい場合
+                    playerInputActions.Player.Inventory.Disable();
+                }
+            }
+            else
+            {
+                playerInputActions.UI.Disable();
+                // UIを閉じる際、Inventoryの状態は変更しない（必要なら外部から SetInventoryEnabled を呼ぶ）
+            }
+        }
+
+        /// <summary>
+        /// Inventory アクションだけを有効/無効にします（UI開閉に依存させたくない場合に使用）。
+        /// </summary>
+        public void SetInventoryEnabled(bool enabled)
+        {
+            if (playerInputActions == null) return;
+
+            if (enabled) playerInputActions.Player.Inventory.Enable();
+            else playerInputActions.Player.Inventory.Disable();
         }
     }
 }

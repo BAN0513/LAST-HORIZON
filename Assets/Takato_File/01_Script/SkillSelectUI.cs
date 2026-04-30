@@ -129,7 +129,7 @@ public class SkillSelectUI : MonoBehaviour
     // 装備スロットの表示更新
     public void RefreshSkillSlots()
     {
-        int slotCount = playerSkill.SkillSlotCount;
+        int slotCount = playerSkill.SkillSlotCount; // スロット数分ループ
         for (int i = 0; i < slotCount; i++)
         {
             Image slotImg = (i < skillSlotImages.Count) ? skillSlotImages[i] : null;
