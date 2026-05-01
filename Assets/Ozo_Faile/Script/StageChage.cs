@@ -14,6 +14,13 @@ public class StageChage : MonoBehaviour
     [Header("ステージナンバー（0～3）")]
     public int StageNumber = 0;//現在のステージナンバー
 
+    [Header("スポーンポイント(B1～B3)")]
+    [SerializeField] GameObject SpawnPoint_B1;
+
+    [SerializeField] GameObject SpawnPoint_B2;
+
+    [SerializeField] GameObject SpawnPoint_B3;
+
     public static bool IsChage = false;//FadeController共有用変数
 
     private void Start()
@@ -42,11 +49,11 @@ public class StageChage : MonoBehaviour
         //一旦キャラクターコントロールを無効化する
 
         if (StageNumber == 1 /*&& !EndWarp*/)
-            transform.position = new Vector3(0, 0, 20);
+            transform.position = SpawnPoint_B1.transform.position;
         else if (StageNumber == 2 /*&& !EndWarp*/)
-            transform.position = new Vector3(-50, 0, -10);
+            transform.position = SpawnPoint_B2.transform.position;
         else if (StageNumber == 3 /*&& !EndWarp*/)
-            transform.position = new Vector3(50, 0, -10);
+            transform.position = SpawnPoint_B3.transform.position;
         else if (StageNumber == 0 /*&& !EndWarp*/)
             transform.position = new Vector3(0, 0, 0);
 

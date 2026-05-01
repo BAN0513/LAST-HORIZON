@@ -82,6 +82,8 @@ public class GameOverAnim : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         IsSelect = true;
         Time.timeScale = 0;
     }

@@ -29,6 +29,8 @@ public class PausManeger : MonoBehaviour
 
     public void PauseGame()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         BackImage.SetActive(true);
         BackBrownImage.SetActive(true);
         PauseTextImage.SetActive(true);
@@ -37,6 +39,8 @@ public class PausManeger : MonoBehaviour
 
     public void ResumeGame()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         BackImage.SetActive(false);
         BackBrownImage.SetActive(false);
         PauseTextImage.SetActive(false);
@@ -52,6 +56,8 @@ public class PausManeger : MonoBehaviour
 
     public void ResetGame()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         GameOverBackImage.SetActive(false);
         GameOverTextImage.SetActive(false);
         Time.timeScale = 1;
