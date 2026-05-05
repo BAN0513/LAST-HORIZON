@@ -116,8 +116,11 @@ public abstract class Enemy : MonoBehaviour
 
         lotteryTime = enemySO.attackCoolDown;
 
-        _weaponController.Damage = enemySO.damage;
-        _weaponController.Player = playerController;
+        if (_weaponController != null)
+        {
+            _weaponController.Damage = enemySO.damage;
+            _weaponController.Player = playerController;
+        }
 
         //âÊñ ÇÃñæÇÈÇ≥ïœçXÅiå„Ç≈ï ÇÃÇ∆Ç±Ç…èëÇ≠Åj
         //RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
