@@ -291,7 +291,7 @@ Transform:
   m_GameObject: {fileID: 103766648}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 607.3839, y: 0.00004, z: 7074.233}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -507,7 +507,7 @@ GameObject:
   - component: {fileID: 637565095}
   - component: {fileID: 637565094}
   m_Layer: 0
-  m_Name: 'BGM_AudioSorce '
+  m_Name: BGM_AudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -528,7 +528,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1510,7 +1510,7 @@ Transform:
   m_GameObject: {fileID: 1998733031}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 304.5699, y: -0.00009, z: -5439.59}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1530,12 +1530,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundManager
   BGM:
   - {fileID: 8300000, guid: 4310c13675df6aa459d4acfe265370d3, type: 3}
-  BGMVolume: 0.2
+  BGMVolume: 1
   SE:
   - {fileID: 8300000, guid: ce3c486cf594c4249ad7551628d28ca3, type: 3}
   SEVolume: 1
   bgmSource: {fileID: 637565094}
   seSource: {fileID: 746353415}
+  enableDebugLogs: 1
 --- !u!114 &330628587621403911 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2836793546037156955, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
@@ -1614,7 +1615,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271668808745765363, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 537.50006
+      value: 537.4998
       objectReference: {fileID: 0}
     - target: {fileID: 3107381957292727190, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: m_Size
