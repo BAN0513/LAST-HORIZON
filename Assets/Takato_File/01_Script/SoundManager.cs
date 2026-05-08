@@ -21,40 +21,51 @@ public class SoundManager : MonoBehaviour
     [SerializeField] AudioSource bgmSource;
     [SerializeField] AudioSource seSource;
 
+    [Header("デバッグ")]
+    [SerializeField] bool enableDebugLogs = true; // デバッグログの有効化
+
     private void Awake()
     {
-        // BGM用 AudioSource を確保
-        if (bgmSource == null)
+        // Inspector で割当てられていればそれを尊重する
+        // そうでなければ一度だけ子を含めて取得して振り分ける
+        if (bgmSource == null || seSource == null)
         {
-            bgmSource = GetComponentInChildren<AudioSource>();
+            var sources = GetComponentsInChildren<AudioSource>(true);
+
+            // bgmSource が null なら、まずはこのオブジェクトの AudioSource を探す
             if (bgmSource == null)
             {
-                var go = new GameObject("BGM_AudioSource");
-                go.transform.SetParent(transform, false);
-                bgmSource = go.AddComponent<AudioSource>();
+                bgmSource = GetComponent<AudioSource>() ?? System.Array.Find(sources, s => s != null);
+            }
+
+            if (seSource == null)
+            {
+                // bgmSource と重複しないものを選ぶ
+                seSource = System.Array.Find(sources, s => s != null && s != bgmSource);
             }
         }
 
-        // SE用 AudioSource を確保（BGM用と区別）
+        if (bgmSource == null)
+        {
+            var go = new GameObject("BGM_AudioSource");
+            go.transform.SetParent(transform, false);
+            bgmSource = go.AddComponent<AudioSource>();
+        }
+
         if (seSource == null)
         {
-            // 既に拾った bgmSource と同じにならないように確認
-            seSource = GetComponentInChildren<AudioSource>();
-            if (seSource == null || seSource == bgmSource)
-            {
-                var go = new GameObject("SE_AudioSource");
-                go.transform.SetParent(transform, false);
-                seSource = go.AddComponent<AudioSource>();
-            }
+            var go = new GameObject("SE_AudioSource");
+            go.transform.SetParent(transform, false);
+            seSource = go.AddComponent<AudioSource>();
         }
 
-        // UI/SE 向けに 2D サウンドに固定
+        // 共通設定
         bgmSource.spatialBlend = 0f;
         seSource.spatialBlend = 0f;
-
-        // SEは PlayOneShot 利用のため playOnAwake を切っておく
-        seSource.playOnAwake = false;
         bgmSource.playOnAwake = false;
+        seSource.playOnAwake = false;
+
+        if (enableDebugLogs) LogBGMState("Awake 終了");
     }
 
     private void Start()
@@ -63,12 +74,15 @@ public class SoundManager : MonoBehaviour
         seSource.volume = Mathf.Clamp01(SEVolume);
 
         // 初期BGM自動再生
-        if (BGM != null && BGM.Length > 0 && BGM[0] != null && !bgmSource.isPlaying)
+        if (BGM != null && BGM.Length > 0 && BGM[0] != null)
         {
             bgmSource.clip = BGM[0];
             bgmSource.loop = true;
             bgmSource.Play();
+            if (enableDebugLogs) Debug.Log($"PlayBGM: 再生 BGM#0 '{BGM[0].name}' via bgmSource");
         }
+
+        if (enableDebugLogs) LogBGMState("Start 終了");
     }
 
     /// <summary>
@@ -78,7 +92,7 @@ public class SoundManager : MonoBehaviour
     {
         if (seSource == null)
         {
-            Debug.LogWarning("PlaySE 呼び出しだが seSource がありません。");
+            if (enableDebugLogs) Debug.LogWarning("PlaySE: seSource がありません。");
             return;
         }
 
@@ -88,13 +102,10 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"PlaySE: 再生 SE#{SENumber} (音量={SEVolume})");
         seSource.PlayOneShot(SE[SENumber], Mathf.Clamp01(SEVolume));
+        if (enableDebugLogs) Debug.Log($"PlaySE: 再生 SE#{SENumber} '{SE[SENumber].name}'");
     }
 
-    /// <summary>
-    /// ワールド位置で鳴らしたい場合
-    /// </summary>
     public void PlaySEAtPoint(int SENumber, Vector3 position)
     {
         if (SE == null || SENumber < 0 || SENumber >= SE.Length || SE[SENumber] == null)
@@ -103,17 +114,17 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
-        AudioSource.PlayClipAtPoint(SE[SENumber], position, Mathf.Clamp01(SEVolume));
+        AudioSource.PlayClipAtPoint(SE[SENumber], position, Mathf.Clamp01(SEVolume)); // 3D空間で再生
     }
 
     /// <summary>
-    /// 指定BGMを再生（ループ可）
+    /// BGMの再生関数
     /// </summary>
     public void PlayBGM(int index, bool loop = true)
     {
         if (bgmSource == null)
         {
-            Debug.LogWarning("PlayBGM 呼び出しだが bgmSource がありません。");
+            Debug.LogWarning("PlayBGM: bgmSource がありません。");
             return;
         }
 
@@ -127,21 +138,23 @@ public class SoundManager : MonoBehaviour
         bgmSource.loop = loop;
         bgmSource.volume = Mathf.Clamp01(BGMVolume);
         bgmSource.Play();
+        if (enableDebugLogs) Debug.Log($"PlayBGM: 再生 BGM#{index} '{BGM[index].name}' via bgmSource");
     }
 
     /// <summary>
-    /// BGMを停止
+    /// BGMの停止関数
     /// </summary>
     public void StopBGM()
     {
         if (bgmSource != null && bgmSource.isPlaying)
         {
             bgmSource.Stop();
+            if (enableDebugLogs) Debug.Log("StopBGM: 停止しました。");
         }
     }
 
     /// <summary>
-    /// BGMの音量を設定（0.0～1.0）
+    /// セットされたBGMの音量を変更する関数
     /// </summary>
     public void SetBGMVolume(float volume)
     {
@@ -150,7 +163,7 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// SEの音量を設定（0.0～1.0）
+    /// セットされたSEの音量を変更する関数
     /// </summary>
     public void SetSEVolume(float volume)
     {
@@ -159,14 +172,31 @@ public class SoundManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 有効化してすぐにBGMを再生
+    /// コンポーネントが有効になったときに呼ばれる関数
     /// </summary>
     private void OnEnable()
     {
-        // デバッグ用の簡易再生（既存挙動を維持しつつ安全に）
-        if (bgmSource != null && bgmSource.clip != null && Camera.main != null)
+        // bgmSource にクリップがあれば再生
+        if (bgmSource != null && bgmSource.clip != null && !bgmSource.isPlaying)
         {
-            AudioSource.PlayClipAtPoint(bgmSource.clip, Camera.main.transform.position, bgmSource.volume);
+            bgmSource.Play();
+            if (enableDebugLogs) Debug.Log($"OnEnable: bgmSource 再生 '{bgmSource.clip.name}'");
         }
+    }
+
+    // デバッグ用の状態出力
+    private void LogBGMState(string tag = "")
+    {
+        if (!enableDebugLogs) return; //デバッグログが無効な場合は何もしない
+
+        if (bgmSource == null)
+        {
+            Debug.Log($"LogBGMState({tag}): bgmSource == null");
+            return;
+        }
+
+        var clipName = bgmSource.clip != null ? bgmSource.clip.name : "null";
+        var mixerName = bgmSource.outputAudioMixerGroup != null ? bgmSource.outputAudioMixerGroup.name : "None";
+        Debug.Log($"LogBGMState({tag}): clip={clipName}, isPlaying={bgmSource.isPlaying}, volume={bgmSource.volume}, mute={bgmSource.mute}, outputMixerGroup={mixerName}");
     }
 }
