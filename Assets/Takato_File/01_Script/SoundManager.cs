@@ -17,7 +17,7 @@ public class SoundManager : MonoBehaviour
     [Header("SEの音量")]
     [SerializeField] float SEVolume;
 
-    [Header("AudioSource（オプション: Inspectorで割当可）")]
+    [Header("AudioSource")]
     [SerializeField] AudioSource bgmSource;
     [SerializeField] AudioSource seSource;
 
