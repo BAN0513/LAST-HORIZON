@@ -23,14 +23,14 @@ public abstract class Enemy : MonoBehaviour
     [Header("敵のAnimatorController")]
     [SerializeField] protected EnemyAnimatorController enemyAnimatorController;
 
-    [Header("HPのスライダー")]
-    [SerializeField] protected Slider hpSliider;
-
-    [Header("武器のスクリプト")]
-    [SerializeField] protected EnemyWeaponController _weaponController;
-
     [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
     [SerializeField] protected Transform forward;
+
+    [Header("0～この値までは近距離攻撃")]
+    [SerializeField] protected float shortDis = 3;
+    [Header("shortDisからこの値までを中距離攻撃")]
+    [SerializeField] protected float mediumDis = 6;
+    //mediumDis～engageDisまでは遠距離攻撃
 
     //攻撃時にこの値の距離まで近づく
     [SerializeField] protected float attackDis = 1.5f;
@@ -97,14 +97,6 @@ public abstract class Enemy : MonoBehaviour
         target = GameObject.FindWithTag("Player").transform;
         playerController = target.GetComponent<PlayerController>();
         playerAnimationController = target.GetComponent<PlayerAnimationController>();
-        
-
-        if (hpSliider != null)
-        {
-            hpSliider.maxValue = enemySO.maxHP;
-            hpSliider.minValue = 0;
-            hpSliider.value = enemySO.maxHP;
-        }
 
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -116,11 +108,7 @@ public abstract class Enemy : MonoBehaviour
 
         lotteryTime = enemySO.attackCoolDown;
 
-        if (_weaponController != null)
-        {
-            _weaponController.Damage = enemySO.damage;
-            _weaponController.Player = playerController;
-        }
+
 
         //画面の明るさ変更（後で別のとこに書く）
         //RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
@@ -136,12 +124,6 @@ public abstract class Enemy : MonoBehaviour
 
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
-
-        //移動アニメーションの変更処理
-        MoveAnimControl();
-
-        //後ろに下がる行動の処理
-        BackMoveControl();
 
         //交戦時の処理
         EngageMoveControl();
@@ -204,85 +186,66 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    private void MoveAnimControl()
+    protected virtual void EngageMoveControl()
     {
-        Vector3 toTarget = (target.position - transform.position).normalized;
-        Vector3 moveDir = agent.velocity.normalized;
-        float moveDot = Vector3.Dot(toTarget, moveDir);
+        if (distance <= enemySO.engageDis)
+        {
+            //敵のスピードを少しだけ遅くする
+            agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 
-        if (agent.velocity.magnitude < 0.1f)
-        {
-            isWalking = false;
-            isBackMove = false;
-        }
-        else if (moveDot > 0)
-        {
-            if (distance >= enemySO.engageDis)
+            if (!isAction)
             {
-                isDash = true;
-                isWalking = false;
-                SetDashSpeed(); // ダッシュ速度に設定
+                lotteryTime -= Time.deltaTime;
+                if (lotteryTime <= 0)
+                {
+
+                    //行動の抽選で使う
+                    rand = Random.Range(1, 101);
+
+                    isAction = true;
+
+                    //次の抽選に必要な時間をランダムで決める
+                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
+                }
             }
             else
             {
-                isWalking = true;
-                isDash = false;
-                SetWalkSpeed(); // 歩き速度に設定
+                switch (distance)
+                {
+                    case float dis when (dis >= 0 && dis <= shortDis):
+                        ShortDistanceAction();
+                        break;
+                    case float dis when (dis > shortDis && dis <= mediumDis):
+                        MediumDistanceAction();
+                        break;
+                    case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
+                        LongDistanceAction();
+                        break;
+                }
+
             }
-            isBackMove = false;
         }
         else
         {
-            isWalking = false;
-            isBackMove = true;
-            SetWalkSpeed(); // 後退も歩き速度で
+            agent.speed = enemySO.dashMoveSpeed - DebufDEX;
+            isAction = false;
+            rand = 0;
         }
     }
 
-    private void BackMoveControl()
-    {
-        //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
-        if (distance <= enemySO.backActionDis && !isAction)
-        {
-            if (isBackMove) { return; }
-            backMoveCor = StartCoroutine(BackMove());
-        }
-    }
+    protected virtual void ShortDistanceAction() { }
+    protected virtual void MediumDistanceAction() { }
+    protected virtual void LongDistanceAction() { }
 
-    IEnumerator BackMove()
-    {
-        agent.stoppingDistance = 0;
-
-        while (distance <= enemySO.backMoveDis)
-        {
-            //敵の方向を取る
-            Vector3 toTarget = (target.position - transform.position).normalized;
-            toTarget.y = 0;
-
-            //敵の方向と反対方向を取る
-            Vector3 pos = transform.position + -toTarget * enemySO.backMoveDis;
-
-            //キャラクターの後ろを目的地として設定する
-            agent.SetDestination(pos);
-            yield return null;
-        }
-        agent.stoppingDistance = enemySO.stoopingDis;
-        backMoveCor = null;
-    }
-
-    protected abstract void EngageMoveControl();
-
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
         damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }
 
         hp -= damage;
-        hpSliider.value = hp;
 
         if (hp <= 0)
         {
-            hpSliider.gameObject.SetActive(false);
             isHit = false;
             InitAnim();
             Death();
@@ -358,13 +321,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //攻撃判定の出現
-    public void AttackJudgmentActive()
+    public void AttackJudgmentActive(EnemyWeaponController _weaponController)
     {
         _weaponController.SetColliderActive(true);
     }
 
     //攻撃判定の終了
-    public void AttackJudgmentEnd()
+    public void AttackJudgmentEnd(EnemyWeaponController _weaponController)
     {
         _weaponController.SetColliderActive(false);
     }

@@ -122,16 +122,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Last_Boss
   enemySO: {fileID: 11400000, guid: f2361f2cc16997545919cd6c73f390ff, type: 2}
   enemyAnimatorController: {fileID: 8082187950281949759}
+  forward: {fileID: 2585517044960145431}
+  shortDis: 3
+  mediumDis: 6
+  attackDis: 1.5
   hpSliider: {fileID: 1878319838695366945}
   _weaponController: {fileID: 8104887120502432443}
-  forward: {fileID: 2585517044960145431}
-  attackDis: 1.5
   magicCircleEffect: {fileID: 1176117252312639125, guid: 5761b061daecc52438ffb83b28fd97bf, type: 3}
   tornadoEffect: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
   fireEffect: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
   impactEffect: {fileID: 3856664211485569777, guid: 21e0af4b08cd8114b898e08c2f625120, type: 3}
-  shortDis: 3
-  mediumDis: 6
 --- !u!114 &8082187950281949759
 MonoBehaviour:
   m_ObjectHideFlags: 0

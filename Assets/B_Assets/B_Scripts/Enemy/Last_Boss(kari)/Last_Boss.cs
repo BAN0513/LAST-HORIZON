@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Last_Boss : Enemy
+public class Last_Boss : Enemy_Humanoid
 {
     [SerializeField] private GameObject magicCircleEffect;
     [SerializeField] private GameObject tornadoEffect;
@@ -9,11 +9,7 @@ public class Last_Boss : Enemy
     [SerializeField] private GameObject impactEffect;
     private GameObject magicCircle;
 
-    [Header("0～この値までは近距離攻撃")]
-    [SerializeField] private float shortDis = 3;
-    [Header("shortDisからこの値までを中距離攻撃")]
-    [SerializeField] private float mediumDis = 6;
-    //mediumDis～engageDisまでは遠距離攻撃
+
 
     private bool bigTrickReady = false;
     private bool bigTrickUsed = false;
@@ -42,57 +38,7 @@ public class Last_Boss : Enemy
         base.Update();
     }
 
-    protected override void EngageMoveControl()
-    {
-        if (distance <= enemySO.engageDis)
-        {
-            //敵のスピードを少しだけ遅くする
-            agent.speed = enemySO.walkMoveSpeed - DebufDEX;
-
-            if (!isAction)
-            {
-                lotteryTime -= Time.deltaTime;
-                if (lotteryTime <= 0)
-                {
-                    if (bigTrickReady)
-                    {
-                        StartCoroutine(Tornado());
-                    }
-                    else
-                    {
-                        //行動の抽選で使う
-                        rand = Random.Range(1, 101);
-
-                        isAction = true;
-
-                        switch (distance)
-                        {
-                            case float dis when (dis >= 0 && dis <= shortDis):
-                                ShortDistanceAction();
-                                break;
-                            case float dis when (dis > shortDis && dis <= mediumDis):
-                                MediumDistanceAction();
-                                break;
-                            case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
-                                LongDistanceAction();
-                                break;
-                        }
-                    }
-
-                    //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
-                }
-            }
-        }
-        else
-        {
-            agent.speed = enemySO.dashMoveSpeed - DebufDEX;
-            isAction = false;
-            rand = 0;
-        }
-    }
-
-    private void ShortDistanceAction()
+    protected override void ShortDistanceAction()
     {
         //確率で行動を決める
         switch (rand)
@@ -106,7 +52,7 @@ public class Last_Boss : Enemy
         }
     }
 
-    private void MediumDistanceAction()
+    protected override void MediumDistanceAction()
     {
         switch (rand)
         {
@@ -119,7 +65,7 @@ public class Last_Boss : Enemy
         }
     }
 
-    private void LongDistanceAction()
+    protected override void LongDistanceAction()
     {
         switch (rand)
         {
@@ -197,13 +143,6 @@ public class Last_Boss : Enemy
             isBackMove = false;
             StopCoroutine(backMoveCor);
         }
-    }
-
-    protected override void Death()
-    {
-        base.Death();
-
-        AttackJudgmentEnd();
     }
 
     //ここから下はAnimator関連の関数

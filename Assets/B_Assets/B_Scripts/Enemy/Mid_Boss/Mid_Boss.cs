@@ -2,7 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class Mid_Boss : Enemy
+public class Mid_Boss : Enemy_Humanoid
 {
 
     [Header("二段目の攻撃に派生する確率")]
@@ -51,56 +51,20 @@ public class Mid_Boss : Enemy
 
         }
     }
-
-    protected override void EngageMoveControl()
+    protected override void ShortDistanceAction()
     {
-        if (distance <= enemySO.engageDis)
-        {
-            //敵のスピードを少しだけ遅くする
-            agent.speed = enemySO.walkMoveSpeed - DebufDEX;
-
-            if (!isAction && !isBlock)
-            {
-                lotteryTime -= Time.deltaTime;
-                if (lotteryTime <= 0)
-                {
-                    //行動の抽選で使う
-                    rand = Random.Range(1, 101);
-
-                    //次の抽選に必要な時間をランダムで決める
-                    lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
-                    isAction = true;
-                }
-            }
-
-            //確率で行動を決める
-            switch (rand)
-            {
-                case int r when (r > 0 && r <= attackProbability):
-                    AttackMove();
-                    break;
-                case 0:
-                    break;
-                default:
-                    //攻撃じゃなかったら攻撃の確率を上げる
-                    if (isAction)
-                    {
-                        isAction = false;
-                        attackProbability += enemySO.attackUpProbability;
-                    }
-                    break;
-            }
-        }
-        else
-        {
-            agent.speed = enemySO.dashMoveSpeed - DebufDEX;
-            isAction = false;
-            rand = 0;
-        }
+        AttackMove();
     }
 
+    protected override void MediumDistanceAction()
+    {
+        AttackMove();
+    }
 
-
+    protected override void LongDistanceAction()
+    {
+        AttackMove();
+    }
 
     private void AttackMove()
     {
@@ -132,13 +96,6 @@ public class Mid_Boss : Enemy
                 is360Attack = true;
             }
         }
-    }
-
-    protected override void Death()
-    {
-        base.Death();
-
-        AttackJudgmentEnd();
     }
 
     //ここから下はAnimator関連の関数
