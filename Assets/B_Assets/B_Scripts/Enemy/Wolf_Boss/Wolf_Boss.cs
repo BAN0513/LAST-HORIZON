@@ -5,7 +5,6 @@ public class Wolf_Boss : Enemy_FourLegs
 {
     //アニメーションで使うやつ
     public bool isAttack_1 { get; private set; }
-    public bool isAttack_2 { get; private set; }
     public bool isDashAttacKBefore { get; private set; }
     public bool isRotationAttack { get; private set; }
     public bool isTailAttack { get; private set; }
@@ -28,7 +27,7 @@ public class Wolf_Boss : Enemy_FourLegs
         switch (rand)
         {
             case int r when (r > 0 && r <= attackProbability):
-
+                Attack_1();
                 break;
             default:
                 DoNotAttack();
@@ -41,7 +40,7 @@ public class Wolf_Boss : Enemy_FourLegs
         switch (rand)
         {
             case int r when (r > 0 && r <= attackProbability):
-
+                Attack_1();
                 break;
             default:
                 DoNotAttack();
@@ -53,15 +52,24 @@ public class Wolf_Boss : Enemy_FourLegs
     {
         switch (rand)
         {
-            //case int r when (r > 0 && r <= attackProbability):
-            //    StartCoroutine(Tornado());
-            //    break;
             case int r when (r > 0 && r <= attackProbability):
-
+                Attack_1();
                 break;
             default:
                 DoNotAttack();
                 break;
+        }
+    }
+
+    private void Attack_1()
+    {
+        agent.stoppingDistance = 0;
+
+        if (distance <= 10 && dot >= 0.7f)
+        {
+            isAttack_1 = true;
+            isAnimation = true;
+            LookPlayerChange(false);
         }
     }
 
@@ -73,25 +81,6 @@ public class Wolf_Boss : Enemy_FourLegs
 
     }
 
-    private void LookPlayerChange(bool isLook)
-    {
-        StopBackMoveCor();
-
-        isLookPlayer = isLook;
-        agent.isStopped = true;
-    }
-
-    private void StopBackMoveCor()
-    {
-        //rand = 0;
-        //もし後退中なら後退を止める
-        if (backMoveCor != null)
-        {
-            isBackMove = false;
-            StopCoroutine(backMoveCor);
-        }
-    }
-
 
     //ここから下はAnimator関連の関数
 
@@ -100,7 +89,6 @@ public class Wolf_Boss : Enemy_FourLegs
     {
         base.InitAnim();
         isAttack_1 = false;
-        isAttack_2 = false;
         isDashAttacKBefore = false;
         isRotationAttack = false;
         isTailAttack = false;

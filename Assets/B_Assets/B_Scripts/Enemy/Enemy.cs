@@ -74,6 +74,9 @@ public abstract class Enemy : MonoBehaviour
     //何かしらアクションが抽選されているかどうか
     protected bool isAction = false;
 
+    //アニメーションが再生されているかどうか
+    protected bool isAnimation = false;
+
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
 
@@ -108,6 +111,7 @@ public abstract class Enemy : MonoBehaviour
 
         lotteryTime = enemySO.attackCoolDown;
 
+        attackProbability = enemySO.attackInitProbability;
 
 
         //画面の明るさ変更（後で別のとこに書く）
@@ -164,6 +168,12 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void LookPlayerChange(bool isLook)
+    {
+        isLookPlayer = isLook;
+        agent.isStopped = true;
+    }
+
     private void AgentContact()
     {
         if (!isContact)
@@ -208,7 +218,7 @@ public abstract class Enemy : MonoBehaviour
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-            else
+            else if (!isAnimation)
             {
                 switch (distance)
                 {
@@ -307,6 +317,7 @@ public abstract class Enemy : MonoBehaviour
         rand = 0;
         agent.isStopped = false;
         isAction = false;
+        isAnimation = false;
     }
 
     //向き補正
@@ -321,13 +332,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //攻撃判定の出現
-    public void AttackJudgmentActive(EnemyWeaponController _weaponController)
+    public void AttackJudgmentActive(EnemyAttackRollController _weaponController)
     {
         _weaponController.SetColliderActive(true);
     }
 
     //攻撃判定の終了
-    public void AttackJudgmentEnd(EnemyWeaponController _weaponController)
+    public void AttackJudgmentEnd(EnemyAttackRollController _weaponController)
     {
         _weaponController.SetColliderActive(false);
     }

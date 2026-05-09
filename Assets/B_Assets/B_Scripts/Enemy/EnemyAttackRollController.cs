@@ -1,17 +1,11 @@
 using Takato;
 using UnityEngine;
 
-public class EnemyWeaponController : MonoBehaviour
+public class EnemyAttackRollController : MonoBehaviour
 {
-    private BoxCollider boxCollider; // 武器のコライダー
-    private int damage;
-    public int Damage
-    {
-        set
-        {
-            damage = value;
-        }
-    }
+    private BoxCollider[] boxCollider; // 武器のコライダー
+    [SerializeField] private int damage;
+
     private PlayerController player;
     public PlayerController Player
     {
@@ -23,13 +17,20 @@ public class EnemyWeaponController : MonoBehaviour
 
     private void Start()
     {
-        boxCollider = GetComponent<BoxCollider>(); // 武器のコライダーを取得
-        boxCollider.enabled = false;               // 初期状態では武器のコライダーを無効化
+        boxCollider = GetComponents<BoxCollider>(); // 武器のコライダーを取得
+
+        foreach (BoxCollider boxCollider in boxCollider)
+        {
+            boxCollider.enabled = false;               // 初期状態では武器のコライダーを無効化
+        }
     }
 
     public void SetColliderActive(bool active)
     {
-        boxCollider.enabled = active; // 武器のコライダーを有効化または無効化
+        foreach (BoxCollider boxCollider in boxCollider)
+        {
+            boxCollider.enabled = active; // 武器のコライダーを有効化または無効化
+        }
     }
 
     private void OnTriggerEnter(Collider other)

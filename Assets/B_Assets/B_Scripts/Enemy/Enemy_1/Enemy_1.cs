@@ -13,7 +13,6 @@ public class Enemy_1 : Enemy_Humanoid
     protected override void Start()
     {
         base.Start();
-        attackProbability = enemySO.attackInitProbability;
     }
 
     protected override void Update()

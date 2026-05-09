@@ -19,7 +19,6 @@ public class Mid_Boss : Enemy_Humanoid
     protected override void Start()
     {
         base.Start();
-        attackProbability = enemySO.attackInitProbability;
 
         _shieldController = GetComponentInChildren<EnemyShieldController>();
         _shieldController.Enemy = this;
@@ -37,7 +36,7 @@ public class Mid_Boss : Enemy_Humanoid
         float blockDistance = 3;  //この値より距離が遠いとブロックしない
         float blockDot = 0.5f;    //この値よりDotが低いとブロックしない
 
-        if (isAction) 
+        if (isAnimation) 
         {
             isBlock = false;
         }

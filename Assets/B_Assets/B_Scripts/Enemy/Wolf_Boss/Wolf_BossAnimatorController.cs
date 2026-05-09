@@ -5,7 +5,6 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
     private Wolf_Boss wolf_Boss;
 
     int isAttack_1Hash;
-    int isAttack_2Hash;
     int isDashAttackBeforeHash;
     int isRotationAttackHash;
     int isTailAttackHash;
@@ -17,7 +16,6 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         wolf_Boss = GetComponent<Wolf_Boss>();
 
         isAttack_1Hash = Animator.StringToHash("isAttack_1");
-        isAttack_2Hash = Animator.StringToHash("isAttack_2");
         isDashAttackBeforeHash = Animator.StringToHash("isDashAttackBefore");
         isRotationAttackHash = Animator.StringToHash("isRotationAttack");
         isTailAttackHash = Animator.StringToHash("isTailAttack");
@@ -28,13 +26,11 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         base.Update();
 
         bool isAttack_1 = animator.GetBool(isAttack_1Hash);
-        bool isAttack_2 = animator.GetBool(isAttack_2Hash);
         bool isDashAttackBefore = animator.GetBool(isDashAttackBeforeHash);
         bool isRotationAttack = animator.GetBool(isRotationAttackHash);
         bool isTailAttack = animator.GetBool(isTailAttackHash);
 
         if (wolf_Boss.isAttack_1 != isAttack_1) animator.SetBool(isAttack_1Hash, wolf_Boss.isAttack_1);
-        if (wolf_Boss.isAttack_2 != isAttack_2) animator.SetBool(isAttack_2Hash, wolf_Boss.isAttack_2);
         if (wolf_Boss.isDashAttacKBefore != isDashAttackBefore) animator.SetBool(isDashAttackBeforeHash, wolf_Boss.isDashAttacKBefore);
         if (wolf_Boss.isRotationAttack != isRotationAttack) animator.SetBool(isRotationAttackHash, wolf_Boss.isRotationAttack);
         if (wolf_Boss.isTailAttack != isTailAttack) animator.SetBool(isTailAttackHash, wolf_Boss.isTailAttack);

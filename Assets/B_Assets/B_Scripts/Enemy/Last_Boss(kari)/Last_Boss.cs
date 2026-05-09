@@ -24,7 +24,6 @@ public class Last_Boss : Enemy_Humanoid
     protected override void Start()
     {
         base.Start();
-        attackProbability = enemySO.attackInitProbability;
     }
 
     protected override void Update()
@@ -84,7 +83,7 @@ public class Last_Boss : Enemy_Humanoid
     private void DoNotAttack()
     {
         //çUåÇÇ∂Ç·Ç»Ç©Ç¡ÇΩÇÁçUåÇÇÃämó¶Çè„Ç∞ÇÈ
-        isAction = false;
+        isAnimation = false;
         attackProbability += enemySO.attackUpProbability;
 
     }
@@ -126,24 +125,7 @@ public class Last_Boss : Enemy_Humanoid
         yield return null;
     }
 
-    private void LookPlayerChange(bool isLook)
-    {
-        StopBackMoveCor();
 
-        isLookPlayer = isLook;
-        agent.isStopped = true;
-    }
-
-    private void StopBackMoveCor()
-    {
-        //rand = 0;
-        //Ç‡Çµå„ëﬁíÜÇ»ÇÁå„ëﬁÇé~ÇﬂÇÈ
-        if (backMoveCor != null)
-        {
-            isBackMove = false;
-            StopCoroutine(backMoveCor);
-        }
-    }
 
     //Ç±Ç±Ç©ÇÁâ∫ÇÕAnimatorä÷òAÇÃä÷êî
     public void ChantStart()

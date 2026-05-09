@@ -8,7 +8,7 @@ public class Enemy_Humanoid : Enemy
     [SerializeField] protected Slider hpSliider;
 
     [Header("武器のスクリプト")]
-    [SerializeField] protected EnemyWeaponController _weaponController;
+    [SerializeField] protected EnemyAttackRollController _weaponController;
 
     protected override void Start()
     {
@@ -23,7 +23,6 @@ public class Enemy_Humanoid : Enemy
 
         if (_weaponController != null)
         {
-            _weaponController.Damage = enemySO.damage;
             _weaponController.Player = playerController;
         }
     }
@@ -42,7 +41,7 @@ public class Enemy_Humanoid : Enemy
     private void BackMoveControl()
     {
         //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
-        if (distance <= enemySO.backActionDis && !isAction)
+        if (distance <= enemySO.backActionDis && !isAnimation)
         {
             if (isBackMove) { return; }
             backMoveCor = StartCoroutine(BackMove());
@@ -126,6 +125,23 @@ public class Enemy_Humanoid : Enemy
     {
         base.Death();
         _weaponController.SetColliderActive(false);
+    }
+
+    protected override void LookPlayerChange(bool isLook)
+    {
+        StopBackMoveCor();
+
+        base.LookPlayerChange(isLook);
+    }
+
+    protected void StopBackMoveCor()
+    {
+        //もし後退中なら後退を止める
+        if (backMoveCor != null)
+        {
+            isBackMove = false;
+            StopCoroutine(backMoveCor);
+        }
     }
 
     public void AttackJudgmentActive()

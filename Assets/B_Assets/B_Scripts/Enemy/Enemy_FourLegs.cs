@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Enemy_FourLegs : Enemy
 {
-    [SerializeField] private EnemyWeaponController _weaponController_LeftLeg;
-    [SerializeField] private EnemyWeaponController _weaponController_RightLeg;
-    [SerializeField] private EnemyWeaponController _weaponController_LeftArm;
-    [SerializeField] private EnemyWeaponController _weaponController_RightArm;
-    [SerializeField] private EnemyWeaponController _weaponController_Tail;
-    [SerializeField] private EnemyWeaponController _weaponController_AllBody;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_LeftLeg;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_RightLeg;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_LeftArm;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_RightArm;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_Tail;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_AllBody;
 
     public enum BodyPart
     {
@@ -21,14 +21,14 @@ public class Enemy_FourLegs : Enemy
         AllBody
     };
 
-    private Dictionary<BodyPart, EnemyWeaponController> _weaponControllers;
+    private Dictionary<BodyPart, EnemyAttackRollController[]> _weaponControllers;
 
 
     protected override void Start()
     {
         base.Start();
 
-        _weaponControllers = new Dictionary<BodyPart, EnemyWeaponController>()
+        _weaponControllers = new Dictionary<BodyPart, EnemyAttackRollController[]>()
         {
            { BodyPart.LeftLeg, _weaponController_LeftLeg },
            { BodyPart.RightLeg, _weaponController_RightLeg },
@@ -37,6 +37,14 @@ public class Enemy_FourLegs : Enemy
            { BodyPart.Tail, _weaponController_Tail },
            { BodyPart.AllBody, _weaponController_AllBody },
         };
+
+        foreach (var w in _weaponControllers)
+        {
+            for (int i = 0; i < w.Value.Length; i++)
+            {
+                w.Value[i].Player = playerController;
+            }
+        }
     }
 
     protected override void Update()
@@ -53,20 +61,29 @@ public class Enemy_FourLegs : Enemy
     {
         base.Death();
 
-        foreach(var w in _weaponControllers)
+        foreach (var w in _weaponControllers)
         {
-            AttackJudgmentEnd(w.Value);
+            for (int i = 0; i < w.Value.Length; i++)
+            {
+                AttackJudgmentEnd(w.Value[i]);
+            }
         }
     }
 
-    public void AttackJudgmentActive(BodyPart part) 
+    public void AttackJudgmentActive(BodyPart part)
     {
-        base.AttackJudgmentActive(_weaponControllers[part]);
+        for (int i = 0; i < _weaponControllers[part].Length; i++)
+        {
+            base.AttackJudgmentActive(_weaponControllers[part][i]);
+        }
     }
 
     public void AttackJudgmentEnd(BodyPart part)
     {
-        base.AttackJudgmentEnd(_weaponControllers[part]);
+        for (int i = 0; i < _weaponControllers[part].Length; i++)
+        {
+            base.AttackJudgmentEnd(_weaponControllers[part][i]);
+        }
     }
 
 }
