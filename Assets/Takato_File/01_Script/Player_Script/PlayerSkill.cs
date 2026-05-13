@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// プレイヤーのスキルを管理するクラス
-/// </summary>
 namespace Takato
 {
     public class PlayerSkill : MonoBehaviour
@@ -12,10 +9,13 @@ namespace Takato
         [SerializeField] private List<SkillBase> skills;
 
         private float[] skillCooldownTimers; // 各スキルのクールダウンタイマー
-
+        private PlayerController playerController;
 
         private void Awake()
         {
+            // PlayerController を取得
+            playerController = GetComponent<PlayerController>();
+
             // スロット数分の要素がなければnullで埋める
             int slotCount = Mathf.Max(skills.Count, 4); // 最低4スロット確保
             while (skills.Count < slotCount)
@@ -23,6 +23,18 @@ namespace Takato
                 skills.Add(null);
             }
             skillCooldownTimers = new float[skills.Count];
+
+            // 既にセットされているスキルがあれば装備時フックを呼ぶ（パッシブ対応）
+            if (playerController != null)
+            {
+                for (int i = 0; i < skills.Count; i++)
+                {
+                    if (skills[i] != null)
+                    {
+                        skills[i].OnEquip(playerController);
+                    }
+                }
+            }
         }
 
         private void Update()
@@ -32,7 +44,7 @@ namespace Takato
                 if (skillCooldownTimers[i] > 0)
                 {
                     skillCooldownTimers[i] -= Time.deltaTime; // クールダウンタイマーを減少させる
-                }     
+                }
             }
         }
 
@@ -72,7 +84,22 @@ namespace Takato
                 Debug.LogWarning($"SetSkill: slotindex {slotindex} が無効です（skills.Count={skills.Count}）");
                 return;
             }
+
+            // 装備解除フック（以前のスキル）
+            var previous = skills[slotindex];
+            if (previous != null && playerController != null)
+            {
+                previous.OnUnequip(playerController);
+            }
+
             skills[slotindex] = skill;
+
+            // 装備時フック（新しいスキル）
+            if (skill != null && playerController != null)
+            {
+                skill.OnEquip(playerController);
+            }
+
             Debug.Log($"SetSkill: スロット{slotindex}に「{(skill != null ? skill.skillName : "なし")}」をセットしました。");
         }
         /// <summary>

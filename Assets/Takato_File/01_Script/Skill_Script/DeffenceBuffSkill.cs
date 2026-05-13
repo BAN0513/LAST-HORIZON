@@ -1,6 +1,7 @@
 using Takato;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Takato
 {
@@ -28,8 +29,25 @@ namespace Takato
         [Header("最大スキルレベル")]
         public int maxSkillLevel;
 
+        [Space(8)]
+        [Header("パッシブ(装備中)")]
+        [Header("装備中のダメージカット率（パッシブ）")]
+        public float passiveCutRate;
+        [Header("装備中の移動速度バフ（パッシブ）")]
+        public float passiveMoveSpeedBuff;
+
+        // パッシブ状態をプレイヤー単位で管理
+        private class PassiveState
+        {
+            public float originalCutRate;
+            public ParticleSystem effect;
+            public float originalMoveSpeed;
+        }
+
+        private Dictionary<int, PassiveState> passiveStates = new Dictionary<int, PassiveState>();
+
         /// <summary>
-        /// 防御力を一定時間上げるスキルの発動処理
+        /// 防御力を一定時間上げるスキルの発動処理（アクティブ）
         /// </summary>
         public override void Activate(PlayerController player)
         {
@@ -55,7 +73,7 @@ namespace Takato
 
             player.StartCoroutine(ApplyDefenceBuff(player, effect, cutRate, duration));
 
-            // 移動速度バフを適用
+            // 移動速度バフを適用（アクティブ）
             if (moveSpeedBuff > 0)
             {
                 player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
@@ -65,7 +83,58 @@ namespace Takato
         }
 
         /// <summary>
-        /// 移動速度バフを適用するコルーチン
+        /// 装備時（パッシブ）：装備中は常時バフを適用する（レベル依存なし）
+        /// </summary>
+        public override void OnEquip(PlayerController player)
+        {
+            if (player == null) return;
+            int id = player.GetInstanceID();
+            if (passiveStates.ContainsKey(id)) return; // 既に適用済み
+
+            float originalCutRate = player.GetDamageCutRate();
+            player.SetDamageCutRate(originalCutRate + passiveCutRate);
+
+            float originalMoveSpeed = player.GetMoveSpeed();
+            if (passiveMoveSpeedBuff != 0f)
+            {
+                player.SetMoveSpeed(originalMoveSpeed + passiveMoveSpeedBuff);
+            }
+
+            passiveStates[id] = new PassiveState
+            {
+                originalCutRate = originalCutRate,
+                originalMoveSpeed = originalMoveSpeed
+            };
+
+            Debug.Log($"{skillName} を装備（パッシブ適用）: ダメージカット率+{passiveCutRate} 移動速度+{passiveMoveSpeedBuff}");
+        }
+
+        /// <summary>
+        /// 装備解除時（パッシブ解除）
+        /// </summary>
+        public override void OnUnequip(PlayerController player)
+        {
+            if (player == null) return;
+            int id = player.GetInstanceID();
+            if (!passiveStates.TryGetValue(id, out var state)) return;
+
+            player.SetDamageCutRate(state.originalCutRate);
+
+            if (state.effect != null)
+            {
+                state.effect.Stop();
+                Destroy(state.effect.gameObject, state.effect.main.duration);
+            }
+
+            player.SetMoveSpeed(state.originalMoveSpeed);
+
+            passiveStates.Remove(id);
+
+            Debug.Log($"{skillName} のパッシブを解除");
+        }
+
+        /// <summary>
+        /// 移動速度バフを適用するコルーチン（アクティブ用）
         /// </summary>
         private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
         {
@@ -80,7 +149,7 @@ namespace Takato
 
 
         /// <summary>
-        /// 防御力バフを適用するコルーチン
+        /// 防御力バフを適用するコルーチン（アクティブ用）
         /// </summary>
         private IEnumerator ApplyDefenceBuff(PlayerController player, ParticleSystem effect, float cutRate, float duration)
         {
@@ -98,7 +167,7 @@ namespace Takato
             }
         }
 
-        // スキルレベルを上げるメソッド（必要に応じて呼び出し）
+        // スキルレベルを上げるメソッド（アクティブ用の成長のみ）
         public void LevelUp()
         {
             if (skillLevel < maxSkillLevel)

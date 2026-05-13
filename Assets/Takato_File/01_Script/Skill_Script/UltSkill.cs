@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// ウルトラスキルを管理するクラス
@@ -37,6 +38,79 @@ namespace Takato
         public int debuffDefValue;
         [Header("防御デバフの持続時間（秒）")]
         public float debuffDuration;
+
+        [Space(8)]
+        [Header("パッシブ(装備中)設定")]
+        [Header("装備中のパッシブ移動速度")]
+        public float passiveMoveSpeedBuff;
+        [Header("装備中のパッシブ防御力")]
+        public int passiveDefBuff;
+
+        //[Header("装備中のパッシブSP回復力")]← 後で回復の処理を書きます。
+        //public int passiveSPRecoveryBuff;
+
+        // パッシブ状態をプレイヤー単位で管理
+        private class PassiveState
+        {
+            public float originalMoveSpeed;
+            public float originalDef;
+            //public int originalSPRecovery;← 後で回復の処理を書きます。
+        }
+        private Dictionary<int, PassiveState> passiveStates = new Dictionary<int, PassiveState>();
+
+        ///<summary>
+        ///装備中のパッシブ効果の処理
+        ///</summary>
+        public override void OnEquip(PlayerController player)
+        {
+            if (player == null) return;
+            int id = player.GetInstanceID();
+            if (passiveStates.ContainsKey(id)) return;
+
+            //現在の移動速度と防御力を保存してパッシブ効果を適用
+            float originalMoveSpeed = player.GetMoveSpeed();
+            float originalDef = player.GetDamageCutRate();
+            //int originalSPRecovery = player.GetSPRecoveryRate();← 後で回復の処理を書きます。
+
+            // 移動速度と防御力をバフ
+            if(passiveMoveSpeedBuff != 0)
+            {
+                player.SetMoveSpeed(originalMoveSpeed * passiveMoveSpeedBuff);
+            }
+            if(passiveDefBuff != 0)
+            {
+                player.SetDamageCutRate(originalDef + passiveDefBuff);
+            }
+            //if(passiveSPRecoveryBuff != 0){} ← 後で回復の処理を書きます。
+
+            passiveStates[id] = new PassiveState
+            {
+                originalMoveSpeed = originalMoveSpeed,
+                originalDef = originalDef,
+                //originalSPRecovery = originalSPRecovery← 後で回復の処理を書きます。
+            };
+            Debug.Log($"[UltSkill] Player {id} equipped. MoveSpeed: {originalMoveSpeed} -> {player.GetMoveSpeed()}, Def: {originalDef} -> {player.GetDamageCutRate()}");
+        }
+
+        /// <summary>
+        /// 装備解除時にパッシブ効果を元に戻す処理
+        /// </summary>
+        /// <param name="player"></param>
+        public override void OnUnequip(PlayerController player)
+        {
+            if (player == null) return;
+            int id = player.GetInstanceID();
+            if (!passiveStates.ContainsKey(id)) return;
+
+            //保存していた元の値を復元
+            var state = passiveStates[id];
+            player.SetMoveSpeed(state.originalMoveSpeed);
+            player.SetDamageCutRate(state.originalDef);
+            //player.SetSPRecoveryRate(state.originalSPRecovery);← 後で回復の処理を書きます。
+
+            passiveStates.Remove(id);
+            Debug.Log($"[UltSkill] Player {id} unequipped. MoveSpeed restored to {state.originalMoveSpeed}, Def restored to {state.originalDef}");
+        }
 
         /// <summary>
         /// スキル発動時の処理

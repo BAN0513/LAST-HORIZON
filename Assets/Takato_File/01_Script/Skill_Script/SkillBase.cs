@@ -19,5 +19,11 @@ namespace Takato
 
         // スキル発動時の共通インターフェース
         public abstract void Activate(PlayerController player);
+
+        //スキル装備(スロットに入っているとき)のパッシブ判定
+        public virtual void OnEquip(PlayerController player) { }
+
+        //スキル解除(スロットから外れた)時のパッシブ判定
+        public virtual void OnUnequip(PlayerController player){ }
     }
 }
