@@ -93,9 +93,9 @@ namespace Takato
             playerInputActions.Player.Ult.canceled += context => IsSkill4Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
 
             //Look入力イベント登録
-            playerInputActions.Player.Look.started += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
-            playerInputActions.Player.Look.performed += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
-            playerInputActions.Player.Look.canceled += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() : Vector2.zero;
+            playerInputActions.Player.Look.started += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
+            playerInputActions.Player.Look.performed += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
+            playerInputActions.Player.Look.canceled += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
 
             //Inventory入力イベント登録
             playerInputActions.Player.Inventory.started += context => IsInventoryInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント
@@ -152,14 +152,6 @@ namespace Takato
         private void OnJumpInput(InputAction.CallbackContext context)
         {
             JumpInput = context.ReadValueAsButton();
-        }
-
-        /// <summary>
-        /// プレイヤーの視点入力を処理するメソッド
-        /// </summary>
-        private void OnLookInput(InputAction.CallbackContext context)
-        {
-            LookInput = context.ReadValue<Vector2>();
         }
 
         /// <summary>

@@ -41,15 +41,14 @@ namespace Takato
         /// </summary>
         public void ActivateSkill(int index, PlayerController player)
         {
+            if (index < 0 || index >= skills.Count) return;
+            if (skillCooldownTimers[index] > 0) return;
+            if (skills[index] == null) return;
             SoundManager soundManager = FindAnyObjectByType<SoundManager>();
             if (soundManager != null)
             {
                 soundManager.PlaySE(0);//0”Ô‚ÌSE‚ğÄ¶
             }
-
-            if (index < 0 || index >= skills.Count) return;
-            if (skillCooldownTimers[index] > 0) return;
-            if (skills[index] == null) return;
 
             skills[index].Activate(player);
             skillCooldownTimers[index] = skills[index].cooldown;

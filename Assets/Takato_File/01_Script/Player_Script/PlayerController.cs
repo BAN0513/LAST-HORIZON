@@ -27,11 +27,11 @@ namespace Takato
         [Header("Look Orbit Controller(Cinemachineカメラ入れてください)")]
         [SerializeField] private Behaviour lookOrbitController; 
 
-        private PlayerInputController inputController;
-        private CharacterController characterController;
-        private PlayerAnimationController animationController;
-        private PlayerWeaponController weaponController;
-        private PlayerShieldContoroller shieldController;
+        private PlayerInputController inputController;　// プレイヤーの入力を管理するクラスのインスタンス
+        private CharacterController characterController; // プレイヤーの移動を管理するCharacterControllerコンポーネントのインスタンス
+        private PlayerAnimationController animationController;// プレイヤーのアニメーションを管理するクラスのインスタンス
+        private PlayerWeaponController weaponController; // プレイヤーの攻撃を管理するクラスのインスタンス
+        private PlayerShieldContoroller shieldController; // プレイヤーの防御を管理するクラスのインスタンス
         private PlayerSkill playerSkill;
 
         private float verticalVelocity; // ジャンプと重力の処理に使用する垂直速度
@@ -40,6 +40,9 @@ namespace Takato
         private bool isDead = false;    // 死亡フラグ
         private bool isSkillUIOpen = false;// スキル選択UIが開いているかどうかを管理するフラグ
         private bool prevInventoryOpen = false;// 前フレームのインベントリの開閉状態を管理するフラグ
+
+        //スキル発動ボタンを押された時の判定をするための前フレームのスキル入力状態を管理するフラグ
+        private bool prevSkillInput = false;
 
         private void Awake()
         {
@@ -97,22 +100,27 @@ namespace Takato
             Block();// 防御処理は常に行う
             Attack();// 攻撃処理は常に行う
 
-            if (inputController.IsSkillInput && playerSkill != null)
+            // スキル入力の判定
+            if (inputController.IsSkillInput&&prevSkillInput && playerSkill != null)
             {
                 playerSkill.ActivateSkill(0, this);
             }
-            if (inputController.IsSkill2Input && playerSkill != null)
+            if (inputController.IsSkill2Input&&prevSkillInput && playerSkill != null)
             {
                 playerSkill.ActivateSkill(1, this);
             }
-            if (inputController.IsSkill3Input && playerSkill != null)
+            if (inputController.IsSkill3Input && prevSkillInput && playerSkill != null)
             {
                 playerSkill.ActivateSkill(2, this);
             }
-            if(inputController.IsSkill4Input && playerSkill != null)
+            if(inputController.IsSkill4Input && prevSkillInput && playerSkill != null)
             {
                 playerSkill.ActivateSkill(3, this);
             }
+
+            //現フレームのスキル入力状態を保存
+            prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input || 
+                inputController.IsSkill3Input || inputController.IsSkill4Input;
         }
 
         /// <summary>
