@@ -24,3 +24,5 @@ MonoBehaviour:
   effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
   skillLevel: 5
   maxSkillLevel: 10
+  passiveAttackMultiplier: 1.2
+  passiveMoveSpeedBuff: 1.2

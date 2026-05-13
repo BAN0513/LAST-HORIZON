@@ -99,10 +99,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
   enemySO: {fileID: 11400000, guid: 5fb6d6923c23f7e41add6f327d1d2769, type: 2}
   enemyAnimatorController: {fileID: 6025648744925135600}
+  forward: {fileID: 2585517044960145431}
+  shortDis: 3
+  mediumDis: 6
+  attackDis: 1.5
   hpSliider: {fileID: 1878319838695366945}
   _weaponController: {fileID: 8104887120502432443}
-  forward: {fileID: 2585517044960145431}
-  attackDis: 1.5
   melee2Probability: 70
 --- !u!114 &6025648744925135600
 MonoBehaviour:
@@ -4851,6 +4853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96ebfb9257b8d343805b152fed005b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  damage: 0
 --- !u!54 &5367454221775748305
 Rigidbody:
   m_ObjectHideFlags: 0

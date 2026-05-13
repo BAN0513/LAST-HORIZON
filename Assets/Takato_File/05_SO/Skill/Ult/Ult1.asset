@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ult1
   m_EditorClassIdentifier: Assembly-CSharp::Takato.UltSkill
   skillName: Ult1
-  skillIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  skillIcon: {fileID: 177594677, guid: 3f0fe70a557b1204fa94daa34f494aaf, type: 3}
   cost: 70
   cooldown: 140
   moveSpeedBuff: 0
@@ -27,3 +27,5 @@ MonoBehaviour:
   moveSpeedDebuffPerLevel: 0.2
   debuffDefValue: 20
   debuffDuration: 5
+  passiveMoveSpeedBuff: 2
+  passiveDefBuff: 2
