@@ -1439,7 +1439,7 @@ PrefabInstance:
       objectReference: {fileID: 746353415}
     - target: {fileID: 251627373082192970, guid: 4a903966bd1d2634b9b674d78eb1e3dc, type: 3}
       propertyPath: BGMVolume
-      value: 0.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 251627373082192970, guid: 4a903966bd1d2634b9b674d78eb1e3dc, type: 3}
       propertyPath: bgmSource
@@ -1784,6 +1784,10 @@ PrefabInstance:
       propertyPath: costText
       value: 
       objectReference: {fileID: 330628587621403911}
+    - target: {fileID: 4319136025616011422, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+      propertyPath: moveSpeed
+      value: 3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 4319136025616011422, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
       propertyPath: skillSelectUI
       value: 
