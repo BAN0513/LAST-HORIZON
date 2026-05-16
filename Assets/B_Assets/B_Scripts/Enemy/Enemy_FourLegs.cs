@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy_FourLegs : Enemy
 {
+    [Header("“G‚ÌUŒ‚‚Ì“–‚½‚è”»’è")]
     [SerializeField] private EnemyAttackRollController[] _weaponController_LeftLeg;
     [SerializeField] private EnemyAttackRollController[] _weaponController_RightLeg;
     [SerializeField] private EnemyAttackRollController[] _weaponController_LeftArm;
@@ -50,11 +51,23 @@ public class Enemy_FourLegs : Enemy
     protected override void Update()
     {
         base.Update();
+
+        if (isAnimation)
+        {
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+        }
+        else
+        {
+            if (agent.velocity.magnitude > 0)
+            {
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+            }
+        }
     }
 
-    protected override void InitAnim()
+    public override void Init()
     {
-        base.InitAnim();
+        base.Init();
     }
 
     protected override void Death()

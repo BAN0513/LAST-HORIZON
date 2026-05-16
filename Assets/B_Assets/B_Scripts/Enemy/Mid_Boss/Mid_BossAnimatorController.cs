@@ -1,13 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Mid_BossAnimatorController : EnemyAnimatorController
 {
     private Mid_Boss mid_Boss;
 
-    int isMelee1Hash;
-    int isMelee2Hash;
-    int isBlockHash;
-    int is360AttackHash;
+    public enum Mid_BossAnimation
+    {
+        Melee1,
+        Melee2,
+        Block,
+        RotationAttack
+    }
+
+    private Dictionary<Mid_BossAnimation, int> mid_BossAnims;
 
     protected override void Start()
     {
@@ -15,24 +21,47 @@ public class Mid_BossAnimatorController : EnemyAnimatorController
 
         mid_Boss = GetComponent<Mid_Boss>();
 
-        isMelee1Hash = Animator.StringToHash("isMelee1");
-        isMelee2Hash = Animator.StringToHash("isMelee2");
-        isBlockHash = Animator.StringToHash("isBlock");
-        is360AttackHash = Animator.StringToHash("is360Attack");
+        mid_BossAnims = new Dictionary<Mid_BossAnimation, int>
+        {
+            {Mid_BossAnimation.Melee1, Animator.StringToHash("isMelee1") },
+            {Mid_BossAnimation.Melee2, Animator.StringToHash("isMelee2") },
+            {Mid_BossAnimation.Block, Animator.StringToHash("isBlock") },
+            {Mid_BossAnimation.RotationAttack, Animator.StringToHash("is360Attack") }
+        };
     }
 
-    protected override void Update()
+    public override void SetBoolAnim(AnimationBase animation, bool isAnim)
     {
-        base.Update();
+        base.SetBoolAnim(animation, isAnim);
+    }
 
-        bool isMelee1 = animator.GetBool(isMelee1Hash);
-        bool isMelee2 = animator.GetBool(isMelee2Hash);
-        bool isBlock  = animator.GetBool(isBlockHash);
-        bool is360Attack = animator.GetBool(is360AttackHash);
+    public void SetBoolAnim(Mid_BossAnimation animation, bool isAnim)
+    {
+        animator.SetBool(mid_BossAnims[animation], isAnim);
+    }
 
-        if (mid_Boss.isMelee1 != isMelee1) animator.SetBool(isMelee1Hash, mid_Boss.isMelee1);
-        if (mid_Boss.isMelee2 != isMelee2) animator.SetBool(isMelee2Hash, mid_Boss.isMelee2);
-        if (mid_Boss.isBlock  != isBlock)  animator.SetBool(isBlockHash,  mid_Boss.isBlock);
-        if (mid_Boss.is360Attack != is360Attack) animator.SetBool(is360AttackHash,mid_Boss.is360Attack);
+    public override void SetTriggerAnim(AnimationBase animation)
+    {
+        base.SetTriggerAnim(animation);
+    }
+
+    public void SetTriggerAnim(Mid_BossAnimation animation)
+    {
+        animator.SetTrigger(mid_BossAnims[animation]);
+    }
+
+    public override void ResetTriggerAnim(AnimationBase animation)
+    {
+        base.ResetTriggerAnim(animation);
+    }
+
+    public void ResetTriggerAnim(Mid_BossAnimation animation)
+    {
+        animator.ResetTrigger(mid_BossAnims[animation]);
+    }
+
+    public override bool CheckCurrentAnim(string name)
+    {
+        return base.CheckCurrentAnim(name);
     }
 }

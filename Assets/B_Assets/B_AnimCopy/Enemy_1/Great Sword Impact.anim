@@ -29711,7 +29711,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 1.2
-    functionName: IsHitAnimEnd
+    functionName: InitAll
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

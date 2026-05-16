@@ -4,20 +4,19 @@ using UnityEngine;
 public class Enemy_1 : Enemy_Humanoid
 {
     [Header("二段目の攻撃に派生する確率")]
-    [Range(0,100)] [SerializeField] private float melee2Probability = 50;
+    [Range(0, 100)][SerializeField] private float melee2Probability = 50;
 
-    //アニメーションで使うやつ
-    public bool isMelee1 { get; private set; }
-    public bool isMelee2 { get; private set; }
+    private Enemy_1AnimatorController enemy_1AnimatorController;
 
     protected override void Start()
     {
         base.Start();
+
+        enemy_1AnimatorController = GetComponent<Enemy_1AnimatorController>();
     }
 
     protected override void Update()
     {
-        if (isDeath || isHit) { return; }
         base.Update();
     }
 
@@ -41,7 +40,7 @@ public class Enemy_1 : Enemy_Humanoid
         //もし後退中なら後退を止める
         if (backMoveCor != null)
         {
-            isBackMove = false;
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
             StopCoroutine(backMoveCor);
         }
 
@@ -51,33 +50,43 @@ public class Enemy_1 : Enemy_Humanoid
         //一定距離近づくと攻撃する
         if (distance <= attackDis)
         {
-            isLookPlayer = false;
-            agent.isStopped = true;
-            isMelee1 = true;
+            LookPlayerChange(false);
+
+            if (!enemy_1AnimatorController.CheckCurrentAnim("Melee2"))
+            {
+                enemy_1AnimatorController.SetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee1);
+            }
         }
     }
 
     //ここから下はAnimator関連の関数
     public void Melee2()
     {
+        enemy_1AnimatorController.ResetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee1);
         int rand = Random.Range(1, 101);
 
         //一定確率で二段目の攻撃に派生する
         if (rand <= melee2Probability && distance <= 3 && dot > 0.3f)
         {
-            isMelee2 = true;
+            enemy_1AnimatorController.SetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee2);
         }
         else
         {
-            InitAnim();
+            Init();
         }
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
-    protected override void InitAnim()
+    public override void Init()
+    {
+        base.Init();
+    }
+
+    public override void InitAnim()
     {
         base.InitAnim();
-        isMelee1 = false;
-        isMelee2 = false;
+
+        enemy_1AnimatorController.ResetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee1);
+        enemy_1AnimatorController.ResetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee2);
     }
 }

@@ -7,8 +7,7 @@ public class Enemy_Humanoid : Enemy
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
 
-    [Header("武器のスクリプト")]
-    [SerializeField] protected EnemyAttackRollController _weaponController;
+    protected EnemyAttackRollController _weaponController;
 
     protected override void Start()
     {
@@ -20,6 +19,8 @@ public class Enemy_Humanoid : Enemy
             hpSliider.minValue = 0;
             hpSliider.value = enemySO.maxHP;
         }
+
+        _weaponController = GetComponentInChildren<EnemyAttackRollController>();
 
         if (_weaponController != null)
         {
@@ -43,7 +44,7 @@ public class Enemy_Humanoid : Enemy
         //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
         if (distance <= enemySO.backActionDis && !isAnimation)
         {
-            if (isBackMove) { return; }
+            if (enemyAnimatorController.CheckCurrentAnim("Walk Back")) { return; }
             backMoveCor = StartCoroutine(BackMove());
         }
     }
@@ -77,29 +78,29 @@ public class Enemy_Humanoid : Enemy
 
         if (agent.velocity.magnitude < 0.1f)
         {
-            isWalking = false;
-            isBackMove = false;
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
         }
         else if (moveDot > 0)
         {
             if (distance >= enemySO.engageDis)
             {
-                isDash = true;
-                isWalking = false;
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
                 SetDashSpeed(); // ダッシュ速度に設定
             }
             else
             {
-                isWalking = true;
-                isDash = false;
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
                 SetWalkSpeed(); // 歩き速度に設定
             }
-            isBackMove = false;
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
         }
         else
         {
-            isWalking = false;
-            isBackMove = true;
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, true);
             SetWalkSpeed(); // 後退も歩き速度で
         }
     }
@@ -116,9 +117,9 @@ public class Enemy_Humanoid : Enemy
         }
     }
 
-    protected override void InitAnim()
+    public override void Init()
     {
-        base.InitAnim();
+        base.Init();
     }
 
     protected override void Death()
@@ -139,7 +140,7 @@ public class Enemy_Humanoid : Enemy
         //もし後退中なら後退を止める
         if (backMoveCor != null)
         {
-            isBackMove = false;
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
             StopCoroutine(backMoveCor);
         }
     }

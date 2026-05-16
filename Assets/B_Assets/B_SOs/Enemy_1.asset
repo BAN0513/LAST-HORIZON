@@ -22,8 +22,8 @@ MonoBehaviour:
   searchDistance: 100
   contactDistance: 100
   engageDis: 5
-  backActionDis: 2
-  backMoveDis: 4
+  backActionDis: 1
+  backMoveDis: 3
   attackInitProbability: 20
   attackUpProbability: 20
   attackCoolDown: 3

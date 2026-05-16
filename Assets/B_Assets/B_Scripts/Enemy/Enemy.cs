@@ -2,14 +2,21 @@ using System.Collections;
 using Takato;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
     protected Transform target;
     protected NavMeshAgent agent;
+    public NavMeshAgent Agent
+    {
+        get { return agent; }
+        set { agent = value; }
+    }
     protected PlayerController playerController;
     protected PlayerAnimationController playerAnimationController;
+    protected EnemyAnimatorController enemyAnimatorController;
 
     protected int rand;
     protected float lotteryTime;
@@ -19,9 +26,6 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
-
-    [Header("敵のAnimatorController")]
-    [SerializeField] protected EnemyAnimatorController enemyAnimatorController;
 
     [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
     [SerializeField] protected Transform forward;
@@ -86,16 +90,10 @@ public abstract class Enemy : MonoBehaviour
     //接敵中か（今後常に敵対状態になるかも）
     public bool isContact {  get; protected set; }
 
-    //アニメーション用
-    public bool isWalking {  get; protected set; }
-    public bool isDeath { get; protected set; }
-    public bool isHit { get; protected set; }
-    public bool isBackMove { get; protected set; }
-    public bool isDash { get; protected set; }
-
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        enemyAnimatorController = GetComponent<EnemyAnimatorController>();
 
         target = GameObject.FindWithTag("Player").transform;
         playerController = target.GetComponent<PlayerController>();
@@ -120,6 +118,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (enemyAnimatorController.CheckCurrentAnim("Death") || enemyAnimatorController.CheckCurrentAnim("Hit")) { return; }
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -129,13 +128,12 @@ public abstract class Enemy : MonoBehaviour
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
 
+        if (isAnimation) { return; }
         //交戦時の処理
         EngageMoveControl();
 
         //追跡するかしないかを調整する関数
         AgentContact();
-
-        Debug.Log(agent.speed);
     }
 
     private void DotPlayer()
@@ -171,6 +169,7 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void LookPlayerChange(bool isLook)
     {
         isLookPlayer = isLook;
+        isAnimation = true;
         agent.isStopped = true;
     }
 
@@ -256,14 +255,17 @@ public abstract class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-            isHit = false;
-            InitAnim();
+            Init();
             Death();
         }
         else
         {
-            isHit = true;
-            InitAnim();
+            if (!enemyAnimatorController.CheckCurrentAnim("Hit"))
+            {
+                enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
+            }
+
+            Init();
             agent.isStopped = true;
         }
     }
@@ -278,9 +280,9 @@ public abstract class Enemy : MonoBehaviour
             moveSpeedMultiplier = value;
 
             // 必ず現在の速度を再設定
-            if (isDash)
+            if (enemyAnimatorController.CheckCurrentAnim("Running"))
                 SetDashSpeed();
-            else if (isWalking || isBackMove)
+            else if (enemyAnimatorController.CheckCurrentAnim("Walking") || enemyAnimatorController.CheckCurrentAnim("Walk Back"))
                 SetWalkSpeed();
             else
                 SetWalkSpeed(); // 停止時もwalk速度
@@ -305,10 +307,11 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Death()
     {
         agent.isStopped = true;
-        isDeath = true;
+        InitAnim();
+        enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
-    protected virtual void InitAnim()
+    public virtual void Init()
     {
         isLookPlayer = true;
         agent.stoppingDistance = enemySO.stoopingDis;
@@ -318,6 +321,17 @@ public abstract class Enemy : MonoBehaviour
         agent.isStopped = false;
         isAction = false;
         isAnimation = false;
+    }
+
+    public virtual void InitAnim()
+    {
+        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
+    }
+
+    public virtual void InitAll()
+    {
+        Init();
+        InitAnim();
     }
 
     //向き補正
@@ -341,12 +355,6 @@ public abstract class Enemy : MonoBehaviour
     public void AttackJudgmentEnd(EnemyAttackRollController _weaponController)
     {
         _weaponController.SetColliderActive(false);
-    }
-
-    public void IsHitAnimEnd()
-    {
-        isHit = false;
-        agent.isStopped = false;
     }
 
     public void DeathAnimEnd()

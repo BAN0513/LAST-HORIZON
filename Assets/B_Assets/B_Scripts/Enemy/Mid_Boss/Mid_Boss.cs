@@ -10,11 +10,7 @@ public class Mid_Boss : Enemy_Humanoid
 
     private EnemyShieldController _shieldController;
 
-    //アニメーションで使うやつ
-    public bool isMelee1 { get; private set; }
-    public bool isMelee2 { get; private set; }
-    public bool isBlock { get; private set; }
-    public bool is360Attack {  get; private set; }
+    private Mid_BossAnimatorController mid_BossAnimatorController;
 
     protected override void Start()
     {
@@ -22,28 +18,30 @@ public class Mid_Boss : Enemy_Humanoid
 
         _shieldController = GetComponentInChildren<EnemyShieldController>();
         _shieldController.Enemy = this;
+
+        mid_BossAnimatorController = GetComponent<Mid_BossAnimatorController>();
     }
 
     protected override void Update()
     {
-        if (isDeath || isHit) { return; }
         base.Update();
         CheckPlayerAttack();
     }
 
     private void CheckPlayerAttack()
     {
+        if (isAnimation || mid_BossAnimatorController.CheckCurrentAnim("Hit")) { return; }
         float blockDistance = 3;  //この値より距離が遠いとブロックしない
         float blockDot = 0.5f;    //この値よりDotが低いとブロックしない
 
-        if (isAnimation) 
+        if (isAnimation)
         {
-            isBlock = false;
+            mid_BossAnimatorController.SetBoolAnim(Mid_BossAnimatorController.Mid_BossAnimation.Block, false);
         }
         else if (playerAnimationController.IsAttackMove && distance <= blockDistance && dot > blockDot)
         {
 
-            isBlock = true;
+            mid_BossAnimatorController.SetBoolAnim(Mid_BossAnimatorController.Mid_BossAnimation.Block, true);
             agent.isStopped = true;
             isLookPlayer = false;
             _shieldController.SetColliderActive(true);
@@ -70,7 +68,7 @@ public class Mid_Boss : Enemy_Humanoid
         //もし後退中なら後退を止める
         if (backMoveCor != null)
         {
-            isBackMove = false;
+            mid_BossAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
             StopCoroutine(backMoveCor);
         }
 
@@ -80,19 +78,18 @@ public class Mid_Boss : Enemy_Humanoid
         //一定距離近づくと攻撃する
         if (distance <= attackDis)
         {
-            agent.isStopped = true;
-            isLookPlayer = false;
+            LookPlayerChange(false);
             rand = 0;
 
             float attackDot = 0.4f;
 
-            if (dot >= attackDot && !is360Attack)
+            if (dot >= attackDot && !mid_BossAnimatorController.CheckCurrentAnim("RotationAttack"))
             {
-                isMelee1 = true;
+                mid_BossAnimatorController.SetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.Melee1);
             }
-            else if (dot < attackDot && !isMelee1)
+            else if (dot < attackDot && !mid_BossAnimatorController.CheckCurrentAnim("Melee1"))
             {
-                is360Attack = true;
+                mid_BossAnimatorController.SetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.RotationAttack);
             }
         }
     }
@@ -109,33 +106,43 @@ public class Mid_Boss : Enemy_Humanoid
         {
             if (dot >= secondAttackDot)
             {
-                isMelee2 = true;
+                mid_BossAnimatorController.SetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.Melee2);
             }
             else
             {
-                is360Attack = true;
+                mid_BossAnimatorController.SetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.RotationAttack);
             }
         }
         else
         {
-            InitAnim();
+            InitAll();
         }
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
-    protected override void InitAnim()
+    public override void Init()
+    {
+        base.Init();
+    }
+
+    public override void InitAnim()
     {
         base.InitAnim();
-        isMelee1 = false;
-        isMelee2 = false;
-        is360Attack = false;
-        isBlock = false;
+    }
+
+    public override void InitAll()
+    {
+        base.InitAll();
+        mid_BossAnimatorController.ResetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.Melee1);
+        mid_BossAnimatorController.ResetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.Melee2);
+        mid_BossAnimatorController.ResetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.RotationAttack);
+        mid_BossAnimatorController.ResetTriggerAnim(Mid_BossAnimatorController.Mid_BossAnimation.Block);
     }
 
     public void BlockEnd()
     {
         agent.isStopped = false;
-        isBlock = false;
+        mid_BossAnimatorController.SetBoolAnim(Mid_BossAnimatorController.Mid_BossAnimation.Block, false);
         isLookPlayer = true;
         _shieldController.SetColliderActive(false);
     }

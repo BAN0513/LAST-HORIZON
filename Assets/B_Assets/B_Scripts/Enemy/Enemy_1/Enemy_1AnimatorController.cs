@@ -1,30 +1,57 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy_1AnimatorController : EnemyAnimatorController
 {
     private Enemy_1 enemy_1;
 
-    int isMelee1Hash;
-    int isMelee2Hash;
+    public enum Enemy_1Animation
+    {
+        Melee1,
+        Melee2
+    }
+
+    private Dictionary<Enemy_1Animation, int> enemy_1Anims;
 
     protected override void Start()
     {
         base.Start();
-
         enemy_1 = GetComponent<Enemy_1>();
 
-        isMelee1Hash   = Animator.StringToHash("isMelee1");
-        isMelee2Hash   = Animator.StringToHash("isMelee2");
+        enemy_1Anims = new Dictionary<Enemy_1Animation, int>
+        {
+            {Enemy_1Animation.Melee1, Animator.StringToHash("isMelee1") },
+            {Enemy_1Animation.Melee2, Animator.StringToHash("isMelee2") }
+        };
     }
 
-    protected override void Update()
+    public override void SetBoolAnim(AnimationBase animation, bool isAnim)
     {
-        base.Update();
+        base.SetBoolAnim(animation, isAnim);
+    }
 
-        bool isMelee1   = animator.GetBool(isMelee1Hash);
-        bool isMelee2   = animator.GetBool(isMelee2Hash);
+    public void SetBoolAnim(Enemy_1Animation animation, bool isAnim)
+    {
+        animator.SetBool(enemy_1Anims[animation], isAnim);
+    }
 
-        if (enemy_1.isMelee1 != isMelee1)     animator.SetBool(isMelee1Hash, enemy_1.isMelee1);
-        if (enemy_1.isMelee2 != isMelee2)     animator.SetBool(isMelee2Hash, enemy_1.isMelee2);
+    public override void SetTriggerAnim(AnimationBase animation)
+    {
+        base.SetTriggerAnim(animation);
+    }
+
+    public void SetTriggerAnim(Enemy_1Animation animation)
+    {
+        animator.SetTrigger(enemy_1Anims[animation]);
+    }
+
+    public void ResetTriggerAnim(Enemy_1Animation animation)
+    {
+        animator.ResetTrigger(enemy_1Anims[animation]);
+    }
+
+    public override bool CheckCurrentAnim(string name)
+    {
+        return base.CheckCurrentAnim(name);
     }
 }

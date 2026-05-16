@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAnimatorController : MonoBehaviour
@@ -5,39 +6,63 @@ public class EnemyAnimatorController : MonoBehaviour
     protected Enemy enemy;
     protected Animator animator;
 
+    public enum AnimationBase
+    {
+        Walk,
+        BackMove,
+        Dash,
+        Death,
+        Hit
+    }
+
     int isWalkingHash;
-    int isDeathHash;
-    int isHitHash;
     int isBackMoveHash;
     int isDashHash;
+    int isDeathHash;
+    int isHitHash;
+
+    protected Dictionary<AnimationBase, int> anims;
 
     protected virtual void Start()
     {
         enemy = GetComponent<Enemy>();
         animator = GetComponent<Animator>();
 
-        //ƒnƒbƒVƒ…‰»
-        isWalkingHash  = Animator.StringToHash("isWalking");
-        isDeathHash    = Animator.StringToHash("isDeath");
-        isHitHash      = Animator.StringToHash("isHit");
-        isBackMoveHash = Animator.StringToHash("isBackMove");
-        isDashHash     = Animator.StringToHash("isDash");
+        anims = new Dictionary<AnimationBase, int>()
+        {
+            { AnimationBase.Walk, Animator.StringToHash("isWalking") },
+            { AnimationBase.BackMove, Animator.StringToHash("isBackMove") },
+            { AnimationBase.Dash, Animator.StringToHash("isDash") },
+            { AnimationBase.Death, Animator.StringToHash("isDeath") },
+            { AnimationBase.Hit,  Animator.StringToHash("isHit") },
+        };
     }
 
     protected virtual void Update()
     {
-        bool isWalking  = animator.GetBool(isWalkingHash);
-        bool isDeath    = animator.GetBool(isDeathHash);
-        bool isHit      = animator.GetBool(isHitHash);
-        bool isBackMove = animator.GetBool(isBackMoveHash);
-        bool isDash     = animator.GetBool(isDashHash);
-
-        if (enemy.isWalking != isWalking)   animator.SetBool(isWalkingHash, enemy.isWalking);
-        if (enemy.isDeath != isDeath)       animator.SetBool(isDeathHash, enemy.isDeath);
-        if (enemy.isHit != isHit)           animator.SetBool(isHitHash,enemy.isHit);
-        if (enemy.isBackMove != isBackMove) animator.SetBool(isBackMoveHash, enemy.isBackMove);
-        if (enemy.isDash != isDash)         animator.SetBool(isDashHash, enemy.isDash);
     }
 
+    public virtual void SetBoolAnim(AnimationBase animation, bool isAnim)
+    {
+        animator.SetBool(anims[animation], isAnim);
+    }
 
+    public virtual void SetTriggerAnim(AnimationBase animation)
+    {
+        animator.SetTrigger(anims[animation]);
+    }
+
+    public virtual void ResetTriggerAnim(AnimationBase animation)
+    {
+        animator.ResetTrigger(anims[animation]);
+    }
+
+    public virtual bool CheckCurrentAnim(string name)
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(name))
+        {
+            return true;
+        }
+        return false;
+    }
 }
