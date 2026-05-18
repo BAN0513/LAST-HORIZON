@@ -43,8 +43,18 @@ namespace Takato
             isAttacking = false; // UŒ‚I—¹
         }
 
+        /// <summary>
+        /// “G‚ÉUŒ‚‚ª“–‚½‚Á‚½‚Ìˆ—
+        /// </summary>
         private void OnTriggerEnter(Collider other)
         {
+            SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
+
+            if(soundmanager != null)
+            {
+                soundmanager.PlaySE(1); // UŒ‚ƒqƒbƒg‚ÌSE‚ğÄ¶
+            }
+
             if (!isAttacking) return; // UŒ‚’†‚Ì‚İ”»’è
 
             // ‚±‚±‚Å“G‚©‚Ç‚¤‚©”»’è‚µAƒ_ƒ[ƒWˆ—

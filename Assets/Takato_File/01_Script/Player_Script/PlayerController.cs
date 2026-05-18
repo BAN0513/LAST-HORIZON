@@ -79,6 +79,16 @@ namespace Takato
             }
             prevInventoryOpen = inputController.IsInventoryInput;
 
+
+            if(hp < maxHp/3)
+            {
+                SoundManager soundManager = FindAnyObjectByType<SoundManager>();
+                if (soundManager != null)
+                {
+                    soundManager.PlaySE(3); // HPが1/3以下になったらBGMを切り替える
+                }
+            }
+            
             if (hp <= 0)
             {
                 Die(); // HPが0以下になったら死亡処理を行う
@@ -284,6 +294,12 @@ namespace Takato
         /// </summary>
         public void TakeDamage(int damage)
         {
+            SoundManager soundManager = FindAnyObjectByType<SoundManager>();
+            if (soundManager != null)
+            {
+                soundManager.PlaySE(1); // ダメージを受けたときのSEを再生
+            }
+
             int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate)); // ダメージカット率を適用
             hp -= finalDamage;
             hpBar.SetHP(hp, maxHp); // HPバーを更新

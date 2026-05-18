@@ -42,6 +42,12 @@ public class SkillSelectUI : MonoBehaviour
     /// </summary>
     public void ShowUI(bool show)
     {
+        SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
+        if(soundmanager != null)
+        {
+           soundmanager.PlaySE(5); // UI表示切替のSEを再生
+        }
+
         if (skillSelectCanvas != null)
         {
             skillSelectCanvas.enabled = show; // Canvasの有効/無効でUI全体の表示を切り替え
@@ -188,6 +194,12 @@ public class SkillSelectUI : MonoBehaviour
     /// </summary>
     public void OnSkillIconDropped(SkillIconUI iconUI, int slotIndex)
     {
+        SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
+        if(soundmanager != null)
+        {
+            soundmanager.PlaySE(4); // ドロップ成功のSEを再生
+        }
+
         int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(iconUI.Skill);
         if (ownedIndex < 0) return;
         bringSkill.SwapSkillWithPlayerSkill(ownedIndex, slotIndex, playerSkill);

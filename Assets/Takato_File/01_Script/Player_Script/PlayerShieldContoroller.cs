@@ -44,6 +44,12 @@ namespace Takato
         /// </summary>
         public void ReceiveAttack(int damage, PlayerController player)
         {
+            SoundManager soundManager = FindAnyObjectByType<SoundManager>();
+            if (soundManager != null)
+            {
+                soundManager.PlaySE(2);//2番のSEを再生
+            }
+
             int reducedDamage = Mathf.RoundToInt(damage * (1f - damageCutRate));
             player.TakeDamage(reducedDamage);
             Debug.Log($"シールドでダメージカット: {damage} → {reducedDamage}");
