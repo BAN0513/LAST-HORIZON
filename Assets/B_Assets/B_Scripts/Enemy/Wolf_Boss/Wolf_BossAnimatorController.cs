@@ -8,6 +8,7 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
     public enum WolfAnimation
     {
         Attack_1,
+        Attack_2,
         DashAttackBefore,
         RotationAttack,
         TailAttack,
@@ -23,11 +24,12 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
 
         wolfAnims = new System.Collections.Generic.Dictionary<WolfAnimation, int>
         {
-            {WolfAnimation.Attack_1,  Animator.StringToHash("isAttack_1") },
+            {WolfAnimation.Attack_1,         Animator.StringToHash("isAttack_1")},
+            {WolfAnimation.Attack_2,         Animator.StringToHash("isAttack_2") },
             {WolfAnimation.DashAttackBefore, Animator.StringToHash("isDashAttackBefore") },
-            {WolfAnimation.RotationAttack, Animator.StringToHash("isRotationAttack") },
-            {WolfAnimation.TailAttack, Animator.StringToHash("isTailAttack") },
-            {WolfAnimation.DownBefore, Animator.StringToHash("isDownBefore") }
+            {WolfAnimation.RotationAttack,   Animator.StringToHash("isRotationAttack") },
+            {WolfAnimation.TailAttack,       Animator.StringToHash("isTailAttack") },
+            {WolfAnimation.DownBefore,       Animator.StringToHash("isDownBefore") }
         };
     }
 

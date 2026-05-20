@@ -15,6 +15,11 @@ public abstract class Enemy : MonoBehaviour
         set { agent = value; }
     }
     protected PlayerController playerController;
+    protected CharacterController playerCharacterController;
+    public CharacterController PlayerCharacterController
+    {
+        get { return playerCharacterController; }
+    }
     protected PlayerAnimationController playerAnimationController;
     protected EnemyAnimatorController enemyAnimatorController;
 
@@ -90,14 +95,20 @@ public abstract class Enemy : MonoBehaviour
     //ê⁄ìGíÜÇ©Åiç°å„èÌÇ…ìGëŒèÛë‘Ç…Ç»ÇÈÇ©Ç‡Åj
     public bool isContact {  get; protected set; }
 
-    protected virtual void Start()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         enemyAnimatorController = GetComponent<EnemyAnimatorController>();
 
         target = GameObject.FindWithTag("Player").transform;
         playerController = target.GetComponent<PlayerController>();
+        playerCharacterController = target.GetComponent<CharacterController>();
         playerAnimationController = target.GetComponent<PlayerAnimationController>();
+    }
+
+    protected virtual void Start()
+    {
+
 
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -313,7 +324,6 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        isLookPlayer = true;
         agent.stoppingDistance = enemySO.stoopingDis;
         lotteryTime = enemySO.attackCoolDown;
         attackProbability = enemySO.attackInitProbability;

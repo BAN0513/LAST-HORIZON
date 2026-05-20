@@ -14,7 +14,7 @@ public class ChargeAttackCheckHit : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!wolf.wolf_Anim.CheckCurrentAnim("DashAttack")) { return; }
-        if (other.CompareTag("Shield"))
+        if (other.CompareTag("Wall"))
         {
             wolf.Init();
         }

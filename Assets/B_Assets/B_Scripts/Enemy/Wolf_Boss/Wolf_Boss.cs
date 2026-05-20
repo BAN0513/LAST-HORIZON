@@ -15,6 +15,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
     protected override void Update()
     {
+        //Debug.Log(distance);
         if (isKnockBack)
         {
             transform.position += Vector3.Normalize(-transform.forward) * 5 * Time.deltaTime;
@@ -36,7 +37,14 @@ public class Wolf_Boss : Enemy_FourLegs
         switch (rand)
         {
             case int r when (r > 0 && r <= attackProbability):
-                RotationAttack();
+                if (dot >= 0.8f)
+                {
+                    Attack_1();
+                }
+                else
+                {
+                    RotationAttack();
+                }
                 break;
             default:
                 DoNotAttack();
@@ -47,9 +55,21 @@ public class Wolf_Boss : Enemy_FourLegs
     protected override void MediumDistanceAction()
     {
         switch (rand)
-        {
+        {          
             case int r when (r > 0 && r <= attackProbability):
-                Attack_1();
+                if (r <= attackProbability / 2)
+                {
+                    isLookPlayer = true;
+
+                    if (dot >= 0.9f)
+                    {
+                        Attack_2();
+                    }
+                }
+                else
+                {
+                    agent.stoppingDistance = shortDis;
+                }
                 break;
             default:
                 DoNotAttack();
@@ -70,21 +90,28 @@ public class Wolf_Boss : Enemy_FourLegs
         }
     }
 
-    private void Attack_1()
-    {
-        agent.stoppingDistance = 0;
-
-        if (distance <= 10 && dot >= 0.7f)
-        {
-            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_1);
-            LookPlayerChange(false);
-        }
-    }
 
     private void RotationAttack()
     {
         wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.RotationAttack);
         LookPlayerChange(false);
+    }
+
+    private void Attack_1()
+    {
+        wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_1);
+        LookPlayerChange(false);
+    }
+
+    private void Attack_2()
+    {
+        agent.stoppingDistance = 0;
+
+        if (distance <= 10 && dot >= 0.7f)
+        {
+            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_2);
+            LookPlayerChange(false);
+        }
     }
 
     private void DashAttackBefore()
@@ -108,6 +135,16 @@ public class Wolf_Boss : Enemy_FourLegs
     {
         agent.enabled = true;
         base.Init();
+    }
+
+    public override void InitAnim()
+    {
+        base.InitAnim();
+    }
+
+    public override void InitAll()
+    {
+        base.InitAll();
     }
 
     public void DashAttak()

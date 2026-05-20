@@ -18,7 +18,7 @@ MonoBehaviour:
   walkMoveSpeed: 1
   def: 50
   stoopingDis: 8
-  lookRotationSpeed: 3
+  lookRotationSpeed: 1
   searchDistance: 100
   contactDistance: 100
   engageDis: 100

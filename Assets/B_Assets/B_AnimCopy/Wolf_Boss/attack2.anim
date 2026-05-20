@@ -298832,7 +298832,7 @@ AnimationClip:
     intParameter: 3
     messageOptions: 0
   - time: 2.8666666
-    functionName: InitAnim
+    functionName: Init
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

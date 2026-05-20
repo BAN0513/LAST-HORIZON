@@ -120,6 +120,7 @@ public class Enemy_Humanoid : Enemy
     public override void Init()
     {
         base.Init();
+        isLookPlayer = true;
     }
 
     protected override void Death()

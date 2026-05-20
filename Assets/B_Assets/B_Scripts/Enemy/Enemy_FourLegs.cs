@@ -28,6 +28,7 @@ public class Enemy_FourLegs : Enemy
     protected override void Start()
     {
         base.Start();
+        isLookPlayer = false;
 
         _weaponControllers = new Dictionary<BodyPart, EnemyAttackRollController[]>()
         {
@@ -61,6 +62,7 @@ public class Enemy_FourLegs : Enemy
             if (agent.velocity.magnitude > 0)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+                isLookPlayer = true;
             }
         }
     }
@@ -68,6 +70,17 @@ public class Enemy_FourLegs : Enemy
     public override void Init()
     {
         base.Init();
+        isLookPlayer = false;
+    }
+
+    public override void InitAnim()
+    {
+        base.InitAnim();
+    }
+
+    public override void InitAll()
+    {
+        base.InitAll();
     }
 
     protected override void Death()

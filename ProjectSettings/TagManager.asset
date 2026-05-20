@@ -9,6 +9,7 @@ TagManager:
   - Warps
   - Shield
   - Pillar
+  - Wall
   layers:
   - Default
   - TransparentFX
