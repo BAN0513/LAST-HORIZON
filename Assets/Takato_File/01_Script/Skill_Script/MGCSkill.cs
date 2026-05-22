@@ -140,7 +140,7 @@ namespace Takato
         /// </summary>
         public void SetSkillLevel(int level)
         {
-            skillLevel = Mathf.Clamp(level, 1, maxSkillLevel);
+            skillLevel = Mathf.Clamp(level, 1, maxSkillLevel); // ƒŒƒxƒ‹‚ğ1‚©‚çmaxSkillLevel‚Ì”ÍˆÍ‚É§ŒÀ
         }
     }
 }

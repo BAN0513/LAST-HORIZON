@@ -52,18 +52,27 @@ namespace Takato
             IsBackMove = moveInput.y < 0;
         }
 
+        /// <summary>
+        /// ジャンプアニメーションの状態を更新
+        /// </summary>
         public void SetJump(bool isJump)
         {
             IsJumpMove = isJump;
             animator.SetBool("IsJumpMove", IsJumpMove);
         }
 
+        /// <summary>
+        /// 防御アニメーションの状態を更新
+        /// </summary>
         public void SetBlock(bool isBlock)
         {
             IsBlockMove = isBlock;
             animator.SetBool("IsBlockMove", IsBlockMove);
         }
 
+        /// <summary>
+        /// 攻撃アニメーションの状態を更新
+        /// </summary>
         public void SetAttack(bool isAttack)
         {
             IsAttackMove = isAttack;
