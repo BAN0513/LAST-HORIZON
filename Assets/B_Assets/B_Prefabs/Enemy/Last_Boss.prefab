@@ -121,11 +121,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Last_Boss
   enemySO: {fileID: 11400000, guid: f2361f2cc16997545919cd6c73f390ff, type: 2}
-  enemyAnimatorController: {fileID: 8082187950281949759}
   forward: {fileID: 2585517044960145431}
   shortDis: 3
   mediumDis: 6
   attackDis: 1.5
+  hpSliider: {fileID: 0}
 --- !u!114 &8082187950281949759
 MonoBehaviour:
   m_ObjectHideFlags: 0
