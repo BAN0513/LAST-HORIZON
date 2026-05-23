@@ -6,6 +6,8 @@ public class Wolf_Boss : Enemy_FourLegs
     public Wolf_BossAnimatorController wolf_Anim;
 
     private bool isKnockBack = false;
+    private float reflectionSpeed = 5;
+    private Vector3 dir;
 
     protected override void Start()
     {
@@ -15,7 +17,6 @@ public class Wolf_Boss : Enemy_FourLegs
 
     protected override void Update()
     {
-        //Debug.Log(distance);
         if (isKnockBack)
         {
             transform.position += Vector3.Normalize(-transform.forward) * 5 * Time.deltaTime;
@@ -29,6 +30,22 @@ public class Wolf_Boss : Enemy_FourLegs
         {
             transform.position += Vector3.Normalize(transform.forward) * 10 * Time.deltaTime;
         }
+        else if (wolf_Anim.CheckCurrentAnim("RetreatAfter"))
+        {
+            transform.position += Vector3.Normalize(-transform.forward) * 10 * Time.deltaTime;
+        }
+
+        if (wolf_Anim.CheckCurrentAnim("Reflection"))
+        {
+            if (dir != Vector3.zero)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    Time.deltaTime * reflectionSpeed
+                    );
+            }
+        }
     }
 
     protected override void ShortDistanceAction()
@@ -39,7 +56,7 @@ public class Wolf_Boss : Enemy_FourLegs
             case int r when (r > 0 && r <= attackProbability):
                 if (dot >= 0.8f)
                 {
-                    Attack_1();
+                    Retreat();
                 }
                 else
                 {
@@ -103,6 +120,12 @@ public class Wolf_Boss : Enemy_FourLegs
         LookPlayerChange(false);
     }
 
+    private void Retreat()
+    {
+        wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Retreat);
+        LookPlayerChange(false);
+    }
+
     private void Attack_2()
     {
         agent.stoppingDistance = 0;
@@ -125,6 +148,14 @@ public class Wolf_Boss : Enemy_FourLegs
         //çUåÇÇ∂Ç·Ç»Ç©Ç¡ÇΩÇÁçUåÇÇÃämó¶Çè„Ç∞ÇÈ
         isAction = false;
         attackProbability += enemySO.attackUpProbability;
+
+        if (dot <= 0)
+        {
+            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Reflection);
+            LookPlayerChange(false);
+            dir = target.position - transform.position;
+            dir.y = 0;
+        }
     }
 
 

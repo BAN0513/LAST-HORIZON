@@ -12,7 +12,9 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         DashAttackBefore,
         RotationAttack,
         TailAttack,
-        DownBefore
+        DownBefore,
+        Reflection,
+        Retreat
     }
     private Dictionary<WolfAnimation, int> wolfAnims;
 
@@ -29,7 +31,9 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
             {WolfAnimation.DashAttackBefore, Animator.StringToHash("isDashAttackBefore") },
             {WolfAnimation.RotationAttack,   Animator.StringToHash("isRotationAttack") },
             {WolfAnimation.TailAttack,       Animator.StringToHash("isTailAttack") },
-            {WolfAnimation.DownBefore,       Animator.StringToHash("isDownBefore") }
+            {WolfAnimation.DownBefore,       Animator.StringToHash("isDownBefore") },
+            {WolfAnimation.Reflection,       Animator.StringToHash("isReflection") },
+            {WolfAnimation.Retreat,         Animator.StringToHash("isRetreat") }
         };
     }
 
