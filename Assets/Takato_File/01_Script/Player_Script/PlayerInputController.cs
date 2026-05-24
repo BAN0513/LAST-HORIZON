@@ -20,6 +20,7 @@ namespace Takato
         public bool IsSkill4Input { get; private set; }  //プレイヤーのアルティメットスキル入力を格納するプロパティ
         public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
         public bool IsInventoryInput { get; private set; } // プレイヤーのインベントリ入力を格納するプロパティ
+        public bool IsCharChange { get; private set; } // プレイヤーのキャラチェンジ入力を格納するプロパティ
 
         // 内部バックフィールド
         private bool isLookEnabled = false;
@@ -101,6 +102,11 @@ namespace Takato
             playerInputActions.Player.Inventory.started += context => IsInventoryInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント
             playerInputActions.Player.Inventory.performed += context => IsInventoryInput = context.ReadValueAsButton(); // 入力が実行されたときのイベント
             playerInputActions.Player.Inventory.canceled += context => IsInventoryInput = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //CharChange入力イベント登録
+            playerInputActions.Player.CharChange.started += context => IsCharChange = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.CharChange.performed += context => IsCharChange = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.CharChange.canceled += context => IsCharChange = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>
@@ -165,9 +171,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// UI アクションマップを有効/無効にします（UI表示時に有効にする）。
-        /// デフォルトでは UI を有効にしても Inventory アクションは無効化しません。
-        /// 必要に応じて keepInventory を false にして UI 表示時に Inventory を無効化できます。
+        /// UI アクションマップを有効/無効にします。
         /// </summary>
         public void SetUIEnabled(bool enabled, bool keepInventory = true)
         {
@@ -196,7 +200,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// Inventory アクションだけを有効/無効にします（UI開閉に依存させたくない場合に使用）。
+        /// Inventory アクションだけを有効/無効にします。
         /// </summary>
         public void SetInventoryEnabled(bool enabled)
         {

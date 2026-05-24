@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Takato
 {
+    /// <summary>
+    ///プレイヤーを管理するクラス
+    /// </summary>
     public class PlayerController : MonoBehaviour
     {
         [Header("(プレイヤー関連のステータス)")]
@@ -24,15 +27,16 @@ namespace Takato
         [SerializeField] private float damageCutRate;
         [Header("Skill Select UI")]
         [SerializeField] private SkillSelectUI skillSelectUI;
-        [Header("Look Orbit Controller(Cinemachineカメラ入れてください)")]
-        [SerializeField] private Behaviour lookOrbitController; 
+
 
         private PlayerInputController inputController;　// プレイヤーの入力を管理するクラスのインスタンス
         private CharacterController characterController; // プレイヤーの移動を管理するCharacterControllerコンポーネントのインスタンス
         private PlayerAnimationController animationController;// プレイヤーのアニメーションを管理するクラスのインスタンス
         private PlayerWeaponController weaponController; // プレイヤーの攻撃を管理するクラスのインスタンス
         private PlayerShieldContoroller shieldController; // プレイヤーの防御を管理するクラスのインスタンス
-        private PlayerSkill playerSkill;
+        private PlayerSkill playerSkill;                  // プレイヤーのスキルを管理するクラスのインスタンス
+        private CharacterChangeController characterChangeController; // キャラクター切り替えを管理するクラスのインスタンス
+        private Transform cameraTransform; // カメラのTransform
 
         private float verticalVelocity; // ジャンプと重力の処理に使用する垂直速度
         private int hp;                 // プレイヤーの現在のHP
@@ -44,6 +48,9 @@ namespace Takato
         //スキル発動ボタンを押された時の判定をするための前フレームのスキル入力状態を管理するフラグ
         private bool prevSkillInput = false;
 
+        // キャラ切替のエッジ判定用フラグ
+        private bool prevCharChange = false;
+
         private void Awake()
         {
             inputController = GetComponent<PlayerInputController>();
@@ -52,6 +59,14 @@ namespace Takato
             weaponController = GetComponentInChildren<PlayerWeaponController>();
             shieldController = GetComponentInChildren<PlayerShieldContoroller>();
             playerSkill= GetComponent<PlayerSkill>();
+            characterChangeController = GetComponent<CharacterChangeController>();
+
+            // カメラのTransformを取得
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                cameraTransform = mainCamera.transform;
+            }
         }
 
         private void Start()
@@ -128,9 +143,18 @@ namespace Takato
                 playerSkill.ActivateSkill(3, this);
             }
 
+            // 操作するキャラクターを入れ替える処理（キー押下の瞬間のみ実行）
+            if (inputController.IsCharChange && !prevCharChange)
+            {
+                characterChangeController?.NextCharacter(); // NextCharacter を呼ぶ（インデックスを進める）
+            }
+
             //現フレームのスキル入力状態を保存
             prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input || 
                 inputController.IsSkill3Input || inputController.IsSkill4Input;
+
+            // キャラ切替の前フレーム状態を保存
+            prevCharChange = inputController.IsCharChange;
         }
 
         /// <summary>
@@ -148,12 +172,6 @@ namespace Takato
             // Look アクションも確実に切る
             inputController.IsLookEnabled = !isSkillUIOpen;
 
-            // Cinemachine 側の Look を無効化
-            if (lookOrbitController != null)
-            {
-                lookOrbitController.enabled = !isSkillUIOpen;
-            }
-
             // カーソルのロックと表示を切り替える
             if (isSkillUIOpen)
             {
@@ -168,24 +186,8 @@ namespace Takato
         }
 
         /// <summary>
-        /// LateUpdateは、Updateの後に呼び出されるため、プレイヤーの移動やアニメーションが更新された後にカメラの向きを調整することができる。
-        /// </summary>
-        private void LateUpdate()
-        {
-            // 死亡またはスキル選択UIが開いている場合は視点操作をスキップ
-            if (isDead || isSkillUIOpen) return;
-
-            if (Camera.main == null) return;
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0; // 水平面上の方向に制限
-            if (cameraForward.sqrMagnitude > 0.01f)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cameraForward), Time.deltaTime * 10f);
-            }
-        }
-
-        /// <summary>
         /// プレイヤーの移動とジャンプを処理するメソッド
+        /// （カメラ基準の移動）
         /// </summary>
         private void Move()
         {
@@ -213,10 +215,24 @@ namespace Takato
             Vector2 moveDirection = inputController.MoveInput;
             float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed; // 防御中は移動速度を低下
 
-            // プレイヤーの向いている方向に移動
-            Vector3 forward = transform.forward;
-            Vector3 right = transform.right;
-            Vector3 movement = (forward * moveDirection.y + right * moveDirection.x) * currentMoveSpeed;
+            // カメラ基準の移動方向を計算
+            Vector3 movement;
+            if (cameraTransform != null)
+            {
+                Vector3 camForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+                Vector3 camRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
+                Vector3 desiredMove = camForward * moveDirection.y + camRight * moveDirection.x;
+
+                movement = desiredMove * currentMoveSpeed;
+            }
+            else
+            {
+                // カメラが設定されていない場合は従来通りプレイヤー基準で移動
+                Vector3 forward = transform.forward;
+                Vector3 right = transform.right;
+                movement = (forward * moveDirection.y + right * moveDirection.x) * currentMoveSpeed;
+            }
+
             movement.y = verticalVelocity;
 
             characterController.Move(movement * Time.deltaTime);

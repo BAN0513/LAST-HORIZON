@@ -142,7 +142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -150,15 +150,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -230,6 +230,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8611447818778448829}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7632434543182664271}
     - targetCorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4328250632509708348}
@@ -867,6 +870,20 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+--- !u!114 &7632434543182664271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5899827493166609428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4872610588fb42842b4944bf2f8edb16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterChangeController
+  characterPrefab: []
+  spawnPoint: {fileID: 0}
 --- !u!1 &5918869648423950159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
