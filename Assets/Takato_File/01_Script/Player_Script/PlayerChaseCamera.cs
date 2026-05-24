@@ -9,10 +9,10 @@ namespace Takato
     {
         [Header("カメラの設定")]
         [SerializeField] private Transform player; // プレイヤーのTransform
-        [Header("カメラのオフセット（水平成分のみ使用）")]
-        [SerializeField] private Vector3 cameraOffset; // プレイヤーからの水平オフセット (Yは無視)
+        [Header("カメラのオフセット")]
+        [SerializeField] private Vector3 cameraOffset; // プレイヤーからの水平オフセット
         [Header("カメラの高さ")]
-        [SerializeField] private float cameraHeight; // プレイヤーのどの高さを狙うか（LookAt高さ）
+        [SerializeField] private float cameraHeight; // プレイヤーのどの高さを狙うか
         [Header("マウスの感度")]
         [SerializeField] private float mouseSensitivity; // マウス感度
         [Header("回転の制限")]
@@ -44,6 +44,34 @@ namespace Takato
             }
         }
 
+        private void Update()
+        {
+            //つい移住するターゲットがいない場合はTagのPlayerを探す
+            if (player == null)
+            {
+                GameObject tagged = null;
+                try
+                {
+                    tagged = GameObject.FindWithTag("Player");
+                }
+                catch
+                {
+                    // "Player" タグが存在しない場合の例外は無視
+                    tagged = null;
+                }
+                if (tagged != null)
+                {
+                    player = tagged.transform;
+                    inputController = player.GetComponent<PlayerInputController>();
+                    if (inputController != null)
+                    {
+                        inputController.IsLookEnabled = true; // Look入力を有効化
+                    }
+                }
+            }
+        }
+
+
         private void LateUpdate()
         {
             if (player == null || inputController == null)
@@ -57,12 +85,12 @@ namespace Takato
             // Y軸の反転設定を考慮して垂直入力を決定
             float lookY = invertY ? -lookInput.y : lookInput.y;
 
-            // カメラの回転を更新（上下の符号は invertY で制御）
+            // カメラの回転を更新
             horizontalAngle += lookInput.x * mouseSensitivity;
             verticalAngle += lookY * mouseSensitivity;
             verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
 
-            // 水平オフセットだけを使う（cameraOffset.y は無視）
+            // 水平オフセットだけを使う
             Vector3 horizontalOffset = new Vector3(cameraOffset.x, 0f, cameraOffset.z);
 
             // カメラの位置と回転を計算
@@ -87,7 +115,7 @@ namespace Takato
                 return;
             }
 
-            // カメラの前方向（Y軸を無視）をプレイヤーの向きとする
+            // カメラの前方向
             Vector3 cameraForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
 
             if (cameraForward.sqrMagnitude > 0.0001f)

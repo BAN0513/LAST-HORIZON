@@ -19,20 +19,53 @@ public class CharacterChangeController : MonoBehaviour
     // Start() を削除：起動時に自動スポーンしないようにする
 
     /// <summary>
-    /// 指定のインデックスでキャラクターをスポーン
+    /// シーンにキャラクターをスポーンするメソッド
     /// </summary>
     public void SpawnCharacter()
     {
         if (characterPrefab == null || characterPrefab.Length == 0) return;
 
-        // 現在のキャラクターがあれば削除
+        // 既に管理しているキャラクターがあれば破棄
         if (currentCharacter != null)
         {
             Destroy(currentCharacter);
+            currentCharacter = null;
+        }
+        else
+        {
+            // "Player" タグを持つオブジェクトを探して破棄
+            GameObject tagged = null;
+            try
+            {
+                tagged = GameObject.FindWithTag("Player");
+            }
+            catch
+            {
+                // "Player" タグが存在しない場合の例外は無視
+                tagged = null;
+            }
+
+            if (tagged != null)
+            {
+                Destroy(tagged);
+            }
+            else
+            {
+                // プレハブ名と一致するルートオブジェクトを探す
+                var prefabName = characterPrefab[currentCharacterIndex].name;
+                var byName = GameObject.Find(prefabName);
+                if (byName != null)
+                {
+                    Destroy(byName);
+                }
+            }
         }
 
+        Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
+        Quaternion rot = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
+
         // 現在のインデックスでスポーン
-        currentCharacter = Instantiate(characterPrefab[currentCharacterIndex], spawnPoint.position, spawnPoint.rotation);
+        currentCharacter = Instantiate(characterPrefab[currentCharacterIndex], pos, rot);
     }
 
     /// <summary>

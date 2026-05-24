@@ -55,13 +55,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5384875510572615320}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.032, y: 0.08, z: 0.02}
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0.015, y: 0.123, z: 0.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4941751450563884685}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 90}
 --- !u!1001 &2847757902662745851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -174,7 +174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_Name
-      value: Player1_Ragdoll_Night
+      value: Player1_Ragdoll_Axe
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       propertyPath: m_IsActive
@@ -835,8 +835,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752ebf28e2a246747b93e2d43b34a495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponController
-  equippedWeapon: {fileID: -5005743964119743882, guid: 99498499df145074facda6de3d9c92e4, type: 3}
-  weaponPrefab: {fileID: -5005743964119743882, guid: 99498499df145074facda6de3d9c92e4, type: 3}
+  equippedWeapon: {fileID: 7339351941533750335, guid: e620e571b6ce8e24b8723fe6811cec3d, type: 3}
+  weaponPrefab: {fileID: 7339351941533750335, guid: e620e571b6ce8e24b8723fe6811cec3d, type: 3}
   weaponFolder: {fileID: 2474018634880942812}
 --- !u!114 &6640673578056825300
 MonoBehaviour:
