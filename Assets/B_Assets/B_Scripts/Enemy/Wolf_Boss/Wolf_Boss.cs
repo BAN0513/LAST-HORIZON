@@ -32,7 +32,7 @@ public class Wolf_Boss : Enemy_FourLegs
         }
         else if (wolf_Anim.CheckCurrentAnim("RetreatAfter"))
         {
-            transform.position += Vector3.Normalize(-transform.forward) * 10 * Time.deltaTime;
+            transform.position += Vector3.Normalize(-transform.forward) * 5 * Time.deltaTime;
         }
 
         if (wolf_Anim.CheckCurrentAnim("Reflection"))
@@ -143,6 +143,14 @@ public class Wolf_Boss : Enemy_FourLegs
         LookPlayerChange(false);
     }
 
+    private void Reflection()
+    {
+        wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Reflection);
+        LookPlayerChange(false);
+        dir = target.position - transform.position;
+        dir.y = 0;
+    }
+
     private void DoNotAttack()
     {
         //çUåÇÇ∂Ç·Ç»Ç©Ç¡ÇΩÇÁçUåÇÇÃämó¶Çè„Ç∞ÇÈ
@@ -151,10 +159,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (dot <= 0)
         {
-            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Reflection);
-            LookPlayerChange(false);
-            dir = target.position - transform.position;
-            dir.y = 0;
+            Reflection();
         }
     }
 
