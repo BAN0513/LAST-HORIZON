@@ -41,6 +41,7 @@ public class Enemy_Humanoid : Enemy
 
     private void BackMoveControl()
     {
+        if (isAnimation) { return; }
         //‹——£‚ªbackActionDis‚æ‚è¬‚³‚©‚Á‚½‚èAUŒ‚‚ğ‚µ‚Ä‚¢‚È‚¢ê‡‚É‰º‚ª‚é“®ì‚ğ‚·‚é
         if (distance <= enemySO.backActionDis && !isAnimation)
         {

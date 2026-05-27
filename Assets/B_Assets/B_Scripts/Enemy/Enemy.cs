@@ -1,9 +1,6 @@
-using System.Collections;
 using Takato;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -108,8 +105,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-
-
         distance = Vector3.Distance(transform.position, target.position);
 
         agent.updateRotation = false;
@@ -228,7 +223,7 @@ public abstract class Enemy : MonoBehaviour
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-            else
+            else if (!isAnimation)
             {
                 switch (rand)
                 {

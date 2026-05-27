@@ -60,7 +60,7 @@ public class Wolf_Boss : Enemy_FourLegs
             if (curScore < lastScore)
             {
                 curScore = lastScore;
-                firtstActionSO = a;
+                firtstActionSO = (Wolf_BossActionSO)a;
             }
         }
         if (firtstActionSO != null)

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Wolf_Boss_AttackTail_SO", menuName = "Scriptable Objects/Wolf_Boss_AttackTail_SO")]
+[CreateAssetMenu(fileName = "Wolf_Boss_AttackTail_SO", menuName = "EnemyActionSO/Wolf_BossActionSO/Wolf_Boss_AttackTail_SO")]
 public class Wolf_Boss_AttackTail_SO : Wolf_BossActionSO
 {
     public override float ScoreCalculation(float dis, float dot)

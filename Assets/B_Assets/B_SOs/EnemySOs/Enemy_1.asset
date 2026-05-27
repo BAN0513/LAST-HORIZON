@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Enemy_1
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
+  action:
+  - {fileID: 11400000, guid: c8b6aaa48f107d14b9515e110a5ddc67, type: 2}
   maxHP: 50
   damage: 1
   dashMoveSpeed: 2

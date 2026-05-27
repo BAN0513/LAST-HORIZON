@@ -1,12 +1,12 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemySO", menuName = "Scriptable Objects/EnemySO")]
+[CreateAssetMenu(fileName = "EnemySO", menuName = "EnemySO/EnemySO")]
 public class EnemySO : ScriptableObject
 {
     [Header("“G‘S‘Ì‚ª‚Â’l‚Ì‰Šúİ’èB\n" +
         "“G‚ª‚»‚ê‚¼‚ê‚Â’l‚Í“G‚Ìinspector‚Åİ’è")]
 
-    public Wolf_BossActionSO[] action;
+    public EnemyActionSO[] action;
 
     [Header("“G‚ÌHP")]
     public int maxHP;

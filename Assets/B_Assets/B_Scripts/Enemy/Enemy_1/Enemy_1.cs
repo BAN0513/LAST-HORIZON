@@ -22,17 +22,9 @@ public class Enemy_1 : Enemy_Humanoid
 
     protected override void ShortDistanceAction()
     {
-        AttackMove();
-    }
-
-    protected override void MediumDistanceAction()
-    {
-        AttackMove();
-    }
-
-    protected override void LongDistanceAction()
-    {
-        AttackMove();
+        Enemy_1ActionSO enemy_1Action = (Enemy_1ActionSO)enemySO.action[0];
+        enemy_1Action.Execute(enemy_1AnimatorController);
+        LookPlayerChange(false);
     }
 
     private void AttackMove()
