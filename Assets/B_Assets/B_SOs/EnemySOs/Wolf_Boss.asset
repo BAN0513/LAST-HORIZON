@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Wolf_Boss
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
+  action:
+  - {fileID: 11400000, guid: 2e4ed1d4d9d2aa04498cd15db5dfdec8, type: 2}
+  - {fileID: 11400000, guid: a84e36e3d4370334aa583a36cd4378f4, type: 2}
+  - {fileID: 11400000, guid: fa966292e4c2fa74285e3d15811824d2, type: 2}
+  - {fileID: 11400000, guid: 1409bd2a52a6f4140aef1be7b4cb652b, type: 2}
+  - {fileID: 11400000, guid: 91069d6f0604364449968eb211e1068b, type: 2}
+  - {fileID: 11400000, guid: 3fbcc06dd3d86564c9c410f55709a851, type: 2}
   maxHP: 1000
   damage: 1
   dashMoveSpeed: 2

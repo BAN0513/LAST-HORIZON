@@ -228,21 +228,17 @@ public abstract class Enemy : MonoBehaviour
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-            else if (!isAnimation)
+            else
             {
-                switch (distance)
+                switch (rand)
                 {
-                    case float dis when (dis >= 0 && dis <= shortDis):
+                    case int r when (r > 0 && r <= attackProbability):
                         ShortDistanceAction();
                         break;
-                    case float dis when (dis > shortDis && dis <= mediumDis):
-                        MediumDistanceAction();
-                        break;
-                    case float dis when (dis > mediumDis && dis <= enemySO.engageDis):
-                        LongDistanceAction();
+                    default:
+                        DoNotAttack();
                         break;
                 }
-
             }
         }
         else
@@ -252,6 +248,14 @@ public abstract class Enemy : MonoBehaviour
             rand = 0;
         }
     }
+
+    protected virtual void DoNotAttack()
+    {
+        //UŒ‚‚¶‚á‚È‚©‚Á‚½‚çUŒ‚‚ÌŠm—¦‚ðã‚°‚é
+        isAction = false;
+        attackProbability += enemySO.attackUpProbability;
+    }
+
 
     protected virtual void ShortDistanceAction() { }
     protected virtual void MediumDistanceAction() { }
@@ -342,17 +346,6 @@ public abstract class Enemy : MonoBehaviour
     {
         Init();
         InitAnim();
-    }
-
-    //Œü‚«•â³
-    public void DirCorrection()
-    {
-        isLookPlayer = true;
-    }
-
-    public void DirCorrectionEnd()
-    {
-        isLookPlayer = false;
     }
 
     //UŒ‚”»’è‚ÌoŒ»

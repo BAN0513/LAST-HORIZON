@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0109bf7e27d436b4e9e37511312daa99, type: 3}
+  m_Name: Wolf_Boss_AttackRotation_SO
+  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_AttackRotation_SO
+  maxDis: 5
+  minDis: 0
+  maxDot: 1
+  minDot: -1
+  baseDis: 0.7
+  baseDot: 0.3

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Wolf_BossAnimatorController : EnemyAnimatorController
@@ -13,6 +14,7 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         RotationAttack,
         TailAttack,
         DownBefore,
+        ShortReflection,
         Reflection,
         Retreat
     }
@@ -32,6 +34,7 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
             {WolfAnimation.RotationAttack,   Animator.StringToHash("isRotationAttack") },
             {WolfAnimation.TailAttack,       Animator.StringToHash("isTailAttack") },
             {WolfAnimation.DownBefore,       Animator.StringToHash("isDownBefore") },
+            {WolfAnimation.ShortReflection,  Animator.StringToHash("isShortReflection") },
             {WolfAnimation.Reflection,       Animator.StringToHash("isReflection") },
             {WolfAnimation.Retreat,         Animator.StringToHash("isRetreat") }
         };
