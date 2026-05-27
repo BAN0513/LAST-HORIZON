@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce3070ab045f234aab3efb655f0693c, type: 3}
   m_Name: Wolf_Boss_Attack2_SO
   m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_Attack2_SO
+  bestDis: 6
+  bestDot: 1
   maxDis: 7
-  minDis: 5
   maxDot: 1
-  minDot: 0.7
-  baseDis: 0.7
-  baseDot: 0.7
+  minDis: 0
+  minDot: 0
+  baseDis: 0.5
+  baseDot: 0.5

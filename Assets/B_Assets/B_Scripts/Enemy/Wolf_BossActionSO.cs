@@ -20,7 +20,7 @@ public abstract class Wolf_BossActionSO : ScriptableObject
     [Range(0, 1)] public float baseDot = 0.5f;
 
     //スコアの計算
-    //今後アクションによって条件を付けることがあるかもしれないから、継承しておく
+    //今後アクションによって条件を付けることがあるかもしれないから、継承できるようにしておく
     public virtual float ScoreCalculation(float dis, float dot)
     {
         if (dis > maxDis || dot > maxDot || dis < minDis || dot < minDot) { return 0; }

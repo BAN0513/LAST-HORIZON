@@ -24,7 +24,7 @@ public class Wolf_Boss : Enemy_FourLegs
         }
 
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
-        //Debug.Log(distance);
+
         base.Update();
 
         if (wolf_Anim.CheckCurrentAnim("DashAttack"))
