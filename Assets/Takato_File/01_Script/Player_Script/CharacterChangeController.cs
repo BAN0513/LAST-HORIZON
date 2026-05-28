@@ -1,71 +1,109 @@
+using System;
 using UnityEngine;
 
 /// <summary>
-/// キャラクターを切り替えるためのクラス
+/// キャラクター切替のマネージャー（シーン上に置くシングルトン）
 /// </summary>
 public class CharacterChangeController : MonoBehaviour
 {
-    [Header("きゃらくたーを切り替えるスクリプトの詳細")]
+    public static CharacterChangeController Instance { get; private set; }
+
+    [Header("キャラクターを切り替えるスクリプトの詳細")]
     [Space(10)]
 
     [Header("切り替えるキャラクターのプレハブ")]
-    [SerializeField] private GameObject[] characterPrefab; // 切り替えるキャラクターのプレハブ
-    [Header("切り替えるキャラクターのスポーン位置")]
-    [SerializeField] private Transform spawnPoint; // 切り替えるキャラクターのスポーン位置
+    [SerializeField] private GameObject[] characterPrefabs; // 切り替えるキャラクターのプレハブ
+
+    [Header("このマネージャーをシーン跨ぎで保持するか")]
+    [SerializeField] private bool persistAcrossScenes = false;
 
     private GameObject currentCharacter; // 現在のキャラクター
     private int currentCharacterIndex = 0;   // 現在のキャラクターのインデックス
 
-    // Start() を削除：起動時に自動スポーンしないようにする
+    /// <summary>
+    /// キャラクター変更時のイベント
+    /// </summary>
+    public event Action<int, GameObject> OnCharacterChanged;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        if (persistAcrossScenes)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        SpawnCharacter(); // 最初のキャラクターをスポーン
+    }
 
     /// <summary>
-    /// シーンにキャラクターをスポーンするメソッド
+    /// キャラクターが切り替わるたびに呼び出されるスポーン処理
     /// </summary>
     public void SpawnCharacter()
     {
-        if (characterPrefab == null || characterPrefab.Length == 0) return;
+        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
 
-        // 既に管理しているキャラクターがあれば破棄
+        var prefab = characterPrefabs[currentCharacterIndex];
+
+        // デフォルトの位置/回転
+        Vector3 pos = Vector3.zero;
+        Quaternion rot = Quaternion.identity;
+
+        // 既に currentCharacter がある場合は、その位置で新しいキャラを生成してから古いのを破棄
         if (currentCharacter != null)
         {
+            pos = currentCharacter.transform.position;
+            rot = currentCharacter.transform.rotation;
+
+            var newChar = Instantiate(prefab, pos, rot);
             Destroy(currentCharacter);
-            currentCharacter = null;
+            currentCharacter = newChar;
+
+            OnCharacterChanged?.Invoke(currentCharacterIndex, currentCharacter);
+            return;
+        }
+
+        // currentCharacter が null の場合、シーン内の "Player" タグや同名オブジェクトから位置を引き継ぐ
+        GameObject tagged = null;
+        try
+        {
+            tagged = GameObject.FindWithTag("Player");
+        }
+        catch
+        {
+            tagged = null;
+        }
+
+        if (tagged != null)
+        {
+            pos = tagged.transform.position;
+            rot = tagged.transform.rotation;
+            Destroy(tagged);
         }
         else
         {
-            // "Player" タグを持つオブジェクトを探して破棄
-            GameObject tagged = null;
-            try
+            var prefabName = prefab.name;
+            var byName = GameObject.Find(prefabName);
+            if (byName != null)
             {
-                tagged = GameObject.FindWithTag("Player");
-            }
-            catch
-            {
-                // "Player" タグが存在しない場合の例外は無視
-                tagged = null;
-            }
-
-            if (tagged != null)
-            {
-                Destroy(tagged);
-            }
-            else
-            {
-                // プレハブ名と一致するルートオブジェクトを探す
-                var prefabName = characterPrefab[currentCharacterIndex].name;
-                var byName = GameObject.Find(prefabName);
-                if (byName != null)
-                {
-                    Destroy(byName);
-                }
+                pos = byName.transform.position;
+                rot = byName.transform.rotation;
+                Destroy(byName);
             }
         }
 
-        Vector3 pos = spawnPoint != null ? spawnPoint.position : Vector3.zero;
-        Quaternion rot = spawnPoint != null ? spawnPoint.rotation : Quaternion.identity;
-
-        // 現在のインデックスでスポーン
-        currentCharacter = Instantiate(characterPrefab[currentCharacterIndex], pos, rot);
+        currentCharacter = Instantiate(prefab, pos, rot); // 新しいキャラクターをスポーン
+        OnCharacterChanged?.Invoke(currentCharacterIndex, currentCharacter); // キャラクター変更イベントを発火
     }
 
     /// <summary>
@@ -73,9 +111,35 @@ public class CharacterChangeController : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        if (characterPrefab == null || characterPrefab.Length == 0) return;
+        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
 
-        currentCharacterIndex = (currentCharacterIndex + 1) % characterPrefab.Length;
+        currentCharacterIndex = (currentCharacterIndex + 1) % characterPrefabs.Length;
         SpawnCharacter();
     }
+
+    /// <summary>
+    /// 前のキャラクターに切り替えてスポーンする（ループ）
+    /// </summary>
+    public void PreviousCharacter()
+    {
+        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
+
+        currentCharacterIndex = (currentCharacterIndex - 1 + characterPrefabs.Length) % characterPrefabs.Length;
+        SpawnCharacter();
+    }
+
+    /// <summary>
+    /// 指定インデックスのキャラクターをスポーンする
+    /// </summary>
+    public void SpawnCharacterAt(int index)
+    {
+        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
+        if (index < 0 || index >= characterPrefabs.Length) return;
+
+        currentCharacterIndex = index;
+        SpawnCharacter();
+    }
+
+    public int GetCurrentIndex() => currentCharacterIndex;
+    public GameObject GetCurrentCharacter() => currentCharacter;
 }

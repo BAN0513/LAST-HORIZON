@@ -59,7 +59,14 @@ namespace Takato
             weaponController = GetComponentInChildren<PlayerWeaponController>();
             shieldController = GetComponentInChildren<PlayerShieldContoroller>();
             playerSkill= GetComponent<PlayerSkill>();
-            characterChangeController = GetComponent<CharacterChangeController>();
+
+            // マネージャー化に合わせてインスタンス参照をシングルトンから取得する
+            characterChangeController = CharacterChangeController.Instance;
+            if (characterChangeController == null)
+            {
+                // Awake のタイミングで未登録の場合はフォールバックで検索
+                characterChangeController = FindAnyObjectByType<CharacterChangeController>();
+            }
 
             // カメラのTransformを取得
             Camera mainCamera = Camera.main;
@@ -71,8 +78,22 @@ namespace Takato
 
         private void Start()
         {
-            hp = maxHp;             // HPを最大値で初期化
-            hpBar.SetHP(hp, maxHp); // HPバーを初期化
+            hp = maxHp;// HPを最大値で初期化
+
+            // hpBar が割当てられていない場合はフォールバックで検索してから SetHP を呼ぶ
+            if (hpBar == null)
+            {
+                hpBar = FindAnyObjectByType<PlayerHPBar>();
+            }
+
+            if (hpBar != null)
+            {
+                hpBar.SetHP(hp, maxHp); // HPバーを初期化
+            }
+            else
+            {
+                Debug.LogWarning($"[{nameof(PlayerController)}] hpBar が割り当てられていません。Inspector にセットするか、実行時に PlayerHPBar を配置してください。");
+            }
 
             //カーソルをロックして非表示にする
             Cursor.lockState = CursorLockMode.Locked;
@@ -86,7 +107,33 @@ namespace Takato
 
         private void Update()
         {
-            hp = Mathf.Max(hp, 0);
+            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
+
+            //HPBarのコンポーネントを取得し続ける
+            if(hpBar == null)
+            {
+                hpBar = FindAnyObjectByType<PlayerHPBar>();
+                if (hpBar != null)
+                {
+                    hpBar.SetHP(hp, maxHp); // HPバーを更新
+                }
+            }
+
+            //コストのTextコンポーネントを取得し続ける
+            if(costText == null)
+            {
+                costText = FindAnyObjectByType<TMPro.TextMeshProUGUI>();
+                if (costText != null)
+                {
+                    costText.text = $"Cost: {currentCost}"; // コストの表示を更新
+                }
+            }
+
+            //SelectUIのコンポーネントを取得し続ける
+            if(skillSelectUI == null)
+            {
+                skillSelectUI = FindAnyObjectByType<SkillSelectUI>();
+            }
 
             if (inputController.IsInventoryInput && !prevInventoryOpen)
             {
@@ -249,6 +296,44 @@ namespace Takato
         public void SetMoveSpeed(float value)
         {
             moveSpeed = value; // プレイヤーの移動速度を設定する
+        }
+
+        /// <summary>
+        /// HP 関係の公開ユーティリティ
+        /// </summary>
+        public int GetHP()
+        {
+            return hp;
+        }
+
+        public int GetMaxHP()
+        {
+            return maxHp;
+        }
+
+        public void SetHP(int value)
+        {
+            hp = Mathf.Clamp(value, 0, maxHp);
+            hpBar?.SetHP(hp, maxHp);
+        }
+
+        /// <summary>
+        /// HPを別のプレイヤーに転送するメソッド
+        /// </summary>
+        public void TransferHPTo(PlayerController target, bool preservePercent = true)
+        {
+            if (target == null) return;
+
+            if (preservePercent)
+            {
+                float ratio = (maxHp > 0) ? (float)hp / maxHp : 0f;
+                int newHp = Mathf.RoundToInt(ratio * target.GetMaxHP());
+                target.SetHP(newHp);
+            }
+            else
+            {
+                target.SetHP(hp);
+            }
         }
 
         /// <summary>
