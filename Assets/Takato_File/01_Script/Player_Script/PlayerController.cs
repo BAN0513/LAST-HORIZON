@@ -3,10 +3,11 @@ using UnityEngine;
 namespace Takato
 {
     /// <summary>
-    ///プレイヤーを管理するクラス
+    /// プレイヤーを管理するクラス
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
+        // --- Inspector で設定するフィールド ---
         [Header("(プレイヤー関連のステータス)")]
         [Space(10)]
         [Header("プレイヤーのHP")]
@@ -28,76 +29,43 @@ namespace Takato
         [Header("Skill Select UI")]
         [SerializeField] private SkillSelectUI skillSelectUI;
 
+        // --- キャッシュされたコンポーネント／参照 ---
+        private PlayerInputController inputController;
+        private CharacterController characterController;
+        private PlayerAnimationController animationController;
+        private PlayerWeaponController weaponController;
+        private PlayerShieldContoroller shieldController;
+        private PlayerSkill playerSkill;
+        private CharacterChangeController characterChangeController;
+        private Transform cameraTransform;
 
-        private PlayerInputController inputController;　// プレイヤーの入力を管理するクラスのインスタンス
-        private CharacterController characterController; // プレイヤーの移動を管理するCharacterControllerコンポーネントのインスタンス
-        private PlayerAnimationController animationController;// プレイヤーのアニメーションを管理するクラスのインスタンス
-        private PlayerWeaponController weaponController; // プレイヤーの攻撃を管理するクラスのインスタンス
-        private PlayerShieldContoroller shieldController; // プレイヤーの防御を管理するクラスのインスタンス
-        private PlayerSkill playerSkill;                  // プレイヤーのスキルを管理するクラスのインスタンス
-        private CharacterChangeController characterChangeController; // キャラクター切り替えを管理するクラスのインスタンス
-        private Transform cameraTransform; // カメラのTransform
+        // --- 状態 ---
+        private float verticalVelocity;
+        private int hp;
+        private bool isBlocking;
+        private bool isDead;
+        private bool isSkillUIOpen;
+        private bool prevInventoryOpen;
 
-        private float verticalVelocity; // ジャンプと重力の処理に使用する垂直速度
-        private int hp;                 // プレイヤーの現在のHP
-        private bool isBlocking = false;// 防御中かどうかを管理するフラグ
-        private bool isDead = false;    // 死亡フラグ
-        private bool isSkillUIOpen = false;// スキル選択UIが開いているかどうかを管理するフラグ
-        private bool prevInventoryOpen = false;// 前フレームのインベントリの開閉状態を管理するフラグ
-
-        //スキル発動ボタンを押された時の判定をするための前フレームのスキル入力状態を管理するフラグ
-        private bool prevSkillInput = false;
+        // スキル発動に関する前フレーム入力（既存ロジックを維持）
+        private bool prevSkillInput;
 
         // キャラ切替のエッジ判定用フラグ
-        private bool prevCharChange = false;
+        private bool prevCharChange;
 
+        // --- Unity ライフサイクル ---
         private void Awake()
         {
-            inputController = GetComponent<PlayerInputController>();
-            characterController = GetComponent<CharacterController>();
-            animationController = GetComponent<PlayerAnimationController>();
-            weaponController = GetComponentInChildren<PlayerWeaponController>();
-            shieldController = GetComponentInChildren<PlayerShieldContoroller>();
-            playerSkill= GetComponent<PlayerSkill>();
-
-            // マネージャー化に合わせてインスタンス参照をシングルトンから取得する
-            characterChangeController = CharacterChangeController.Instance;
-            if (characterChangeController == null)
-            {
-                // Awake のタイミングで未登録の場合はフォールバックで検索
-                characterChangeController = FindAnyObjectByType<CharacterChangeController>();
-            }
-
-            // カメラのTransformを取得
-            Camera mainCamera = Camera.main;
-            if (mainCamera != null)
-            {
-                cameraTransform = mainCamera.transform;
-            }
+            CacheComponentsOnAwake();
+            AcquireCameraTransform();
+            AcquireCharacterChangeController();
         }
 
         private void Start()
         {
-            hp = maxHp;// HPを最大値で初期化
-
-            // hpBar が割当てられていない場合はフォールバックで検索してから SetHP を呼ぶ
-            if (hpBar == null)
-            {
-                hpBar = FindAnyObjectByType<PlayerHPBar>();
-            }
-
-            if (hpBar != null)
-            {
-                hpBar.SetHP(hp, maxHp); // HPバーを初期化
-            }
-            else
-            {
-                Debug.LogWarning($"[{nameof(PlayerController)}] hpBar が割り当てられていません。Inspector にセットするか、実行時に PlayerHPBar を配置してください。");
-            }
-
-            //カーソルをロックして非表示にする
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            hp = maxHp;
+            EnsureHPBarInitialized();
+            LockCursor();
 
             if (costText != null)
             {
@@ -107,135 +75,226 @@ namespace Takato
 
         private void Update()
         {
-            hp = Mathf.Max(hp, 0); // HPが0未満にならないようにする
+            hp = Mathf.Max(hp, 0);
 
-            //HPBarのコンポーネントを取得し続ける
-            if(hpBar == null)
+            // 実行時に参照が外れている可能性があるものは必要に応じて補完
+            TryRecoverMissingReferences();
+
+            UpdateHUDIfNeeded();
+
+            HandleInventoryToggle();
+
+            UpdateLowHPMusic();
+
+            if (hp <= 0)
             {
-                hpBar = FindAnyObjectByType<PlayerHPBar>();
-                if (hpBar != null)
-                {
-                    hpBar.SetHP(hp, maxHp); // HPバーを更新
-                }
+                Die();
+                return;
             }
 
-            //コストのTextコンポーネントを取得し続ける
-            if(costText == null)
+            if (isSkillUIOpen)
+            {
+                ApplySkillUIState();
+                return;
+            }
+
+            // 通常プレイ時の処理を分離
+            Move();
+            Block();
+            Attack();
+            HandleSkillInputs();
+            HandleCharacterChangeEdge();
+
+            // 前フレーム情報を保存
+            prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input ||
+                             inputController.IsSkill3Input || inputController.IsSkill4Input;
+            prevCharChange = inputController.IsCharChange;
+        }
+
+        // --- 初期化ヘルパー ---
+        private void CacheComponentsOnAwake()
+        {
+            inputController = GetComponent<PlayerInputController>();
+            characterController = GetComponent<CharacterController>();
+            animationController = GetComponent<PlayerAnimationController>();
+            weaponController = GetComponentInChildren<PlayerWeaponController>();
+            shieldController = GetComponentInChildren<PlayerShieldContoroller>();
+            playerSkill = GetComponent<PlayerSkill>();
+        }
+        /// <summary>
+        /// キャラクター切り替えののコントローラーを取得する。
+        /// </summary>
+        private void AcquireCharacterChangeController()
+        {
+            characterChangeController = CharacterChangeController.Instance;
+            if (characterChangeController == null)
+            {
+                characterChangeController = FindAnyObjectByType<CharacterChangeController>();
+            }
+        }
+
+        /// <summary>
+        /// プレイヤーのカメラを取得する。通常は MainCamera タグのカメラを探すが、見つからない場合はシーン内の任意のカメラを探す。
+        /// </summary>
+        private void AcquireCameraTransform()
+        {
+            Camera mainCamera = Camera.main;
+            if (mainCamera != null)
+            {
+                cameraTransform = mainCamera.transform;
+            }
+        }
+
+        /// <summary>
+        /// HPバーの初期化を行う。Inspector で割り当てられていない場合は、シーン内の任意の PlayerHPBar を探して割り当てる。
+        /// </summary>
+        private void EnsureHPBarInitialized()
+        {
+            if (hpBar == null)
+            {
+                hpBar = FindAnyObjectByType<PlayerHPBar>();
+            }
+
+            if (hpBar != null)
+            {
+                hpBar.SetHP(hp, maxHp);
+            }
+            else
+            {
+                Debug.LogWarning($"[{nameof(PlayerController)}] hpBar が割り当てられていません。Inspector にセットするか、実行時に PlayerHPBar を配置してください。");
+            }
+        }
+
+        /// <summary>
+        /// カーソルをロックして非表示にする。
+        /// </summary>
+        private void LockCursor()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        // --- 毎フレーム補完 ---
+        private void TryRecoverMissingReferences()
+        {
+            if (hpBar == null)
+            {
+                hpBar = FindAnyObjectByType<PlayerHPBar>();
+                hpBar?.SetHP(hp, maxHp);
+            }
+
+            if (costText == null)
             {
                 costText = FindAnyObjectByType<TMPro.TextMeshProUGUI>();
                 if (costText != null)
                 {
-                    costText.text = $"Cost: {currentCost}"; // コストの表示を更新
+                    costText.text = $"Cost: {currentCost}";
                 }
             }
 
-            //SelectUIのコンポーネントを取得し続ける
-            if(skillSelectUI == null)
+            if (skillSelectUI == null)
             {
                 skillSelectUI = FindAnyObjectByType<SkillSelectUI>();
             }
+        }
 
-            if (inputController.IsInventoryInput && !prevInventoryOpen)
-            {
-                ToggleSkillUI(); // インベントリ入力が押されたときにスキルUIの表示切替を行う
-            }
-            prevInventoryOpen = inputController.IsInventoryInput;
+        /// <summary>
+        /// Hpが変化したときにHUDを更新する。
+        /// </summary>
+        private void UpdateHUDIfNeeded()
+        {
+            hpBar?.SetHP(hp, maxHp);
+        }
 
-
-            if(hp < maxHp/3)
+        private void UpdateLowHPMusic()
+        {
+            if (hp < maxHp / 3)
             {
                 SoundManager soundManager = FindAnyObjectByType<SoundManager>();
-                if (soundManager != null)
-                {
-                    soundManager.PlaySE(3); // HPが1/3以下になったらBGMを切り替える
-                }
+                soundManager?.PlaySE(3);
             }
-            
-            if (hp <= 0)
+        }
+
+        // --- 入力関連 ---
+        private void HandleInventoryToggle()
+        {
+            if (inputController.IsInventoryInput && !prevInventoryOpen)
             {
-                Die(); // HPが0以下になったら死亡処理を行う
-                return;
+                ToggleSkillUI();
             }
+            prevInventoryOpen = inputController.IsInventoryInput;
+        }
 
-            if (isSkillUIOpen)
-            {
-                animationController.SetAttack(false); // スキルUIが開いているときは攻撃アニメーションをオフ
-                animationController.SetBlock(false); // スキルUIが開いているときは防御アニメーションをオフ
-                animationController.SetJump(false);  // スキルUIが開いているときはジャンプアニメーションをオフ
-                weaponController?.DisableWeaponCollider(); // スキルUIが開いているときは武器のコライダーを無効化
-                shieldController?.DisableShieldCollider(); // スキルUIが開いているときはシールドのコライダーを無効化
-                isBlocking = false;
-                return;
-            }
+        /// <summary>
+        /// プレイヤーのスキル入力を処理する。スキルUIが開いているときはスキル入力を無視する。
+        /// </summary>
+        private void HandleSkillInputs()
+        {
+            if (playerSkill == null) return;
 
-            Move(); // 移動処理は常に行う
-            Block();// 防御処理は常に行う
-            Attack();// 攻撃処理は常に行う
-
-            // スキル入力の判定
-            if (inputController.IsSkillInput&&prevSkillInput && playerSkill != null)
+            if (inputController.IsSkillInput && prevSkillInput)
             {
                 playerSkill.ActivateSkill(0, this);
             }
-            if (inputController.IsSkill2Input&&prevSkillInput && playerSkill != null)
+            if (inputController.IsSkill2Input && prevSkillInput)
             {
                 playerSkill.ActivateSkill(1, this);
             }
-            if (inputController.IsSkill3Input && prevSkillInput && playerSkill != null)
+            if (inputController.IsSkill3Input && prevSkillInput)
             {
                 playerSkill.ActivateSkill(2, this);
             }
-            if(inputController.IsSkill4Input && prevSkillInput && playerSkill != null)
+            if (inputController.IsSkill4Input && prevSkillInput)
             {
                 playerSkill.ActivateSkill(3, this);
             }
-
-            // 操作するキャラクターを入れ替える処理（キー押下の瞬間のみ実行）
-            if (inputController.IsCharChange && !prevCharChange)
-            {
-                characterChangeController?.NextCharacter(); // NextCharacter を呼ぶ（インデックスを進める）
-            }
-
-            //現フレームのスキル入力状態を保存
-            prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input || 
-                inputController.IsSkill3Input || inputController.IsSkill4Input;
-
-            // キャラ切替の前フレーム状態を保存
-            prevCharChange = inputController.IsCharChange;
         }
 
-        /// <summary>
-        /// スキル選択UIの表示切替と、それに伴う入力制御やカーソルの状態を管理するメソッド
-        /// </summary>
+        private void HandleCharacterChangeEdge()
+        {
+            if (inputController.IsCharChange && !prevCharChange)
+            {
+                characterChangeController?.NextCharacter();
+            }
+        }
+
+        // --- UI 操作 ---
         private void ToggleSkillUI()
         {
             isSkillUIOpen = !isSkillUIOpen;
-            skillSelectUI.ShowUI(isSkillUIOpen);
+            skillSelectUI?.ShowUI(isSkillUIOpen);
 
-            // ゲーム入力を止めて、UI マップを有効化／無効化
             inputController.SetGameplayEnabled(!isSkillUIOpen);
             inputController.SetUIEnabled(isSkillUIOpen);
-
-            // Look アクションも確実に切る
             inputController.IsLookEnabled = !isSkillUIOpen;
 
-            // カーソルのロックと表示を切り替える
             if (isSkillUIOpen)
             {
-                Cursor.lockState = CursorLockMode.None; // カーソルのロックを解除して表示する
-                Cursor.visible = true;                  // カーソルを表示する
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked; // カーソルをロックして非表示にする
-                Cursor.visible = false;                   // カーソルを非表示にする
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         }
 
         /// <summary>
-        /// プレイヤーの移動とジャンプを処理するメソッド
-        /// （カメラ基準の移動）
+        /// スキルのUiが開いているときの状態を適用する。攻撃、防御、ジャンプのアニメーションをリセットし、武器と盾のコライダーを無効化する。
         /// </summary>
+        private void ApplySkillUIState()
+        {
+            animationController.SetAttack(false);
+            animationController.SetBlock(false);
+            animationController.SetJump(false);
+            weaponController?.DisableWeaponCollider();
+            shieldController?.DisableShieldCollider();
+            isBlocking = false;
+        }
+
+        // --- 移動／攻撃／防御 ---
+        /// <summary> カメラ基準の移動とジャンプ処理 </summary>
         private void Move()
         {
             if (characterController.isGrounded)
@@ -250,7 +309,7 @@ namespace Takato
                 }
                 else
                 {
-                    animationController.SetJump(false); // 地面にいるときはジャンプアニメーションをオフ
+                    animationController.SetJump(false);
                 }
             }
             else
@@ -260,65 +319,80 @@ namespace Takato
             }
 
             Vector2 moveDirection = inputController.MoveInput;
-            float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed; // 防御中は移動速度を低下
+            float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed;
 
-            // カメラ基準の移動方向を計算
             Vector3 movement;
             if (cameraTransform != null)
             {
                 Vector3 camForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
                 Vector3 camRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up).normalized;
                 Vector3 desiredMove = camForward * moveDirection.y + camRight * moveDirection.x;
-
                 movement = desiredMove * currentMoveSpeed;
             }
             else
             {
-                // カメラが設定されていない場合は従来通りプレイヤー基準で移動
                 Vector3 forward = transform.forward;
                 Vector3 right = transform.right;
                 movement = (forward * moveDirection.y + right * moveDirection.x) * currentMoveSpeed;
             }
 
             movement.y = verticalVelocity;
-
             characterController.Move(movement * Time.deltaTime);
             animationController.UpdateAnimation(moveDirection);
         }
 
         /// <summary>
-        /// プレイヤーの移動速度を取得するメソッド
+        /// プレイヤーの攻撃処理を実行するためのメソッドです。
         /// </summary>
-        public float GetMoveSpeed()
+        private void Attack()
         {
-            return moveSpeed; // プレイヤーの移動速度を返す
-        }
-        public void SetMoveSpeed(float value)
-        {
-            moveSpeed = value; // プレイヤーの移動速度を設定する
+            if (inputController.IsAttackInput)
+            {
+                animationController.SetAttack(true);
+                weaponController?.EnableWeaponCollider();
+            }
+            else
+            {
+                animationController.SetAttack(false);
+                weaponController?.DisableWeaponCollider();
+            }
         }
 
         /// <summary>
-        /// HP 関係の公開ユーティリティ
+        ///プレイヤーの防御処理を実行するためのメソッドです。
         /// </summary>
-        public int GetHP()
+        private void Block()
         {
-            return hp;
+            if (inputController.BlockInput)
+            {
+                animationController.SetBlock(true);
+                shieldController?.EnableShieldCollider();
+                isBlocking = true;
+            }
+            else
+            {
+                animationController.SetBlock(false);
+                shieldController?.DisableShieldCollider();
+                isBlocking = false;
+            }
         }
 
-        public int GetMaxHP()
-        {
-            return maxHp;
-        }
+        // --- 公開 API ---
+        public float GetMoveSpeed() => moveSpeed;                   //プレイヤーの移動速度を取得するためのメソッド
+        public void SetMoveSpeed(float value) => moveSpeed = value; //プレイヤーの移動速度を設定するためのメソッド
 
-        public void SetHP(int value)
+        public int GetHP() => hp;                                   //プレイヤーの現在のHPを取得するためのメソッド
+        public int GetMaxHP() => maxHp;                             //プレイヤーの最大HPを取得するためのメソッド
+
+        //プレイヤーのHPを設定するためのメソッド
+        public void SetHP(int value)                               
         {
             hp = Mathf.Clamp(value, 0, maxHp);
-            hpBar?.SetHP(hp, maxHp);
+            hpBar?.SetHP(hp, maxHp);                               
         }
 
         /// <summary>
-        /// HPを別のプレイヤーに転送するメソッド
+        /// HPを切り替え先でも同じ割合を維持する形で転送する。preservePercent が false の場合は、現在のHPをそのまま転送する。
         /// </summary>
         public void TransferHPTo(PlayerController target, bool preservePercent = true)
         {
@@ -336,124 +410,60 @@ namespace Takato
             }
         }
 
-        /// <summary>
-        /// 攻撃処理
-        /// </summary>
-        private void Attack()
-        {
-            // 攻撃入力がある場合、攻撃アニメーションを再生して、武器のコライダーを有効化
-            if (inputController.IsAttackInput)
-            {
-                animationController.SetAttack(true);
-                weaponController?.EnableWeaponCollider(); // 攻撃入力がある場合、武器のコライダーを有効化
-            }
-            else
-            {
-                animationController.SetAttack(false);
-                weaponController?.DisableWeaponCollider(); // 攻撃入力がない場合、武器のコライダーを無効化
-            }
-        }
+        public float GetDamageCutRate() => damageCutRate; //プレイヤーのダメージカット率を取得するためのメソッド
+        public void SetDamageCutRate(float value) => damageCutRate = Mathf.Clamp01(value); //プレイヤーのダメージカット率を設定するためのメソッド
 
-        /// <summary>
-        /// 防御処理
-        /// </summary>
-        private void Block()
-        {
-            // 防御入力がある場合、防御アニメーションを再生して、シールドのコライダーを有効化
-            if (inputController.BlockInput)
-            {
-                animationController.SetBlock(true);
-                shieldController?.EnableShieldCollider(); // 防御入力がある場合、シールドのコライダーを有効化
-                isBlocking = true; // 防御中フラグを立てる
-            }
-            else
-            {
-                animationController.SetBlock(false);
-                shieldController?.DisableShieldCollider(); // 防御入力がない場合、シールドのコライダーを無効化
-                isBlocking = false; // 防御中フラグを下げる
-            }
-        }
-
-        /// <summary>
-        /// ダメージカット率を取得するメソッド
-        /// </summary>
-        public float GetDamageCutRate()
-        {
-            return damageCutRate; // ダメージカット率を返す
-        }
-
-        /// <summary>
-        /// ダメージカット率を設定するメソッド
-        /// </summary>
-        public void SetDamageCutRate(float value)
-        {
-            damageCutRate = Mathf.Clamp01(value);
-        }
-
-        /// <summary>
-        /// プレイヤーがダメージを受ける処理
-        /// </summary>
         public void TakeDamage(int damage)
         {
             SoundManager soundManager = FindAnyObjectByType<SoundManager>();
-            if (soundManager != null)
-            {
-                soundManager.PlaySE(1); // ダメージを受けたときのSEを再生
-            }
+            soundManager?.PlaySE(1);
 
-            int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate)); // ダメージカット率を適用
+            int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate));
             hp -= finalDamage;
-            hpBar.SetHP(hp, maxHp); // HPバーを更新
+            hpBar?.SetHP(hp, maxHp);
             Debug.Log($"プレイヤーは{finalDamage}のダメージを受けました。現在のHP: {hp}/{maxHp}");
         }
 
-        /// <summary>
-        /// 現在のスキルコストを取得するメソッド
-        /// </summary>
-        public int GetCurrentCost()
-        {
-            return currentCost;
-        }
+        public int GetCurrentCost() => currentCost; //プレイヤーの現在のスキルコストを取得するためのメソッド
 
-        /// <summary>
-        /// スキルコストを消費する処理
-        /// </summary>
         public void ConsumeCost(int value)
         {
-            currentCost = Mathf.Max(0, currentCost - value); // コストが0未満にならないようにする
-            costText.text = $"Cost: {currentCost}"; // コストの表示を更新
+            currentCost = Mathf.Max(0, currentCost - value);
+            if (costText != null)
+            {
+                costText.text = $"Cost: {currentCost}";
+            }
         }
 
-        // 必要に応じてコスト回復メソッドも追加する予定
         public void RecoverCost(int value)
         {
             currentCost += value;
+            if (costText != null)
+            {
+                costText.text = $"Cost: {currentCost}";
+            }
         }
 
-
-        /// <summary>
-        /// プレイヤーが死亡したときの処理
-        /// </summary>
+        // --- 死亡処理 ---
         private void Die()
         {
-            isDead = true; // 死亡フラグを立てる
+            if (isDead) return;
 
-            //操作を無効化
+            isDead = true;
+
             inputController.enabled = false;
             animationController.enabled = false;
-            weaponController?.DisableWeaponCollider(); // 武器のコライダーを無効化
-            shieldController?.DisableShieldCollider(); // シールドのコライダーを無効化
-            
+            weaponController?.DisableWeaponCollider();
+            shieldController?.DisableShieldCollider();
 
             Debug.Log("プレイヤーは死亡しました");
             PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();
             if (ragdollController != null)
             {
-                ragdollController.ActivateRagdoll(); // ラグドールを有効化して死亡表現
+                ragdollController.ActivateRagdoll();
             }
             else
             {
-                // ラグドールがない場合は、単純にオブジェクトを非表示にする
                 gameObject.SetActive(false);
             }
         }

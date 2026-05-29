@@ -895,7 +895,7 @@ Camera:
     height: 1
   near clip plane: 0.1
   far clip plane: 5000
-  field of view: 80
+  field of view: 60
   orthographic: 0
   orthographic size: 10
   m_Depth: -1
@@ -1006,15 +1006,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 56609770559436359, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2864310820104485418, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2864310820104485418, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3713859532431908425, guid: d6c4a523394890246b75bcd0157514f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1304,7 +1304,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271668808745765363, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 537.50006
+      value: 537.49994
       objectReference: {fileID: 0}
     - target: {fileID: 3532616136693808161, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: bringSkill
@@ -1515,6 +1515,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1267233131858992298, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_Name
+      value: CostText
+      objectReference: {fileID: 0}
     - target: {fileID: 1365156940225386268, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1522,6 +1526,26 @@ PrefabInstance:
     - target: {fileID: 1365156940225386268, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419344215415248756, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 487.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836793546037156955, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836793546037156955, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836793546037156955, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.81122255
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836793546037156955, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294901967
       objectReference: {fileID: 0}
     - target: {fileID: 3834320670185637282, guid: 96ef0d266bd8cc140b336561d072cf6d, type: 3}
       propertyPath: m_AnchorMax.x
