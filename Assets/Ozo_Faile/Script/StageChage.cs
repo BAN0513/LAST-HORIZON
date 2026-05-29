@@ -22,12 +22,14 @@ public class StageChage : MonoBehaviour
     [SerializeField] GameObject SpawnPoint_B3;
 
     public static bool IsChage = false;//FadeController共有用変数
+    public static int IsStage = 0;
 
     private void Start()
     {
         if (StageNumber < 0 || StageNumber > 3)
         { 
             StageNumber = 0;
+            IsStage = StageNumber;
             transform.position = Vector3.zero;
         }
     }
@@ -56,6 +58,8 @@ public class StageChage : MonoBehaviour
             transform.position = SpawnPoint_B3.transform.position;
         else if (StageNumber == 0 /*&& !EndWarp*/)
             transform.position = new Vector3(0, 0, 0);
+
+        Physics.SyncTransforms();
 
         //EndWarp = true;
 
@@ -86,6 +90,7 @@ public class StageChage : MonoBehaviour
             Chage = true;
             StageNumber++;
             if (StageNumber > 3) StageNumber = 0;
+            IsStage = StageNumber;
             IsChage = true;
             //GoWarp();
         }
