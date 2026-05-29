@@ -94,9 +94,9 @@ namespace Takato
             playerInputActions.Player.Ult.canceled += context => IsSkill4Input = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
 
             //Look入力イベント登録
-            playerInputActions.Player.Look.started += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
-            playerInputActions.Player.Look.performed += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
-            playerInputActions.Player.Look.canceled += context => LookInput = IsLookEnabled ? context.ReadValue<Vector2>() * Time.deltaTime : Vector2.zero;
+            playerInputActions.Player.Look.started += context => LookInput = context.ReadValue<Vector2>();   // 入力が開始されたときのイベント
+            playerInputActions.Player.Look.performed += context => LookInput = context.ReadValue<Vector2>(); // 入力が実行されたときのイベント
+            playerInputActions.Player.Look.canceled += context => LookInput = Vector2.zero;                  // 入力がキャンセルされたときのイベント
 
             //Inventory入力イベント登録
             playerInputActions.Player.Inventory.started += context => IsInventoryInput = context.ReadValueAsButton();   // 入力が開始されたときのイベント

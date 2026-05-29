@@ -987,7 +987,7 @@ MonoBehaviour:
   player: {fileID: 0}
   cameraOffset: {x: 1, y: 0, z: -1}
   cameraHeight: 1.4
-  mouseSensitivity: 10
+  mouseSensitivity: 0.07
   minVerticalAngle: -30
   maxVerticalAngle: 60
   playerRotationSpeed: 10
@@ -1304,7 +1304,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271668808745765363, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 537.49994
+      value: 537.50006
       objectReference: {fileID: 0}
     - target: {fileID: 3532616136693808161, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: bringSkill

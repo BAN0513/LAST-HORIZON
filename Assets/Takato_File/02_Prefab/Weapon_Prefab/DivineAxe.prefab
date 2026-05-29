@@ -190,6 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8792870351216015964}
   - component: {fileID: 7339351941533750335}
+  - component: {fileID: 2301145615191907808}
   - component: {fileID: -7264655272146658899}
   - component: {fileID: -4991142288933362922}
   m_Layer: 0
@@ -231,6 +232,19 @@ MonoBehaviour:
   baseAttackDamage: 5
   weaponLevel: 5
   maxLevel: 10
+--- !u!114 &2301145615191907808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8164283214986944742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b79deeb2400e604cb8ae69a7adce159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerShieldContoroller
+  damageCutRate: 0.75
 --- !u!54 &-7264655272146658899
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -277,5 +291,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.06, y: 0.4, z: 0.2}
-  m_Center: {x: 0, y: 0.4, z: 0.1}
+  m_Size: {x: 0.06, y: 0.5, z: 0.2}
+  m_Center: {x: 0, y: 0.35, z: 0.1}
