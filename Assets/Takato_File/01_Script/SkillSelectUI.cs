@@ -29,12 +29,43 @@ public class SkillSelectUI : MonoBehaviour
     private List<Image> skillSlotImages = new List<Image>(); // スロットのImageコンポーネントを保持するリスト
     private List<SkillSlotDropHandler> slotHandlers = new List<SkillSlotDropHandler>(); // 各スロットのハンドラ参照
 
+    // すでにスロット生成済みかどうかのフラグ
+    private bool slotsGenerated = false;
+
     void Start()
     {
-        GenerateSkillSlots(); // スロット生成
-        RefreshOwnedSkills(); // 所持スキル表示
-        RefreshSkillSlots();  // スロット表示更新
-        ShowUI(false);        // 最初は非表示
+        // UIは最初非表示。ただしスロット生成は playerSkill が取得できてから実行する
+        ShowUI(false);
+
+        // 可能なら即座に playerSkill を探して初期化する
+        if (playerSkill == null)
+            playerSkill = FindAnyObjectByType<PlayerSkill>();
+
+        if (playerSkill != null)
+        {
+            GenerateSkillSlots(); // スロット生成
+            RefreshOwnedSkills(); // 所持スキル表示
+            RefreshSkillSlots();  // スロット表示更新
+            slotsGenerated = true;
+        }
+    }
+
+
+    private void Update()
+    {
+        // プレイヤーのスキル管理クラスがNullなら自動で探す
+        if (playerSkill == null)
+        {
+            playerSkill = FindAnyObjectByType<PlayerSkill>();
+            if (playerSkill != null && !slotsGenerated)
+            {
+                // プレイヤーが遅延スポーンして見つかった -> 一度だけ初期化
+                GenerateSkillSlots(); // スロット再生成
+                RefreshOwnedSkills(); // 所持スキル表示更新
+                RefreshSkillSlots();  // スロット表示更新
+                slotsGenerated = true;
+            }
+        }
     }
 
     /// <summary>
@@ -67,6 +98,18 @@ public class SkillSelectUI : MonoBehaviour
     // スロットを生成
     void GenerateSkillSlots()
     {
+        // 必須依存関係のチェック
+        if (playerSkill == null)
+        {
+            Debug.LogWarning($"[{nameof(SkillSelectUI)}] playerSkill が見つかりません。プレイヤーがスポーンしてからスロットを生成します。");
+            return;
+        }
+        if (slotParent == null || slotPrefab == null)
+        {
+            Debug.LogWarning($"[{nameof(SkillSelectUI)}] slotParent または slotPrefab が設定されていません。スロット生成をスキップします。");
+            return;
+        }
+
         foreach (Transform child in slotParent)
             Destroy(child.gameObject);
 
@@ -117,6 +160,12 @@ public class SkillSelectUI : MonoBehaviour
     // 所持スキル一覧を表示
     void RefreshOwnedSkills()
     {
+        if (bringSkill == null || ownedSkillsPanel == null || skillIconPrefab == null)
+        {
+            Debug.LogWarning($"[{nameof(SkillSelectUI)}] bringSkill / ownedSkillsPanel / skillIconPrefab のいずれかが未設定です。所持スキル表示をスキップします。");
+            return;
+        }
+
         foreach (Transform child in ownedSkillsPanel)
             Destroy(child.gameObject);
 
@@ -135,6 +184,8 @@ public class SkillSelectUI : MonoBehaviour
     // 装備スロットの表示更新
     public void RefreshSkillSlots()
     {
+        if (playerSkill == null) return; //もしプレイヤーのスキル管理クラスがないなら更新できないので終了です。
+
         int slotCount = playerSkill.SkillSlotCount; // スロット数分ループ
         for (int i = 0; i < slotCount; i++)
         {
@@ -199,6 +250,8 @@ public class SkillSelectUI : MonoBehaviour
         {
             soundmanager.PlaySE(4); // ドロップ成功のSEを再生
         }
+
+        if (bringSkill == null || playerSkill == null) return;
 
         int ownedIndex = bringSkill.GetOwnedSkills().IndexOf(iconUI.Skill);
         if (ownedIndex < 0) return;

@@ -72,15 +72,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 614fcf142a102894eb9cf6f2c6a82c8e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.5417373
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 614fcf142a102894eb9cf6f2c6a82c8e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.00000006952234
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 614fcf142a102894eb9cf6f2c6a82c8e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -5.6334205
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 614fcf142a102894eb9cf6f2c6a82c8e, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1041,11 +1041,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 30
+  maxHp: 150
   currentCost: 100
   hpBar: {fileID: 0}
   costText: {fileID: 0}
-  moveSpeed: 3.5
+  moveSpeed: 2
   jumpForce: 5
   gravity: 13
   damageCutRate: 0.2
@@ -1090,7 +1090,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40e1c765535f6f442a6054bd4a2ad358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerSkill
-  skills: []
+  skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &6845199619196757455 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: 614fcf142a102894eb9cf6f2c6a82c8e, type: 3}

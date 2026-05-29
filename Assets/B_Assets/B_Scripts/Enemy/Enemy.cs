@@ -124,6 +124,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+       
         if (enemyAnimatorController.CheckCurrentAnim("Death") || enemyAnimatorController.CheckCurrentAnim("Hit")) { return; }
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
