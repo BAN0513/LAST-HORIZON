@@ -20,7 +20,7 @@ public class Enemy_1 : Enemy_Humanoid
         base.Update();
     }
 
-    protected override void ShortDistanceAction()
+    protected override void AttackAction()
     {
         Enemy_1ActionSO enemy_1Action = (Enemy_1ActionSO)enemySO.action[0];
         enemy_1Action.Execute(enemy_1AnimatorController);

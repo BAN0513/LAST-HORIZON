@@ -6,7 +6,11 @@ public class EnemySO : ScriptableObject
     [Header("“G‘S‘Ì‚ª‚Â’l‚Ì‰Šúİ’èB\n" +
         "“G‚ª‚»‚ê‚¼‚ê‚Â’l‚Í“G‚Ìinspector‚Åİ’è")]
 
+    [Header("“G‚ÌUŒ‚‚Ìs“®")]
     public EnemyActionSO[] action;
+
+    [Header("“G‚ÌUŒ‚‚µ‚È‚©‚Á‚½‚Æ‚«‚Ìs“®")]
+    public EnemyActionSO[] doNotAttack_Action;
 
     [Header("“G‚ÌHP")]
     public int maxHP;

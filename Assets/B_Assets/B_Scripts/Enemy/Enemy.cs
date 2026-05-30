@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    protected Transform target;
+    public Transform target;
     protected NavMeshAgent agent;
     public NavMeshAgent Agent
     {
@@ -89,8 +89,10 @@ public abstract class Enemy : MonoBehaviour
     //プレイヤーと自身の距離
     protected float distance = 0;
 
-    //接敵中か（今後常に敵対状態になるかも）
-    public bool isContact {  get; protected set; }
+    //歩いているか
+    protected bool isWalk = true;
+
+    protected bool isNotPlayer = false;
 
     private void Awake()
     {
@@ -124,7 +126,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-       
         if (enemyAnimatorController.CheckCurrentAnim("Death") || enemyAnimatorController.CheckCurrentAnim("Hit")) { return; }
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
@@ -182,23 +183,21 @@ public abstract class Enemy : MonoBehaviour
 
     private void AgentContact()
     {
-        if (!isContact)
-        {
-            if (distance <= enemySO.searchDistance)
-            {
-                isContact = true;
-                agent.isStopped = false;
-            }
-        }
-        else
+        if (!isNotPlayer)
         {
             agent.SetDestination(target.position);
-            if (enemySO.contactDistance <= distance)
-            {
-                isContact = false;
-                agent.isStopped = true;
-            }
+        }
 
+        //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
+        if (distance <= agent.stoppingDistance && isWalk)
+        {
+            isWalk = false;
+            agent.stoppingDistance++;
+        }
+        else if (distance >= agent.stoppingDistance && !isWalk)
+        {
+            isWalk = true;
+            agent.stoppingDistance--;
         }
     }
 
@@ -211,7 +210,9 @@ public abstract class Enemy : MonoBehaviour
 
             if (!isAction)
             {
-                lotteryTime -= Time.deltaTime;
+                if (!isAnimation) lotteryTime -= Time.deltaTime;
+                
+
                 if (lotteryTime <= 0)
                 {
 
@@ -229,7 +230,7 @@ public abstract class Enemy : MonoBehaviour
                 switch (rand)
                 {
                     case int r when (r > 0 && r <= attackProbability):
-                        ShortDistanceAction();
+                        AttackAction();
                         break;
                     default:
                         DoNotAttack();
@@ -253,9 +254,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
 
-    protected virtual void ShortDistanceAction() { }
-    protected virtual void MediumDistanceAction() { }
-    protected virtual void LongDistanceAction() { }
+    protected virtual void AttackAction() { }
 
     public virtual void TakeDamage(int damage)
     {
@@ -324,7 +323,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        agent.stoppingDistance = enemySO.stoopingDis;
+        //agent.stoppingDistance = enemySO.stoopingDis;
         lotteryTime = enemySO.attackCoolDown;
         attackProbability = enemySO.attackInitProbability;
         rand = 0;

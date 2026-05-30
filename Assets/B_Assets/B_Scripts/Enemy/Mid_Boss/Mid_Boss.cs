@@ -48,17 +48,7 @@ public class Mid_Boss : Enemy_Humanoid
 
         }
     }
-    protected override void ShortDistanceAction()
-    {
-        AttackMove();
-    }
-
-    protected override void MediumDistanceAction()
-    {
-        AttackMove();
-    }
-
-    protected override void LongDistanceAction()
+    protected override void AttackAction()
     {
         AttackMove();
     }

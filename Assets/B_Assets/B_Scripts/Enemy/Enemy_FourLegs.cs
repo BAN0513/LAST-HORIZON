@@ -57,13 +57,15 @@ public class Enemy_FourLegs : Enemy
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }
+        else if (agent.velocity.magnitude > 0)
+        {
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+            isLookPlayer = true;
+        }
         else
         {
-            if (agent.velocity.magnitude > 0)
-            {
-                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
-                isLookPlayer = true;
-            }
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            isLookPlayer = false;
         }
     }
 

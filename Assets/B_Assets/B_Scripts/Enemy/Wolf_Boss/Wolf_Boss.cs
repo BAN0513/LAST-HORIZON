@@ -5,9 +5,6 @@ public class Wolf_Boss : Enemy_FourLegs
 {
     public Wolf_BossAnimatorController wolf_Anim;
 
-    private bool isKnockBack = false;
-    private float reflectionSpeed = 5;
-    private Vector3 dir;
     private Wolf_BossActionSO lastAction;
 
     protected override void Start()
@@ -17,49 +14,25 @@ public class Wolf_Boss : Enemy_FourLegs
     }
 
     protected override void Update()
-    {
-        if (isKnockBack)
-        {
-            transform.position += Vector3.Normalize(-transform.forward) * 5 * Time.deltaTime;
-        }
-
+    {        
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();
-
-        if (wolf_Anim.CheckCurrentAnim("DashAttack"))
-        {
-            transform.position += Vector3.Normalize(transform.forward) * 10 * Time.deltaTime;
-        }
-        else if (wolf_Anim.CheckCurrentAnim("Retreat"))
-        {
-            transform.position += Vector3.Normalize(-transform.forward) * 5 * Time.deltaTime;
-        }
-
-        if (wolf_Anim.CheckCurrentAnim("Reflection") || wolf_Anim.CheckCurrentAnim("ShortReflection"))
-        {
-            if (dir != Vector3.zero)
-            {
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    Quaternion.LookRotation(dir),
-                    Time.deltaTime * reflectionSpeed
-                    );
-            }
-        }
     }
 
-    protected override void ShortDistanceAction()
+    protected override void AttackAction()
     {
         float curScore = 0;
         Wolf_BossActionSO firtstActionSO = null;
+        Wolf_BossActionSO secondActionSO = null;
         foreach (var a in enemySO.action)
         {
             float lastScore = a.ScoreCalculation(distance, dot);
 
             if (curScore < lastScore)
-            {
+            {             
                 curScore = lastScore;
+                secondActionSO = firtstActionSO;
                 firtstActionSO = (Wolf_BossActionSO)a;
             }
         }
@@ -68,21 +41,15 @@ public class Wolf_Boss : Enemy_FourLegs
             LookPlayerChange(false);
             if (lastAction == firtstActionSO)
             {
-                lastAction = null;
-                if (dot < 0)
+                if (secondActionSO != null)
                 {
-                    Reflection();
+                    secondActionSO.Execute(wolf_Anim);
+                    lastAction = secondActionSO;
                 }
                 else
                 {
-                    if (dot >= 0.9f)
-                    {
-                        wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Retreat);
-                    }
-                    else
-                    {
-                        Reflection(true);
-                    }
+                    lastAction = null;
+                    Init();
                 }
             }
             else
@@ -95,96 +62,34 @@ public class Wolf_Boss : Enemy_FourLegs
 
     }
 
-    //protected override void MediumDistanceAction()
-    //{
-    //    switch (rand)
-    //    {          
-    //        case int r when (r > 0 && r <= attackProbability):
-    //            if (r <= attackProbability / 2)
-    //            {
-    //                isLookPlayer = true;
-
-    //                if (dot >= 0.9f)
-    //                {
-    //                    Attack_2();
-    //                }
-    //            }
-    //            else
-    //            {
-    //                agent.stoppingDistance = shortDis;
-    //            }
-    //            break;
-    //        default:
-    //            DoNotAttack();
-    //            break;
-    //    }
-    //}
-
-    //protected override void LongDistanceAction()
-    //{
-    //    switch (rand)
-    //    {
-    //        case int r when (r > 0 && r <= attackProbability):
-    //            DashAttackBefore();
-    //            break;
-    //        default:
-    //            DoNotAttack();
-    //            break;
-    //    }
-    //}
-
-
-    //private void RotationAttack()
-    //{
-    //    wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.RotationAttack);
-    //    LookPlayerChange(false);
-    //}
-
-    //private void Attack_1()
-    //{
-    //    wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_1);
-    //    LookPlayerChange(false);
-    //}
-
-    //private void Retreat()
-    //{
-    //    wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Retreat);
-    //    LookPlayerChange(false);
-    //}
-
-    //private void Attack_2()
-    //{
-    //    agent.stoppingDistance = 0;
-
-    //    if (distance <= 10 && dot >= 0.7f)
-    //    {
-    //        wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_2);
-    //        LookPlayerChange(false);
-    //    }
-    //}
-
-    //private void DashAttackBefore()
-    //{
-    //    wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.DashAttackBefore);
-    //    LookPlayerChange(false);
-    //}
-
-    private void Reflection(bool shortVar = false)
+    protected override void DoNotAttack()
     {
-        if (shortVar)
+        LookPlayerChange(false);
+
+        float curScore = 0;
+        Wolf_BossActionSO firstActionSO = null;
+
+        foreach(var a in enemySO.doNotAttack_Action)
         {
-            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.ShortReflection);
+            float lastScore = a.ScoreCalculation(distance, dot);
+
+            if (curScore < lastScore)
+            {
+                curScore = lastScore;
+                firstActionSO = (Wolf_BossActionSO)a;
+            }
+        }
+        
+        if (firstActionSO != null)
+        {
+            firstActionSO.Execute(wolf_Anim);
         }
         else
         {
-            wolf_Anim.SetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Reflection);
+            Init();
         }
-        LookPlayerChange(false);
-        dir = target.position - transform.position;
-        dir.y = 0;
+        base.DoNotAttack();
     }
-
-
 
     //‚±‚±‚©‚ç‰º‚ÍAnimatorŠÖ˜A‚ÌŠÖ”
 
@@ -211,16 +116,6 @@ public class Wolf_Boss : Enemy_FourLegs
         AttackJudgmentActive(BodyPart.AllBody);
 
         agent.enabled = false;
-    }
-
-    public void KnockBackStart()
-    {
-        isKnockBack = true;
-    }
-
-    public void KnockBackEnd()
-    {
-        isKnockBack = false;
     }
 }
 
