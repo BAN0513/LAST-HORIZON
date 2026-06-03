@@ -536,6 +536,7 @@ MonoBehaviour:
   characterPrefabs:
   - {fileID: 5899827493166609428, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
   - {fileID: 6718070489165416084, guid: 7107c1d1566e4004a80cc2f33644dc41, type: 3}
+  - {fileID: 2871309425514811095, guid: aeba22a8556779c47a585ac971eaea94, type: 3}
   persistAcrossScenes: 0
 --- !u!114 &441955317
 MonoBehaviour:
@@ -1304,7 +1305,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2271668808745765363, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 537.50006
+      value: 537.49976
       objectReference: {fileID: 0}
     - target: {fileID: 3532616136693808161, guid: 53cf4b1ef3aa3e140a9789072213052f, type: 3}
       propertyPath: bringSkill
