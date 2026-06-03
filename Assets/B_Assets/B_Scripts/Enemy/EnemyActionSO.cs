@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "EnemyActionSO", menuName = "EnemyActionSO")]
 public class EnemyActionSO : ScriptableObject
 {
-    [Header("攻撃時の最適距離と最適角度")]
+    [Header("最適距離と最適角度")]
     public float bestDis = 0;
     [Range(-1, 1)] public float bestDot = 0;
 

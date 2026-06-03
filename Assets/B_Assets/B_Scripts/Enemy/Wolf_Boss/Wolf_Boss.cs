@@ -7,6 +7,8 @@ public class Wolf_Boss : Enemy_FourLegs
 
     private Wolf_BossActionSO lastAction;
 
+    public GameObject neck;
+
     protected override void Start()
     {
         base.Start();
@@ -14,7 +16,8 @@ public class Wolf_Boss : Enemy_FourLegs
     }
 
     protected override void Update()
-    {        
+    {
+        Debug.Log(attackProbability);
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();
@@ -23,7 +26,7 @@ public class Wolf_Boss : Enemy_FourLegs
     protected override void AttackAction()
     {
         float curScore = 0;
-        Wolf_BossActionSO firtstActionSO = null;
+        Wolf_BossActionSO firstActionSO = null;
         Wolf_BossActionSO secondActionSO = null;
         foreach (var a in enemySO.action)
         {
@@ -32,14 +35,14 @@ public class Wolf_Boss : Enemy_FourLegs
             if (curScore < lastScore)
             {             
                 curScore = lastScore;
-                secondActionSO = firtstActionSO;
-                firtstActionSO = (Wolf_BossActionSO)a;
+                secondActionSO = firstActionSO;
+                firstActionSO = (Wolf_BossActionSO)a;
             }
         }
-        if (firtstActionSO != null)
+        if (firstActionSO != null)
         {
             LookPlayerChange(false);
-            if (lastAction == firtstActionSO)
+            if (lastAction == firstActionSO)
             {
                 if (secondActionSO != null)
                 {
@@ -54,12 +57,14 @@ public class Wolf_Boss : Enemy_FourLegs
             }
             else
             {
-                firtstActionSO.Execute(wolf_Anim);
-                lastAction = firtstActionSO;
+                firstActionSO.Execute(wolf_Anim);
+                lastAction = firstActionSO;
             }
         }
-
-
+        else
+        {
+            DoNotAttack();
+        }
     }
 
     protected override void DoNotAttack()
@@ -68,27 +73,45 @@ public class Wolf_Boss : Enemy_FourLegs
 
         float curScore = 0;
         Wolf_BossActionSO firstActionSO = null;
+        Wolf_BossActionSO secondActionSO = null;
 
-        foreach(var a in enemySO.doNotAttack_Action)
+        foreach (var a in enemySO.doNotAttack_Action)
         {
             float lastScore = a.ScoreCalculation(distance, dot);
 
             if (curScore < lastScore)
             {
                 curScore = lastScore;
+                secondActionSO = firstActionSO;
                 firstActionSO = (Wolf_BossActionSO)a;
             }
         }
-        
+
         if (firstActionSO != null)
         {
-            firstActionSO.Execute(wolf_Anim);
+            if (lastAction == firstActionSO)
+            {
+                if (secondActionSO != null)
+                {
+                    secondActionSO.Execute(wolf_Anim);
+                    lastAction = secondActionSO;
+                }
+                else
+                {
+                    lastAction = null;
+                    Init();
+                }
+            }
+            else
+            {
+                firstActionSO.Execute(wolf_Anim);
+                lastAction = firstActionSO;
+            }
         }
         else
         {
             Init();
         }
-        base.DoNotAttack();
     }
 
     //‚±‚±‚©‚ç‰º‚ÍAnimatorŠÖ˜A‚ÌŠÖ”
@@ -108,6 +131,17 @@ public class Wolf_Boss : Enemy_FourLegs
     public override void InitAll()
     {
         base.InitAll();
+
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_1);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Attack_2);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.DashAttackBefore);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.TailAttack);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.RotationAttack);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.DownBefore);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Reflection);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.ShortReflection);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.Retreat);
+        wolf_Anim.ResetTriggerAnim(Wolf_BossAnimatorController.WolfAnimation.ForwardStep);
     }
 
     public void DashAttak()

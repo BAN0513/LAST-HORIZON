@@ -1,6 +1,7 @@
 using Takato;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
+
+    [Header("HPのスライダー")]
+    [SerializeField] protected Slider hpSliider;
 
     [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
     [SerializeField] protected Transform forward;
@@ -92,7 +96,9 @@ public abstract class Enemy : MonoBehaviour
     //歩いているか
     protected bool isWalk = true;
 
-    protected bool isNotPlayer = false;
+    //敵が攻撃された後に連続で攻撃が当たらないようにするための変数
+    private float invincibilityTime  = 0.5f;
+    private float invincibilityTimer = 0;
 
     private void Awake()
     {
@@ -107,6 +113,13 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
+        if (hpSliider != null)
+        {
+            hpSliider.maxValue = enemySO.maxHP;
+            hpSliider.minValue = 0;
+            hpSliider.value = enemySO.maxHP;
+        }
+
         distance = Vector3.Distance(transform.position, target.position);
 
         agent.updateRotation = false;
@@ -127,6 +140,12 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Update()
     {
         if (enemyAnimatorController.CheckCurrentAnim("Death") || enemyAnimatorController.CheckCurrentAnim("Hit")) { return; }
+
+        if (invincibilityTimer > 0)
+        {
+            invincibilityTimer -= Time.deltaTime;
+        }
+
         //プレイヤーと自身の距離計算
         distance = Vector3.Distance(transform.position, target.position);
 
@@ -183,10 +202,7 @@ public abstract class Enemy : MonoBehaviour
 
     private void AgentContact()
     {
-        if (!isNotPlayer)
-        {
-            agent.SetDestination(target.position);
-        }
+        agent.SetDestination(target.position);
 
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
         if (distance <= agent.stoppingDistance && isWalk)
@@ -246,29 +262,29 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void DoNotAttack()
-    {
-        //攻撃じゃなかったら攻撃の確率を上げる
-        isAction = false;
-        attackProbability += enemySO.attackUpProbability;
-    }
+    protected virtual void DoNotAttack() { }
 
 
     protected virtual void AttackAction() { }
 
     public virtual void TakeDamage(int damage)
     {
+        if (enemyAnimatorController.CheckCurrentAnim("die")) { return; }
+        if (invincibilityTimer > 0) { return; }
+
         damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }
 
         hp -= damage;
 
+        hpSliider.value = hp;
+
         if (hp <= 0)
         {
-            Init();
+
             Death();
         }
-        else
+        else if (!isAnimation)
         {
             if (!enemyAnimatorController.CheckCurrentAnim("Hit"))
             {
@@ -278,6 +294,7 @@ public abstract class Enemy : MonoBehaviour
             Init();
             agent.isStopped = true;
         }
+        invincibilityTimer = invincibilityTime;
     }
 
     //移動速度の倍率
@@ -316,8 +333,10 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Death()
     {
-        agent.isStopped = true;
+        Init();
         InitAnim();
+        hpSliider.gameObject.SetActive(false);
+        agent.isStopped = true;
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
@@ -332,9 +351,23 @@ public abstract class Enemy : MonoBehaviour
         isAnimation = false;
     }
 
+    public virtual void AttackProbabilityUP()
+    {
+        attackProbability += enemySO.attackUpProbability;
+    }
+
+    public virtual void AttackProbabilityReset()
+    {
+        attackProbability = enemySO.attackInitProbability;
+    }
+
     public virtual void InitAnim()
     {
+        //全アニメーションのリセット
         enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
+        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Walk);
+        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.BackMove);
+        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Dash);
     }
 
     public virtual void InitAll()

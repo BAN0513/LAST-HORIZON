@@ -4,21 +4,12 @@ using UnityEngine.UI;
 
 public class Enemy_Humanoid : Enemy
 {
-    [Header("HPのスライダー")]
-    [SerializeField] protected Slider hpSliider;
 
     protected EnemyAttackRollController _weaponController;
 
     protected override void Start()
     {
         base.Start();
-
-        if (hpSliider != null)
-        {
-            hpSliider.maxValue = enemySO.maxHP;
-            hpSliider.minValue = 0;
-            hpSliider.value = enemySO.maxHP;
-        }
 
         _weaponController = GetComponentInChildren<EnemyAttackRollController>();
 
@@ -109,13 +100,6 @@ public class Enemy_Humanoid : Enemy
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
-        hpSliider.value = hp;
-
-        if (hp <= 0)
-        {
-            hpSliider.gameObject.SetActive(false);
-
-        }
     }
 
     public override void Init()

@@ -22,11 +22,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8368e45c78d489041a71b4c0ce3b422a, type: 2}
   - {fileID: 11400000, guid: 3fbcc06dd3d86564c9c410f55709a851, type: 2}
   - {fileID: 11400000, guid: 62b617f9a3fd2354389d8c0ac8207a07, type: 2}
+  - {fileID: 11400000, guid: 65ecc5ad400bbe44ba81f8c58f2ca98c, type: 2}
   maxHP: 1000
   damage: 1
   dashMoveSpeed: 2
   walkMoveSpeed: 1
-  def: 50
+  def: 0
   stoopingDis: 6
   lookRotationSpeed: 1
   searchDistance: 100
@@ -35,5 +36,5 @@ MonoBehaviour:
   backActionDis: 0
   backMoveDis: 0
   attackInitProbability: 50
-  attackUpProbability: 20
+  attackUpProbability: 50
   attackCoolDown: 1

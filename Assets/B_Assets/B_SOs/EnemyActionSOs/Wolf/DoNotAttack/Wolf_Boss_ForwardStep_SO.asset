@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 974b325fb7371c2498dba43678d5caf7, type: 3}
-  m_Name: Wolf_Boss_Retreat_SO
-  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_Retreat_SO
-  bestDis: 3
-  bestDot: 0.7
-  maxDis: 6
-  maxDot: 1
+  m_Script: {fileID: 11500000, guid: c434dc5439e9c6d4dbd29040b05131f3, type: 3}
+  m_Name: Wolf_Boss_ForwardStep_SO
+  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_SideStep_SO
+  bestDis: 2
+  bestDot: -1
+  maxDis: 3
+  maxDot: 0.5
   minDis: 0
-  minDot: 0
+  minDot: -1
   baseDis: 1
-  baseDot: 0.6
+  baseDot: 0.5

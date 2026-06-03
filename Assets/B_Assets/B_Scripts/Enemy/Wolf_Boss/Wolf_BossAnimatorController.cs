@@ -16,7 +16,8 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         DownBefore,
         ShortReflection,
         Reflection,
-        Retreat
+        Retreat,
+        ForwardStep
     }
     private Dictionary<WolfAnimation, int> wolfAnims;
 
@@ -36,7 +37,8 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
             {WolfAnimation.DownBefore,       Animator.StringToHash("isDownBefore") },
             {WolfAnimation.ShortReflection,  Animator.StringToHash("isShortReflection") },
             {WolfAnimation.Reflection,       Animator.StringToHash("isReflection") },
-            {WolfAnimation.Retreat,         Animator.StringToHash("isRetreat") }
+            {WolfAnimation.Retreat,          Animator.StringToHash("isRetreat") },
+            {WolfAnimation.ForwardStep,        Animator.StringToHash("isForwardStep") }
         };
     }
 
@@ -45,18 +47,9 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         base.Update();
     }
 
-    public override void SetBoolAnim(AnimationBase animation, bool isAnim)
-    {
-        base.SetBoolAnim(animation, isAnim);
-    }
     public void SetBoolAnim(WolfAnimation animation, bool isAnim)
     {
         animator.SetBool(wolfAnims[animation], isAnim);
-    }
-
-    public override void SetTriggerAnim(AnimationBase animation)
-    {
-        base.SetTriggerAnim(animation);
     }
 
     public void SetTriggerAnim(WolfAnimation animation)
@@ -64,8 +57,9 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         animator.SetTrigger(wolfAnims[animation]);
     }
 
-    public override bool CheckCurrentAnim(string name)
+    public void ResetTriggerAnim(WolfAnimation animation)
     {
-        return base.CheckCurrentAnim(name);
+        animator.ResetTrigger(wolfAnims[animation]);
     }
+
 }
