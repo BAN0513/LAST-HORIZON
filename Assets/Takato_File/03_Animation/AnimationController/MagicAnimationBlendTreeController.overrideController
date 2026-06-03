@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MagicAnimationBlendTreeController
+  m_Controller: {fileID: 9100000, guid: c2413a634b748414e89b777a1095d7cc, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 6b2453e82fec64d4696d144e6d3f9dbc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0a33783e62360024ea19a00077a8571c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 00cefb915c4d5b143b5dc20e72824a0c, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0f50e85378b42864e92c4c1536febcc7, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 868878b3d0a484a42ab783eeb487f3d1, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e7683dc376dbb7e4893592831d53c72a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 55855dc5f50e2674fa95d496f80179fd, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bf0e6587d82cedc43987b698bf2b2512, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 18a6c6786265d334181f9871de563d97, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0467681694faaf049910edb78e0855ab, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 81bcde4b5e5395146b748301115c7b56, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 63a6ee598e9bfc34baaf8023cbbe444c, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 19c3bcfba9ee2994791e4c579d1efa95, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 50b18fa401c261e40862ec7eabb68c3a, type: 2}
