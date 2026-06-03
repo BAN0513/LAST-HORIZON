@@ -149,6 +149,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CharChangeDown",
+                    "type": "Button",
+                    "id": "76c6bd3b-eccd-463f-9db4-14f3de7b8ced",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -584,7 +593,7 @@
                 {
                     "name": "",
                     "id": "0d92877c-f7e1-466f-91a6-9a88c6612801",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -611,6 +620,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "CharChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "637ae26b-4c17-4cac-9437-62cd81fdd4ca",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CharChangeDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

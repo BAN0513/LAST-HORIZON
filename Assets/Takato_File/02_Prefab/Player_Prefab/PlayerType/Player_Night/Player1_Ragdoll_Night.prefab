@@ -1015,8 +1015,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 30
-  currentCost: 100
+  maxHp: 100
+  currentCost: 75
   hpBar: {fileID: 0}
   costText: {fileID: 0}
   moveSpeed: 3.5

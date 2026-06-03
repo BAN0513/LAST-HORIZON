@@ -21,6 +21,7 @@ namespace Takato
         public Vector2 LookInput { get; private set; }   // プレイヤーの視点入力を格納するプロパティ
         public bool IsInventoryInput { get; private set; } // プレイヤーのインベントリ入力を格納するプロパティ
         public bool IsCharChange { get; private set; } // プレイヤーのキャラチェンジ入力を格納するプロパティ
+        public bool IsCharChangeDown { get; private set; } // プレイヤーのキャラチェンジ入力を格納するプロパティ
 
         // 内部バックフィールド
         private bool isLookEnabled = false;
@@ -107,6 +108,11 @@ namespace Takato
             playerInputActions.Player.CharChange.started += context => IsCharChange = context.ReadValueAsButton();   // 入力が開始されたときのイベント
             playerInputActions.Player.CharChange.performed += context => IsCharChange = context.ReadValueAsButton(); // 入力が実行されたときのイベント
             playerInputActions.Player.CharChange.canceled += context => IsCharChange = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
+
+            //CharChangeDown入力イベント登録
+            playerInputActions.Player.CharChangeDown.started += context => IsCharChangeDown = context.ReadValueAsButton();   // 入力が開始されたときのイベント
+            playerInputActions.Player.CharChangeDown.performed += context => IsCharChangeDown = context.ReadValueAsButton(); // 入力が実行されたときのイベント
+            playerInputActions.Player.CharChangeDown.canceled += context => IsCharChangeDown = context.ReadValueAsButton();  // 入力がキャンセルされたときのイベント
         }
 
         /// <summary>

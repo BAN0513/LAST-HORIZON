@@ -47,7 +47,7 @@ namespace Takato
         private bool isSkillUIOpen;
         private bool prevInventoryOpen;
 
-        // スキル発動に関する前フレーム入力（既存ロジックを維持）
+        // スキル発動に関する前フレーム入力
         private bool prevSkillInput;
 
         // キャラ切替のエッジ判定用フラグ
@@ -104,6 +104,7 @@ namespace Takato
             Attack();
             HandleSkillInputs();
             HandleCharacterChangeEdge();
+            PreviousCharacter();
 
             // 前フレーム情報を保存
             prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input ||
@@ -250,11 +251,25 @@ namespace Takato
             }
         }
 
+        /// <summary>
+        /// キャラクターを次のキャラクターに切り替える処理を実行
+        /// </summary>
         private void HandleCharacterChangeEdge()
         {
             if (inputController.IsCharChange && !prevCharChange)
             {
                 characterChangeController?.NextCharacter();
+            }
+        }
+
+        /// <summary>
+        /// キャラクターが前のキャラクターに切り替わる処理を実行
+        /// </summary>
+        private void PreviousCharacter()
+        {
+           if(inputController.IsCharChangeDown && !prevCharChange)
+            {
+                characterChangeController?.PreviousCharacter();
             }
         }
 

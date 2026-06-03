@@ -235,6 +235,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CharChangeDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""76c6bd3b-eccd-463f-9db4-14f3de7b8ced"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -670,7 +679,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0d92877c-f7e1-466f-91a6-9a88c6612801"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -697,6 +706,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CharChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""637ae26b-4c17-4cac-9437-62cd81fdd4ca"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CharChangeDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1320,6 +1340,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Ult = m_Player.FindAction("Ult", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_CharChange = m_Player.FindAction("CharChange", throwIfNotFound: true);
+        m_Player_CharChangeDown = m_Player.FindAction("CharChangeDown", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1430,6 +1451,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ult;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_CharChange;
+    private readonly InputAction m_Player_CharChangeDown;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1506,6 +1528,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @CharChange => m_Wrapper.m_Player_CharChange;
         /// <summary>
+        /// Provides access to the underlying input action "Player/CharChangeDown".
+        /// </summary>
+        public InputAction @CharChangeDown => m_Wrapper.m_Player_CharChangeDown;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1579,6 +1605,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CharChange.started += instance.OnCharChange;
             @CharChange.performed += instance.OnCharChange;
             @CharChange.canceled += instance.OnCharChange;
+            @CharChangeDown.started += instance.OnCharChangeDown;
+            @CharChangeDown.performed += instance.OnCharChangeDown;
+            @CharChangeDown.canceled += instance.OnCharChangeDown;
         }
 
         /// <summary>
@@ -1638,6 +1667,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CharChange.started -= instance.OnCharChange;
             @CharChange.performed -= instance.OnCharChange;
             @CharChange.canceled -= instance.OnCharChange;
+            @CharChangeDown.started -= instance.OnCharChangeDown;
+            @CharChangeDown.performed -= instance.OnCharChangeDown;
+            @CharChangeDown.canceled -= instance.OnCharChangeDown;
         }
 
         /// <summary>
@@ -2061,6 +2093,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCharChange(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CharChangeDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCharChangeDown(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
