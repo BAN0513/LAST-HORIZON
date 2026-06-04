@@ -1685,7 +1685,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_LeftAndRightWalk
   walkSpeed: 7
-  rotationSpeed: 7
+  rotationSpeed: 10
 --- !u!1101 &7413558208633814165
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

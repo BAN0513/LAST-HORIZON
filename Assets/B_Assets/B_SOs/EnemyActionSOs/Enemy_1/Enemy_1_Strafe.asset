@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d338fa3d0e06ffb4aadf54b1ca5dddba, type: 3}
-  m_Name: Enemy_1_MeleeSO
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_1_MeleeSO
-  bestDis: 1
+  m_Script: {fileID: 11500000, guid: 87bc7d91a6b7f0a49b577fe2fada1454, type: 3}
+  m_Name: Enemy_1_Strafe
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_1_Strafe
+  bestDis: 5
   bestDot: 1
-  maxDis: 3
+  maxDis: 8
   maxDot: 1
   minDis: 0
-  minDot: 0
+  minDot: -1
   baseDis: 0.5
   baseDot: 0.5

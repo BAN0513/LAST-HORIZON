@@ -22,9 +22,37 @@ public class Enemy_1 : Enemy_Humanoid
 
     protected override void AttackAction()
     {
-        Enemy_1ActionSO enemy_1Action = (Enemy_1ActionSO)enemySO.action[0];
-        enemy_1Action.Execute(enemy_1AnimatorController);
-        LookPlayerChange(false);
+        float curScore = 0;
+        Enemy_1ActionSO firstActionSO = null;
+
+        foreach (var a in enemySO.action)
+        {
+            float lastScore = a.ScoreCalculation(distance, dot);
+
+            if (curScore < lastScore)
+            {
+                curScore = lastScore;
+                firstActionSO = (Enemy_1ActionSO)a;
+            }
+        }
+
+        if (firstActionSO != null)
+        {
+            LookPlayerChange(false);
+
+            firstActionSO.Execute(enemy_1AnimatorController);
+        }
+        else
+        {
+            DoNotAttack();
+        }
+    }
+
+    protected override void DoNotAttack()
+    {
+        LookPlayerChange(true);
+        Enemy_1ActionSO action = (Enemy_1ActionSO)enemySO.doNotAttack_Action[0];
+        action.Execute(enemy_1AnimatorController);
     }
 
     private void AttackMove()

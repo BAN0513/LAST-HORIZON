@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   action:
   - {fileID: 11400000, guid: c8b6aaa48f107d14b9515e110a5ddc67, type: 2}
+  - {fileID: 11400000, guid: 0ab409496f719ee46816f69fd3820ad9, type: 2}
+  doNotAttack_Action:
+  - {fileID: 11400000, guid: 85fcbb8ecc455414db414f103324f15b, type: 2}
   maxHP: 50
   damage: 1
   dashMoveSpeed: 2
@@ -26,6 +29,6 @@ MonoBehaviour:
   engageDis: 5
   backActionDis: 1
   backMoveDis: 3
-  attackInitProbability: 20
+  attackInitProbability: 40
   attackUpProbability: 20
   attackCoolDown: 3

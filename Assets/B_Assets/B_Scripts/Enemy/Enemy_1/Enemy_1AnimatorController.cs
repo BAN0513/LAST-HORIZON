@@ -8,7 +8,10 @@ public class Enemy_1AnimatorController : EnemyAnimatorController
     public enum Enemy_1Animation
     {
         Melee1,
-        Melee2
+        Melee2,
+        SwordCombo,
+        Strafe_Left,
+        Strafe_Right
     }
 
     private Dictionary<Enemy_1Animation, int> enemy_1Anims;
@@ -21,23 +24,16 @@ public class Enemy_1AnimatorController : EnemyAnimatorController
         enemy_1Anims = new Dictionary<Enemy_1Animation, int>
         {
             {Enemy_1Animation.Melee1, Animator.StringToHash("isMelee1") },
-            {Enemy_1Animation.Melee2, Animator.StringToHash("isMelee2") }
+            {Enemy_1Animation.Melee2, Animator.StringToHash("isMelee2") },
+            {Enemy_1Animation.Strafe_Left, Animator.StringToHash("isStrafe_Left") },
+            {Enemy_1Animation.Strafe_Right, Animator.StringToHash("isStrafe_Right") },
+            {Enemy_1Animation.SwordCombo, Animator.StringToHash("isSwordCombo") }
         };
-    }
-
-    public override void SetBoolAnim(AnimationBase animation, bool isAnim)
-    {
-        base.SetBoolAnim(animation, isAnim);
     }
 
     public void SetBoolAnim(Enemy_1Animation animation, bool isAnim)
     {
         animator.SetBool(enemy_1Anims[animation], isAnim);
-    }
-
-    public override void SetTriggerAnim(AnimationBase animation)
-    {
-        base.SetTriggerAnim(animation);
     }
 
     public void SetTriggerAnim(Enemy_1Animation animation)
