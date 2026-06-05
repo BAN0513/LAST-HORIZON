@@ -97,7 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
-  target: {fileID: 0}
   enemySO: {fileID: 11400000, guid: 0331490f3c9c0a74bb26783a7fab01d7, type: 2}
   hpSliider: {fileID: 1878319838695366945}
   forward: {fileID: 2585517044960145431}

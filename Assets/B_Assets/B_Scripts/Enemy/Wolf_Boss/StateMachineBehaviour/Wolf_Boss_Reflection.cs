@@ -10,7 +10,7 @@ public class Wolf_Boss_Reflection : StateMachineBehaviour
     {
         enemy = animator.GetComponent<Enemy>();
 
-        dir = enemy.target.position - enemy.transform.position;
+        dir = enemy.Target.position - enemy.transform.position;
         dir.y = 0;
     }
 

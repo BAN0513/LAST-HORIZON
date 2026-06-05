@@ -5,7 +5,12 @@ using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
+    public Transform Target
+    {
+        get {  return target; }
+    }
+
     protected NavMeshAgent agent;
     public NavMeshAgent Agent
     {
@@ -24,7 +29,7 @@ public abstract class Enemy : MonoBehaviour
     protected int rand;
     protected float lotteryTime;
     protected float lotteryMinTime = 0.5f;
-    protected float lotteryMaxTime = 2.0f;
+    protected float lotteryMaxTime = 1.0f;
     protected float dot;
 
     [Header("敵のScriptable Object")]
@@ -156,6 +161,7 @@ public abstract class Enemy : MonoBehaviour
         LookPlayer();
 
         if (isAnimation) { return; }
+
         //交戦時の処理
         EngageMoveControl();
 
@@ -264,12 +270,11 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void DoNotAttack() { }
 
-
     protected virtual void AttackAction() { }
 
     public virtual void TakeDamage(int damage)
     {
-        if (enemyAnimatorController.CheckCurrentAnim("die")) { return; }
+        if (enemyAnimatorController.CheckCurrentAnim("Death")) { return; }
         if (invincibilityTimer > 0) { return; }
 
         damage -= (enemySO.def - debufDEF);
@@ -281,19 +286,9 @@ public abstract class Enemy : MonoBehaviour
 
         if (hp <= 0)
         {
-
             Death();
         }
-        else if (!isAnimation)
-        {
-            if (!enemyAnimatorController.CheckCurrentAnim("Hit"))
-            {
-                enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
-            }
 
-            Init();
-            agent.isStopped = true;
-        }
         invincibilityTimer = invincibilityTime;
     }
 
@@ -333,8 +328,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Death()
     {
-        Init();
-        InitAnim();
+        InitAll();
         hpSliider.gameObject.SetActive(false);
         agent.isStopped = true;
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
@@ -343,7 +337,7 @@ public abstract class Enemy : MonoBehaviour
     public virtual void Init()
     {
         //agent.stoppingDistance = enemySO.stoopingDis;
-        lotteryTime = enemySO.attackCoolDown;
+        //lotteryTime = enemySO.attackCoolDown;
         attackProbability = enemySO.attackInitProbability;
         rand = 0;
         agent.isStopped = false;
@@ -365,9 +359,9 @@ public abstract class Enemy : MonoBehaviour
     {
         //全アニメーションのリセット
         enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
-        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Walk);
-        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.BackMove);
-        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Dash);
+        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
+        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
     }
 
     public virtual void InitAll()

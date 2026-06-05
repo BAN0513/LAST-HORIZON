@@ -31,4 +31,4 @@ MonoBehaviour:
   backMoveDis: 3
   attackInitProbability: 40
   attackUpProbability: 20
-  attackCoolDown: 3
+  attackCoolDown: 1

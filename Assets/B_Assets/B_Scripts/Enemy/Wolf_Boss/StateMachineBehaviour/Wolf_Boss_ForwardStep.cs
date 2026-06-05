@@ -14,7 +14,7 @@ public class Wolf_Boss_ForwardStep : StateMachineBehaviour
 
         movePos = enemy.transform.forward;
 
-        dir = enemy.target.position - enemy.transform.position;
+        dir = enemy.Target.position - enemy.transform.position;
         dir.y = 0;
     }
 

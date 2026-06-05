@@ -48,7 +48,7 @@ public class Enemy_Humanoid : Enemy
         while (distance <= enemySO.backMoveDis)
         {
             //“G‚Ì•ûŒü‚ðŽæ‚é
-            Vector3 toTarget = (target.position - transform.position).normalized;
+            Vector3 toTarget = (Target.position - transform.position).normalized;
             toTarget.y = 0;
 
             //“G‚Ì•ûŒü‚Æ”½‘Î•ûŒü‚ðŽæ‚é
@@ -64,7 +64,7 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
-        Vector3 toTarget = (target.position - transform.position).normalized;
+        Vector3 toTarget = (Target.position - transform.position).normalized;
         Vector3 moveDir = agent.velocity.normalized;
         float moveDot = Vector3.Dot(toTarget, moveDir);
 
@@ -100,6 +100,13 @@ public class Enemy_Humanoid : Enemy
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
+
+        if (!enemyAnimatorController.CheckCurrentAnim("Hit") && hp > 0)
+        {
+            enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
+
+            agent.isStopped = true;
+        }
     }
 
     public override void Init()
