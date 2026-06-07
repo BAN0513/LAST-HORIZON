@@ -3,6 +3,7 @@ using UnityEngine;
 public class Enemy_1_Strafe : StateMachineBehaviour
 {
     [SerializeField] private float walkSpeed = 1.0f;
+    [SerializeField] private float rotationSpeed = 5.0f;
     private Enemy enemy;
 
     enum Dir
@@ -15,6 +16,9 @@ public class Enemy_1_Strafe : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.GetComponent<Enemy>();
+
+        enemy.LookRotaionSpeed = rotationSpeed;
+        enemy.IsLookPlayer = true;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

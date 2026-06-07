@@ -11,7 +11,8 @@ public class Enemy_1AnimatorController : EnemyAnimatorController
         Melee2,
         SwordCombo,
         Strafe_Left,
-        Strafe_Right
+        Strafe_Right,
+        BackMove
     }
 
     private Dictionary<Enemy_1Animation, int> enemy_1Anims;
@@ -27,7 +28,8 @@ public class Enemy_1AnimatorController : EnemyAnimatorController
             {Enemy_1Animation.Melee2, Animator.StringToHash("isMelee2") },
             {Enemy_1Animation.Strafe_Left, Animator.StringToHash("isStrafe_Left") },
             {Enemy_1Animation.Strafe_Right, Animator.StringToHash("isStrafe_Right") },
-            {Enemy_1Animation.SwordCombo, Animator.StringToHash("isSwordCombo") }
+            {Enemy_1Animation.SwordCombo, Animator.StringToHash("isSwordCombo") },
+            {Enemy_1Animation.BackMove, Animator.StringToHash("isBackMove") }
         };
     }
 

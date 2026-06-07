@@ -94,6 +94,10 @@ public abstract class Enemy : MonoBehaviour
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
+    public bool IsLookPlayer
+    {
+        set { isLookPlayer = value; }
+    }
 
     //プレイヤーと自身の距離
     protected float distance = 0;
@@ -104,6 +108,17 @@ public abstract class Enemy : MonoBehaviour
     //敵が攻撃された後に連続で攻撃が当たらないようにするための変数
     private float invincibilityTime  = 0.5f;
     private float invincibilityTimer = 0;
+
+    //振り向きのスピード
+    private float lookRotationSpeed = 0;
+    public float LookRotaionSpeed
+    {
+        get { return lookRotationSpeed; }
+        set { lookRotationSpeed = value; }
+    }
+
+    //最後に使用したアクションの保存用
+    private EnemyActionSO lastAction;
 
     private void Awake()
     {
@@ -136,6 +151,8 @@ public abstract class Enemy : MonoBehaviour
         lotteryTime = enemySO.attackCoolDown;
 
         attackProbability = enemySO.attackInitProbability;
+
+        lookRotationSpeed = enemySO.lookRotationSpeed;
 
 
         //画面の明るさ変更（後で別のとこに書く）
@@ -193,7 +210,7 @@ public abstract class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation,
                     Quaternion.LookRotation(dir),
-                    Time.deltaTime * enemySO.lookRotationSpeed
+                    Time.deltaTime * lookRotationSpeed
                     );
             }
         }
@@ -255,7 +272,7 @@ public abstract class Enemy : MonoBehaviour
                         AttackAction();
                         break;
                     default:
-                        DoNotAttack();
+                        DoNotAttackAction();
                         break;
                 }
             }
@@ -268,9 +285,50 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void DoNotAttack() { }
+    protected virtual void DoNotAttackAction() { }
 
     protected virtual void AttackAction() { }
+
+    protected EnemyActionSO CalcAction(EnemyActionSO[] action)
+    {
+        float curScore = 0;
+        EnemyActionSO firstActionSO = null;
+        EnemyActionSO secondActionSO = null;
+        foreach (var a in action)
+        {
+            float lastScore = a.ScoreCalculation(distance, dot);
+
+            if (curScore < lastScore)
+            {
+                curScore = lastScore;
+                secondActionSO = firstActionSO;
+                firstActionSO = a;
+            }
+        }
+        if (firstActionSO != null)
+        {
+            if (lastAction == firstActionSO)
+            {
+                if (secondActionSO != null)
+                {
+                    lastAction = secondActionSO;
+                    return secondActionSO;
+                }
+                else
+                {
+                    lastAction = null;
+                    Init();
+                }
+            }
+            else
+            {
+                lastAction = firstActionSO;
+                return firstActionSO;
+            }
+        }
+        
+        return null;
+    }
 
     public virtual void TakeDamage(int damage)
     {
@@ -339,6 +397,7 @@ public abstract class Enemy : MonoBehaviour
         //agent.stoppingDistance = enemySO.stoopingDis;
         //lotteryTime = enemySO.attackCoolDown;
         attackProbability = enemySO.attackInitProbability;
+        lookRotationSpeed = enemySO.lookRotationSpeed;
         rand = 0;
         agent.isStopped = false;
         isAction = false;
@@ -360,7 +419,6 @@ public abstract class Enemy : MonoBehaviour
         //全アニメーションのリセット
         enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
         enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
         enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
     }
 

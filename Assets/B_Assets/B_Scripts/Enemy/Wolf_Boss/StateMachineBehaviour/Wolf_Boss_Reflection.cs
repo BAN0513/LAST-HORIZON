@@ -10,19 +10,22 @@ public class Wolf_Boss_Reflection : StateMachineBehaviour
     {
         enemy = animator.GetComponent<Enemy>();
 
-        dir = enemy.Target.position - enemy.transform.position;
-        dir.y = 0;
+        enemy.LookRotaionSpeed = reflectionSpeed;
+        enemy.IsLookPlayer = true;
+
+        //dir = enemy.Target.position - enemy.transform.position;
+        //dir.y = 0;
     }
 
-    public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (dir != Vector3.zero)
-        {
-            enemy.transform.rotation = Quaternion.Slerp(
-                enemy.transform.rotation,
-                Quaternion.LookRotation(dir),
-                Time.deltaTime * reflectionSpeed
-                );
-        }
-    }
+    //public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    if (dir != Vector3.zero)
+    //    {
+    //        enemy.transform.rotation = Quaternion.Slerp(
+    //            enemy.transform.rotation,
+    //            Quaternion.LookRotation(dir),
+    //            Time.deltaTime * reflectionSpeed
+    //            );
+    //    }
+    //}
 }

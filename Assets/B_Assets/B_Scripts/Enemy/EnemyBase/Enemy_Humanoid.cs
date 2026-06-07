@@ -23,44 +23,10 @@ public class Enemy_Humanoid : Enemy
     {
         base.Update();
 
-        //後ろに下がる行動の処理
-        BackMoveControl();
-
         //移動アニメーションの変更処理
         MoveAnimControl();
     }
 
-    private void BackMoveControl()
-    {
-        if (isAnimation) { return; }
-        //距離がbackActionDisより小さかったり、攻撃をしていない場合に下がる動作をする
-        if (distance <= enemySO.backActionDis && !isAnimation)
-        {
-            if (enemyAnimatorController.CheckCurrentAnim("Walk Back")) { return; }
-            backMoveCor = StartCoroutine(BackMove());
-        }
-    }
-
-    IEnumerator BackMove()
-    {
-        agent.stoppingDistance = 0;
-
-        while (distance <= enemySO.backMoveDis)
-        {
-            //敵の方向を取る
-            Vector3 toTarget = (Target.position - transform.position).normalized;
-            toTarget.y = 0;
-
-            //敵の方向と反対方向を取る
-            Vector3 pos = transform.position + -toTarget * enemySO.backMoveDis;
-
-            //キャラクターの後ろを目的地として設定する
-            agent.SetDestination(pos);
-            yield return null;
-        }
-        agent.stoppingDistance = enemySO.stoopingDis;
-        backMoveCor = null;
-    }
 
     private void MoveAnimControl()
     {
@@ -71,7 +37,6 @@ public class Enemy_Humanoid : Enemy
         if (agent.velocity.magnitude < 0.1f)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
         }
         else if (moveDot > 0)
         {
@@ -87,12 +52,10 @@ public class Enemy_Humanoid : Enemy
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
                 SetWalkSpeed(); // 歩き速度に設定
             }
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
         }
         else
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, true);
             SetWalkSpeed(); // 後退も歩き速度で
         }
     }
@@ -123,19 +86,7 @@ public class Enemy_Humanoid : Enemy
 
     protected override void LookPlayerChange(bool isLook)
     {
-        StopBackMoveCor();
-
         base.LookPlayerChange(isLook);
-    }
-
-    protected void StopBackMoveCor()
-    {
-        //もし後退中なら後退を止める
-        if (backMoveCor != null)
-        {
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
-            StopCoroutine(backMoveCor);
-        }
     }
 
     public void AttackJudgmentActive()

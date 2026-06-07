@@ -17,6 +17,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ab409496f719ee46816f69fd3820ad9, type: 2}
   doNotAttack_Action:
   - {fileID: 11400000, guid: 85fcbb8ecc455414db414f103324f15b, type: 2}
+  - {fileID: 11400000, guid: 6f4073469f49fab43a33fc3a2a617f28, type: 2}
   maxHP: 50
   damage: 1
   dashMoveSpeed: 2

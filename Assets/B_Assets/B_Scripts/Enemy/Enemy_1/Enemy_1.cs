@@ -22,60 +22,31 @@ public class Enemy_1 : Enemy_Humanoid
 
     protected override void AttackAction()
     {
-        float curScore = 0;
-        Enemy_1ActionSO firstActionSO = null;
+        Enemy_1ActionSO action = (Enemy_1ActionSO)CalcAction(enemySO.action);
 
-        foreach (var a in enemySO.action)
-        {
-            float lastScore = a.ScoreCalculation(distance, dot);
-
-            if (curScore < lastScore)
-            {
-                curScore = lastScore;
-                firstActionSO = (Enemy_1ActionSO)a;
-            }
-        }
-
-        if (firstActionSO != null)
+        if (action != null)
         {
             LookPlayerChange(false);
-
-            firstActionSO.Execute(enemy_1AnimatorController);
+            action.Execute(enemy_1AnimatorController);
         }
         else
         {
-            DoNotAttack();
+            DoNotAttackAction();
         }
     }
 
-    protected override void DoNotAttack()
+    protected override void DoNotAttackAction()
     {
-        LookPlayerChange(true);
-        Enemy_1ActionSO action = (Enemy_1ActionSO)enemySO.doNotAttack_Action[0];
-        action.Execute(enemy_1AnimatorController);
-    }
+        Enemy_1ActionSO action = (Enemy_1ActionSO)CalcAction(enemySO.doNotAttack_Action);
 
-    private void AttackMove()
-    {
-        //‚à‚µŒã‘Þ’†‚È‚çŒã‘Þ‚ðŽ~‚ß‚é
-        if (backMoveCor != null)
-        {
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
-            StopCoroutine(backMoveCor);
-        }
-
-        //ˆê’è‹——£‹ß‚Ã‚­‚ÆŽ~‚Ü‚é‚Ì‚ÅstoppingDistance‚ð0‚É‚·‚é
-        agent.stoppingDistance = 0;
-
-        //ˆê’è‹——£‹ß‚Ã‚­‚ÆUŒ‚‚·‚é
-        if (distance <= attackDis)
+        if (action != null)
         {
             LookPlayerChange(false);
-
-            if (!enemy_1AnimatorController.CheckCurrentAnim("Melee2"))
-            {
-                enemy_1AnimatorController.SetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee1);
-            }
+            action.Execute(enemy_1AnimatorController);
+        }
+        else
+        {
+            Init();
         }
     }
 

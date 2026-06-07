@@ -5,8 +5,6 @@ public class Wolf_Boss : Enemy_FourLegs
 {
     public Wolf_BossAnimatorController wolf_Anim;
 
-    private Wolf_BossActionSO lastAction;
-
     public GameObject neck;
 
     protected override void Start()
@@ -25,88 +23,27 @@ public class Wolf_Boss : Enemy_FourLegs
 
     protected override void AttackAction()
     {
-        float curScore = 0;
-        Wolf_BossActionSO firstActionSO = null;
-        Wolf_BossActionSO secondActionSO = null;
-        foreach (var a in enemySO.action)
-        {
-            float lastScore = a.ScoreCalculation(distance, dot);
+        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
 
-            if (curScore < lastScore)
-            {             
-                curScore = lastScore;
-                secondActionSO = firstActionSO;
-                firstActionSO = (Wolf_BossActionSO)a;
-            }
-        }
-        if (firstActionSO != null)
+        if (action != null)
         {
             LookPlayerChange(false);
-            if (lastAction == firstActionSO)
-            {
-                if (secondActionSO != null)
-                {
-                    secondActionSO.Execute(wolf_Anim);
-                    lastAction = secondActionSO;
-                }
-                else
-                {
-                    lastAction = null;
-                    Init();
-                }
-            }
-            else
-            {
-                firstActionSO.Execute(wolf_Anim);
-                lastAction = firstActionSO;
-            }
+            action.Execute(wolf_Anim);
         }
         else
         {
-            DoNotAttack();
+            DoNotAttackAction();
         }
     }
 
-    protected override void DoNotAttack()
+    protected override void DoNotAttackAction()
     {
-        LookPlayerChange(false);
+        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.doNotAttack_Action);
 
-        float curScore = 0;
-        Wolf_BossActionSO firstActionSO = null;
-        Wolf_BossActionSO secondActionSO = null;
-
-        foreach (var a in enemySO.doNotAttack_Action)
+        if (action != null)
         {
-            float lastScore = a.ScoreCalculation(distance, dot);
-
-            if (curScore < lastScore)
-            {
-                curScore = lastScore;
-                secondActionSO = firstActionSO;
-                firstActionSO = (Wolf_BossActionSO)a;
-            }
-        }
-
-        if (firstActionSO != null)
-        {
-            if (lastAction == firstActionSO)
-            {
-                if (secondActionSO != null)
-                {
-                    secondActionSO.Execute(wolf_Anim);
-                    lastAction = secondActionSO;
-                }
-                else
-                {
-                    lastAction = null;
-                    Init();
-                }
-            }
-            else
-            {
-                firstActionSO.Execute(wolf_Anim);
-                lastAction = firstActionSO;
-            }
+            LookPlayerChange(false);
+            action.Execute(wolf_Anim);
         }
         else
         {

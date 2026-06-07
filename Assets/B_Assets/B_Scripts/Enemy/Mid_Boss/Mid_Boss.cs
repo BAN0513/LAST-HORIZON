@@ -54,14 +54,7 @@ public class Mid_Boss : Enemy_Humanoid
     }
 
     private void AttackMove()
-    {
-        //‚à‚µŒã‘Þ’†‚È‚çŒã‘Þ‚ðŽ~‚ß‚é
-        if (backMoveCor != null)
-        {
-            mid_BossAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.BackMove, false);
-            StopCoroutine(backMoveCor);
-        }
-
+    { 
         //ˆê’è‹——£‹ß‚Ã‚­‚ÆŽ~‚Ü‚é‚Ì‚ÅstoppingDistance‚ð0‚É‚·‚é
         agent.stoppingDistance = 0;
 

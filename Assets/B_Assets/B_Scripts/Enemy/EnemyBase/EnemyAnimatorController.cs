@@ -9,17 +9,10 @@ public class EnemyAnimatorController : MonoBehaviour
     public enum AnimationBase
     {
         Walk,
-        BackMove,
         Dash,
         Death,
         Hit
     }
-
-    int isWalkingHash;
-    int isBackMoveHash;
-    int isDashHash;
-    int isDeathHash;
-    int isHitHash;
 
     protected Dictionary<AnimationBase, int> anims;
 
@@ -31,7 +24,6 @@ public class EnemyAnimatorController : MonoBehaviour
         anims = new Dictionary<AnimationBase, int>()
         {
             { AnimationBase.Walk, Animator.StringToHash("isWalking") },
-            { AnimationBase.BackMove, Animator.StringToHash("isBackMove") },
             { AnimationBase.Dash, Animator.StringToHash("isDash") },
             { AnimationBase.Death, Animator.StringToHash("isDeath") },
             { AnimationBase.Hit,  Animator.StringToHash("isHit") },
