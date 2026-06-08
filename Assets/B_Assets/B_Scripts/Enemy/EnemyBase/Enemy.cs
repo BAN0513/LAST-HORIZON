@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Takato;
 using UnityEngine;
 using UnityEngine.AI;
@@ -118,7 +119,8 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //最後に使用したアクションの保存用
-    private EnemyActionSO lastAction;
+    private EnemyActionSO lastAction_1;
+    private EnemyActionSO lastAction_2;
 
     private void Awake()
     {
@@ -216,9 +218,9 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void LookPlayerChange(bool isLook)
+    protected virtual void AnimStart()
     {
-        isLookPlayer = isLook;
+        isLookPlayer = false;
         isAnimation = true;
         agent.isStopped = true;
     }
@@ -254,7 +256,6 @@ public abstract class Enemy : MonoBehaviour
 
                 if (lotteryTime <= 0)
                 {
-
                     //行動の抽選で使う
                     rand = Random.Range(1, 101);
 
@@ -284,45 +285,65 @@ public abstract class Enemy : MonoBehaviour
             rand = 0;
         }
     }
+    protected virtual void AttackAction() { }
 
     protected virtual void DoNotAttackAction() { }
 
-    protected virtual void AttackAction() { }
-
     protected EnemyActionSO CalcAction(EnemyActionSO[] action)
     {
-        float curScore = 0;
+        List<float> scores = new List<float>();
         EnemyActionSO firstActionSO = null;
         EnemyActionSO secondActionSO = null;
         foreach (var a in action)
         {
-            float lastScore = a.ScoreCalculation(distance, dot);
+            scores.Add(a.ScoreCalculation(distance, dot));
 
-            if (curScore < lastScore)
+        }
+
+        float firstScore = 0;
+        float secondScore = 0;
+        int firstIndex = -1;
+        int secondIndex = -1;
+
+        for (int i = 0; i < scores.Count - 1; i++)
+        {
+            float score = scores[i];
+
+            if (score > firstScore)
             {
-                curScore = lastScore;
-                secondActionSO = firstActionSO;
-                firstActionSO = a;
+                firstScore = score;
+                firstIndex = i;
+            }
+            else if (score > secondScore)
+            {
+                secondScore = score;
+                secondIndex = i;
             }
         }
+
+        firstActionSO = action[firstIndex];
+        secondActionSO = action[secondIndex];
+
         if (firstActionSO != null)
         {
-            if (lastAction == firstActionSO)
+            if (lastAction_1 == firstActionSO || lastAction_2 == firstActionSO)
             {
                 if (secondActionSO != null)
                 {
-                    lastAction = secondActionSO;
+                    lastAction_2 = lastAction_1;
+                    lastAction_1 = secondActionSO;
                     return secondActionSO;
                 }
                 else
                 {
-                    lastAction = null;
+                    lastAction_2 = null;
                     Init();
                 }
             }
             else
             {
-                lastAction = firstActionSO;
+                lastAction_2 = lastAction_1;
+                lastAction_1 = firstActionSO;
                 return firstActionSO;
             }
         }
@@ -383,7 +404,6 @@ public abstract class Enemy : MonoBehaviour
             debufDEX = moveSpeedMultiplier;
     }
 
-
     protected virtual void Death()
     {
         InitAll();
@@ -396,7 +416,7 @@ public abstract class Enemy : MonoBehaviour
     {
         //agent.stoppingDistance = enemySO.stoopingDis;
         //lotteryTime = enemySO.attackCoolDown;
-        attackProbability = enemySO.attackInitProbability;
+        //attackProbability = enemySO.attackInitProbability;
         lookRotationSpeed = enemySO.lookRotationSpeed;
         rand = 0;
         agent.isStopped = false;

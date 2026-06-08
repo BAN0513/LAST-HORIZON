@@ -38,7 +38,7 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
             {WolfAnimation.ShortReflection,  Animator.StringToHash("isShortReflection") },
             {WolfAnimation.Reflection,       Animator.StringToHash("isReflection") },
             {WolfAnimation.Retreat,          Animator.StringToHash("isRetreat") },
-            {WolfAnimation.ForwardStep,        Animator.StringToHash("isForwardStep") }
+            {WolfAnimation.ForwardStep,      Animator.StringToHash("isForwardStep") }
         };
     }
 

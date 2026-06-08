@@ -30,15 +30,21 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
+        if (isAnimation) 
+        {
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            return;
+        }
+
         Vector3 toTarget = (Target.position - transform.position).normalized;
         Vector3 moveDir = agent.velocity.normalized;
-        float moveDot = Vector3.Dot(toTarget, moveDir);
 
         if (agent.velocity.magnitude < 0.1f)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }
-        else if (moveDot > 0)
+        else
         {
             if (distance >= enemySO.engageDis)
             {
@@ -53,11 +59,6 @@ public class Enemy_Humanoid : Enemy
                 SetWalkSpeed(); // ï‡Ç´ë¨ìxÇ…ê›íË
             }
         }
-        else
-        {
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-            SetWalkSpeed(); // å„ëﬁÇ‡ï‡Ç´ë¨ìxÇ≈
-        }
     }
 
     public override void TakeDamage(int damage)
@@ -68,7 +69,7 @@ public class Enemy_Humanoid : Enemy
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
 
-            agent.isStopped = true;
+            AnimStart();
         }
     }
 
@@ -82,11 +83,6 @@ public class Enemy_Humanoid : Enemy
     {
         base.Death();
         _weaponController.SetColliderActive(false);
-    }
-
-    protected override void LookPlayerChange(bool isLook)
-    {
-        base.LookPlayerChange(isLook);
     }
 
     public void AttackJudgmentActive()

@@ -15,7 +15,6 @@ public class Wolf_Boss : Enemy_FourLegs
 
     protected override void Update()
     {
-        Debug.Log(attackProbability);
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();
@@ -27,8 +26,9 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            LookPlayerChange(false);
+            AnimStart();
             action.Execute(wolf_Anim);
+            AttackProbabilityReset();
         }
         else
         {
@@ -42,8 +42,9 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            LookPlayerChange(false);
+            AnimStart();
             action.Execute(wolf_Anim);
+            AttackProbabilityUP();
         }
         else
         {

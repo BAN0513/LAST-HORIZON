@@ -26,8 +26,9 @@ public class Enemy_1 : Enemy_Humanoid
 
         if (action != null)
         {
-            LookPlayerChange(false);
+            AnimStart();
             action.Execute(enemy_1AnimatorController);
+            AttackProbabilityReset();
         }
         else
         {
@@ -41,8 +42,9 @@ public class Enemy_1 : Enemy_Humanoid
 
         if (action != null)
         {
-            LookPlayerChange(false);
+            AnimStart();
             action.Execute(enemy_1AnimatorController);
+            AttackProbabilityUP();
         }
         else
         {

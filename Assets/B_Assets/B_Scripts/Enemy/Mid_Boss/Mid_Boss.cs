@@ -61,7 +61,7 @@ public class Mid_Boss : Enemy_Humanoid
         //ˆê’è‹——£‹ß‚Ã‚­‚ÆUŒ‚‚·‚é
         if (distance <= attackDis)
         {
-            LookPlayerChange(false);
+            AnimStart();
             rand = 0;
 
             float attackDot = 0.4f;
