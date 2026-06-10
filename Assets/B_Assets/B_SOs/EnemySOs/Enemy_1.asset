@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Enemy_1
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   action:
-  - {fileID: 11400000, guid: c8b6aaa48f107d14b9515e110a5ddc67, type: 2}
   - {fileID: 11400000, guid: 0ab409496f719ee46816f69fd3820ad9, type: 2}
+  - {fileID: 11400000, guid: c8b6aaa48f107d14b9515e110a5ddc67, type: 2}
   doNotAttack_Action:
   - {fileID: 11400000, guid: 85fcbb8ecc455414db414f103324f15b, type: 2}
   - {fileID: 11400000, guid: 6f4073469f49fab43a33fc3a2a617f28, type: 2}
@@ -23,7 +23,7 @@ MonoBehaviour:
   dashMoveSpeed: 2
   walkMoveSpeed: 1.5
   def: 10
-  stoopingDis: 3
+  stoopingDis: 2
   lookRotationSpeed: 5
   searchDistance: 100
   contactDistance: 100

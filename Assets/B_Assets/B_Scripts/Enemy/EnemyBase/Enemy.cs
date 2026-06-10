@@ -297,20 +297,22 @@ public abstract class Enemy : MonoBehaviour
         foreach (var a in action)
         {
             scores.Add(a.ScoreCalculation(distance, dot));
-
         }
 
-        float firstScore = 0;
-        float secondScore = 0;
+        float firstScore = -1;
+        float secondScore = -1;
         int firstIndex = -1;
         int secondIndex = -1;
 
-        for (int i = 0; i < scores.Count - 1; i++)
+        for (int i = 0; i < scores.Count; i++)
         {
             float score = scores[i];
 
             if (score > firstScore)
             {
+                secondScore = firstScore;
+                secondIndex = firstIndex;
+
                 firstScore = score;
                 firstIndex = i;
             }
@@ -321,8 +323,8 @@ public abstract class Enemy : MonoBehaviour
             }
         }
 
-        firstActionSO = action[firstIndex];
-        secondActionSO = action[secondIndex];
+        if (firstScore != -1)  { firstActionSO = action[firstIndex]; }
+        if (secondScore != -1) { secondActionSO = action[secondIndex]; }
 
         if (firstActionSO != null)
         {
