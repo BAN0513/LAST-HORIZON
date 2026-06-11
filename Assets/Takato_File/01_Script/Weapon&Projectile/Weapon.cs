@@ -22,7 +22,12 @@ namespace Takato
         private void Awake()
         {
             weaponCollider = GetComponent<Collider>();  // 武器のコライダーを取得
-            DisableCollider();                          // 初期状態ではコライダーを無効化
+            
+            // コライダーがある場合のみ初期化処理を行う
+            if (weaponCollider != null)
+            {
+                DisableCollider();
+            }
         }
 
         /// <summary>
@@ -30,7 +35,10 @@ namespace Takato
         /// </summary>
         public void EnableCollider()
         {
-            weaponCollider.enabled = true;
+            if (weaponCollider != null)
+            {
+                weaponCollider.enabled = true;
+            }
             isAttacking = true; // 攻撃開始
         }
 
@@ -39,7 +47,10 @@ namespace Takato
         /// </summary>
         public void DisableCollider()
         {
-            weaponCollider.enabled = false;
+            if (weaponCollider != null)
+            {
+                weaponCollider.enabled = false;
+            }
             isAttacking = false; // 攻撃終了
         }
 
@@ -48,19 +59,18 @@ namespace Takato
         /// </summary>
         private void OnTriggerEnter(Collider other)
         {
-            SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
-
-            if(soundmanager != null)
-            {
-                soundmanager.PlaySE(1); // 攻撃ヒットのSEを再生
-            }
-
             if (!isAttacking) return; // 攻撃中のみ判定
+
+            SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
 
             // ここで敵かどうか判定し、ダメージ処理
             var enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
+                if (soundmanager != null)
+                {
+                    soundmanager.PlaySE(1); // 攻撃ヒットのSEを再生
+                }
                 enemy.TakeDamage((int)AttackDamage);
             }
         }

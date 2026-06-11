@@ -21,7 +21,7 @@ namespace Takato
         [SerializeField] private Transform weaponFolder;
 
         [HideInInspector]
-        public Weapon EquippedWeapon => equippedWeapon;
+        public Weapon EquippedWeapon => equippedWeapon; // 現在装備している武器を外部から参照できるようにするプロパティ
 
         private void Start()
         {

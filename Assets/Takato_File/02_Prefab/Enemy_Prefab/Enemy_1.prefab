@@ -97,13 +97,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
-  target: {fileID: 0}
   enemySO: {fileID: 11400000, guid: 5fb6d6923c23f7e41add6f327d1d2769, type: 2}
+  hpSliider: {fileID: 1878319838695366945}
   forward: {fileID: 2585517044960145431}
   shortDis: 3
   mediumDis: 6
   attackDis: 1.5
-  hpSliider: {fileID: 1878319838695366945}
   melee2Probability: 70
 --- !u!114 &6025648744925135600
 MonoBehaviour:

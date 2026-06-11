@@ -62,9 +62,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6059127826480018846}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4790377780384153851}
   m_SourcePrefab: {fileID: 100100000, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
 --- !u!1 &8159668695086229389 stripped
@@ -72,21 +69,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
   m_PrefabInstance: {fileID: 9078586849507695324}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6059127826480018846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8159668695086229389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c26938b23023c4eb90b98866142e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Takato.Weapon
-  baseAttackDamage: 0
-  weaponLevel: 5
-  maxLevel: 10
 --- !u!136 &4790377780384153851
 CapsuleCollider:
   m_ObjectHideFlags: 0
