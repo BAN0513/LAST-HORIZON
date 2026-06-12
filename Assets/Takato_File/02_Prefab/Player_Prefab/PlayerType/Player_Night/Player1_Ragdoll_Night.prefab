@@ -220,6 +220,9 @@ PrefabInstance:
       addedObject: {fileID: 2285573355395167822}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8611447818778448829}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4319136025616011422}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
@@ -227,9 +230,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6640673578056825300}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8611447818778448829}
     - targetCorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5994367292143447892}
@@ -1003,6 +1003,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
   animationSmoothTime: 0.15
+--- !u!114 &8611447818778448829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5899827493166609428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40e1c765535f6f442a6054bd4a2ad358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
+  skills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &4319136025616011422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1015,14 +1033,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 100
-  currentCost: 75
+  maxHp: 0
+  currentCost: 0
   hpBar: {fileID: 0}
   costText: {fileID: 0}
-  moveSpeed: 3.5
-  jumpForce: 5
-  gravity: 13
-  damageCutRate: 0.2
+  playerSO: {fileID: 11400000, guid: 32babca45de0d644e9d0ceb33650442a, type: 2}
+  moveSpeed: 0
+  jumpForce: 0
+  gravity: 0
+  damageCutRate: 0
   skillSelectUI: {fileID: 0}
 --- !u!114 &9195856261803714679
 MonoBehaviour:
@@ -1052,24 +1071,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRagdollController
   ragdollRoot: {fileID: 6533515195140484782}
---- !u!114 &8611447818778448829
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5899827493166609428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40e1c765535f6f442a6054bd4a2ad358, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
-  skills:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!1 &5918869648423950159 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: 175817a34439f4345aacab1d5ee1dd2e, type: 3}

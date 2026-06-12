@@ -8,26 +8,24 @@ namespace Takato
     public class PlayerController : MonoBehaviour
     {
         // --- Inspector で設定するフィールド ---
-        [Header("(プレイヤー関連のステータス)")]
+        [Header("プレイヤーのInspecterで設定フィールド")]
         [Space(10)]
-        [Header("プレイヤーのHP")]
-        [SerializeField] private int maxHp;
-        [Header("現在のスキルコスト")]
-        [SerializeField] private int currentCost;
+        [Header("Player SO (SOを使う場合)")]
+        [SerializeField] private PlayerSO playerSO;
         [Header("プレイヤーのHPバーのスクリプトが入ってる物を入れる")]
         [SerializeField] private PlayerHPBar hpBar;
         [Header("プレイヤーの現在のコストを見るためのText")]
         [SerializeField] private TMPro.TextMeshProUGUI costText;
-        [Header("プレイヤーの移動速度")]
-        [SerializeField] private float moveSpeed;
-        [Header("プレイヤーのジャンプ力")]
-        [SerializeField] private float jumpForce;
-        [Header("プレイヤーの重力")]
-        [SerializeField] private float gravity;
-        [Header("プレイヤーのダメージカット率")]
-        [SerializeField] private float damageCutRate;
-        [Header("Skill Select UI")]
-        [SerializeField] private SkillSelectUI skillSelectUI;
+
+
+        /// --- プレイヤーのステータス値の変数 ---
+         private int maxHp;                 //プレイヤーの最大HPを格納する変数
+        private int currentCost;            //プレイヤーの現在のスキルコストを格納する変数 
+        private float moveSpeed;            //プレイヤーの移動速度を格納する変数
+        private float jumpForce;            //プレイヤーのジャンプ力を格納する変数
+        private float gravity;              //プレイヤーの重力を格納する変数
+        private float damageCutRate;        //プレイヤーのダメージカット率を格納する変数（0～1の範囲で、例えば0.2なら20%カットとかです）
+        private SkillSelectUI skillSelectUI;//スキル選択UIのスクリプトを格納する変数
 
         // --- キャッシュされたコンポーネント／参照 ---
         private PlayerInputController inputController;
@@ -40,12 +38,12 @@ namespace Takato
         private Transform cameraTransform;
 
         // --- 状態 ---
-        private float verticalVelocity;
-        private int hp;
-        private bool isBlocking;
-        private bool isDead;
-        private bool isSkillUIOpen;
-        private bool prevInventoryOpen;
+        private float verticalVelocity; //ジャンプと重力の処理のための垂直速度を格納する変数
+        private int hp;                 //プレイヤーの現在のHPを格納する変数
+        private bool isBlocking;        //プレイヤーが現在防御中かどうかを格納する変数
+        private bool isDead;            //プレイヤーが死亡しているかどうかを格納する変数
+        private bool isSkillUIOpen;     //スキルUIが開いているかどうかを格納する変数
+        private bool prevInventoryOpen; //インベントリが前フレームで開いていたかどうかを格納する変数
 
         // スキル発動に関する前フレーム入力
         private bool prevSkillInput;
@@ -59,6 +57,9 @@ namespace Takato
             CacheComponentsOnAwake();
             AcquireCameraTransform();
             AcquireCharacterChangeController();
+
+            // PlayerSO が割り当てられていれば値で上書きしておく
+            ApplyPlayerSOValues();
         }
 
         private void Start()
@@ -71,6 +72,21 @@ namespace Takato
             {
                 costText.text = $"Cost: {currentCost}";
             }
+        }
+
+        // --- PlayerSO からの適用 ---
+        private void ApplyPlayerSOValues()
+        {
+            if (playerSO == null) return;
+
+            // PlayerSO の値で上書き
+            moveSpeed = playerSO.MoveSpeed;
+            jumpForce = playerSO.JumpForce;
+            gravity = playerSO.Gravity;
+            damageCutRate = Mathf.Clamp01(playerSO.DamageCutRate);
+            maxHp = playerSO.MaxHP;
+            // SO に開始コストを追加している場合、それで初期化する
+            currentCost = playerSO.StartingCost;
         }
 
         private void Update()
@@ -400,10 +416,10 @@ namespace Takato
         public int GetMaxHP() => maxHp;                             //プレイヤーの最大HPを取得するためのメソッド
 
         //プレイヤーのHPを設定するためのメソッド
-        public void SetHP(int value)                               
+        public void SetHP(int value)
         {
             hp = Mathf.Clamp(value, 0, maxHp);
-            hpBar?.SetHP(hp, maxHp);                               
+            hpBar?.SetHP(hp, maxHp);
         }
 
         /// <summary>
@@ -427,6 +443,42 @@ namespace Takato
 
         public float GetDamageCutRate() => damageCutRate; //プレイヤーのダメージカット率を取得するためのメソッド
         public void SetDamageCutRate(float value) => damageCutRate = Mathf.Clamp01(value); //プレイヤーのダメージカット率を設定するためのメソッド
+
+        /// <summary>
+        /// 外部から PlayerSO を割り当てる。プレイヤーのmaxHpを合わせる。
+        /// </summary>
+        public void SetPlayerSO(PlayerSO so, bool preserveHPPercent = true)
+        {
+            if (so == null) return;
+
+            // 現在のHP割合を保持するための比率を取得
+            float prevRatio = (maxHp > 0) ? (float)hp / maxHp : 1f;
+
+            playerSO = so;
+            ApplyPlayerSOValues(); // SO の値で上書き
+
+            // HP を適切に調整
+            if (preserveHPPercent)
+            {
+                hp = Mathf.RoundToInt(Mathf.Clamp01(prevRatio) * maxHp);
+            }
+            else
+            {
+                hp = maxHp; // preserveHPPercent が false の場合は、HPを最大値にリセット
+            }
+
+            // スキルコストは SO の開始値で初期化
+            currentCost = playerSO.StartingCost;
+
+            EnsureHPBarInitialized();
+            hpBar?.SetHP(hp, maxHp);
+
+            // コストテキストなど UI を更新
+            if (costText != null)
+            {
+                costText.text = $"Cost: {currentCost}";
+            }
+        }
 
         public void TakeDamage(int damage)
         {

@@ -516,14 +516,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 100
-  currentCost: 75
+  maxHp: 0
+  currentCost: 0
   hpBar: {fileID: 0}
   costText: {fileID: 0}
-  moveSpeed: 3.5
-  jumpForce: 5
-  gravity: 13
-  damageCutRate: 0.2
+  playerSO: {fileID: 0}
+  moveSpeed: 0
+  jumpForce: 0
+  gravity: 0
+  damageCutRate: 0
   skillSelectUI: {fileID: 0}
 --- !u!1 &2922182109286895159 stripped
 GameObject:

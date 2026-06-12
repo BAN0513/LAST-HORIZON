@@ -11,8 +11,8 @@ public class CharacterChangeController : MonoBehaviour
     [Header("キャラクターを切り替えるスクリプトの詳細")]
     [Space(10)]
 
-    [Header("切り替えるキャラクターのプレハブ")]
-    [SerializeField] private GameObject[] characterPrefabs; // 切り替えるキャラクターのプレハブ
+    [Header("切り替えるキャラクターの PlayerSO (Prefab + ステータスを持つ)")]
+    [SerializeField] private PlayerSO[] playerSOs; // ここを PlayerSO 配列に変更
 
     [Header("このマネージャーをシーン跨ぎで保持するか")]
     [SerializeField] private bool persistAcrossScenes = false;
@@ -51,9 +51,12 @@ public class CharacterChangeController : MonoBehaviour
     /// </summary>
     public void SpawnCharacter()
     {
-        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
+        if (playerSOs == null || playerSOs.Length == 0) return;
 
-        var prefab = characterPrefabs[currentCharacterIndex];
+        var playerSO = playerSOs[currentCharacterIndex];
+        if (playerSO == null || playerSO.PlayerPrefab == null) return;
+
+        var prefab = playerSO.PlayerPrefab;
 
         // デフォルトの位置/回転
         Vector3 pos = Vector3.zero;
@@ -68,6 +71,9 @@ public class CharacterChangeController : MonoBehaviour
             var newChar = Instantiate(prefab, pos, rot);
             Destroy(currentCharacter);
             currentCharacter = newChar;
+
+            // PlayerController に PlayerSO を割り当てる
+            AssignPlayerSOToInstance(currentCharacter, playerSO);
 
             OnCharacterChanged?.Invoke(currentCharacterIndex, currentCharacter);
             return;
@@ -103,7 +109,23 @@ public class CharacterChangeController : MonoBehaviour
         }
 
         currentCharacter = Instantiate(prefab, pos, rot); // 新しいキャラクターをスポーン
+
+        // PlayerController に PlayerSO を割り当てる
+        AssignPlayerSOToInstance(currentCharacter, playerSO);
+
         OnCharacterChanged?.Invoke(currentCharacterIndex, currentCharacter); // キャラクター変更イベントを発火
+    }
+
+    private void AssignPlayerSOToInstance(GameObject instance, PlayerSO playerSO)
+    {
+        if (instance == null || playerSO == null) return;
+
+        // PlayerController を探して PlayerSO をセットする
+        var playerCtrl = instance.GetComponent<Takato.PlayerController>() ?? instance.GetComponentInChildren<Takato.PlayerController>();
+        if (playerCtrl != null)
+        {
+            playerCtrl.SetPlayerSO(playerSO, preserveHPPercent: true);
+        }
     }
 
     /// <summary>
@@ -111,9 +133,9 @@ public class CharacterChangeController : MonoBehaviour
     /// </summary>
     public void NextCharacter()
     {
-        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
+        if (playerSOs == null || playerSOs.Length == 0) return;
 
-        currentCharacterIndex = (currentCharacterIndex + 1) % characterPrefabs.Length;
+        currentCharacterIndex = (currentCharacterIndex + 1) % playerSOs.Length;
         SpawnCharacter();
     }
 
@@ -122,9 +144,9 @@ public class CharacterChangeController : MonoBehaviour
     /// </summary>
     public void PreviousCharacter()
     {
-        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
+        if (playerSOs == null || playerSOs.Length == 0) return;
 
-        currentCharacterIndex = (currentCharacterIndex - 1 + characterPrefabs.Length) % characterPrefabs.Length;
+        currentCharacterIndex = (currentCharacterIndex - 1 + playerSOs.Length) % playerSOs.Length;
         SpawnCharacter();
     }
 
@@ -133,8 +155,8 @@ public class CharacterChangeController : MonoBehaviour
     /// </summary>
     public void SpawnCharacterAt(int index)
     {
-        if (characterPrefabs == null || characterPrefabs.Length == 0) return;
-        if (index < 0 || index >= characterPrefabs.Length) return;
+        if (playerSOs == null || playerSOs.Length == 0) return;
+        if (index < 0 || index >= playerSOs.Length) return;
 
         currentCharacterIndex = index;
         SpawnCharacter();
