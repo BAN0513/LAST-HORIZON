@@ -33,11 +33,25 @@ public class PlayerSO : ScriptableObject
     [SerializeField] private float damageCutRate;
 
     // 読み取り専用のプロパティ
+
+    // プレイヤーのPrefabへのプロパティ
     public GameObject PlayerPrefab => playerPrefab;
+
+    // プレイヤーの最大HPへのプロパティ
     public int MaxHP => maxHP;
+
+    // 開始スキルコストへのプロパティ
     public int StartingCost => startingCost;
+
+    // プレイヤーの移動速度へのプロパティ
     public float MoveSpeed => moveSpeed;
+
+    // プレイヤーのジャンプ力へのプロパティ
     public float JumpForce => jumpForce;
+
+    // プレイヤーの重力へのプロパティ
     public float Gravity => gravity;
-    public float DamageCutRate => damageCutRate;
+
+    // プレイヤーのダメージカット率へのプロパティ
+    public float DamageCutRate => damageCutRate;  
 }

@@ -10,7 +10,7 @@ namespace Takato
         // --- Inspector で設定するフィールド ---
         [Header("プレイヤーのInspecterで設定フィールド")]
         [Space(10)]
-        [Header("Player SO (SOを使う場合)")]
+        [Header("プレイヤーのSOを入れる")]
         [SerializeField] private PlayerSO playerSO;
         [Header("プレイヤーのHPバーのスクリプトが入ってる物を入れる")]
         [SerializeField] private PlayerHPBar hpBar;
@@ -19,7 +19,7 @@ namespace Takato
 
 
         /// --- プレイヤーのステータス値の変数 ---
-         private int maxHp;                 //プレイヤーの最大HPを格納する変数
+        private int maxHp;                 //プレイヤーの最大HPを格納する変数
         private int currentCost;            //プレイヤーの現在のスキルコストを格納する変数 
         private float moveSpeed;            //プレイヤーの移動速度を格納する変数
         private float jumpForce;            //プレイヤーのジャンプ力を格納する変数

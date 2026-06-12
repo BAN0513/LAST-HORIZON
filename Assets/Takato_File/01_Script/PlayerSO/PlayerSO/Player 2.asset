@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 442ca5895ab7e33499f08a26e0736900, type: 3}
   m_Name: Player 2
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSO
-  playerPrefab: {fileID: 5899827493166609428, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
-  maxHP: 100
-  moveSpeed: 3
-  jumpForce: 5
+  playerPrefab: {fileID: 2871309425514811095, guid: aeba22a8556779c47a585ac971eaea94, type: 3}
+  maxHP: 75
+  startingCost: 150
+  moveSpeed: 5
+  jumpForce: 7
   gravity: 10
-  damageCutRate: 0.5
+  damageCutRate: 0.25

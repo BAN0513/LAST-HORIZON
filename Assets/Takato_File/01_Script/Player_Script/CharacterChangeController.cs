@@ -12,24 +12,22 @@ public class CharacterChangeController : MonoBehaviour
     [Space(10)]
 
     [Header("切り替えるキャラクターの PlayerSO (Prefab + ステータスを持つ)")]
-    [SerializeField] private PlayerSO[] playerSOs; // ここを PlayerSO 配列に変更
+    [SerializeField] private PlayerSO[] playerSOs;
 
     [Header("このマネージャーをシーン跨ぎで保持するか")]
     [SerializeField] private bool persistAcrossScenes = false;
 
-    private GameObject currentCharacter; // 現在のキャラクター
+    private GameObject currentCharacter;     // 現在のキャラクター
     private int currentCharacterIndex = 0;   // 現在のキャラクターのインデックス
 
-    /// <summary>
-    /// キャラクター変更時のイベント
-    /// </summary>
+    // キャラクターが切り替わるたびに、インデックスと新しいキャラクターの GameObject を引数にしてイベントを起こす。
     public event Action<int, GameObject> OnCharacterChanged;
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // 既にインスタンスが存在する場合はこのオブジェクトを破棄
             return;
         }
 
@@ -37,7 +35,7 @@ public class CharacterChangeController : MonoBehaviour
 
         if (persistAcrossScenes)
         {
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // シーン跨ぎでこのオブジェクトを保持
         }
     }
 
@@ -56,7 +54,7 @@ public class CharacterChangeController : MonoBehaviour
         var playerSO = playerSOs[currentCharacterIndex];
         if (playerSO == null || playerSO.PlayerPrefab == null) return;
 
-        var prefab = playerSO.PlayerPrefab;
+        var prefab = playerSO.PlayerPrefab; // PlayerSO からプレハブを取得
 
         // デフォルトの位置/回転
         Vector3 pos = Vector3.zero;
@@ -87,7 +85,7 @@ public class CharacterChangeController : MonoBehaviour
         }
         catch
         {
-            tagged = null;
+            tagged = null; // タグが存在しない場合は null を返す
         }
 
         if (tagged != null)
@@ -162,6 +160,9 @@ public class CharacterChangeController : MonoBehaviour
         SpawnCharacter();
     }
 
+    // 現在のキャラクターのインデックスと GameObject を取得するためのメソッド
     public int GetCurrentIndex() => currentCharacterIndex;
+
+    /// 現在のキャラクターの GameObject を取得するためのメソッド
     public GameObject GetCurrentCharacter() => currentCharacter;
 }
