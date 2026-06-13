@@ -39,22 +39,8 @@ public abstract class Enemy : MonoBehaviour
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
 
-    [Header("transform.forwardが正常に取れないから\n前方に空のオブジェクトを置いておく")]
-    [SerializeField] protected Transform forward;
-
-    [Header("0～この値までは近距離攻撃")]
-    [SerializeField] protected float shortDis = 3;
-    [Header("shortDisからこの値までを中距離攻撃")]
-    [SerializeField] protected float mediumDis = 6;
-    //mediumDis～engageDisまでは遠距離攻撃
-
-    //攻撃時にこの値の距離まで近づく
-    [SerializeField] protected float attackDis = 1.5f;
-
     //攻撃確率の保存用変数
     protected float attackProbability = 0;
-
-    protected Coroutine backMoveCor = null;
 
     //敵のHP
     public int hp { get; private set; }
@@ -194,7 +180,7 @@ public abstract class Enemy : MonoBehaviour
         Vector3 toTarget = (target.position - transform.position).normalized;
         toTarget.y = 0;
         //自身の前方方向を取る
-        Vector3 forwardDir = (forward.position - transform.position).normalized;
+        Vector3 forwardDir = (transform.forward - transform.position).normalized;
         forwardDir.y = 0;
 
         //内積で方向の一致度を取る

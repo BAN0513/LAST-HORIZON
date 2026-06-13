@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15e3612402021d6409fc4a4718c9f3b1, type: 3}
+  m_Name: Enemy_Wizard_FireSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_FireSO
+  bestDis: 8
+  bestDot: 1
+  maxDis: 15
+  maxDot: 1
+  minDis: 0
+  minDot: 0
+  baseDis: 0.5
+  baseDot: 0.5
