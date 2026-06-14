@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5764719c550447c4ab1ac82f049fb96b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1_Strafe
-  walkSpeed: 1
+  walkSpeed: 0.5
   rotationSpeed: 5
   dir: 1
 --- !u!1101 &-5002174412430094978
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 145027f0fb542a34398d88c6a1d2e2dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1_BackMove
-  walkSpeed: 1
+  walkSpeed: 0.5
   rotationSpeed: 3
 --- !u!1101 &897594911322292137
 AnimatorStateTransition:
@@ -1005,7 +1005,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5764719c550447c4ab1ac82f049fb96b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1_Strafe
-  walkSpeed: 1
+  walkSpeed: 0.5
   rotationSpeed: 5
   dir: 0
 --- !u!1102 &6209860905047165326

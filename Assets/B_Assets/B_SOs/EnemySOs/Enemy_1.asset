@@ -21,15 +21,11 @@ MonoBehaviour:
   maxHP: 50
   damage: 1
   dashMoveSpeed: 2
-  walkMoveSpeed: 1.5
+  walkMoveSpeed: 0.5
   def: 10
   stoopingDis: 2
   lookRotationSpeed: 5
-  searchDistance: 100
-  contactDistance: 100
   engageDis: 5
-  backActionDis: 1
-  backMoveDis: 3
   attackInitProbability: 40
   attackUpProbability: 20
   attackCoolDown: 1

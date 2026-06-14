@@ -16,18 +16,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da4a9006471667e4ea6231a7b1b6703c, type: 2}
   - {fileID: 11400000, guid: 41992f1651636ba4689c657b8b8dab3d, type: 2}
   doNotAttack_Action: []
-  maxHP: 50
+  maxHP: 200
   damage: 10
-  dashMoveSpeed: 0
-  walkMoveSpeed: 0
+  dashMoveSpeed: 1
+  walkMoveSpeed: 0.5
   def: 0
-  stoopingDis: 100
+  stoopingDis: 8
   lookRotationSpeed: 3
-  searchDistance: 100
-  contactDistance: 100
-  engageDis: 100
-  backActionDis: 0
-  backMoveDis: 0
+  engageDis: 50
   attackInitProbability: 50
   attackUpProbability: 50
   attackCoolDown: 1

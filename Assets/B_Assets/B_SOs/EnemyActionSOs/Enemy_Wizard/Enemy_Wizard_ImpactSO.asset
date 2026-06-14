@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14bff83ea697184195625af63e98100, type: 3}
   m_Name: Enemy_Wizard_ImpactSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_ImpactSO
-  bestDis: 3
+  bestDis: 5
   bestDot: 1
-  maxDis: 5
-  maxDot: 0
+  maxDis: 10
+  maxDot: 1
   minDis: 0
   minDot: -1
-  baseDis: 0.5
+  baseDis: 0.7
   baseDot: 0.5

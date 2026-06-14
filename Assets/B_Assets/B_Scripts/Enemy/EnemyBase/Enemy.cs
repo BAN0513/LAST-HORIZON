@@ -285,8 +285,8 @@ public abstract class Enemy : MonoBehaviour
             scores.Add(a.ScoreCalculation(distance, dot));
         }
 
-        float firstScore = -1;
-        float secondScore = -1;
+        float firstScore = 0;
+        float secondScore = 0;
         int firstIndex = -1;
         int secondIndex = -1;
 
@@ -309,8 +309,8 @@ public abstract class Enemy : MonoBehaviour
             }
         }
 
-        if (firstScore != -1)  { firstActionSO = action[firstIndex]; }
-        if (secondScore != -1) { secondActionSO = action[secondIndex]; }
+        if (firstScore != 0)  { firstActionSO = action[firstIndex]; }
+        if (secondScore != 0) { secondActionSO = action[secondIndex]; }
 
         if (firstActionSO != null)
         {
@@ -335,7 +335,8 @@ public abstract class Enemy : MonoBehaviour
                 return firstActionSO;
             }
         }
-        
+
+        lastAction_1 = null;
         return null;
     }
 

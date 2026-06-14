@@ -11,6 +11,8 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     [SerializeField] private Transform[] warpPos;
 
+    private bool isTeleport = false;
+
     protected override void Start()
     {
         base.Start();
@@ -25,6 +27,24 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     protected override void AttackAction()
     {
+        if (isTeleport)
+        {
+            isTeleport = false;
+            int warpLimit = 10;
+            int randomWarp = 0;
+
+            for (int i = 0; i < warpLimit; i++)
+            {
+                randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
+                if (Vector3.Distance(transform.position, warpPos[randomWarp].position) <= 3) { continue; }
+                break;
+            }
+
+            transform.position = warpPos[randomWarp].position;
+            Init();
+            return;
+        }
+
         Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.action);
 
         if (action != null)
@@ -41,15 +61,15 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     protected override void DoNotAttackAction()
     {
-        if (distance <= 3)
-        {
-            int randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
-            transform.position = warpPos[randomWarp].position;
-        }
-        else
-        {
-            Init();
-        }
+        Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.doNotAttack_Action);
+        Init();
+    }
+
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        AttackProbabilityUP();
+        isTeleport = true;
     }
 
     //‚±‚±‚©‚ç‰º‚ÍAnimatorŠÖ˜A‚ÌŠÖ”

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class Enemy_Humanoid : Enemy
 {
-
     protected EnemyAttackRollController _weaponController;
 
     protected override void Start()
@@ -37,10 +36,7 @@ public class Enemy_Humanoid : Enemy
             return;
         }
 
-        Vector3 toTarget = (Target.position - transform.position).normalized;
-        Vector3 moveDir = agent.velocity.normalized;
-
-        if (agent.velocity.magnitude < 0.1f)
+        if (agent.velocity.magnitude < 0.1f || distance <= agent.stoppingDistance)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }
@@ -82,7 +78,11 @@ public class Enemy_Humanoid : Enemy
     protected override void Death()
     {
         base.Death();
-        _weaponController.SetColliderActive(false);
+
+        if (_weaponController != null)
+        {
+            _weaponController.SetColliderActive(false);
+        }
     }
 
     public void AttackJudgmentActive()
