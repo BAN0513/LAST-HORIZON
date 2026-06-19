@@ -6,24 +6,30 @@ namespace Takato
     /// <summary>
     /// プレイヤーの武器を制御するクラス
     /// </summary>
+    [RequireComponent(typeof(PlayerInputController))] // 必須コンポーネントを保証
     public class PlayerWeaponController : MonoBehaviour
     {
-        [Header("プレイヤーの武器制御")]
-        [Space(10)]
-
-        [Header("現在装備している武器")]
-        [SerializeField] private Weapon equippedWeapon;
-        [Header("武器のプレハブ")]
+        [Header("--- 武器の設定 ---")]
         [SerializeField] private Weapon weaponPrefab;
-        [Header("武器を配置する空のオブジェクト")]
         [SerializeField] private Transform weaponFolder;
 
-        [Space(10)]
-        [Header("魔法武器の場合のFirePoint")]
+        [Header("--- 魔法武器の設定 ---")]
         [SerializeField] private Transform magicFirePoint; // 魔法武器の発射位置
 
-        [HideInInspector]
-        public Weapon EquippedWeapon => equippedWeapon; // 現在装備している武器を外部から参照できるようにするプロパティ
+        [Header("--- デバッグ・確認用 ---")]
+        [SerializeField] private Weapon equippedWeapon; // 現在装備している武器
+
+        // 現在装備している武器を外部から参照できるようにするプロパティ
+        public Weapon EquippedWeapon => equippedWeapon;
+
+        // キャッシュ用変数
+        private PlayerInputController _inputController;
+
+        private void Awake()
+        {
+            // 事前にコンポーネントを取得しておく（Updateでの負荷軽減）
+            _inputController = GetComponent<PlayerInputController>();
+        }
 
         private void Start()
         {
@@ -32,20 +38,12 @@ namespace Takato
 
         private void Update()
         {
-            // magicFirePoint が未設定なら、装備中の武器の子から探す（1フレーム毎に探すが見つかれば以降はスキップ）
-            if (magicFirePoint == null && equippedWeapon != null)
+            // 攻撃入力があれば魔法を発射
+            if (_inputController != null && _inputController.IsAttackInput)
             {
-                magicFirePoint = FindChildRecursive(equippedWeapon.transform, "FirePoint");
-            }
-
-            //PlayerInputControllerのAttackInputがtrueのときにFireMagicを呼び出す
-            var inputController = GetComponent<PlayerInputController>();
-            if (inputController != null && inputController.IsAttackInput)
-            {
-                FireMagic();// 攻撃入力があれば魔法を発射
+                FireMagic();
             }
         }
-
 
         /// <summary>
         /// 武器を生成して装備する
@@ -55,26 +53,25 @@ namespace Takato
             // 既存の武器がシーン上に存在する場合のみ削除
             if (equippedWeapon != null && equippedWeapon.gameObject.scene.IsValid())
             {
-                Destroy(equippedWeapon.gameObject); // 既存の武器を削除
+                Destroy(equippedWeapon.gameObject);
+                magicFirePoint = null; // 古い発射位置をクリア
             }
 
-            if (weaponPrefab != null && weaponFolder != null)
-            {
-                // プレハブから武器を生成し、WeaponFolderの子にする
-                Weapon newWeapon = Instantiate(weaponPrefab, weaponFolder);
-                newWeapon.transform.localPosition = Vector3.zero;
-                newWeapon.transform.localRotation = Quaternion.identity;
-                equippedWeapon = newWeapon;
-
-                // 装備直後に weapon の子から FirePoint を探して設定（見つかれば以降の探索を不要にする）
-                if (magicFirePoint == null)
-                {
-                    magicFirePoint = FindChildRecursive(equippedWeapon.transform, "FirePoint");
-                }
-            }
-            else
+            if (weaponPrefab == null || weaponFolder == null)
             {
                 Debug.LogWarning("weaponPrefab または weaponFolder が設定されていません。");
+                return;
+            }
+
+            // プレハブから武器を生成し、WeaponFolderの子にする
+            equippedWeapon = Instantiate(weaponPrefab, weaponFolder);
+            equippedWeapon.transform.localPosition = Vector3.zero;
+            equippedWeapon.transform.localRotation = Quaternion.identity;
+
+            // 装備直後に一度だけ FirePoint を探して設定
+            if (magicFirePoint == null)
+            {
+                magicFirePoint = FindChildRecursive(equippedWeapon.transform, "FirePoint");
             }
         }
 
@@ -83,10 +80,7 @@ namespace Takato
         /// </summary>
         public void EnableWeaponCollider()
         {
-            if (equippedWeapon != null)
-            {
-                equippedWeapon.EnableCollider(); // 武器のコライダーを有効化
-            }
+            if (equippedWeapon != null) equippedWeapon.EnableCollider();
         }
 
         /// <summary>
@@ -94,27 +88,23 @@ namespace Takato
         /// </summary>
         public void DisableWeaponCollider()
         {
-            if (equippedWeapon != null)
-            {
-                equippedWeapon.DisableCollider(); // 武器のコライダーを無効化
-            }
+            if (equippedWeapon != null) equippedWeapon.DisableCollider();
         }
 
         /// <summary>
         /// 魔法を発射する
-        /// 実際の生成・設定は Weapon 側の FireMagic に移譲する
         /// </summary>
         public void FireMagic()
         {
-            if (magicFirePoint == null)
-            {
-                Debug.LogWarning("magicFirePoint が設定されていません。");
-                return;
-            }
-
             if (equippedWeapon == null)
             {
                 Debug.LogWarning("装備中の武器がありません。");
+                return;
+            }
+
+            if (magicFirePoint == null)
+            {
+                Debug.LogWarning("magicFirePoint が設定されていません。");
                 return;
             }
 

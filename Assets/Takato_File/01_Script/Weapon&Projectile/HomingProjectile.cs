@@ -9,23 +9,17 @@ namespace Takato
     public class HomingProjectile : MonoBehaviour
     {
         [Tooltip("移動速度")]
-        public float speed;
+        public float speed = 10f;
         [Tooltip("回転速度（追尾の滑らかさ）")]
-        public float rotationSpeed;
+        public float rotationSpeed = 5f;
         [Tooltip("与えるダメージ")]
-        public float damage;
+        public float damage = 10f;
 
-        private Transform target;
-        private Rigidbody rb;
-
-        private void Awake()
-        {
-            rb = GetComponent<Rigidbody>();
-            // Rigidbody が無くても動作するよう Update ベースでも対応
-        }
+        private Transform target; // 追尾対象の Transform
 
         private void Update()
         {
+            // ターゲットがいればそちらを向く
             if (target != null)
             {
                 Vector3 dir = (target.position - transform.position).normalized;
@@ -35,7 +29,8 @@ namespace Takato
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, rotationSpeed * Time.deltaTime);
                 }
             }
-            // 前方へ移動
+
+            // 前方へ移動（Transformによる移動）
             transform.position += transform.forward * speed * Time.deltaTime;
         }
 
@@ -47,16 +42,24 @@ namespace Takato
             target = t;
         }
 
+        /// <summary>
+        /// 何かに接触したときの判定（Is Trigger用）
+        /// </summary>
         private void OnTriggerEnter(Collider other)
         {
             if (other == null) return;
 
-            var enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
+            // 接触したオブジェクトに "Enemy" タグがついているかチェック
+            if (other.CompareTag("Enemy"))
             {
-                enemy.TakeDamage((int)damage);
+                // Enemyコンポーネントがあればダメージを与える
+                if (other.TryGetComponent<Enemy>(out var enemy))
+                {
+                    enemy.TakeDamage((int)damage);
+                }
+
+                // Enemyタグのオブジェクトに当たったので、自身（弾）を削除
                 Destroy(gameObject);
-                return;
             }
         }
     }

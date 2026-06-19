@@ -5,6 +5,7 @@ namespace Takato
     /// <summary>
     /// 武器のクラス
     /// </summary>
+    [RequireComponent(typeof(Collider))]
     public class Weapon : MonoBehaviour
     {
         [Header("武器ステータス")]
@@ -18,7 +19,7 @@ namespace Takato
 
         [Space(10)]
         [Header("魔法武器設定")]
-        [SerializeField] private bool isMagicWeapon; // 魔法武器フラグ（インスペクタで設定）
+        [SerializeField] private bool isMagicWeapon; // 魔法武器フラグ
         [Header("魔法弾のプレハブ（魔法武器の場合）")]
         [SerializeField] private HomingProjectile magicProjectilePrefab; // HomingProjectile のプレハブ
 
@@ -26,20 +27,37 @@ namespace Takato
         [Header("魔法攻撃のクールタイム（秒）")]
         [SerializeField] private float magicCooldown; // インスペクタで調整可能なクールタイム
 
-
-
         private float nextMagicFireTime = 0f; // 次に発射できる時刻
         private Collider weaponCollider;  // 武器のコライダー
         private bool isAttacking = false; // 攻撃中かどうか
 
+        // キャッシュ
+        private SoundManager soundManager;
+
         private void Awake()
         {
-            weaponCollider = GetComponent<Collider>();  // 武器のコライダーを取得
-
-            // コライダーがある場合のみ初期化処理を行う
-            if (weaponCollider != null)
+            // コライダーを取得
+            weaponCollider = GetComponent<Collider>();
+            if (weaponCollider == null)
+            {
+                Debug.LogWarning($"{nameof(Weapon)}: Collider が見つかりません。");
+            }
+            else
             {
                 DisableCollider(); // 初期状態ではコライダーを無効化
+            }
+
+            // SoundManager をキャッシュ（存在しない場合は null のまま）
+            soundManager =FindAnyObjectByType<SoundManager>();
+            if (soundManager == null)
+            {
+                Debug.LogWarning($"{nameof(Weapon)}: SoundManager がシーン内に見つかりません。SE を再生できません。");
+            }
+
+            // 魔法弾プレハブが必要な場合の事前警告
+            if (isMagicWeapon && magicProjectilePrefab == null)
+            {
+                Debug.LogWarning($"{nameof(Weapon)}: isMagicWeapon が true ですが magicProjectilePrefab が設定されていません。");
             }
         }
 
@@ -60,13 +78,13 @@ namespace Takato
 
             if (firePoint == null)
             {
-                Debug.LogWarning("firePoint が設定されていません。");
+                Debug.LogWarning($"{nameof(FireMagic)}: firePoint が設定されていません。");
                 return;
             }
 
             if (magicProjectilePrefab == null)
             {
-                Debug.LogWarning("magicProjectilePrefab が設定されていません。");
+                Debug.LogWarning($"{nameof(FireMagic)}: magicProjectilePrefab が設定されていません。");
                 return;
             }
 
@@ -136,27 +154,6 @@ namespace Takato
                 weaponCollider.enabled = false;
             }
             isAttacking = false; // 攻撃終了
-        }
-
-        /// <summary>
-        /// 敵に攻撃が当たった時の処理
-        /// </summary>
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!isAttacking) return; // 攻撃中のみ判定
-
-            SoundManager soundmanager = FindAnyObjectByType<SoundManager>();
-
-            // ここで敵かどうか判定し、ダメージ処理
-            var enemy = other.GetComponent<Enemy>();
-            if (enemy != null)
-            {
-                if (soundmanager != null)
-                {
-                    soundmanager.PlaySE(1); // 攻撃ヒットのSEを再生
-                }
-                enemy.TakeDamage((int)AttackDamage);
-            }
         }
 
         /// <summary>
