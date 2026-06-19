@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4936766150601922115}
   - component: {fileID: 8825622566448534756}
   m_Layer: 0
-  m_Name: MagicBall
+  m_Name: PlayerNormalBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 55027029df0963e4397d1e41ef9df38c, type: 2}
+  - {fileID: 2100000, guid: aa62b9d9f3052be4fbfaa872ac3dee15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -153,6 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425a66d112e9dcc43afa54a8e96cac2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HomingProjectile
-  speed: 0
-  rotationSpeed: 0
-  damage: 0
+  speed: 5
+  rotationSpeed: 5
+  damage: 15

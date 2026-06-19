@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3442118205643680968
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6003688581791800742}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6003688581791800742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442118205643680968}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.294, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8824565833013214519}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &9078586849507695324
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,11 +89,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6003688581791800742}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4790377780384153851}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7608129612383161402}
   m_SourcePrefab: {fileID: 100100000, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
 --- !u!1 &8159668695086229389 stripped
 GameObject:
@@ -92,3 +129,26 @@ CapsuleCollider:
   m_Height: 0.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7608129612383161402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8159668695086229389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c26938b23023c4eb90b98866142e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.Weapon
+  baseAttackDamage: 0
+  weaponLevel: 5
+  maxLevel: 10
+  isMagicWeapon: 1
+  magicProjectilePrefab: {fileID: 8825622566448534756, guid: 7dc1c3cdb7e41e54a8a399e42e9ed5c4, type: 3}
+  magicCooldown: 2
+--- !u!4 &8824565833013214519 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 81b1f41848fe5964c9ab4656ca436a5f, type: 3}
+  m_PrefabInstance: {fileID: 9078586849507695324}
+  m_PrefabAsset: {fileID: 0}

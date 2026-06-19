@@ -1,56 +1,63 @@
 using UnityEngine;
 
-/// <summary>
-/// ホーミング弾の挙動を管理するクラス
-/// </summary>
-public class HomingProjectile : MonoBehaviour
+namespace Takato
 {
-    [HideInInspector]
-    public float speed;         // 弾の速度
-    [HideInInspector]
-    public float rotationSpeed; // ホーミングの回転速度
-    [HideInInspector]
-    public float damage;        // 弾のダメージ量
-
-
-    private Transform target;   // ターゲットの位置
-  
     /// <summary>
-    /// ターゲットを設定するメソッド
+    /// ホーミング弾の基本実装
+    /// ターゲットが設定されていれば追尾、衝突時に Enemy.TakeDamage(int) を呼ぶ
     /// </summary>
-    public void SetTarget(Transform targetTransform)
+    public class HomingProjectile : MonoBehaviour
     {
-        this.target = targetTransform;
-    }
+        [Tooltip("移動速度")]
+        public float speed;
+        [Tooltip("回転速度（追尾の滑らかさ）")]
+        public float rotationSpeed;
+        [Tooltip("与えるダメージ")]
+        public float damage;
 
-    private void Update()
-    {
-        if(target == null)
+        private Transform target;
+        private Rigidbody rb;
+
+        private void Awake()
         {
-            Destroy(gameObject); // ターゲットが存在しない場合は弾を破壊
-            return;
+            rb = GetComponent<Rigidbody>();
+            // Rigidbody が無くても動作するよう Update ベースでも対応
         }
-        // ターゲットの方向を計算
-        Vector3 direction = target.position - transform.position;
-        direction.Normalize();
-        // 現在の向きをターゲットの方向に回転させる
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, direction, rotationSpeed * Time.deltaTime, 0.0f);
-        transform.rotation = Quaternion.LookRotation(newDirection);
-        // 弾を前進させる
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
 
-    // ターゲットに衝突したときの処理
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy")) // 敵に衝突した場合
+        private void Update()
         {
-            Enemy enemy = other.GetComponent<Enemy>();
+            if (target != null)
+            {
+                Vector3 dir = (target.position - transform.position).normalized;
+                if (dir.sqrMagnitude > 0.0001f)
+                {
+                    Quaternion lookRot = Quaternion.LookRotation(dir);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, rotationSpeed * Time.deltaTime);
+                }
+            }
+            // 前方へ移動
+            transform.position += transform.forward * speed * Time.deltaTime;
+        }
+
+        /// <summary>
+        /// ターゲットを設定する
+        /// </summary>
+        public void SetTarget(Transform t)
+        {
+            target = t;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other == null) return;
+
+            var enemy = other.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.TakeDamage(Mathf.RoundToInt(damage));
+                enemy.TakeDamage((int)damage);
+                Destroy(gameObject);
+                return;
             }
-            Destroy(gameObject); // 弾を破壊
         }
     }
 }

@@ -1041,16 +1041,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
-  maxHp: 0
-  currentCost: 0
+  playerSO: {fileID: 11400000, guid: 441d11c7c995e074d8d3c917a264444f, type: 2}
   hpBar: {fileID: 0}
   costText: {fileID: 0}
-  playerSO: {fileID: 0}
-  moveSpeed: 0
-  jumpForce: 0
-  gravity: 0
-  damageCutRate: 0
-  skillSelectUI: {fileID: 0}
 --- !u!114 &5133047595112318893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1066,6 +1059,9 @@ MonoBehaviour:
   equippedWeapon: {fileID: 7339351941533750335, guid: e620e571b6ce8e24b8723fe6811cec3d, type: 3}
   weaponPrefab: {fileID: 7339351941533750335, guid: e620e571b6ce8e24b8723fe6811cec3d, type: 3}
   weaponFolder: {fileID: 1389450999320030855}
+  isMagicWeapon: 0
+  magicFirePoint: {fileID: 0}
+  magicProjectilePrefab: {fileID: 0}
 --- !u!114 &1819582846505344133
 MonoBehaviour:
   m_ObjectHideFlags: 0
