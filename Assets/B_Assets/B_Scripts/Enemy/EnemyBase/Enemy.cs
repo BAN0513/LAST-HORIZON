@@ -108,6 +108,8 @@ public abstract class Enemy : MonoBehaviour
     private EnemyActionSO lastAction_1;
     private EnemyActionSO lastAction_2;
 
+    EventProgress eventProgress;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -117,6 +119,7 @@ public abstract class Enemy : MonoBehaviour
         playerController = target.GetComponent<PlayerController>();
         playerCharacterController = target.GetComponent<CharacterController>();
         playerAnimationController = target.GetComponent<PlayerAnimationController>();
+        eventProgress = GetComponentInParent<EventProgress>();
     }
 
     protected virtual void Start()
@@ -451,6 +454,14 @@ public abstract class Enemy : MonoBehaviour
 
     public void DeathAnimEnd()
     {
+        if (eventProgress != null)
+        {
+            eventProgress.DestroyEnemy(this);
+        }
+        else
+        {
+            Debug.Log("EventProgressÇ™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÅB");
+        }
         Destroy(gameObject);
     }
 
