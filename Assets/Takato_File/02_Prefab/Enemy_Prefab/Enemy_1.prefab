@@ -97,9 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d48203f73afde44ea30e6be65cd6b44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_1
-  enemySO: {fileID: 11400000, guid: 5fb6d6923c23f7e41add6f327d1d2769, type: 2}
+  enemySO: {fileID: 11400000, guid: 0331490f3c9c0a74bb26783a7fab01d7, type: 2}
   hpSliider: {fileID: 1878319838695366945}
-  melee2Probability: 70
+  melee2Probability: 50
 --- !u!114 &6025648744925135600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +127,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3157,7 +3157,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   m_FillRect: {fileID: 2864310820104485418}
   m_HandleRect: {fileID: 0}
-  m_Direction: 0
+  m_Direction: 1
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
@@ -3255,15 +3255,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.12156868, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 2ed2c3894091d9d43817232c945da108, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -3361,15 +3361,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: a4b66714aafab2f4cb2c6538b99b7703, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4723,13 +4723,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4171468405231022394}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.50914305, y: 0.000000801277, z: 0.00000041652038, w: 0.8606819}
-  m_LocalPosition: {x: 0.64400077, y: 0.9080001, z: -0.12900019}
+  m_LocalRotation: {x: 0.2142029, y: 0.008037908, z: 0.19978558, w: 0.95610577}
+  m_LocalPosition: {x: 0.69914913, y: 0.79171276, z: 0.0003002584}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3713859532431908425}
-  m_LocalEulerAnglesHint: {x: 61.214, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45.901, y: -41.706, z: -12.859}
 --- !u!33 &3644063011777999305
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4797,12 +4797,12 @@ ParentConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.64400053, y: 0.908, z: -0.129}
-  m_RotationAtRest: {x: 61.213524, y: 0.00008583063, z: 0.000096559466}
+  m_TranslationAtRest: {x: 0.049, y: 0.813, z: 0.261}
+  m_RotationAtRest: {x: 45.907024, y: -40.51046, z: -12.464792}
   m_TranslationOffsets:
-  - {x: -0.09439501, y: -0.22247875, z: 0.09787989}
+  - {x: 0.073958635, y: -0.26445198, z: 0.04150659}
   m_RotationOffsets:
-  - {x: 17.904856, y: 82.07708, z: -39.658844}
+  - {x: -7.725494, y: 109.786835, z: -16.667337}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1
@@ -4848,7 +4848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   boxCollider: {fileID: 31848338589756540}
-  damage: 10
+  damage: 3
 --- !u!54 &5367454221775748305
 Rigidbody:
   m_ObjectHideFlags: 0

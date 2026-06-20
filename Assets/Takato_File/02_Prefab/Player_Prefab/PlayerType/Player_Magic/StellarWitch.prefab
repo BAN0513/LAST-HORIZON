@@ -444,7 +444,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 1.7
-  m_Radius: 0.2
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -502,10 +502,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 752ebf28e2a246747b93e2d43b34a495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerWeaponController
-  equippedWeapon: {fileID: 7608129612383161402, guid: daf310a0682250b478bb947dd9f81134, type: 3}
   weaponPrefab: {fileID: 7608129612383161402, guid: daf310a0682250b478bb947dd9f81134, type: 3}
   weaponFolder: {fileID: 1365337466059784981}
   magicFirePoint: {fileID: 0}
+  equippedWeapon: {fileID: 7608129612383161402, guid: daf310a0682250b478bb947dd9f81134, type: 3}
 --- !u!114 &8007606772746839892
 MonoBehaviour:
   m_ObjectHideFlags: 0

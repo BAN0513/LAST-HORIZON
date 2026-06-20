@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public class CharacterChangeController : MonoBehaviour
 {
-    public static CharacterChangeController Instance { get; private set; }
+    public static CharacterChangeController Instance { get; private set; } // シングルトンのインスタンス
 
     [Header("キャラクターを切り替えるスクリプトの詳細")]
     [Space(10)]
@@ -111,9 +111,14 @@ public class CharacterChangeController : MonoBehaviour
         // PlayerController に PlayerSO を割り当てる
         AssignPlayerSOToInstance(currentCharacter, playerSO);
 
+        StartCoroutine(NotifyEnemiesDelayed(currentCharacter));
+
         OnCharacterChanged?.Invoke(currentCharacterIndex, currentCharacter); // キャラクター変更イベントを発火
     }
 
+    /// <summary>
+    /// PlayerのSOをインスタンス化したGameObjectに割り当てる
+    /// </summary>
     private void AssignPlayerSOToInstance(GameObject instance, PlayerSO playerSO)
     {
         if (instance == null || playerSO == null) return;
@@ -158,6 +163,26 @@ public class CharacterChangeController : MonoBehaviour
 
         currentCharacterIndex = index;
         SpawnCharacter();
+    }
+
+    /// <summary>
+    /// プレイヤーが完全に生成・初期化された直後のフレームで敵にターゲットを通知する
+    /// </summary>
+    private System.Collections.IEnumerator NotifyEnemiesDelayed(GameObject newPlayer)
+    {
+        // 1フレーム待つことで、新プレイヤーのAwake/Startやコンポーネントの準備を待つ
+        yield return null;
+
+        if (newPlayer == null) yield break;
+
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        foreach (var enemy in allEnemies)
+        {
+            if (enemy != null)
+            {
+                enemy.UpdateTarget(newPlayer);
+            }
+        }
     }
 
     // 現在のキャラクターのインデックスと GameObject を取得するためのメソッド

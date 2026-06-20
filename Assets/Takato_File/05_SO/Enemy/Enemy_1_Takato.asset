@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
   m_Name: Enemy_1_Takato
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
-  maxHP: 1500
-  damage: 10
+  action: []
+  doNotAttack_Action: []
+  maxHP: 50
+  damage: 15
   dashMoveSpeed: 3
   walkMoveSpeed: 2
   def: 2
   stoopingDis: 2
   lookRotationSpeed: 5
-  searchDistance: 100
-  contactDistance: 100
   engageDis: 5
-  backActionDis: 2
-  backMoveDis: 2
-  attackInitProbability: 100
+  attackInitProbability: 50
   attackUpProbability: 20
   attackCoolDown: 2

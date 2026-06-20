@@ -114,12 +114,14 @@ public abstract class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         enemyAnimatorController = GetComponent<EnemyAnimatorController>();
-
-        target = GameObject.FindWithTag("Player").transform;
-        playerController = target.GetComponent<PlayerController>();
-        playerCharacterController = target.GetComponent<CharacterController>();
-        playerAnimationController = target.GetComponent<PlayerAnimationController>();
         eventProgress = GetComponentInParent<EventProgress>();
+
+        // 開始時にすでにシーンにプレイヤーがいる場合のみ実行
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        {
+            UpdateTarget(playerObj);
+        }
     }
 
     protected virtual void Start()
@@ -157,6 +159,15 @@ public abstract class Enemy : MonoBehaviour
         if (invincibilityTimer > 0)
         {
             invincibilityTimer -= Time.deltaTime;
+        }
+
+        //playerタグのついたオブジェクトを見つける(Awakeで取得失敗した際の保険です。)
+        if(target == null)
+        {
+            target = GameObject.FindWithTag("Player").transform;
+            playerController = target.GetComponent<PlayerController>();
+            playerCharacterController = target.GetComponent<CharacterController>();
+            playerAnimationController = target.GetComponent<PlayerAnimationController>();
         }
 
         //プレイヤーと自身の距離計算
@@ -463,6 +474,25 @@ public abstract class Enemy : MonoBehaviour
             Debug.Log("EventProgressが見つかりません。");
         }
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// キャラクター切り替え時やスポーン時に、新しいプレイヤーの参照を設定し直す
+    /// </summary>
+    public void UpdateTarget(GameObject newPlayer)
+    {
+        if (newPlayer == null) return;
+
+        target = newPlayer.transform;
+
+        //ここで各コンポーネントを安全に取得
+        playerController = target.GetComponent<Takato.PlayerController>();
+        playerCharacterController = target.GetComponent<CharacterController>();
+        playerAnimationController = target.GetComponent<Takato.PlayerAnimationController>();
+
+        // デバッグ用ログ
+        if (playerController == null)
+            Debug.LogWarning($"[{gameObject.name}] PlayerController の取得に失敗しました。Playerプレハブにスクリプトが付いているか確認してください。");
     }
 
     //デバッグ用

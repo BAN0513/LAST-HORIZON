@@ -18,4 +18,4 @@ MonoBehaviour:
   moveSpeed: 3
   jumpForce: 5
   gravity: 10
-  damageCutRate: 0.5
+  damageCutRate: 0.1

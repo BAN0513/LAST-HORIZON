@@ -28,13 +28,11 @@ public class PlayerHPBar : MonoBehaviour
     /// <summary>
     /// HPバーの値を更新するメソッド
     /// </summary>
-    /// <param name="current"></param>
-    /// <param name="max"></param>
     public void SetHP(int current, int max)
     {
         if (hpSlider != null)
         {
-            hpSlider.value = (max > 0) ? (float)current / max : 0f;
+            hpSlider.value = (max > 0) ? (float)current / max : 0f; // HPが0のときは0に設定
         }
     }
 }

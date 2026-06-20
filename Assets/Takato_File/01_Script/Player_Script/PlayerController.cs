@@ -220,7 +220,7 @@ namespace Takato
         /// </summary>
         private void UpdateHUDIfNeeded()
         {
-            hpBar?.SetHP(hp, maxHp);
+            hpBar?.SetHP(hp, maxHp); // HPバーの更新
         }
 
         private void UpdateLowHPMusic()
@@ -451,6 +451,12 @@ namespace Takato
         {
             if (so == null) return;
 
+            // ★修正：maxHpが0（ゲーム開始時の最初のスポーン）なら、割合保持を強制的にオフにする
+            if (maxHp <= 0)
+            {
+                preserveHPPercent = false;
+            }
+
             // 現在のHP割合を保持するための比率を取得
             float prevRatio = (maxHp > 0) ? (float)hp / maxHp : 1f;
 
@@ -464,7 +470,7 @@ namespace Takato
             }
             else
             {
-                hp = maxHp; // preserveHPPercent が false の場合は、HPを最大値にリセット
+                hp = maxHp; // 最初や、リセット時は満タンにする
             }
 
             // スキルコストは SO の開始値で初期化
@@ -480,15 +486,36 @@ namespace Takato
             }
         }
 
+        /// <summary>
+        /// プレイヤーがダメージを受けるメソッド
+        /// </summary>
         public void TakeDamage(int damage)
         {
+            if (isDead) return; // 死亡している場合はダメージを受けない
+
             SoundManager soundManager = FindAnyObjectByType<SoundManager>();
-            soundManager?.PlaySE(1);
+
+            soundManager?.PlaySE(1); // ダメージを受けたときのSEを再生
 
             int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate));
+
+            // 最低でも 1 ダメージは受けるようにする安全策
+            if (finalDamage <= 0 && damage > 0) finalDamage = 1;
+
             hp -= finalDamage;
+            
+            // HPが0以下にならないようにクランプ
+            hp = Mathf.Max(0, hp);
+
+            // UIの更新
             hpBar?.SetHP(hp, maxHp);
-            Debug.Log($"プレイヤーは{finalDamage}のダメージを受けました。現在のHP: {hp}/{maxHp}");
+            
+            Debug.Log($"プレイヤーは {finalDamage} のダメージを受けました。現在のHP: {hp}/{maxHp}");
+
+            if (hp <= 0)
+            {
+                Die();
+            }
         }
 
         public int GetCurrentCost() => currentCost; //プレイヤーの現在のスキルコストを取得するためのメソッド
@@ -522,6 +549,7 @@ namespace Takato
             animationController.enabled = false;
             weaponController?.DisableWeaponCollider();
             shieldController?.DisableShieldCollider();
+            characterController.enabled = false;
 
             Debug.Log("プレイヤーは死亡しました");
             PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();

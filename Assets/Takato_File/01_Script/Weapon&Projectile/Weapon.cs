@@ -25,7 +25,7 @@ namespace Takato
 
         [Space(10)]
         [Header("魔法攻撃のクールタイム（秒）")]
-        [SerializeField] private float magicCooldown; // インスペクタで調整可能なクールタイム
+        [SerializeField] private float magicCooldown; // インスペクターで調整可能なクールタイム
 
         private float nextMagicFireTime = 0f; // 次に発射できる時刻
         private Collider weaponCollider;  // 武器のコライダー
@@ -47,7 +47,7 @@ namespace Takato
                 DisableCollider(); // 初期状態ではコライダーを無効化
             }
 
-            // SoundManager をキャッシュ（存在しない場合は null のまま）
+            // SoundManager をキャッシュ
             soundManager =FindAnyObjectByType<SoundManager>();
             if (soundManager == null)
             {
@@ -131,6 +131,26 @@ namespace Takato
 
             return best;
         }
+
+        /// <summary>
+        /// 武器のコライダーが敵に接触したときの処理
+        /// </summary>
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!isAttacking) return; // 攻撃中でなければ無視
+            if (other.CompareTag("Enemy"))
+            {
+                // Enemyコンポーネントがあればダメージを与える
+                if (other.TryGetComponent<Enemy>(out var enemy))
+                {
+                    enemy.TakeDamage((int)AttackDamage);
+                    soundManager?.PlaySE(1); // 1番のSEを再生（ヒット音）
+                }
+            }
+        }
+
+
+        /// --- コライダーの有効化・無効化 ---
 
         /// <summary>
         /// コライダーを有効化
