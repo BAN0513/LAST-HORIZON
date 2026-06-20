@@ -5,6 +5,7 @@ public class WarpPointerController : MonoBehaviour
 {
     private PlayerController player;
     public GameObject warpObj;
+    [SerializeField] private GameObject arrowObj;
     [SerializeField] private GameObject testWarp;
 
     private void Start()
@@ -18,11 +19,11 @@ public class WarpPointerController : MonoBehaviour
 
         if (warpObj == null)
         {
-            gameObject.SetActive(false);
+            arrowObj.SetActive(false);
         }
         else
         {
-            gameObject.SetActive(true);
+            arrowObj.SetActive(true);
         }
     }
 
@@ -30,20 +31,20 @@ public class WarpPointerController : MonoBehaviour
     {
         if (warpObj == null) return;
 
-        Vector3 dir = warpObj.transform.position - transform.position;
+        Vector3 dir = warpObj.transform.position - player.transform.position;
         dir.y = 0;
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
     public void SetWarpPoint(GameObject warpPoint)
     {
-        gameObject.SetActive(true);
+        arrowObj.SetActive(true);
         warpObj = warpPoint;
     }
 
     public void DestroyWarpPoint()
     {
-        gameObject.SetActive(false);
+        arrowObj.SetActive(false);
         warpObj = null;
     }
 

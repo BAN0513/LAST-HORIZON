@@ -4,25 +4,46 @@ using UnityEngine;
 
 public class EventProgress : MonoBehaviour
 {
+    [SerializeField] private string startText;
     [SerializeField] private string changeText;
+    [SerializeField] private GameObject warpPoint;
     private List<Enemy> enemies = new List<Enemy>();
+    private WarpPointerController warpPointerController;
     private DestinationUI destinationUI;
 
     private void Start()
     {
         destinationUI = DestinationUI.Instance;
 
+        warpPointerController = GameObject.FindWithTag("Player").GetComponentInChildren<WarpPointerController>();
+
+        if (destinationUI != null)
+        {
+            destinationUI.SetDestinationText(startText);
+            if (warpPointerController != null)
+            {
+                warpPointerController.SetWarpPoint(warpPoint);
+            }
+            else
+            {
+                Debug.LogWarning("");
+            }
+        }
+
         Enemy[] e = GetComponentsInChildren<Enemy>();
 
         foreach (Enemy enemy in e)
-        enemies.Add(enemy);
+        {
+            enemies.Add(enemy);
+        }
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (enemies.Count == 0)
+        if (destinationUI != null)
         {
-            destinationUI.SetDestinationText(changeText);
+            destinationUI.SetDestinationText(startText);
+            warpPointerController.DestroyWarpPoint();
         }
     }
 
@@ -34,6 +55,12 @@ public class EventProgress : MonoBehaviour
             {
                 enemies.RemoveAt(i);
             }
+        }
+
+        if (enemies.Count == 0)
+        {
+            destinationUI.SetDestinationText(changeText);
+            warpPointerController.SetWarpPoint(warpPoint);
         }
     }
 

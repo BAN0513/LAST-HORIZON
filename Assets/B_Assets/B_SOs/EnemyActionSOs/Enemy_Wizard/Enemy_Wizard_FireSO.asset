@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15e3612402021d6409fc4a4718c9f3b1, type: 3}
   m_Name: Enemy_Wizard_FireSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_FireSO
-  bestDis: 8
+  bestDis: 10
   bestDot: 1
   maxDis: 15
   maxDot: 1
