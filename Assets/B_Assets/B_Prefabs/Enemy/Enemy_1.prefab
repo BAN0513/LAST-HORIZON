@@ -50,7 +50,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 56609770559436359}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.7
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -4723,8 +4723,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4171468405231022394}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2142029, y: 0.008037908, z: 0.19978558, w: 0.95610577}
-  m_LocalPosition: {x: 0.820456, y: 0.56080484, z: -0.09505987}
+  m_LocalRotation: {x: 0.2142029, y: 0.00803786, z: 0.19978546, w: 0.9561058}
+  m_LocalPosition: {x: 0.6099999, y: 0.87, z: -0.02600021}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4797,12 +4797,12 @@ ParentConstraint:
   m_Enabled: 1
   serializedVersion: 2
   m_Weight: 1
-  m_TranslationAtRest: {x: 0.049, y: 0.813, z: 0.261}
-  m_RotationAtRest: {x: 45.907024, y: -40.51046, z: -12.464792}
+  m_TranslationAtRest: {x: 0.61, y: 0.87, z: -0.026}
+  m_RotationAtRest: {x: 23.978222, y: 6.343866, z: 24.95361}
   m_TranslationOffsets:
-  - {x: 0.073958635, y: -0.26445198, z: 0.04150659}
+  - {x: 0.004971653, y: -0.08729613, z: 0.046226084}
   m_RotationOffsets:
-  - {x: -7.725494, y: 109.786835, z: -16.667337}
+  - {x: -7.7254963, y: 109.78682, z: -16.66735}
   m_AffectTranslationX: 1
   m_AffectTranslationY: 1
   m_AffectTranslationZ: 1

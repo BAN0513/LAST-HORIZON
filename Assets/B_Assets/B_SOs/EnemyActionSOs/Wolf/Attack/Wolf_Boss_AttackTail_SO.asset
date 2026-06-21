@@ -15,7 +15,7 @@ MonoBehaviour:
   bestDis: 5
   bestDot: -1
   maxDis: 7
-  maxDot: 0.5
+  maxDot: 0
   minDis: 0
   minDot: -1
   baseDis: 0.5

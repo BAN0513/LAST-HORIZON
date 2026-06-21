@@ -5,8 +5,6 @@ public class Wolf_Boss : Enemy_FourLegs
 {
     public Wolf_BossAnimatorController wolf_Anim;
 
-    public GameObject neck;
-
     protected override void Start()
     {
         base.Start();

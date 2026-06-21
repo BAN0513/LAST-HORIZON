@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Takato;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
@@ -113,6 +114,11 @@ public abstract class Enemy : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        if (agent == null )
+        {
+            Debug.LogError("navMeshが見つからない");
+        }
         enemyAnimatorController = GetComponent<EnemyAnimatorController>();
         eventProgress = GetComponentInParent<EventProgress>();
 
@@ -194,7 +200,7 @@ public abstract class Enemy : MonoBehaviour
         Vector3 toTarget = (target.position - transform.position).normalized;
         toTarget.y = 0;
         //自身の前方方向を取る
-        Vector3 forwardDir = (transform.forward - transform.position).normalized;
+        Vector3 forwardDir = (transform.position + transform.forward - transform.position).normalized;
         forwardDir.y = 0;
 
         //内積で方向の一致度を取る
@@ -205,16 +211,32 @@ public abstract class Enemy : MonoBehaviour
     {
         if (isLookPlayer)
         {
-            Vector3 dir = target.position - transform.position;
-            dir.y = 0;
-            if (dir != Vector3.zero)
+            Vector3 dir;
+            dir.x = 0;
+            dir.z = 0;
+
+            if (agent.speed == enemySO.walkMoveSpeed)
             {
-                transform.rotation = Quaternion.Slerp(
-                    transform.rotation,
-                    Quaternion.LookRotation(dir),
-                    Time.deltaTime * lookRotationSpeed
-                    );
+                dir = target.position - transform.position;
+
             }
+            else
+            {
+                dir = (transform.position + agent.velocity) - transform.position;
+            }
+            dir.y = 0;
+            SetRotation(dir);
+        }
+    }
+    private void SetRotation(Vector3 dir)
+    {
+        if (dir != Vector3.zero)
+        {
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(dir),
+                Time.deltaTime * lookRotationSpeed
+                );
         }
     }
 
@@ -227,7 +249,11 @@ public abstract class Enemy : MonoBehaviour
 
     private void AgentContact()
     {
-        agent.SetDestination(target.position);
+        if (agent.isOnNavMesh)
+        {
+            agent.SetDestination(target.position);
+
+        }
 
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
         if (distance <= agent.stoppingDistance && isWalk)
@@ -244,8 +270,9 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void EngageMoveControl()
     {
-        if (distance <= enemySO.engageDis)
+        if (distance <= enemySO.engageDis && Mathf.Abs(target.position.y - transform.position.y) < 0.5f)
         {
+
             //敵のスピードを少しだけ遅くする
             agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 

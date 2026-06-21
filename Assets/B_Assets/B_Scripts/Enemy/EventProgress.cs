@@ -26,7 +26,7 @@ public class EventProgress : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("");
+                Debug.LogWarning("warpPointerController‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
             }
         }
 

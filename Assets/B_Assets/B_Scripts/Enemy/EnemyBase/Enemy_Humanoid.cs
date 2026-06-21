@@ -42,7 +42,7 @@ public class Enemy_Humanoid : Enemy
         }
         else
         {
-            if (distance >= enemySO.engageDis)
+            if (distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
