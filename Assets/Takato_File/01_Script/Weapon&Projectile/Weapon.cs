@@ -63,7 +63,6 @@ namespace Takato
 
         /// <summary>
         /// 魔法弾を発射する（Player から呼び出す）
-        /// Weapon 側で生成・ダメージ設定・ターゲット設定を行う
         /// </summary>
         public void FireMagic(Transform firePoint)
         {

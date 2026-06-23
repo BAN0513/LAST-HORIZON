@@ -1,106 +1,106 @@
-using Takato;
+ï»¿using Takato;
 using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// –‚–@UŒ‚‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/// é­”æ³•æ”»æ’ƒã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 namespace Takato
 {
     [CreateAssetMenu(menuName = "Takato/Skill/MGCSkill")]
     public class MGCSkill : SkillBase
     {
-        [Header("(–‚–@UŒ‚ƒXƒLƒ‹‚ÌƒXƒe[ƒ^ƒX)")]
+        [Header("(é­”æ³•æ”»æ’ƒã‚¹ã‚­ãƒ«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹)")]
         [Space(10)]
 
-        [Header("ƒz[ƒ~ƒ“ƒO’eƒvƒŒƒnƒu")]
+        [Header("ãƒ›ãƒ¼ãƒŸãƒ³ã‚°å¼¾ãƒ—ãƒ¬ãƒãƒ–")]
         [SerializeField] private HomingProjectile homingProjectilePrefab;
-        [Header("–‚–@UŒ‚‚ÌParticle")]
+        [Header("é­”æ³•æ”»æ’ƒæ™‚ã®Particle")]
         [SerializeField] private ParticleSystem magicEffectPrefab;
-        [Header("’e‚Ì‘¬“xi‰Šú’lj")]
+        [Header("å¼¾ã®é€Ÿåº¦ï¼ˆåˆæœŸå€¤ï¼‰")]
         [SerializeField] private float baseProjectileSpeed;
-        [Header("ƒz[ƒ~ƒ“ƒO‰ñ“]‘¬“xi‰Šú’lj")]
+        [Header("ãƒ›ãƒ¼ãƒŸãƒ³ã‚°å›è»¢é€Ÿåº¦ï¼ˆåˆæœŸå€¤ï¼‰")]
         [SerializeField] private float baseHomingRotationSpeed;
-        [Header("’e‚Ìƒ_ƒ[ƒWi‰Šú’lj")]
+        [Header("å¼¾ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼ˆåˆæœŸå€¤ï¼‰")]
         [SerializeField] private float baseProjectileDamage;
-        [Header("ƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         [SerializeField, Min(1)] private int skillLevel;
-        [Header("Å‘åƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("æœ€å¤§ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         [SerializeField, Min(1)] private int maxSkillLevel;
-        [Header("ƒŒƒxƒ‹‚²‚Æ‚Ìƒ_ƒ[ƒW‘‰Á—Ê")]
+        [Header("ãƒ¬ãƒ™ãƒ«ã”ã¨ã®ãƒ€ãƒ¡ãƒ¼ã‚¸å¢—åŠ é‡")]
         [SerializeField] private float damagePerLevel;
-        [Header("ƒŒƒxƒ‹‚²‚Æ‚Ì‘¬“x‘‰Á—Ê")]
+        [Header("ãƒ¬ãƒ™ãƒ«ã”ã¨ã®é€Ÿåº¦å¢—åŠ é‡")]
         [SerializeField] private float speedPerLevel;
 
         public override void Activate(PlayerController player)
         {
-            // ƒRƒXƒgƒ`ƒFƒbƒN
+            // ã‚³ã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
             if (player.GetCurrentCost() < cost)
             {
-                Debug.Log($"{skillName}FƒRƒXƒg•s‘«‚Å”­“®‚Å‚«‚Ü‚¹‚ñB•K—vƒRƒXƒgF{cost}AŒ»İF{player.GetCurrentCost()}");
+                Debug.Log($"{skillName}ï¼šã‚³ã‚¹ãƒˆä¸è¶³ã§ç™ºå‹•ã§ãã¾ã›ã‚“ã€‚å¿…è¦ã‚³ã‚¹ãƒˆï¼š{cost}ã€ç¾åœ¨ï¼š{player.GetCurrentCost()}");
                 return;
             }
-            player.ConsumeCost(cost);//ƒRƒXƒg‚ğÁ”ï
+            player.ConsumeCost(cost);//ã‚³ã‚¹ãƒˆã‚’æ¶ˆè²»
 
-            // –‚–@UŒ‚‚ÌƒGƒtƒFƒNƒg‚ğ¶¬
+            // é­”æ³•æ”»æ’ƒã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆ
             if (magicEffectPrefab != null)
             {
                 ParticleSystem effect = Instantiate(magicEffectPrefab, player.transform.position, Quaternion.identity);
-                effect.transform.SetParent(player.transform); // ƒvƒŒƒCƒ„[‚É’Ç]‚³‚¹‚é
+                effect.transform.SetParent(player.transform); // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«è¿½å¾“ã•ã›ã‚‹
                 effect.Play();
-                // ƒGƒtƒFƒNƒg‚ÌÄ¶ŠÔ
+                // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®å†ç”Ÿæ™‚é–“
                 Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
             }
 
-            // Å‚à‹ß‚¢“G‚ğ’T‚·
+            // æœ€ã‚‚è¿‘ã„æ•µã‚’æ¢ã™
             Enemy targetEnemy = FindNearestEnemy(player.transform.position);
             if (targetEnemy == null)
             {
-                Debug.Log("ƒ^[ƒQƒbƒg‚Æ‚È‚é“G‚ª‚¢‚Ü‚¹‚ñB");
+                Debug.Log("ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã¨ãªã‚‹æ•µãŒã„ã¾ã›ã‚“ã€‚");
                 return;
             }
 
-            // FirePoint‚ğŠK‘w‚ğ–â‚í‚¸©“®æ“¾
+            // FirePointã‚’éšå±¤ã‚’å•ã‚ãšè‡ªå‹•å–å¾—
             Transform autoFirePoint = FindDeepChild(player.transform, "FirePoint");
             Vector3 spawnPos = autoFirePoint != null
                 ? autoFirePoint.position
                 : player.transform.position + player.transform.forward;
 
-            // ƒŒƒxƒ‹‚É‰‚¶‚½ƒpƒ‰ƒ[ƒ^ŒvZ
+            // ãƒ¬ãƒ™ãƒ«ã«å¿œã˜ãŸãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨ˆç®—
             float projectileSpeed = baseProjectileSpeed + speedPerLevel * (skillLevel - 1);
-            float homingRotationSpeed = baseHomingRotationSpeed; // •K—v‚È‚çƒŒƒxƒ‹‚Å‘‰Á
+            float homingRotationSpeed = baseHomingRotationSpeed; // å¿…è¦ãªã‚‰ãƒ¬ãƒ™ãƒ«ã§å¢—åŠ 
             float projectileDamage = baseProjectileDamage + damagePerLevel * (skillLevel - 1);
 
-            // ƒz[ƒ~ƒ“ƒO’e‚ğ¶¬
+            // ãƒ›ãƒ¼ãƒŸãƒ³ã‚°å¼¾ã‚’ç”Ÿæˆ
             HomingProjectile projectile = Instantiate(homingProjectilePrefab, spawnPos, Quaternion.identity);
             projectile.speed = projectileSpeed;
             projectile.rotationSpeed = homingRotationSpeed;
             projectile.damage = projectileDamage;
             projectile.SetTarget(targetEnemy.transform);
 
-            // ˆÚ“®‘¬“xƒoƒt‚ğ“K—p
+            // ç§»å‹•é€Ÿåº¦ãƒãƒ•ã‚’é©ç”¨
             if (moveSpeedBuff > 0)
             {
                 float duration = 5.0f;
                 player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
             }
-            Debug.Log($"{skillName} ”­“®: Lv{skillLevel} ƒ_ƒ[ƒW{projectileDamage}, ‘¬“x{projectileSpeed}");
+            Debug.Log($"{skillName} ç™ºå‹•: Lv{skillLevel} ãƒ€ãƒ¡ãƒ¼ã‚¸{projectileDamage}, é€Ÿåº¦{projectileSpeed}");
         }
 
         /// <summary>
-        /// ˆÚ“®‘¬“xƒoƒt‚ğ“K—p‚·‚éƒRƒ‹[ƒ`ƒ“
+        /// ç§»å‹•é€Ÿåº¦ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
         /// </summary>
         private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
         {
-            float originalSpeed = player.GetMoveSpeed();    // ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌˆÚ“®‘¬“x‚ğæ“¾
-            player.SetMoveSpeed(originalSpeed + speedBuff); // ˆÚ“®‘¬“x‚ğã‚°‚é
-            yield return new WaitForSeconds(duration);      // w’è‚µ‚½ŠÔ‘Ò‚Â
-            player.SetMoveSpeed(originalSpeed);             // ˆÚ“®‘¬“x‚ğŒ³‚É–ß‚·
+            float originalSpeed = player.GetMoveSpeed();    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®ç§»å‹•é€Ÿåº¦ã‚’å–å¾—
+            player.SetMoveSpeed(originalSpeed + speedBuff); // ç§»å‹•é€Ÿåº¦ã‚’ä¸Šã’ã‚‹
+            yield return new WaitForSeconds(duration);      // æŒ‡å®šã—ãŸæ™‚é–“å¾…ã¤
+            player.SetMoveSpeed(originalSpeed);             // ç§»å‹•é€Ÿåº¦ã‚’å…ƒã«æˆ»ã™
         }
 
 
         /// <summary>
-        /// w’è‚µ‚½ˆÊ’u‚©‚çÅ‚à‹ß‚¢“G‚ğ’T‚·ƒƒ\ƒbƒh
+        /// æŒ‡å®šã—ãŸä½ç½®ã‹ã‚‰æœ€ã‚‚è¿‘ã„æ•µã‚’æ¢ã™ãƒ¡ã‚½ãƒƒãƒ‰
         /// </summary>
         private Enemy FindNearestEnemy(Vector3 fromPosition)
         {
@@ -120,7 +120,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// w’è‚µ‚½–¼‘O‚ÌqTransform‚ğŠK‘w‚ğ–â‚í‚¸Ä‹A“I‚É’T‚·
+        /// æŒ‡å®šã—ãŸåå‰ã®å­Transformã‚’éšå±¤ã‚’å•ã‚ãšå†å¸°çš„ã«æ¢ã™
         /// </summary>
         private Transform FindDeepChild(Transform parent, string name)
         {
@@ -136,11 +136,11 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒXƒLƒ‹ƒŒƒxƒ‹‚ğŠO•”‚©‚ç•ÏX‚·‚éê‡—p
+        /// ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«ã‚’å¤–éƒ¨ã‹ã‚‰å¤‰æ›´ã™ã‚‹å ´åˆç”¨
         /// </summary>
         public void SetSkillLevel(int level)
         {
-            skillLevel = Mathf.Clamp(level, 1, maxSkillLevel); // ƒŒƒxƒ‹‚ğ1‚©‚çmaxSkillLevel‚Ì”ÍˆÍ‚É§ŒÀ
+            skillLevel = Mathf.Clamp(level, 1, maxSkillLevel); // ãƒ¬ãƒ™ãƒ«ã‚’1ã‹ã‚‰maxSkillLevelã®ç¯„å›²ã«åˆ¶é™
         }
     }
 }

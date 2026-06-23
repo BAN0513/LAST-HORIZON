@@ -1,33 +1,37 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 namespace Takato
 {
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class PlayerController : MonoBehaviour
     {
-        // --- Inspector ‚Åİ’è‚·‚éƒtƒB[ƒ‹ƒh ---
-        [Header("ƒvƒŒƒCƒ„[‚ÌInspecter‚Åİ’èƒtƒB[ƒ‹ƒh")]
+        // --- Inspector ã§è¨­å®šã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ ---
+        [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®Inspecterã§è¨­å®šãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰")]
         [Space(10)]
-        [Header("ƒvƒŒƒCƒ„[‚ÌSO‚ğ“ü‚ê‚é")]
+        [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®SOã‚’å…¥ã‚Œã‚‹")]
         [SerializeField] private PlayerSO playerSO;
-        [Header("ƒvƒŒƒCƒ„[‚ÌHPƒo[‚ÌƒXƒNƒŠƒvƒg‚ª“ü‚Á‚Ä‚é•¨‚ğ“ü‚ê‚é")]
+        [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPãƒãƒ¼ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒå…¥ã£ã¦ã‚‹ç‰©ã‚’å…¥ã‚Œã‚‹")]
         [SerializeField] private PlayerHPBar hpBar;
-        [Header("ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌƒRƒXƒg‚ğŒ©‚é‚½‚ß‚ÌText")]
+        [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®ã‚³ã‚¹ãƒˆã‚’è¦‹ã‚‹ãŸã‚ã®Text")]
         [SerializeField] private TMPro.TextMeshProUGUI costText;
 
 
-        /// --- ƒvƒŒƒCƒ„[‚ÌƒXƒe[ƒ^ƒX’l‚Ì•Ï” ---
-        private int maxHp;                 //ƒvƒŒƒCƒ„[‚ÌÅ‘åHP‚ğŠi”[‚·‚é•Ï”
-        private int currentCost;            //ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌƒXƒLƒ‹ƒRƒXƒg‚ğŠi”[‚·‚é•Ï” 
-        private float moveSpeed;            //ƒvƒŒƒCƒ„[‚ÌˆÚ“®‘¬“x‚ğŠi”[‚·‚é•Ï”
-        private float jumpForce;            //ƒvƒŒƒCƒ„[‚ÌƒWƒƒƒ“ƒv—Í‚ğŠi”[‚·‚é•Ï”
-        private float gravity;              //ƒvƒŒƒCƒ„[‚Ìd—Í‚ğŠi”[‚·‚é•Ï”
-        private float damageCutRate;        //ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒWƒJƒbƒg—¦‚ğŠi”[‚·‚é•Ï”i0`1‚Ì”ÍˆÍ‚ÅA—á‚¦‚Î0.2‚È‚ç20%ƒJƒbƒg‚Æ‚©‚Å‚·j
-        private SkillSelectUI skillSelectUI;//ƒXƒLƒ‹‘I‘ğUI‚ÌƒXƒNƒŠƒvƒg‚ğŠi”[‚·‚é•Ï”
+        /// --- ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹å€¤ã®å¤‰æ•° ---
+        private int maxHp;                 //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æœ€å¤§HPã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private int currentCost;            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®ã‚¹ã‚­ãƒ«ã‚³ã‚¹ãƒˆã‚’æ ¼ç´ã™ã‚‹å¤‰æ•° 
+        private float moveSpeed;            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•é€Ÿåº¦ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private float jumpForce;            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¸ãƒ£ãƒ³ãƒ—åŠ›ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private float gravity;              //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é‡åŠ›ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private float damageCutRate;        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°ï¼ˆ0ï½1ã®ç¯„å›²ã§ã€ä¾‹ãˆã°0.2ãªã‚‰20%ã‚«ãƒƒãƒˆã¨ã‹ã§ã™ï¼‰
+        private SkillSelectUI skillSelectUI;//ã‚¹ã‚­ãƒ«é¸æŠUIã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
 
-        // --- ƒLƒƒƒbƒVƒ…‚³‚ê‚½ƒRƒ“ƒ|[ƒlƒ“ƒg^QÆ ---
+        //ãƒãƒ•ãƒ»ãƒ‡ãƒãƒ•ã®åˆè¨ˆå€¤ã‚’ç®¡ç†ã™ã‚‹å¤‰æ•°ï¼ˆé‡ã­æ›ã‘ã§å…ƒã®æ•°å€¤ã‚’å£Šã•ãªã„ãŸã‚ï¼‰
+        private float moveSpeedBuffTotal = 0f;
+        private float damageCutBuffTotal = 0f;
+
+        // --- ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã•ã‚ŒãŸã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆï¼å‚ç…§ ---
         private PlayerInputController inputController;
         private CharacterController characterController;
         private PlayerAnimationController animationController;
@@ -37,28 +41,33 @@ namespace Takato
         private CharacterChangeController characterChangeController;
         private Transform cameraTransform;
 
-        // --- ó‘Ô ---
-        private float verticalVelocity; //ƒWƒƒƒ“ƒv‚Æd—Í‚Ìˆ—‚Ì‚½‚ß‚Ì‚’¼‘¬“x‚ğŠi”[‚·‚é•Ï”
-        private int hp;                 //ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌHP‚ğŠi”[‚·‚é•Ï”
-        private bool isBlocking;        //ƒvƒŒƒCƒ„[‚ªŒ»İ–hŒä’†‚©‚Ç‚¤‚©‚ğŠi”[‚·‚é•Ï”
-        private bool isDead;            //ƒvƒŒƒCƒ„[‚ª€–S‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŠi”[‚·‚é•Ï”
-        private bool isSkillUIOpen;     //ƒXƒLƒ‹UI‚ªŠJ‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŠi”[‚·‚é•Ï”
-        private bool prevInventoryOpen; //ƒCƒ“ƒxƒ“ƒgƒŠ‚ª‘OƒtƒŒ[ƒ€‚ÅŠJ‚¢‚Ä‚¢‚½‚©‚Ç‚¤‚©‚ğŠi”[‚·‚é•Ï”
+        // --- çŠ¶æ…‹ ---
+        private float verticalVelocity; //ã‚¸ãƒ£ãƒ³ãƒ—ã¨é‡åŠ›ã®å‡¦ç†ã®ãŸã‚ã®å‚ç›´é€Ÿåº¦ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private int hp;                 //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®HPã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private bool isBlocking;        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒç¾åœ¨é˜²å¾¡ä¸­ã‹ã©ã†ã‹ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private bool isDead;            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ­»äº¡ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private bool isSkillUIOpen;     //ã‚¹ã‚­ãƒ«UIãŒé–‹ã„ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+        private bool prevInventoryOpen; //ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªãŒå‰ãƒ•ãƒ¬ãƒ¼ãƒ ã§é–‹ã„ã¦ã„ãŸã‹ã©ã†ã‹ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
 
-        // ƒXƒLƒ‹”­“®‚ÉŠÖ‚·‚é‘OƒtƒŒ[ƒ€“ü—Í
+        // ã‚¹ã‚­ãƒ«ç™ºå‹•ã«é–¢ã™ã‚‹å‰ãƒ•ãƒ¬ãƒ¼ãƒ å…¥åŠ›
         private bool prevSkillInput;
 
-        // ƒLƒƒƒ‰Ø‘Ö‚ÌƒGƒbƒW”»’è—pƒtƒ‰ƒO
+        // ã‚­ãƒ£ãƒ©åˆ‡æ›¿ã®ã‚¨ãƒƒã‚¸åˆ¤å®šç”¨ãƒ•ãƒ©ã‚°
         private bool prevCharChange;
 
-        // --- Unity ƒ‰ƒCƒtƒTƒCƒNƒ‹ ---
+        //å¤–éƒ¨å…¬é–‹ç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ï¼ˆãƒãƒ•ã‚’å«ã‚ãŸæœ€çµ‚æ•°å€¤ã‚’è¿”ã™ï¼‰
+        public float MoveSpeed => Mathf.Max(0f, moveSpeed + moveSpeedBuffTotal);
+        public float DamageCutRate => Mathf.Clamp(damageCutRate + damageCutBuffTotal, 0f, 1f);
+        public int CurrentCost => currentCost;
+
+        // --- Unity ãƒ©ã‚¤ãƒ•ã‚µã‚¤ã‚¯ãƒ« ---
         private void Awake()
         {
             CacheComponentsOnAwake();
             AcquireCameraTransform();
             AcquireCharacterChangeController();
 
-            // PlayerSO ‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚ê‚Î’l‚Åã‘‚«‚µ‚Ä‚¨‚­
+            // PlayerSO ãŒå‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã‚Œã°å€¤ã§ä¸Šæ›¸ãã—ã¦ãŠã
             ApplyPlayerSOValues();
         }
 
@@ -74,26 +83,30 @@ namespace Takato
             }
         }
 
-        // --- PlayerSO ‚©‚ç‚Ì“K—p ---
+        // --- PlayerSO ã‹ã‚‰ã®é©ç”¨ ---
         private void ApplyPlayerSOValues()
         {
             if (playerSO == null) return;
 
-            // PlayerSO ‚Ì’l‚Åã‘‚«
+            // PlayerSO ã®å€¤ã§ä¸Šæ›¸ã
             moveSpeed = playerSO.MoveSpeed;
             jumpForce = playerSO.JumpForce;
             gravity = playerSO.Gravity;
             damageCutRate = Mathf.Clamp01(playerSO.DamageCutRate);
             maxHp = playerSO.MaxHP;
-            // SO ‚ÉŠJnƒRƒXƒg‚ğ’Ç‰Á‚µ‚Ä‚¢‚éê‡A‚»‚ê‚Å‰Šú‰»‚·‚é
+            // SO ã«é–‹å§‹ã‚³ã‚¹ãƒˆã‚’è¿½åŠ ã—ã¦ã„ã‚‹å ´åˆã€ãã‚Œã§åˆæœŸåŒ–ã™ã‚‹
             currentCost = playerSO.StartingCost;
+
+            // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒåˆ‡ã‚Šæ›¿ã‚ã£ãŸã‚‰ãƒãƒ•ã®åˆè¨ˆã‚’ãƒªã‚»ãƒƒãƒˆ
+            moveSpeedBuffTotal = 0f;
+            damageCutBuffTotal = 0f;
         }
 
         private void Update()
         {
             hp = Mathf.Max(hp, 0);
 
-            // Às‚ÉQÆ‚ªŠO‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚à‚Ì‚Í•K—v‚É‰‚¶‚Ä•âŠ®
+            // å®Ÿè¡Œæ™‚ã«å‚ç…§ãŒå¤–ã‚Œã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã‚‚ã®ã¯å¿…è¦ã«å¿œã˜ã¦è£œå®Œ
             TryRecoverMissingReferences();
 
             UpdateHUDIfNeeded();
@@ -114,7 +127,7 @@ namespace Takato
                 return;
             }
 
-            // ’ÊíƒvƒŒƒC‚Ìˆ—‚ğ•ª—£
+            // é€šå¸¸ãƒ—ãƒ¬ã‚¤æ™‚ã®å‡¦ç†ã‚’åˆ†é›¢
             Move();
             Block();
             Attack();
@@ -122,13 +135,13 @@ namespace Takato
             HandleCharacterChangeEdge();
             PreviousCharacter();
 
-            // ‘OƒtƒŒ[ƒ€î•ñ‚ğ•Û‘¶
+            // å‰ãƒ•ãƒ¬ãƒ¼ãƒ æƒ…å ±ã‚’ä¿å­˜
             prevSkillInput = inputController.IsSkillInput || inputController.IsSkill2Input ||
                              inputController.IsSkill3Input || inputController.IsSkill4Input;
             prevCharChange = inputController.IsCharChange;
         }
 
-        // --- ‰Šú‰»ƒwƒ‹ƒp[ ---
+        // --- åˆæœŸåŒ–ãƒ˜ãƒ«ãƒ‘ãƒ¼ ---
         private void CacheComponentsOnAwake()
         {
             inputController = GetComponent<PlayerInputController>();
@@ -139,7 +152,7 @@ namespace Takato
             playerSkill = GetComponent<PlayerSkill>();
         }
         /// <summary>
-        /// ƒLƒƒƒ‰ƒNƒ^[Ø‚è‘Ö‚¦‚Ì‚ÌƒRƒ“ƒgƒ[ƒ‰[‚ğæ“¾‚·‚éB
+        /// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼åˆ‡ã‚Šæ›¿ãˆã®ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã‚’å–å¾—ã™ã‚‹ã€‚
         /// </summary>
         private void AcquireCharacterChangeController()
         {
@@ -151,7 +164,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ÌƒJƒƒ‰‚ğæ“¾‚·‚éB’Êí‚Í MainCamera ƒ^ƒO‚ÌƒJƒƒ‰‚ğ’T‚·‚ªAŒ©‚Â‚©‚ç‚È‚¢ê‡‚ÍƒV[ƒ““à‚Ì”CˆÓ‚ÌƒJƒƒ‰‚ğ’T‚·B
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚«ãƒ¡ãƒ©ã‚’å–å¾—ã™ã‚‹ã€‚é€šå¸¸ã¯ MainCamera ã‚¿ã‚°ã®ã‚«ãƒ¡ãƒ©ã‚’æ¢ã™ãŒã€è¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ã‚·ãƒ¼ãƒ³å†…ã®ä»»æ„ã®ã‚«ãƒ¡ãƒ©ã‚’æ¢ã™ã€‚
         /// </summary>
         private void AcquireCameraTransform()
         {
@@ -163,7 +176,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// HPƒo[‚Ì‰Šú‰»‚ğs‚¤BInspector ‚ÅŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚È‚¢ê‡‚ÍAƒV[ƒ““à‚Ì”CˆÓ‚Ì PlayerHPBar ‚ğ’T‚µ‚ÄŠ„‚è“–‚Ä‚éB
+        /// HPãƒãƒ¼ã®åˆæœŸåŒ–ã‚’è¡Œã†ã€‚Inspector ã§å‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ãªã„å ´åˆã¯ã€ã‚·ãƒ¼ãƒ³å†…ã®ä»»æ„ã® PlayerHPBar ã‚’æ¢ã—ã¦å‰²ã‚Šå½“ã¦ã‚‹ã€‚
         /// </summary>
         private void EnsureHPBarInitialized()
         {
@@ -178,12 +191,12 @@ namespace Takato
             }
             else
             {
-                Debug.LogWarning($"[{nameof(PlayerController)}] hpBar ‚ªŠ„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚Ü‚¹‚ñBInspector ‚ÉƒZƒbƒg‚·‚é‚©AÀs‚É PlayerHPBar ‚ğ”z’u‚µ‚Ä‚­‚¾‚³‚¢B");
+                Debug.LogWarning($"[{nameof(PlayerController)}] hpBar ãŒå‰²ã‚Šå½“ã¦ã‚‰ã‚Œã¦ã„ã¾ã›ã‚“ã€‚Inspector ã«ã‚»ãƒƒãƒˆã™ã‚‹ã‹ã€å®Ÿè¡Œæ™‚ã« PlayerHPBar ã‚’é…ç½®ã—ã¦ãã ã•ã„ã€‚");
             }
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚ğƒƒbƒN‚µ‚Ä”ñ•\¦‚É‚·‚éB
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã‚’ãƒ­ãƒƒã‚¯ã—ã¦éè¡¨ç¤ºã«ã™ã‚‹ã€‚
         /// </summary>
         private void LockCursor()
         {
@@ -191,7 +204,7 @@ namespace Takato
             Cursor.visible = false;
         }
 
-        // --- –ˆƒtƒŒ[ƒ€•âŠ® ---
+        // --- æ¯ãƒ•ãƒ¬ãƒ¼ãƒ è£œå®Œ ---
         private void TryRecoverMissingReferences()
         {
             if (hpBar == null)
@@ -216,11 +229,11 @@ namespace Takato
         }
 
         /// <summary>
-        /// Hp‚ª•Ï‰»‚µ‚½‚Æ‚«‚ÉHUD‚ğXV‚·‚éB
+        /// HpãŒå¤‰åŒ–ã—ãŸã¨ãã«HUDã‚’æ›´æ–°ã™ã‚‹ã€‚
         /// </summary>
         private void UpdateHUDIfNeeded()
         {
-            hpBar?.SetHP(hp, maxHp); // HPƒo[‚ÌXV
+            hpBar?.SetHP(hp, maxHp); // HPãƒãƒ¼ã®æ›´æ–°
         }
 
         private void UpdateLowHPMusic()
@@ -232,7 +245,7 @@ namespace Takato
             }
         }
 
-        // --- “ü—ÍŠÖ˜A ---
+        // --- å…¥åŠ›é–¢é€£ ---
         private void HandleInventoryToggle()
         {
             if (inputController.IsInventoryInput && !prevInventoryOpen)
@@ -243,7 +256,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ÌƒXƒLƒ‹“ü—Í‚ğˆ—‚·‚éBƒXƒLƒ‹UI‚ªŠJ‚¢‚Ä‚¢‚é‚Æ‚«‚ÍƒXƒLƒ‹“ü—Í‚ğ–³‹‚·‚éB
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ã‚­ãƒ«å…¥åŠ›ã‚’å‡¦ç†ã™ã‚‹ã€‚ã‚¹ã‚­ãƒ«UIãŒé–‹ã„ã¦ã„ã‚‹ã¨ãã¯ã‚¹ã‚­ãƒ«å…¥åŠ›ã‚’ç„¡è¦–ã™ã‚‹ã€‚
         /// </summary>
         private void HandleSkillInputs()
         {
@@ -268,7 +281,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒLƒƒƒ‰ƒNƒ^[‚ğŸ‚ÌƒLƒƒƒ‰ƒNƒ^[‚ÉØ‚è‘Ö‚¦‚éˆ—‚ğÀs
+        /// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’æ¬¡ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«åˆ‡ã‚Šæ›¿ãˆã‚‹å‡¦ç†ã‚’å®Ÿè¡Œ
         /// </summary>
         private void HandleCharacterChangeEdge()
         {
@@ -279,17 +292,17 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒLƒƒƒ‰ƒNƒ^[‚ª‘O‚ÌƒLƒƒƒ‰ƒNƒ^[‚ÉØ‚è‘Ö‚í‚éˆ—‚ğÀs
+        /// ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒå‰ã®ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã«åˆ‡ã‚Šæ›¿ã‚ã‚‹å‡¦ç†ã‚’å®Ÿè¡Œ
         /// </summary>
         private void PreviousCharacter()
         {
-           if(inputController.IsCharChangeDown && !prevCharChange)
+            if (inputController.IsCharChangeDown && !prevCharChange)
             {
                 characterChangeController?.PreviousCharacter();
             }
         }
 
-        // --- UI ‘€ì ---
+        // --- UI æ“ä½œ ---
         private void ToggleSkillUI()
         {
             isSkillUIOpen = !isSkillUIOpen;
@@ -312,7 +325,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒXƒLƒ‹‚ÌUi‚ªŠJ‚¢‚Ä‚¢‚é‚Æ‚«‚Ìó‘Ô‚ğ“K—p‚·‚éBUŒ‚A–hŒäAƒWƒƒƒ“ƒv‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒŠƒZƒbƒg‚µA•Ší‚Æ‚‚ÌƒRƒ‰ƒCƒ_[‚ğ–³Œø‰»‚·‚éB
+        /// ã‚¹ã‚­ãƒ«ã®UiãŒé–‹ã„ã¦ã„ã‚‹ã¨ãã®çŠ¶æ…‹ã‚’é©ç”¨ã™ã‚‹ã€‚æ”»æ’ƒã€é˜²å¾¡ã€ã‚¸ãƒ£ãƒ³ãƒ—ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒªã‚»ãƒƒãƒˆã—ã€æ­¦å™¨ã¨ç›¾ã®ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹ã€‚
         /// </summary>
         private void ApplySkillUIState()
         {
@@ -324,8 +337,8 @@ namespace Takato
             isBlocking = false;
         }
 
-        // --- ˆÚ“®^UŒ‚^–hŒä ---
-        /// <summary> ƒJƒƒ‰Šî€‚ÌˆÚ“®‚ÆƒWƒƒƒ“ƒvˆ— </summary>
+        // --- ç§»å‹•ï¼æ”»æ’ƒï¼é˜²å¾¡ ---
+        /// <summary> ã‚«ãƒ¡ãƒ©åŸºæº–ã®ç§»å‹•ã¨ã‚¸ãƒ£ãƒ³ãƒ—å‡¦ç† </summary>
         private void Move()
         {
             if (characterController.isGrounded)
@@ -336,7 +349,7 @@ namespace Takato
                 {
                     verticalVelocity = jumpForce;
                     animationController.SetJump(true);
-                    Debug.Log("ƒWƒƒƒ“ƒv‚µ‚Ü‚µ‚½I");
+                    Debug.Log("ã‚¸ãƒ£ãƒ³ãƒ—ã—ã¾ã—ãŸï¼");
                 }
                 else
                 {
@@ -350,7 +363,9 @@ namespace Takato
             }
 
             Vector2 moveDirection = inputController.MoveInput;
-            float currentMoveSpeed = isBlocking ? moveSpeed * 0.75f : moveSpeed;
+
+            //ãƒãƒ•è¾¼ã¿ã®æœ€çµ‚é€Ÿåº¦ï¼ˆMoveSpeedï¼‰ã‚’ãƒ™ãƒ¼ã‚¹ã«è¨ˆç®—ã™ã‚‹ã‚ˆã†ã«å¤‰æ›´
+            float currentMoveSpeed = isBlocking ? MoveSpeed * 0.75f : MoveSpeed;
 
             Vector3 movement;
             if (cameraTransform != null)
@@ -373,7 +388,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ÌUŒ‚ˆ—‚ğÀs‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh‚Å‚·B
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒå‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ã§ã™ã€‚
         /// </summary>
         private void Attack()
         {
@@ -390,7 +405,7 @@ namespace Takato
         }
 
         /// <summary>
-        ///ƒvƒŒƒCƒ„[‚Ì–hŒäˆ—‚ğÀs‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh‚Å‚·B
+        ///ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é˜²å¾¡å‡¦ç†ã‚’å®Ÿè¡Œã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰ã§ã™ã€‚
         /// </summary>
         private void Block()
         {
@@ -408,14 +423,15 @@ namespace Takato
             }
         }
 
-        // --- ŒöŠJ API ---
-        public float GetMoveSpeed() => moveSpeed;                   //ƒvƒŒƒCƒ„[‚ÌˆÚ“®‘¬“x‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
-        public void SetMoveSpeed(float value) => moveSpeed = value; //ƒvƒŒƒCƒ„[‚ÌˆÚ“®‘¬“x‚ğİ’è‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+        // --- å…¬é–‹ API ---
 
-        public int GetHP() => hp;                                   //ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌHP‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
-        public int GetMaxHP() => maxHp;                             //ƒvƒŒƒCƒ„[‚ÌÅ‘åHP‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+        public float GetMoveSpeed() => MoveSpeed;
+        public void SetMoveSpeed(float value) => moveSpeed = value; //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç§»å‹•é€Ÿåº¦ã‚’è¨­å®šã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
 
-        //ƒvƒŒƒCƒ„[‚ÌHP‚ğİ’è‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+        public int GetHP() => hp;                                   //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®HPã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
+        public int GetMaxHP() => maxHp;                             //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æœ€å¤§HPã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
+
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPã‚’è¨­å®šã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
         public void SetHP(int value)
         {
             hp = Mathf.Clamp(value, 0, maxHp);
@@ -423,7 +439,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// HP‚ğØ‚è‘Ö‚¦æ‚Å‚à“¯‚¶Š„‡‚ğˆÛ‚·‚éŒ`‚Å“]‘—‚·‚éBpreservePercent ‚ª false ‚Ìê‡‚ÍAŒ»İ‚ÌHP‚ğ‚»‚Ì‚Ü‚Ü“]‘—‚·‚éB
+        /// HPã‚’åˆ‡ã‚Šæ›¿ãˆå…ˆã§ã‚‚åŒã˜å‰²åˆã‚’ç¶­æŒã™ã‚‹å½¢ã§è»¢é€ã™ã‚‹ã€‚preservePercent ãŒ false ã®å ´åˆã¯ã€ç¾åœ¨ã®HPã‚’ãã®ã¾ã¾è»¢é€ã™ã‚‹ã€‚
         /// </summary>
         public void TransferHPTo(PlayerController target, bool preservePercent = true)
         {
@@ -441,45 +457,67 @@ namespace Takato
             }
         }
 
-        public float GetDamageCutRate() => damageCutRate; //ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒWƒJƒbƒg—¦‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
-        public void SetDamageCutRate(float value) => damageCutRate = Mathf.Clamp01(value); //ƒvƒŒƒCƒ„[‚Ìƒ_ƒ[ƒWƒJƒbƒg—¦‚ğİ’è‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+        //ãƒãƒ•è¾¼ã¿ã®ç¾åœ¨ã®æœ€çµ‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ã‚’è¿”ã™ã‚ˆã†ã«å¤‰æ›´ï¼ˆUltSkillãªã©ã®äº’æ›æ€§ç¶­æŒï¼‰
+        public float GetDamageCutRate() => DamageCutRate;
+        public void SetDamageCutRate(float value) => damageCutRate = Mathf.Clamp01(value); //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ã‚’è¨­å®šã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
+
+       
+        public void AddMoveSpeedBuff(float amount) { moveSpeedBuffTotal += amount; }
+        public void RemoveMoveSpeedBuff(float amount) { moveSpeedBuffTotal -= amount; }
+        public void AddDamageCutBuff(float amount) { damageCutBuffTotal += amount; }
+        public void RemoveDamageCutBuff(float amount) { damageCutBuffTotal -= amount; }
 
         /// <summary>
-        /// ŠO•”‚©‚ç PlayerSO ‚ğŠ„‚è“–‚Ä‚éBƒvƒŒƒCƒ„[‚ÌmaxHp‚ğ‡‚í‚¹‚éB
+        /// ä¸€æ™‚çš„ãªç§»å‹•é€Ÿåº¦ãƒãƒ•ã‚’ã‹ã‘ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆMGCSkillãªã©ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ç°¡ç•¥åŒ–ç”¨ï¼‰
+        /// </summary>
+        public void ApplyTemporaryMoveSpeedBuff(float buffValue, float duration)
+        {
+            StartCoroutine(TemporaryMoveSpeedBuffCoroutine(buffValue, duration));
+        }
+        private System.Collections.IEnumerator TemporaryMoveSpeedBuffCoroutine(float buffValue, float duration)
+        {
+            AddMoveSpeedBuff(buffValue);
+            yield return new WaitForSeconds(duration);
+            RemoveMoveSpeedBuff(buffValue);
+        }
+        // -------------------------------------------------------------------
+
+        /// <summary>
+        /// å¤–éƒ¨ã‹ã‚‰ PlayerSO ã‚’å‰²ã‚Šå½“ã¦ã‚‹ã€‚ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®maxHpã‚’åˆã‚ã›ã‚‹ã€‚
         /// </summary>
         public void SetPlayerSO(PlayerSO so, bool preserveHPPercent = true)
         {
             if (so == null) return;
 
-            // šC³FmaxHp‚ª0iƒQ[ƒ€ŠJn‚ÌÅ‰‚ÌƒXƒ|[ƒ“j‚È‚çAŠ„‡•Û‚ğ‹­§“I‚ÉƒIƒt‚É‚·‚é
+            // â˜…ä¿®æ­£ï¼šmaxHpãŒ0ï¼ˆã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã®æœ€åˆã®ã‚¹ãƒãƒ¼ãƒ³ï¼‰ãªã‚‰ã€å‰²åˆä¿æŒã‚’å¼·åˆ¶çš„ã«ã‚ªãƒ•ã«ã™ã‚‹
             if (maxHp <= 0)
             {
                 preserveHPPercent = false;
             }
 
-            // Œ»İ‚ÌHPŠ„‡‚ğ•Û‚·‚é‚½‚ß‚Ì”ä—¦‚ğæ“¾
+            // ç¾åœ¨ã®HPå‰²åˆã‚’ä¿æŒã™ã‚‹ãŸã‚ã®æ¯”ç‡ã‚’å–å¾—
             float prevRatio = (maxHp > 0) ? (float)hp / maxHp : 1f;
 
             playerSO = so;
-            ApplyPlayerSOValues(); // SO ‚Ì’l‚Åã‘‚«
+            ApplyPlayerSOValues(); // SO ã®å€¤ã§ä¸Šæ›¸ã
 
-            // HP ‚ğ“KØ‚É’²®
+            // HP ã‚’é©åˆ‡ã«èª¿æ•´
             if (preserveHPPercent)
             {
                 hp = Mathf.RoundToInt(Mathf.Clamp01(prevRatio) * maxHp);
             }
             else
             {
-                hp = maxHp; // Å‰‚âAƒŠƒZƒbƒg‚Í–ƒ^ƒ“‚É‚·‚é
+                hp = maxHp; // æœ€åˆã‚„ã€ãƒªã‚»ãƒƒãƒˆæ™‚ã¯æº€ã‚¿ãƒ³ã«ã™ã‚‹
             }
 
-            // ƒXƒLƒ‹ƒRƒXƒg‚Í SO ‚ÌŠJn’l‚Å‰Šú‰»
+            // ã‚¹ã‚­ãƒ«ã‚³ã‚¹ãƒˆã¯ SO ã®é–‹å§‹å€¤ã§åˆæœŸåŒ–
             currentCost = playerSO.StartingCost;
 
             EnsureHPBarInitialized();
             hpBar?.SetHP(hp, maxHp);
 
-            // ƒRƒXƒgƒeƒLƒXƒg‚È‚Ç UI ‚ğXV
+            // ã‚³ã‚¹ãƒˆãƒ†ã‚­ã‚¹ãƒˆãªã© UI ã‚’æ›´æ–°
             if (costText != null)
             {
                 costText.text = $"Cost: {currentCost}";
@@ -487,30 +525,31 @@ namespace Takato
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒW‚ğó‚¯‚éƒƒ\ƒbƒh
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
         /// </summary>
         public void TakeDamage(int damage)
         {
-            if (isDead) return; // €–S‚µ‚Ä‚¢‚éê‡‚Íƒ_ƒ[ƒW‚ğó‚¯‚È‚¢
+            if (isDead) return; // æ­»äº¡ã—ã¦ã„ã‚‹å ´åˆã¯ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãªã„
 
             SoundManager soundManager = FindAnyObjectByType<SoundManager>();
 
-            soundManager?.PlaySE(1); // ƒ_ƒ[ƒW‚ğó‚¯‚½‚Æ‚«‚ÌSE‚ğÄ¶
+            soundManager?.PlaySE(1); // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸã¨ãã®SEã‚’å†ç”Ÿ
 
-            int finalDamage = Mathf.RoundToInt(damage * (1f - damageCutRate));
+            //ãƒãƒ•è¾¼ã¿ã®æœ€çµ‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ï¼ˆDamageCutRate)
+            int finalDamage = Mathf.RoundToInt(damage * (1f - DamageCutRate));
 
-            // Å’á‚Å‚à 1 ƒ_ƒ[ƒW‚Íó‚¯‚é‚æ‚¤‚É‚·‚éˆÀ‘Sô
+            // æœ€ä½ã§ã‚‚ 1 ãƒ€ãƒ¡ãƒ¼ã‚¸ã¯å—ã‘ã‚‹ã‚ˆã†ã«ã™ã‚‹å®‰å…¨ç­–
             if (finalDamage <= 0 && damage > 0) finalDamage = 1;
 
             hp -= finalDamage;
-            
-            // HP‚ª0ˆÈ‰º‚É‚È‚ç‚È‚¢‚æ‚¤‚ÉƒNƒ‰ƒ“ƒv
+
+            // HPãŒ0ä»¥ä¸‹ã«ãªã‚‰ãªã„ã‚ˆã†ã«ã‚¯ãƒ©ãƒ³ãƒ—
             hp = Mathf.Max(0, hp);
 
-            // UI‚ÌXV
+            // UIã®æ›´æ–°
             hpBar?.SetHP(hp, maxHp);
-            
-            Debug.Log($"ƒvƒŒƒCƒ„[‚Í {finalDamage} ‚Ìƒ_ƒ[ƒW‚ğó‚¯‚Ü‚µ‚½BŒ»İ‚ÌHP: {hp}/{maxHp}");
+
+            Debug.Log($"ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¯ {finalDamage} ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¾ã—ãŸã€‚ç¾åœ¨ã®HP: {hp}/{maxHp}");
 
             if (hp <= 0)
             {
@@ -518,7 +557,7 @@ namespace Takato
             }
         }
 
-        public int GetCurrentCost() => currentCost; //ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌƒXƒLƒ‹ƒRƒXƒg‚ğæ“¾‚·‚é‚½‚ß‚Ìƒƒ\ƒbƒh
+        public int GetCurrentCost() => currentCost; //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®ã‚¹ã‚­ãƒ«ã‚³ã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ãŸã‚ã®ãƒ¡ã‚½ãƒƒãƒ‰
 
         public void ConsumeCost(int value)
         {
@@ -538,7 +577,7 @@ namespace Takato
             }
         }
 
-        // --- €–Sˆ— ---
+        // --- æ­»äº¡å‡¦ç† ---
         private void Die()
         {
             if (isDead) return;
@@ -551,7 +590,7 @@ namespace Takato
             shieldController?.DisableShieldCollider();
             characterController.enabled = false;
 
-            Debug.Log("ƒvƒŒƒCƒ„[‚Í€–S‚µ‚Ü‚µ‚½");
+            Debug.Log("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¯æ­»äº¡ã—ã¾ã—ãŸ");
             PlayerRagdollController ragdollController = GetComponent<PlayerRagdollController>();
             if (ragdollController != null)
             {

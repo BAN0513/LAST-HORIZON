@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cc66893b6abbca4f9bc2f4036b466f8, type: 3}
-  m_Name: DEF3
+  m_Name: DEF5
   m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
-  skillName: DEF3
+  skillName: DEF4
   skillIcon: {fileID: 1606747506, guid: af6eb59a7c8352f43a9463f25b090ab3, type: 3}
   cost: 15
   cooldown: 30

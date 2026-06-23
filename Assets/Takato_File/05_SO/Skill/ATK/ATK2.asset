@@ -14,13 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
   skillName: ATK2
   skillIcon: {fileID: -944514887, guid: 026ff1f83bc4b8c478000f0d8df64e83, type: 3}
-  cost: 25
-  cooldown: 0
-  moveSpeedBuff: 1.05
-  baseBuffMultiplier: 0
-  buffMultiplierPerLevel: 0
-  baseDuration: 5
-  durationPerLevel: 1
+  cost: 20
+  cooldown: 40
+  moveSpeedBuff: 0
+  baseBuffMultiplier: 40
+  buffMultiplierPerLevel: 1.5
+  baseDuration: 3
+  durationPerLevel: 0.2
   effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
   skillLevel: 1
-  maxSkillLevel: 5
+  maxSkillLevel: 10
+  passiveAttackMultiplier: 0
+  passiveMoveSpeedBuff: 0

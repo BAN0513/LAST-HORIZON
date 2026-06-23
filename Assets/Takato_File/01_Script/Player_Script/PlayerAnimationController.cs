@@ -10,7 +10,7 @@ namespace Takato
         [Header("アニメーションのステータス")]
         [Space(10)]
         [Header("アニメーションの補完速度")]
-        [SerializeField] private float animationSmoothTime = 0.1f; // デフォルト値を設定
+        [SerializeField] private float animationSmoothTime; // デフォルト値を設定
 
         private Animator animator;
 
@@ -34,7 +34,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// 移動アニメーションの状態を更新（BlendTree対応・補完あり）
+        /// 移動アニメーションの状態を更新
         /// </summary>
         public void UpdateAnimation(Vector2 moveInput)
         {

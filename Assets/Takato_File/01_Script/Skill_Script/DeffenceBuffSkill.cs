@@ -1,4 +1,4 @@
-using Takato;
+ï»¿using Takato;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,37 +6,37 @@ using System.Collections.Generic;
 namespace Takato
 {
     /// <summary>
-    /// –hŒä—Í‚ğˆê’èŠÔã‚°‚éƒXƒLƒ‹‚ÌƒNƒ‰ƒX
+    /// é˜²å¾¡åŠ›ã‚’ä¸€å®šæ™‚é–“ä¸Šã’ã‚‹ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ©ã‚¹
     /// </summary>
     [CreateAssetMenu(menuName = "Takato/Skill/DeffenceBuffSkill")]
     public class DeffenceBuffSkill : SkillBase
     {
-        [Header("(–hŒä—ÍƒoƒtƒXƒLƒ‹‚ÌƒXƒe[ƒ^ƒX)")]
+        [Header("(é˜²å¾¡åŠ›ãƒãƒ•ã‚¹ã‚­ãƒ«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹)")]
         [Space(10)]
 
-        [Header("Šî‘bƒ_ƒ[ƒWƒJƒbƒg—¦i0`1j")]
+        [Header("åŸºç¤ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ï¼ˆ0ï½1ï¼‰")]
         public float baseCutRate;
-        [Header("ƒŒƒxƒ‹‚²‚Æ‚ÌƒJƒbƒg—¦‰ÁZ’l")]
+        [Header("ãƒ¬ãƒ™ãƒ«ã”ã¨ã®ã‚«ãƒƒãƒˆç‡åŠ ç®—å€¤")]
         public float cutRatePerLevel;
-        [Header("Šî‘b‘±ŠÔ")]
+        [Header("åŸºç¤æŒç¶šæ™‚é–“")]
         public float baseDuration;
-        [Header("ƒŒƒxƒ‹‚²‚Æ‚ÌŒø‰ÊŠÔ‰ÁZ’l")]
+        [Header("ãƒ¬ãƒ™ãƒ«ã”ã¨ã®åŠ¹æœæ™‚é–“åŠ ç®—å€¤")]
         public float durationPerLevel;
-        [Header("–hŒäƒoƒt‚ÌƒGƒtƒFƒNƒgƒvƒŒƒnƒu")]
+        [Header("é˜²å¾¡ãƒãƒ•ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒ—ãƒ¬ãƒãƒ–")]
         public ParticleSystem effectPrefab;
-        [Header("ƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         public int skillLevel;
-        [Header("Å‘åƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("æœ€å¤§ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         public int maxSkillLevel;
 
         [Space(8)]
-        [Header("ƒpƒbƒVƒu(‘•”õ’†)")]
-        [Header("‘•”õ’†‚Ìƒ_ƒ[ƒWƒJƒbƒg—¦iƒpƒbƒVƒuj")]
+        [Header("ãƒ‘ãƒƒã‚·ãƒ–(è£…å‚™ä¸­)")]
+        [Header("è£…å‚™ä¸­ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡ï¼ˆãƒ‘ãƒƒã‚·ãƒ–")]
         public float passiveCutRate;
-        [Header("‘•”õ’†‚ÌˆÚ“®‘¬“xƒoƒtiƒpƒbƒVƒuj")]
+        [Header("è£…å‚™ä¸­ã®ç§»å‹•é€Ÿåº¦ãƒãƒ•ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ï¼‰")]
         public float passiveMoveSpeedBuff;
 
-        // ƒpƒbƒVƒuó‘Ô‚ğƒvƒŒƒCƒ„[’PˆÊ‚ÅŠÇ—
+        // ãƒ‘ãƒƒã‚·ãƒ–çŠ¶æ…‹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å˜ä½ã§ç®¡ç†
         private class PassiveState
         {
             public float originalCutRate;
@@ -47,17 +47,17 @@ namespace Takato
         private Dictionary<int, PassiveState> passiveStates = new Dictionary<int, PassiveState>();
 
         /// <summary>
-        /// –hŒä—Í‚ğˆê’èŠÔã‚°‚éƒXƒLƒ‹‚Ì”­“®ˆ—iƒAƒNƒeƒBƒuj
+        /// é˜²å¾¡åŠ›ã‚’ä¸€å®šæ™‚é–“ä¸Šã’ã‚‹ã‚¹ã‚­ãƒ«ã®ç™ºå‹•å‡¦ç†ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ï¼‰
         /// </summary>
         public override void Activate(PlayerController player)
         {
-            // ƒRƒXƒgƒ`ƒFƒbƒN
+            // ã‚³ã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
             if (player.GetCurrentCost() < cost)
             {
-                Debug.Log($"{skillName}FƒRƒXƒg•s‘«‚Å”­“®‚Å‚«‚Ü‚¹‚ñB•K—vƒRƒXƒgF{cost}AŒ»İF{player.GetCurrentCost()}");
+                Debug.Log($"{skillName}ï¼šã‚³ã‚¹ãƒˆä¸è¶³ã§ç™ºå‹•ã§ãã¾ã›ã‚“ã€‚å¿…è¦ã‚³ã‚¹ãƒˆï¼š{cost}ã€ç¾åœ¨ï¼š{player.GetCurrentCost()}");
                 return;
             }
-            player.ConsumeCost(cost);//ƒRƒXƒg‚ğÁ”ï
+            player.ConsumeCost(cost);//ã‚³ã‚¹ãƒˆã‚’æ¶ˆè²»
 
             ParticleSystem effect = null;
             if (effectPrefab != null)
@@ -73,23 +73,23 @@ namespace Takato
 
             player.StartCoroutine(ApplyDefenceBuff(player, effect, cutRate, duration));
 
-            // ˆÚ“®‘¬“xƒoƒt‚ğ“K—piƒAƒNƒeƒBƒuj
+            // ç§»å‹•é€Ÿåº¦ãƒãƒ•ã‚’é©ç”¨ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ï¼‰
             if (moveSpeedBuff > 0)
             {
                 player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
             }
 
-            Debug.Log($"{skillName} ”­“®: Lv{level} ƒ_ƒ[ƒWƒJƒbƒg—¦{cutRate:P0}, {duration}•b");
+            Debug.Log($"{skillName} ç™ºå‹•: Lv{level} ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡{cutRate:P0}, {duration}ç§’");
         }
 
         /// <summary>
-        /// ‘•”õiƒpƒbƒVƒujF‘•”õ’†‚Ííƒoƒt‚ğ“K—p‚·‚éiƒŒƒxƒ‹ˆË‘¶‚È‚µj
+        /// è£…å‚™æ™‚ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ï¼‰ï¼šè£…å‚™ä¸­ã¯å¸¸æ™‚ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ï¼ˆãƒ¬ãƒ™ãƒ«ä¾å­˜ãªã—ï¼‰
         /// </summary>
         public override void OnEquip(PlayerController player)
         {
             if (player == null) return;
             int id = player.GetInstanceID();
-            if (passiveStates.ContainsKey(id)) return; // Šù‚É“K—pÏ‚İ
+            if (passiveStates.ContainsKey(id)) return; // æ—¢ã«é©ç”¨æ¸ˆã¿
 
             float originalCutRate = player.GetDamageCutRate();
             player.SetDamageCutRate(originalCutRate + passiveCutRate);
@@ -106,11 +106,11 @@ namespace Takato
                 originalMoveSpeed = originalMoveSpeed
             };
 
-            Debug.Log($"{skillName} ‚ğ‘•”õiƒpƒbƒVƒu“K—pj: ƒ_ƒ[ƒWƒJƒbƒg—¦+{passiveCutRate} ˆÚ“®‘¬“x+{passiveMoveSpeedBuff}");
+            Debug.Log($"{skillName} ã‚’è£…å‚™ï¼ˆãƒ‘ãƒƒã‚·ãƒ–é©ç”¨ï¼‰: ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚«ãƒƒãƒˆç‡+{passiveCutRate} ç§»å‹•é€Ÿåº¦+{passiveMoveSpeedBuff}");
         }
 
         /// <summary>
-        /// ‘•”õ‰ğœiƒpƒbƒVƒu‰ğœj
+        /// è£…å‚™è§£é™¤æ™‚ï¼ˆãƒ‘ãƒƒã‚·ãƒ–è§£é™¤ï¼‰
         /// </summary>
         public override void OnUnequip(PlayerController player)
         {
@@ -130,11 +130,11 @@ namespace Takato
 
             passiveStates.Remove(id);
 
-            Debug.Log($"{skillName} ‚ÌƒpƒbƒVƒu‚ğ‰ğœ");
+            Debug.Log($"{skillName} ã®ãƒ‘ãƒƒã‚·ãƒ–ã‚’è§£é™¤");
         }
 
         /// <summary>
-        /// ˆÚ“®‘¬“xƒoƒt‚ğ“K—p‚·‚éƒRƒ‹[ƒ`ƒ“iƒAƒNƒeƒBƒu—pj
+        /// ç§»å‹•é€Ÿåº¦ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰
         /// </summary>
         private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
         {
@@ -149,7 +149,7 @@ namespace Takato
 
 
         /// <summary>
-        /// –hŒä—Íƒoƒt‚ğ“K—p‚·‚éƒRƒ‹[ƒ`ƒ“iƒAƒNƒeƒBƒu—pj
+        /// é˜²å¾¡åŠ›ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰
         /// </summary>
         private IEnumerator ApplyDefenceBuff(PlayerController player, ParticleSystem effect, float cutRate, float duration)
         {
@@ -167,7 +167,7 @@ namespace Takato
             }
         }
 
-        // ƒXƒLƒ‹ƒŒƒxƒ‹‚ğã‚°‚éƒƒ\ƒbƒhiƒAƒNƒeƒBƒu—p‚Ì¬’·‚Ì‚İj
+        // ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«ã‚’ä¸Šã’ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ã®æˆé•·ã®ã¿ï¼‰
         public void LevelUp()
         {
             if (skillLevel < maxSkillLevel)

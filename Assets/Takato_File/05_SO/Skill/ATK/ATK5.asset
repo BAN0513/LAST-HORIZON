@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d5bdd86e180e4f40ac53cb3f2a12bf7, type: 3}
-  m_Name: ATK3
+  m_Name: ATK5
   m_EditorClassIdentifier: Assembly-CSharp::Takato.AttackBuffSkill
-  skillName: ATK3
-  skillIcon: {fileID: -71747335, guid: e10be31b1d4d5f146999ad1136c21101, type: 3}
-  cost: 10
-  cooldown: 20
-  moveSpeedBuff: 1.2
-  baseBuffMultiplier: 10
-  buffMultiplierPerLevel: 1.2
-  baseDuration: 10
-  durationPerLevel: 3
+  skillName: ATK5
+  skillIcon: {fileID: 470464075, guid: a6543b3d0f315ab46be50eaaab6c1d08, type: 3}
+  cost: 0
+  cooldown: 0
+  moveSpeedBuff: 0
+  baseBuffMultiplier: 0
+  buffMultiplierPerLevel: 0
+  baseDuration: 0
+  durationPerLevel: 0
   effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
-  skillLevel: 1
-  maxSkillLevel: 5
-  passiveAttackMultiplier: 0
-  passiveMoveSpeedBuff: 0
+  skillLevel: 0
+  maxSkillLevel: 0
+  passiveAttackMultiplier: 1.1
+  passiveMoveSpeedBuff: 1.07

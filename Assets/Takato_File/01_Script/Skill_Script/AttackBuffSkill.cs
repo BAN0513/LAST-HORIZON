@@ -1,41 +1,41 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Takato
 {
     /// <summary>
-    /// UŒ‚ƒoƒtŒnƒXƒLƒ‹
+    /// æ”»æ’ƒãƒãƒ•ç³»ã‚¹ã‚­ãƒ«
     /// </summary>
     [CreateAssetMenu(menuName = "Takato/Skill/AttackBuffSkill")]
     public class AttackBuffSkill : SkillBase
     {
-        [Header("(UŒ‚‚Ì‹¤’ÊƒXƒe[ƒ^ƒX)")]
+        [Header("(æ”»æ’ƒã®å…±é€šã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹)")]
         [Space(10)]
 
-        [Header("UŒ‚‚Ì”{—¦iƒAƒNƒeƒBƒu—pj")]
+        [Header("æ”»æ’ƒã®å€ç‡ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰")]
         public float baseBuffMultiplier;
-        [Header("¬’·‚É‚æ‚é”{—¦‘•ªiƒAƒNƒeƒBƒu—pj")]
+        [Header("æˆé•·ã«ã‚ˆã‚‹å€ç‡å¢—åˆ†ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰")]
         public float buffMultiplierPerLevel;
-        [Header("ƒoƒt‚ÌŠî–{Œp‘±ŠÔiƒAƒNƒeƒBƒu—pj")]
+        [Header("ãƒãƒ•ã®åŸºæœ¬ç¶™ç¶šæ™‚é–“ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰")]
         public float baseDuration = 5f;
-        [Header("¬’·‚É‚æ‚éŒp‘±ŠÔ‘•ªiƒAƒNƒeƒBƒu—pj")]
-        public float durationPerLevel = 1f;
-        [Header("”­¶ƒGƒtƒFƒNƒg")]
+        [Header("æˆé•·ã«ã‚ˆã‚‹ç¶™ç¶šæ™‚é–“å¢—åˆ†ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ï¼‰")]
+        public float durationPerLevel;
+        [Header("ç™ºç”Ÿã‚¨ãƒ•ã‚§ã‚¯ãƒˆ")]
         public ParticleSystem effectPrefab;
-        [Header("ƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         public int skillLevel = 1;
-        [Header("Å‘åƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("æœ€å¤§ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         public int maxSkillLevel = 5;
 
         [Space(8)]
-        [Header("ƒpƒbƒVƒui‘•”õ’†jİ’è")]
-        [Header("‘•”õ’†‚ÌUŒ‚”{—¦iƒpƒbƒVƒuAƒŒƒxƒ‹ˆË‘¶‚È‚µj")]
+        [Header("ãƒ‘ãƒƒã‚·ãƒ–ï¼ˆè£…å‚™ä¸­ï¼‰è¨­å®š")]
+        [Header("è£…å‚™ä¸­ã®æ”»æ’ƒå€ç‡ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ã€ãƒ¬ãƒ™ãƒ«ä¾å­˜ãªã—ï¼‰")]
         public float passiveAttackMultiplier;
-        [Header("‘•”õ’†‚ÌˆÚ“®‘¬“xƒoƒtiƒpƒbƒVƒuAƒŒƒxƒ‹ˆË‘¶‚È‚µj")]
+        [Header("è£…å‚™ä¸­ã®ç§»å‹•é€Ÿåº¦ãƒãƒ•ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ã€ãƒ¬ãƒ™ãƒ«ä¾å­˜ãªã—ï¼‰")]
         public float passiveMoveSpeedBuff;
 
-        // ƒpƒbƒVƒuó‘Ô‚ğƒvƒŒƒCƒ„[’PˆÊ‚ÅŠÇ—
+        // ãƒ‘ãƒƒã‚·ãƒ–çŠ¶æ…‹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å˜ä½ã§ç®¡ç†
         private class PassiveState
         {
             public Weapon weapon;
@@ -47,17 +47,17 @@ namespace Takato
         private Dictionary<int, PassiveState> passiveStates = new Dictionary<int, PassiveState>();
 
         /// <summary>
-        /// ƒAƒNƒeƒBƒu‚Ì”­“®i]—ˆ‚Ìˆêƒoƒtj
+        /// ã‚¢ã‚¯ãƒ†ã‚£ãƒ–æ™‚ã®ç™ºå‹•ï¼ˆå¾“æ¥ã®ä¸€æ™‚ãƒãƒ•ï¼‰
         /// </summary>
         public override void Activate(PlayerController player)
         {
-            // ƒRƒXƒgƒ`ƒFƒbƒN
+            // ã‚³ã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
             if (player.GetCurrentCost() < cost)
             {
-                Debug.Log($"{skillName}FƒRƒXƒg•s‘«i•K—v{cost}AŠ{player.GetCurrentCost()}j");
+                Debug.Log($"{skillName}ï¼šã‚³ã‚¹ãƒˆä¸è¶³ï¼ˆå¿…è¦{cost}ã€æ‰€æŒ{player.GetCurrentCost()}ï¼‰");
                 return;
             }
-            player.ConsumeCost(cost);//ƒRƒXƒgÁ”ï
+            player.ConsumeCost(cost);//ã‚³ã‚¹ãƒˆæ¶ˆè²»
 
             ParticleSystem effect = null;
             if (effectPrefab != null)
@@ -77,25 +77,25 @@ namespace Takato
                 player.StartCoroutine(ApplyAttackBuff(weapon, effect, buffMultiplier, duration));
             }
 
-            // ˆÚ“®‘¬“xƒoƒti’ZŠÔj
+            // ç§»å‹•é€Ÿåº¦ãƒãƒ•ï¼ˆçŸ­æ™‚é–“ï¼‰
             if (moveSpeedBuff != 0f)
             {
                 player.StartCoroutine(ApplyMoveSpeedBuff(player, moveSpeedBuff, duration));
             }
 
-            Debug.Log($"{skillName} ”­“®: Lv{level} UŒ‚”{—¦{buffMultiplier}, Œp‘±{duration}s");
+            Debug.Log($"{skillName} ç™ºå‹•: Lv{level} æ”»æ’ƒå€ç‡{buffMultiplier}, ç¶™ç¶š{duration}s");
         }
 
         /// <summary>
-        /// ‘•”õiƒpƒbƒVƒujF‘•”õ’†‚Ííƒoƒt‚ğ“K—p‚·‚é
+        /// è£…å‚™æ™‚ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ï¼‰ï¼šè£…å‚™ä¸­ã¯å¸¸æ™‚ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹
         /// </summary>
         public override void OnEquip(PlayerController player)
         {
             if (player == null) return;
             int id = player.GetInstanceID();
-            if (passiveStates.ContainsKey(id)) return; // Šù‚É“K—pÏ‚İ
+            if (passiveStates.ContainsKey(id)) return; // æ—¢ã«é©ç”¨æ¸ˆã¿
 
-            // ƒpƒbƒVƒu‚ÍƒŒƒxƒ‹ˆË‘¶‚µ‚È‚¢’Pˆê‚Ì”{—¦EˆÚ“®‘¬“x‚ğg—p
+            // ãƒ‘ãƒƒã‚·ãƒ–ã¯ãƒ¬ãƒ™ãƒ«ä¾å­˜ã—ãªã„å˜ä¸€ã®å€ç‡ãƒ»ç§»å‹•é€Ÿåº¦ã‚’ä½¿ç”¨
             float buffMultiplier = passiveAttackMultiplier;
 
             var weapon = player.GetComponentInChildren<Weapon>();
@@ -119,11 +119,11 @@ namespace Takato
                 originalMoveSpeed = originalMoveSpeed
             };
 
-            Debug.Log($"{skillName} ‚ğ‘•”õiƒpƒbƒVƒu“K—pj: UŒ‚”{—¦{buffMultiplier} ˆÚ“®‘¬“x+{passiveMoveSpeedBuff}");
+            Debug.Log($"{skillName} ã‚’è£…å‚™ï¼ˆãƒ‘ãƒƒã‚·ãƒ–é©ç”¨ï¼‰: æ”»æ’ƒå€ç‡{buffMultiplier} ç§»å‹•é€Ÿåº¦+{passiveMoveSpeedBuff}");
         }
 
         /// <summary>
-        /// ‘•”õ‰ğœiƒpƒbƒVƒu‰ğœj
+        /// è£…å‚™è§£é™¤æ™‚ï¼ˆãƒ‘ãƒƒã‚·ãƒ–è§£é™¤ï¼‰
         /// </summary>
         public override void OnUnequip(PlayerController player)
         {
@@ -142,16 +142,16 @@ namespace Takato
                 Destroy(state.effect.gameObject, state.effect.main.duration);
             }
 
-            // ˆÚ“®‘¬“x‚ğŒ³‚É–ß‚·
+            // ç§»å‹•é€Ÿåº¦ã‚’å…ƒã«æˆ»ã™
             player.SetMoveSpeed(state.originalMoveSpeed);
 
             passiveStates.Remove(id);
 
-            Debug.Log($"{skillName} ‚ÌƒpƒbƒVƒu‚ğ‰ğœ");
+            Debug.Log($"{skillName} ã®ãƒ‘ãƒƒã‚·ãƒ–ã‚’è§£é™¤");
         }
 
         /// <summary>
-        /// ˆÚ“®‘¬“xƒoƒtiƒAƒNƒeƒBƒu—p‚ÌƒRƒ‹[ƒ`ƒ“j
+        /// ç§»å‹•é€Ÿåº¦ãƒãƒ•ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼‰
         /// </summary>
         private IEnumerator ApplyMoveSpeedBuff(PlayerController player, float speedBuff, float duration)
         {
@@ -164,21 +164,21 @@ namespace Takato
         }
 
         /// <summary>
-        /// UŒ‚ƒoƒtiƒAƒNƒeƒBƒu—p‚ÌƒRƒ‹[ƒ`ƒ“j
+        /// æ”»æ’ƒãƒãƒ•ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼‰
         /// </summary>
         private IEnumerator ApplyAttackBuff(Weapon weapon, ParticleSystem effect, float buffMultiplier, float duration)
         {
             float originalBaseAttack = GetBaseAttackDamage(weapon);
 
-            // baseAttackDamage ‚ğ•ÏX
+            // baseAttackDamage ã‚’å¤‰æ›´
             weapon.SetAttackDamage(originalBaseAttack * buffMultiplier);
 
             yield return new WaitForSeconds(duration);
 
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             weapon.SetAttackDamage(originalBaseAttack);
 
-            // ƒGƒtƒFƒNƒg’â~
+            // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆåœæ­¢
             if (effect != null)
             {
                 effect.Stop();
@@ -187,7 +187,7 @@ namespace Takato
         }
 
         /// <summary>
-        /// Weapon ‚Ì private ‚È baseAttackDamage ‚ğæ“¾‚·‚é•â•
+        /// Weapon ã® private ãª baseAttackDamage ã‚’å–å¾—ã™ã‚‹è£œåŠ©
         /// </summary>
         private float GetBaseAttackDamage(Weapon weapon)
         {
@@ -199,7 +199,7 @@ namespace Takato
             return weapon.AttackDamage;
         }
 
-        // ƒŒƒxƒ‹ƒAƒbƒviƒAƒNƒeƒBƒu—p‚Ì¬’·‚Ì‚İj
+        // ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ï¼ˆã‚¢ã‚¯ãƒ†ã‚£ãƒ–ç”¨ã®æˆé•·ã®ã¿ï¼‰
         public void LevelUp()
         {
             if (skillLevel < maxSkillLevel)

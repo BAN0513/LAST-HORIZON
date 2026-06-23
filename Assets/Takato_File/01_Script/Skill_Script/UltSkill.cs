@@ -1,65 +1,65 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// ƒEƒ‹ƒgƒ‰ƒXƒLƒ‹‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/// ã‚¦ãƒ«ãƒˆãƒ©ã‚¹ã‚­ãƒ«ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 namespace Takato
 {
     [CreateAssetMenu(menuName = "Takato/Skill/UltSkill")]
     public class UltSkill : SkillBase
     {
-        [Header("•KE‹Z‚Ì’Ç‰ÁŒø‰Ê")]
+        [Header("å¿…æ®ºæŠ€ã®è¿½åŠ åŠ¹æœ")]
         [Space(10)]
 
-        [Header("ƒXƒLƒ‹ƒŒƒxƒ‹")]
+        [Header("ã‚¹ã‚­ãƒ«ãƒ¬ãƒ™ãƒ«")]
         [SerializeField, Min(1)]
         public int level;
 
-        [Header("UŒ‚—Íƒoƒt”{—¦iƒŒƒxƒ‹1Šî€j")]
+        [Header("æ”»æ’ƒåŠ›ãƒãƒ•å€ç‡ï¼ˆãƒ¬ãƒ™ãƒ«1åŸºæº–ï¼‰")]
         public float baseAttackBuff;
-        [Header("ƒoƒt‚Ì‘±ŠÔiƒŒƒxƒ‹1Šî€j")]
+        [Header("ãƒãƒ•ã®æŒç¶šæ™‚é–“ï¼ˆãƒ¬ãƒ™ãƒ«1åŸºæº–ï¼‰")]
         public float baseDuration;
-        [Header("“G‚É—^‚¦‚éƒ_ƒ[ƒWiƒŒƒxƒ‹1Šî€j")]
+        [Header("æ•µã«ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼ˆãƒ¬ãƒ™ãƒ«1åŸºæº–ï¼‰")]
         public int baseDamage;
 
-        [Header("ƒŒƒxƒ‹‚²‚Æ‚Ìã¸—Ê")]
-        [Header("UŒ‚—Íƒoƒt”{—¦‚Ìã¸—Ê")]
+        [Header("ãƒ¬ãƒ™ãƒ«ã”ã¨ã®ä¸Šæ˜‡é‡")]
+        [Header("æ”»æ’ƒåŠ›ãƒãƒ•å€ç‡ã®ä¸Šæ˜‡é‡")]
         public float attackBuffPerLevel;
-        [Header("ƒoƒt‚Ì‘±ŠÔ‚Ìã¸—Ê")]
+        [Header("ãƒãƒ•ã®æŒç¶šæ™‚é–“ã®ä¸Šæ˜‡é‡")]
         public float durationPerLevel;
-        [Header("“G‚É—^‚¦‚éƒ_ƒ[ƒW‚Ìã¸—Ê")]
+        [Header("æ•µã«ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ä¸Šæ˜‡é‡")]
         public int damagePerLevel;
-        [Header("ƒŒƒxƒ‹10ˆÈã‚Å“G‚ÌˆÚ“®‘¬“x‚ğ‰º‚°‚é”{—¦")]
+        [Header("ãƒ¬ãƒ™ãƒ«10ä»¥ä¸Šã§æ•µã®ç§»å‹•é€Ÿåº¦ã‚’ä¸‹ã’ã‚‹å€ç‡")]
         public float moveSpeedDebuffPerLevel;
 
-        [Header("ƒŒƒxƒ‹10ˆÈã‚Å“G‚Ì–hŒä‚ğ‰º‚°‚é—Ê")]
+        [Header("ãƒ¬ãƒ™ãƒ«10ä»¥ä¸Šã§æ•µã®é˜²å¾¡ã‚’ä¸‹ã’ã‚‹é‡")]
         public int debuffDefValue;
-        [Header("–hŒäƒfƒoƒt‚Ì‘±ŠÔi•bj")]
+        [Header("é˜²å¾¡ãƒ‡ãƒãƒ•ã®æŒç¶šæ™‚é–“ï¼ˆç§’ï¼‰")]
         public float debuffDuration;
 
         [Space(8)]
-        [Header("ƒpƒbƒVƒu(‘•”õ’†)İ’è")]
-        [Header("‘•”õ’†‚ÌƒpƒbƒVƒuˆÚ“®‘¬“x")]
+        [Header("ãƒ‘ãƒƒã‚·ãƒ–(è£…å‚™ä¸­)è¨­å®š")]
+        [Header("è£…å‚™ä¸­ã®ãƒ‘ãƒƒã‚·ãƒ–ç§»å‹•é€Ÿåº¦")]
         public float passiveMoveSpeedBuff;
-        [Header("‘•”õ’†‚ÌƒpƒbƒVƒu–hŒä—Í")]
+        [Header("è£…å‚™ä¸­ã®ãƒ‘ãƒƒã‚·ãƒ–é˜²å¾¡åŠ›")]
         public int passiveDefBuff;
 
-        //[Header("‘•”õ’†‚ÌƒpƒbƒVƒuSP‰ñ•œ—Í")]© Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+        //[Header("è£…å‚™ä¸­ã®ãƒ‘ãƒƒã‚·ãƒ–SPå›å¾©åŠ›")]â† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
         //public int passiveSPRecoveryBuff;
 
-        // ƒpƒbƒVƒuó‘Ô‚ğƒvƒŒƒCƒ„[’PˆÊ‚ÅŠÇ—
+        // ãƒ‘ãƒƒã‚·ãƒ–çŠ¶æ…‹ã‚’ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å˜ä½ã§ç®¡ç†
         private class PassiveState
         {
             public float originalMoveSpeed;
             public float originalDef;
-            //public int originalSPRecovery;© Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+            //public int originalSPRecovery;â† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
         }
         private Dictionary<int, PassiveState> passiveStates = new Dictionary<int, PassiveState>();
 
         ///<summary>
-        ///‘•”õ’†‚ÌƒpƒbƒVƒuŒø‰Ê‚Ìˆ—
+        ///è£…å‚™ä¸­ã®ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã®å‡¦ç†
         ///</summary>
         public override void OnEquip(PlayerController player)
         {
@@ -67,12 +67,12 @@ namespace Takato
             int id = player.GetInstanceID();
             if (passiveStates.ContainsKey(id)) return;
 
-            //Œ»İ‚ÌˆÚ“®‘¬“x‚Æ–hŒä—Í‚ğ•Û‘¶‚µ‚ÄƒpƒbƒVƒuŒø‰Ê‚ğ“K—p
+            //ç¾åœ¨ã®ç§»å‹•é€Ÿåº¦ã¨é˜²å¾¡åŠ›ã‚’ä¿å­˜ã—ã¦ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã‚’é©ç”¨
             float originalMoveSpeed = player.GetMoveSpeed();
             float originalDef = player.GetDamageCutRate();
-            //int originalSPRecovery = player.GetSPRecoveryRate();© Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+            //int originalSPRecovery = player.GetSPRecoveryRate();â† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
 
-            // ˆÚ“®‘¬“x‚Æ–hŒä—Í‚ğƒoƒt
+            // ç§»å‹•é€Ÿåº¦ã¨é˜²å¾¡åŠ›ã‚’ãƒãƒ•
             if(passiveMoveSpeedBuff != 0)
             {
                 player.SetMoveSpeed(originalMoveSpeed * passiveMoveSpeedBuff);
@@ -81,19 +81,19 @@ namespace Takato
             {
                 player.SetDamageCutRate(originalDef + passiveDefBuff);
             }
-            //if(passiveSPRecoveryBuff != 0){} © Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+            //if(passiveSPRecoveryBuff != 0){} â† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
 
             passiveStates[id] = new PassiveState
             {
                 originalMoveSpeed = originalMoveSpeed,
                 originalDef = originalDef,
-                //originalSPRecovery = originalSPRecovery© Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+                //originalSPRecovery = originalSPRecoveryâ† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
             };
             Debug.Log($"[UltSkill] Player {id} equipped. MoveSpeed: {originalMoveSpeed} -> {player.GetMoveSpeed()}, Def: {originalDef} -> {player.GetDamageCutRate()}");
         }
 
         /// <summary>
-        /// ‘•”õ‰ğœ‚ÉƒpƒbƒVƒuŒø‰Ê‚ğŒ³‚É–ß‚·ˆ—
+        /// è£…å‚™è§£é™¤æ™‚ã«ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã‚’å…ƒã«æˆ»ã™å‡¦ç†
         /// </summary>
         /// <param name="player"></param>
         public override void OnUnequip(PlayerController player)
@@ -102,54 +102,54 @@ namespace Takato
             int id = player.GetInstanceID();
             if (!passiveStates.ContainsKey(id)) return;
 
-            //•Û‘¶‚µ‚Ä‚¢‚½Œ³‚Ì’l‚ğ•œŒ³
+            //ä¿å­˜ã—ã¦ã„ãŸå…ƒã®å€¤ã‚’å¾©å…ƒ
             var state = passiveStates[id];
             player.SetMoveSpeed(state.originalMoveSpeed);
             player.SetDamageCutRate(state.originalDef);
-            //player.SetSPRecoveryRate(state.originalSPRecovery);© Œã‚Å‰ñ•œ‚Ìˆ—‚ğ‘‚«‚Ü‚·B
+            //player.SetSPRecoveryRate(state.originalSPRecovery);â† å¾Œã§å›å¾©ã®å‡¦ç†ã‚’æ›¸ãã¾ã™ã€‚
 
             passiveStates.Remove(id);
             Debug.Log($"[UltSkill] Player {id} unequipped. MoveSpeed restored to {state.originalMoveSpeed}, Def restored to {state.originalDef}");
         }
 
         /// <summary>
-        /// ƒXƒLƒ‹”­“®‚Ìˆ—
+        /// ã‚¹ã‚­ãƒ«ç™ºå‹•æ™‚ã®å‡¦ç†
         /// </summary>
         public override void Activate(PlayerController player)
         {
             player.ConsumeCost(cost);
 
-            // ƒŒƒxƒ‹‚É‰‚¶‚½’l‚ğŒvZ
+            // ãƒ¬ãƒ™ãƒ«ã«å¿œã˜ãŸå€¤ã‚’è¨ˆç®—
             float attackBuff = baseAttackBuff + attackBuffPerLevel * (level - 1);
             float duration = baseDuration + durationPerLevel * (level - 1);
             int damage = baseDamage + damagePerLevel * (level - 1);
 
-            // ˆê”Ô‹ß‚¢“G‚ğ’T‚·
+            // ä¸€ç•ªè¿‘ã„æ•µã‚’æ¢ã™
             Enemy target = FindNearestEnemy(player.transform.position);
             if (target != null)
             {
                 target.TakeDamage(damage);
 
-                // ƒŒƒxƒ‹10ˆÈã‚È‚ç–hŒäƒfƒoƒt‚ğ•t—^
+                // ãƒ¬ãƒ™ãƒ«10ä»¥ä¸Šãªã‚‰é˜²å¾¡ãƒ‡ãƒãƒ•ã‚’ä»˜ä¸
                 if (level >= 10)
                 {
                     player.StartCoroutine(ApplyEnemyDefDebuff(target));
                 }
 
-                // “G‚ÌˆÚ“®‘¬“xƒfƒoƒt‚ğ“K—p
+                // æ•µã®ç§»å‹•é€Ÿåº¦ãƒ‡ãƒãƒ•ã‚’é©ç”¨
                 player.StartCoroutine(ApplyEnemyMoveSpeedDebuff(target, duration));
             }
 
-            // ƒvƒŒƒCƒ„[‚ÌUŒ‚—Íƒoƒt‚Ì‚İ“K—p
+            // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒåŠ›ãƒãƒ•ã®ã¿é©ç”¨
             player.StartCoroutine(ApplyUltBuff(player, attackBuff, duration));
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ÌUŒ‚—Íƒoƒt‚Ì‚İ“K—piˆÚ“®‘¬“x‚Í•ÏX‚µ‚È‚¢j
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒåŠ›ãƒãƒ•ã®ã¿é©ç”¨ï¼ˆç§»å‹•é€Ÿåº¦ã¯å¤‰æ›´ã—ãªã„ï¼‰
         /// </summary>
         private IEnumerator ApplyUltBuff(PlayerController player, float attackBuff, float duration)
         {
-            // •Ší‚ÌUŒ‚—Í‚ğæ“¾E•Û‘¶
+            // æ­¦å™¨ã®æ”»æ’ƒåŠ›ã‚’å–å¾—ãƒ»ä¿å­˜
             var weaponController = player.GetComponentInChildren<PlayerWeaponController>();
             if (weaponController == null || weaponController.EquippedWeapon == null)
                 yield break;
@@ -157,16 +157,16 @@ namespace Takato
             Weapon weapon = weaponController.EquippedWeapon;
             float originalBaseAttack = GetWeaponBaseAttack(weapon);
 
-            // •Ší‚ÌŠî–{UŒ‚—Í‚ğƒoƒt
+            // æ­¦å™¨ã®åŸºæœ¬æ”»æ’ƒåŠ›ã‚’ãƒãƒ•
             weapon.SetAttackDamage(originalBaseAttack * attackBuff);
 
             yield return new WaitForSeconds(duration);
 
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             weapon.SetAttackDamage(originalBaseAttack);
         }
 
-        // “G‚Ì–hŒäƒfƒoƒtˆ—
+        // æ•µã®é˜²å¾¡ãƒ‡ãƒãƒ•å‡¦ç†
         private IEnumerator ApplyEnemyDefDebuff(Enemy target)
         {
             int originalDef = target.DebufDEF;
@@ -174,18 +174,18 @@ namespace Takato
 
             yield return new WaitForSeconds(debuffDuration);
 
-            // Œ³‚É–ß‚·
+            // å…ƒã«æˆ»ã™
             target.DebufDEF = originalDef;
         }
 
         /// <summary>
-        /// “G‚ÌˆÚ“®‘¬“xƒfƒoƒt‚ğ“K—p‚·‚éƒRƒ‹[ƒ`ƒ“
+        /// æ•µã®ç§»å‹•é€Ÿåº¦ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³
         /// </summary>
         private IEnumerator ApplyEnemyMoveSpeedDebuff(Enemy target, float duration)
         {
             if (level < 10) yield break;
 
-            // ƒŒƒxƒ‹10‚Å0.8”{AƒŒƒxƒ‹11‚Å0.7”{..‚É‚È‚Á‚Ä‚¢‚«‚Ü‚·.
+            // ãƒ¬ãƒ™ãƒ«10ã§0.8å€ã€ãƒ¬ãƒ™ãƒ«11ã§0.7å€..ã«ãªã£ã¦ã„ãã¾ã™.
             float moveSpeedDebuff = Mathf.Clamp01(1.0f - moveSpeedDebuffPerLevel * (level - 9));
             float originalMultiplier = target.MoveSpeedMultiplier;
             target.MoveSpeedMultiplier = moveSpeedDebuff;
@@ -195,7 +195,7 @@ namespace Takato
             target.MoveSpeedMultiplier = originalMultiplier;
         }
 
-        // •Ší‚ÌbaseAttackDamage‚ğƒŠƒtƒŒƒNƒVƒ‡ƒ“‚Åæ“¾
+        // æ­¦å™¨ã®baseAttackDamageã‚’ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã§å–å¾—
         private float GetWeaponBaseAttack(Weapon weapon)
         {
             var field = typeof(Weapon).GetField("baseAttackDamage", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);

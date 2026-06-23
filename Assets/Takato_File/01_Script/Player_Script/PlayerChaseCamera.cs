@@ -7,135 +7,143 @@ namespace Takato
     /// </summary>
     public class PlayerChaseCamera : MonoBehaviour
     {
-        [Header("カメラの設定")]
-        [SerializeField] private Transform player; // プレイヤーのTransform
-        [Header("カメラのオフセット")]
-        [SerializeField] private Vector3 cameraOffset; // プレイヤーからの水平オフセット
-        [Header("カメラの高さ")]
-        [SerializeField] private float cameraHeight; // プレイヤーのどの高さを狙うか
-        [Header("マウスの感度")]
-        [SerializeField] private float mouseSensitivity; // マウス感度
-        [Header("回転の制限")]
-        [SerializeField] private float minVerticalAngle; // 上下回転の最小角度
-        [SerializeField] private float maxVerticalAngle; // 上下回転の最大角度
-        [Header("プレイヤーの回転速度")]
-        [SerializeField] private float playerRotationSpeed; // プレイヤーの回転速度
-        [Header("Y軸反転")]
-        [SerializeField] private bool invertY; // 上下反転のオン/オフ
+        [System.Serializable]
+        public struct CameraSettings
+        {
+            [Tooltip("マウスの回転感度")] public float mouseSensitivity;
+            [Tooltip("上下回転の最小角度")] public float minVerticalAngle;
+            [Tooltip("上下回転の最大角度")] public float maxVerticalAngle;
+            [Tooltip("プレイヤーの回転追従速度")] public float playerRotationSpeed;
+            [Tooltip("マウスY軸（上下）の反転")] public bool invertY;
+            [Tooltip("角度のスムース時間（SmoothDampAngle 用）")] public float angleSmoothTime;
+        }
 
-        private PlayerInputController inputController; // プレイヤー入力コントローラー
-        private float horizontalAngle = 0f; // 水平回転角度
-        private float verticalAngle = 0f; // 垂直回転角度
+        [Header("--- 追従対象の設定 ---")]
+        [SerializeField] private Transform player;
+        [SerializeField] private Vector3 cameraOffset;
+        [SerializeField] private float cameraHeight;
+
+        [Header("--- カメラの挙動設定 ---")]
+        [SerializeField] private CameraSettings settings;
+
+        // 自動検索オプション
+        [Header("--- 自動プレイヤー検索（オプション） ---")]
+        [SerializeField] private bool autoFindPlayerByTag = true;
+        [SerializeField] private float autoFindInterval;
+
+
+        private float autoFindCooldown = 0f; // 自動検索のクールダウンタイマー
+
+        // キャッシュ
+        private Transform camTransform;
+        private PlayerInputController inputController;
+
+        // 角度およびスムース用の速度
+        private float targetHorizontalAngle;
+        private float targetVerticalAngle;
+        private float currentHorizontalAngle;
+        private float currentVerticalAngle;
+        private float horizontalVelocity;
+        private float verticalVelocity;
+
+        private void Awake()
+        {
+            camTransform = transform;
+        }
 
         private void Start()
         {
-            if (player == null)
-            {
-                player = transform.parent; // 親オブジェクトがプレイヤーの場合
-            }
+            // 最初のプレイヤー参照と入力取得
+            InitializeForPlayer(player);
 
-            if (player != null)
-            {
-                inputController = player.GetComponent<PlayerInputController>();
-                if (inputController != null)
-                {
-                    inputController.IsLookEnabled = true; // Look入力を有効化
-                }
-            }
+            // 初期角度をカメラの現状から設定（ジャンプを防ぐ）
+            var euler = camTransform.eulerAngles;
+            currentHorizontalAngle = targetHorizontalAngle = euler.y;
+            float vx = euler.x;
+            if (vx > 180f) vx -= 360f;
+            currentVerticalAngle = targetVerticalAngle = Mathf.Clamp(vx, settings.minVerticalAngle, settings.maxVerticalAngle);
         }
-
-        private void Update()
-        {
-            //つい移住するターゲットがいない場合はTagのPlayerを探す
-            if (player == null)
-            {
-                GameObject tagged = null;
-                try
-                {
-                    tagged = GameObject.FindWithTag("Player");
-                }
-                catch
-                {
-                    // "Player" タグが存在しない場合の例外は無視
-                    tagged = null;
-                }
-                if (tagged != null)
-                {
-                    player = tagged.transform;
-                    inputController = player.GetComponent<PlayerInputController>();
-                    if (inputController != null)
-                    {
-                        inputController.IsLookEnabled = true; // Look入力を有効化
-                    }
-                }
-            }
-        }
-
 
         private void LateUpdate()
         {
-            if (player == null || inputController == null)
+            // player が null のときのみ、間隔を置いてタグ検索（毎フレーム検索はしない）
+            if (player == null && autoFindPlayerByTag)
             {
-                return;
+                autoFindCooldown -= Time.deltaTime;
+                if (autoFindCooldown <= 0f)
+                {
+                    var go = GameObject.FindWithTag("Player");
+                    if (go != null) InitializeForPlayer(go.transform);
+                    autoFindCooldown = Mathf.Max(0.01f, autoFindInterval);
+                }
             }
 
-            // マウス入力（LookInput）を取得
-            Vector2 lookInput = inputController.LookInput;
+            if (player == null) return;
 
-            // Y軸の反転設定を考慮して垂直入力を決定
-            float lookY = invertY ? -lookInput.y : lookInput.y;
+            //入力取得
+            Vector2 look = Vector2.zero;
+            if (inputController != null)
+            {
+                look = inputController.LookInput;
+            }
+            else
+            {
+                look.x = Input.GetAxis("Mouse X");
+                look.y = Input.GetAxis("Mouse Y");
+            }
 
-            // カメラの回転を更新
-            horizontalAngle += lookInput.x * mouseSensitivity;
-            verticalAngle += lookY * mouseSensitivity;
-            verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
+            //目標角度を更新（behavior の互換を保つため Time.deltaTime を感度調整に導入）
+            float sens = settings.mouseSensitivity;
+            targetHorizontalAngle += look.x * sens;
+            float invert = settings.invertY ? 1f : -1f;
+            targetVerticalAngle += look.y * sens * invert;
+            targetVerticalAngle = Mathf.Clamp(targetVerticalAngle, settings.minVerticalAngle, settings.maxVerticalAngle);
 
-            // 水平オフセットだけを使う
-            Vector3 horizontalOffset = new Vector3(cameraOffset.x, 0f, cameraOffset.z);
+            //スムースに現在角度へ近づける
+            float smooth = Mathf.Max(0.0001f, settings.angleSmoothTime);
+            currentHorizontalAngle = Mathf.SmoothDampAngle(currentHorizontalAngle, targetHorizontalAngle, ref horizontalVelocity, smooth);
+            currentVerticalAngle = Mathf.SmoothDampAngle(currentVerticalAngle, targetVerticalAngle, ref verticalVelocity, smooth);
 
-            // カメラの位置と回転を計算
-            Quaternion rotation = Quaternion.Euler(verticalAngle, horizontalAngle, 0f);
-            Vector3 newCameraPosition = player.position + Vector3.up * cameraHeight + rotation * horizontalOffset;
+            //カメラ位置・回転の適用
+            Quaternion cameraRotation = Quaternion.Euler(currentVerticalAngle, currentHorizontalAngle, 0f);
+            Vector3 targetLookAt = player.position + Vector3.up * cameraHeight;
+            Vector3 targetPosition = targetLookAt + cameraRotation * cameraOffset;
 
-            // カメラの位置と回転を適用
-            transform.position = newCameraPosition;
-            transform.LookAt(player.position + Vector3.up * cameraHeight);
+            camTransform.position = targetPosition;
+            camTransform.rotation = cameraRotation;
 
-            // プレイヤーを常にカメラの方向に向ける
-            RotatePlayerTowardCamera();
+            //プレイヤー回転（平面のみ）: 角度差がある場合だけ計算する
+            RotatePlayerTowardCamera(targetLookAt);
         }
 
-        /// <summary>
-        /// プレイヤーを常にカメラの方向に向けるメソッド
-        /// </summary>
-        private void RotatePlayerTowardCamera()
+        private void InitializeForPlayer(Transform targetPlayer)
         {
-            if (player == null)
+            player = targetPlayer ?? transform.parent;
+            if (player != null)
             {
-                return;
-            }
-
-            // カメラの前方向
-            Vector3 cameraForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-
-            if (cameraForward.sqrMagnitude > 0.0001f)
-            {
-                // カメラが指す方向にプレイヤーを滑らかに回転させる
-                Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
-                player.rotation = Quaternion.Slerp(player.rotation, targetRotation, playerRotationSpeed * Time.deltaTime);
+                // TryGetComponent を使って余計な GC/lookup を避ける
+                player.TryGetComponent(out inputController);
             }
         }
 
-        // --- Getter / Setter ---
-        public Vector3 GetCameraOffset() => cameraOffset;
-        public void SetCameraOffset(Vector3 offset) => cameraOffset = offset;
+        private void RotatePlayerTowardCamera(Vector3 lookAtTarget)
+        {
+            if (player == null) return;
 
-        public float GetCameraHeight() => cameraHeight;
-        public void SetCameraHeight(float height) => cameraHeight = height;
+            // カメラの正面ベクトルを水平面に投影
+            Vector3 camForward = (lookAtTarget - camTransform.position).normalized;
+            Vector3 planarForward = Vector3.ProjectOnPlane(camForward, Vector3.up);
+            if (planarForward.sqrMagnitude <= Mathf.Epsilon) return;
 
-        public void SetMouseSensitivity(float sensitivity) => mouseSensitivity = Mathf.Max(0f, sensitivity);
-        public void SetPlayerRotationSpeed(float speed) => playerRotationSpeed = Mathf.Max(0f, speed);
-        public void SetInvertY(bool invert) => invertY = invert;
+            Quaternion targetRot = Quaternion.LookRotation(planarForward.normalized);
+            float t = Mathf.Clamp01(settings.playerRotationSpeed * Time.deltaTime);
+            player.rotation = Quaternion.Slerp(player.rotation, targetRot, t);
+        }
+
+        // --- プロパティ / セッター ---
+        public Vector3 CameraOffset { get => cameraOffset; set => cameraOffset = value; }
+        public float CameraHeight { get => cameraHeight; set => cameraHeight = value; }
+        public CameraSettings Settings { get => settings; set => settings = value; }
     }
 }
 

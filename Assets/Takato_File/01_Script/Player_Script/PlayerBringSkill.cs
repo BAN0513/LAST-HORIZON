@@ -3,7 +3,7 @@ using Takato;
 using System.Collections.Generic;
 
 /// <summary>
-/// プレイヤーの獲得したスキルを管理するクラス
+/// プレイヤーの獲得したスキルを管理するクラス(シーン上に置いて置くような構造にしてます。)
 /// </summary>
 namespace Takato
 {

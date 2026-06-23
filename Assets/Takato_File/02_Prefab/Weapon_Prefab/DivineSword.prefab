@@ -189,9 +189,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133654971005418837}
-  - component: {fileID: -5005743964119743882}
   - component: {fileID: 2485387675391266941}
   - component: {fileID: 3182551133076042422}
+  - component: {fileID: -5005743964119743882}
   m_Layer: 0
   m_Name: DivineSword
   m_TagString: Untagged
@@ -217,21 +217,6 @@ Transform:
   - {fileID: 3636837467416693057}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5005743964119743882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6510344935332866764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78c26938b23023c4eb90b98866142e5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Takato.Weapon
-  baseAttackDamage: 10
-  weaponLevel: 5
-  maxLevel: 10
 --- !u!65 &2485387675391266941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -280,6 +265,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5005743964119743882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6510344935332866764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78c26938b23023c4eb90b98866142e5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.Weapon
+  baseAttackDamage: 10
+  weaponLevel: 5
+  maxLevel: 10
+  isMagicWeapon: 0
+  magicProjectilePrefab: {fileID: 0}
+  magicCooldown: 0
 --- !u!1001 &3887201404834115242
 PrefabInstance:
   m_ObjectHideFlags: 0

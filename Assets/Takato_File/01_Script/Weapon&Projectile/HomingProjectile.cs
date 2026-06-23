@@ -9,11 +9,11 @@ namespace Takato
     public class HomingProjectile : MonoBehaviour
     {
         [Tooltip("移動速度")]
-        public float speed = 10f;
+        public float speed;
         [Tooltip("回転速度（追尾の滑らかさ）")]
-        public float rotationSpeed = 5f;
+        public float rotationSpeed;
         [Tooltip("与えるダメージ")]
-        public float damage = 10f;
+        public float damage;
 
         private Transform target; // 追尾対象の Transform
 
