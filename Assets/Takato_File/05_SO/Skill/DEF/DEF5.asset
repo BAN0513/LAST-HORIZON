@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc66893b6abbca4f9bc2f4036b466f8, type: 3}
   m_Name: DEF5
   m_EditorClassIdentifier: Assembly-CSharp::Takato.DeffenceBuffSkill
-  skillName: DEF4
+  skillName: DEF5
   skillIcon: {fileID: 1606747506, guid: af6eb59a7c8352f43a9463f25b090ab3, type: 3}
-  cost: 15
-  cooldown: 30
-  moveSpeedBuff: 1.05
-  baseCutRate: 0.1
-  cutRatePerLevel: 0.03
-  baseDuration: 10
-  durationPerLevel: 1
+  cost: 0
+  cooldown: 0
+  moveSpeedBuff: 0
+  baseCutRate: 0
+  cutRatePerLevel: 0
+  baseDuration: 0
+  durationPerLevel: 0
   effectPrefab: {fileID: 3280519133390621004, guid: 868b6d9162ac6244987109c436ef9ac6, type: 3}
-  skillLevel: 5
-  maxSkillLevel: 10
-  passiveCutRate: 0
-  passiveMoveSpeedBuff: 0
+  skillLevel: 0
+  maxSkillLevel: 0
+  passiveCutRate: 0.25
+  passiveMoveSpeedBuff: 1.1

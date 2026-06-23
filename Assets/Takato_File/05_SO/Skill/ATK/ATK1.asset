@@ -16,13 +16,13 @@ MonoBehaviour:
   skillIcon: {fileID: -722861831, guid: 938116a57a6e0f4438defb619d81c07d, type: 3}
   cost: 5
   cooldown: 10
-  moveSpeedBuff: 1.05
+  moveSpeedBuff: 2
   baseBuffMultiplier: 1.3
   buffMultiplierPerLevel: 1.1
   baseDuration: 10
   durationPerLevel: 1
   effectPrefab: {fileID: 3280519133390621004, guid: 7fd8e667e0ab76f429f03cd89e9e520c, type: 3}
-  skillLevel: 1
+  skillLevel: 7
   maxSkillLevel: 10
-  passiveAttackMultiplier: 0
-  passiveMoveSpeedBuff: 0
+  passiveAttackMultiplier: 1
+  passiveMoveSpeedBuff: 1

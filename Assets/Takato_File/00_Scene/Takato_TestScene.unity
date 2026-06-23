@@ -391,7 +391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312714646279427699, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_IsTrigger
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3713859532431908425, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalScale.x
@@ -447,15 +447,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6991496
+      value: 0.59392154
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.79171276
+      value: 0.9463103
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0003004074
+      value: 0.034831047
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1065,7 +1065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3312714646279427699, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_IsTrigger
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3713859532431908425, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalScale.x
@@ -1121,15 +1121,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6991491
+      value: 0.5939208
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.79171276
+      value: 0.9463103
       objectReference: {fileID: 0}
     - target: {fileID: 3972691949628727900, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0003004074
+      value: 0.034831047
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1383,6 +1383,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!4 &1620246856 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6533515195140484782, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+  m_PrefabInstance: {fileID: 1969878197}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1632952731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1660,14 +1665,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b998286084922c4fa2a5eaf66cfda16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerChaseCamera
-  player: {fileID: 0}
-  cameraOffset: {x: 1, y: 0, z: -1}
+  player: {fileID: 1620246856}
+  cameraOffset: {x: 0.5, y: 0, z: -1.2}
   cameraHeight: 1.4
-  mouseSensitivity: 0.07
-  minVerticalAngle: -30
-  maxVerticalAngle: 60
-  playerRotationSpeed: 10
-  invertY: 1
+  settings:
+    mouseSensitivity: 0.05
+    minVerticalAngle: -90
+    maxVerticalAngle: 90
+    playerRotationSpeed: 5
+    invertY: 0
+    angleSmoothTime: 0.05
+  autoFindPlayerByTag: 1
+  autoFindInterval: 0.5
 --- !u!1 &1854379207
 GameObject:
   m_ObjectHideFlags: 0
@@ -1698,7 +1707,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88b6caa8051886f4b934a23e70b1bab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EventProgress
+  startText: 
   changeText: "\u6249\u306B\u8FCE\u3048"
+  warpPoint: {fileID: 0}
 --- !u!114 &1854379209
 MonoBehaviour:
   m_ObjectHideFlags: 0
