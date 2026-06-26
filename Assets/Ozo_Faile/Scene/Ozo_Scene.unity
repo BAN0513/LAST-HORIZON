@@ -529,7 +529,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &133594472
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1471,11 +1471,15 @@ MonoBehaviour:
   player: {fileID: 0}
   cameraOffset: {x: 0.3, y: 0, z: 0.5}
   cameraHeight: 0.7
-  mouseSensitivity: 0.2
-  minVerticalAngle: -60
-  maxVerticalAngle: 40
-  playerRotationSpeed: 10
-  invertY: 1
+  settings:
+    mouseSensitivity: 0
+    minVerticalAngle: 0
+    maxVerticalAngle: 0
+    playerRotationSpeed: 0
+    invertY: 0
+    angleSmoothTime: 0
+  autoFindPlayerByTag: 1
+  autoFindInterval: 0
 --- !u!1001 &352401332
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2335,7 +2339,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &583377063
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5044,7 +5048,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2002958352
 RectTransform:
   m_ObjectHideFlags: 0

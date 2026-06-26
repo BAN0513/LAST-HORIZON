@@ -1,9 +1,13 @@
 using System.Collections;
+using System.Reflection;
+using Takato;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameOverAnim : MonoBehaviour
 {
+    [SerializeField] private PlayerController players;
+
     [SerializeField] private RectTransform GameOverRect;
     [SerializeField] private RectTransform TitleRect;
     [SerializeField] private RectTransform ContinueRect;
@@ -35,6 +39,8 @@ public class GameOverAnim : MonoBehaviour
     private float alfa;
     private float red, green, blue;
 
+    private int playerHp;
+
     //private bool FadeIn;
     //private bool FadeOut;
 
@@ -63,7 +69,15 @@ public class GameOverAnim : MonoBehaviour
 
     private void Update()
     {
-        if (PausManeger.ToGameOver)
+        var field = players.GetType().GetField("hp", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        if (field != null)
+        {
+            playerHp = (int)field.GetValue(players);
+            Debug.Log("HP: " + playerHp);
+        }
+
+        if (PausManeger.ToGameOver || playerHp <= 0)
         {
             FadeImage.GetComponent<Image>().color = new Color(red, green, blue, alfa);
             if (alfa < 1.0f) alfa += speed;
