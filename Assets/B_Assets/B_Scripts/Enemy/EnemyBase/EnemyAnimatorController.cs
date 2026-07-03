@@ -51,6 +51,7 @@ public class EnemyAnimatorController : MonoBehaviour
 
     public virtual bool CheckCurrentAnim(string name)
     {
+        if (animator == null) { return false; }
         if (animator.GetCurrentAnimatorStateInfo(0).IsName(name))
         {
             return true;

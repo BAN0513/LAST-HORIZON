@@ -57,10 +57,11 @@ public class Enemy_Humanoid : Enemy
         }
     }
 
-    public override void TakeDamage(int damage)
+    public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
     {
-        base.TakeDamage(damage);
+        base.TakeDamage(damage, sound, seNumber);
 
+        if (invincibilityTimer > 0) { return; }
         if (!enemyAnimatorController.CheckCurrentAnim("Hit") && hp > 0)
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);

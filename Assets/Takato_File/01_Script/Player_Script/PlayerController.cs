@@ -533,8 +533,11 @@ namespace Takato
 
             SoundManager soundManager = FindAnyObjectByType<SoundManager>();
 
-            soundManager?.PlaySE(1); // ダメージを受けたときのSEを再生
-
+            //音の多重再生防止のためのチェック
+            if (!soundManager.SESource.isPlaying)
+            {
+                soundManager?.PlaySE(1); // ダメージを受けたときのSEを再生
+            }
             //バフ込みの最終ダメージカット率（DamageCutRate)
             int finalDamage = Mathf.RoundToInt(damage * (1f - DamageCutRate));
 

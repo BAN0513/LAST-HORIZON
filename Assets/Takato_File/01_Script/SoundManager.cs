@@ -20,6 +20,10 @@ public class SoundManager : MonoBehaviour
     [Header("AudioSource")]
     [SerializeField] AudioSource bgmSource;
     [SerializeField] AudioSource seSource;
+    public AudioSource SESource
+    {
+        get { return seSource; }
+    }
 
     [Header("デバッグ")]
     [SerializeField] bool enableDebugLogs = true; // デバッグログの有効化

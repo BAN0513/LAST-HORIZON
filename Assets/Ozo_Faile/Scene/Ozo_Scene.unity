@@ -1042,6 +1042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c337ab4fd26b79f46b9a998527b34e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverAnim
+  players: {fileID: 1147348045}
   GameOverRect: {fileID: 1719021940}
   TitleRect: {fileID: 67319150}
   ContinueRect: {fileID: 420725775}
@@ -3416,6 +3417,17 @@ MonoBehaviour:
   SpawnPoint_B1: {fileID: 1493287046}
   SpawnPoint_B2: {fileID: 910914024}
   SpawnPoint_B3: {fileID: 53633908}
+--- !u!114 &1147348045 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4319136025616011422, guid: 7ca55300028a6564e835ba2cebd80ae9, type: 3}
+  m_PrefabInstance: {fileID: 1681236508}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147348040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6236ef2181776b4f905617a07663810, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Takato.PlayerController
 --- !u!1001 &1148733927
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -65,9 +65,9 @@ public class Enemy_Wizard : Enemy_Humanoid
         Init();
     }
 
-    public override void TakeDamage(int damage)
+    public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
-        base.TakeDamage(damage);
+        base.TakeDamage(damage, sound, seNumber);
         AttackProbabilityUP();
         isTeleport = true;
     }

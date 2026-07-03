@@ -137,14 +137,16 @@ namespace Takato
         private void OnTriggerEnter(Collider other)
         {
             if (!isAttacking) return; // 攻撃中でなければ無視
-            if (other.CompareTag("Enemy"))
+
+            // Enemyコンポーネントがあればダメージを与える
+            Enemy enemy = other.GetComponentInParent<Enemy>();
+            if (enemy != null)
             {
-                // Enemyコンポーネントがあればダメージを与える
-                if (other.TryGetComponent<Enemy>(out var enemy))
-                {
-                    enemy.TakeDamage((int)AttackDamage);
-                    soundManager?.PlaySE(1); // 1番のSEを再生（ヒット音）
-                }
+                enemy.TakeDamage((int)AttackDamage, soundManager, 1);
+
+                //攻撃が連続ヒットしたときに音が連続でなるのを防ぐためにEnemyの方で音を鳴らす
+                //soundManager?.PlaySE(1); // 1番のSEを再生（ヒット音）
+
             }
         }
 

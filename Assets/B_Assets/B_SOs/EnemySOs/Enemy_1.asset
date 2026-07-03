@@ -22,7 +22,7 @@ MonoBehaviour:
   damage: 1
   dashMoveSpeed: 2
   walkMoveSpeed: 0.5
-  def: 10
+  def: 0
   stoopingDis: 2
   lookRotationSpeed: 5
   engageDis: 5

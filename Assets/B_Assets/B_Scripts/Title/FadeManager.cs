@@ -4,9 +4,17 @@ using UnityEngine.SceneManagement;
 
 public class FadeManager : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup groupSceneFade;
-
     public static FadeManager instance {  get; private set; }
+
+    [SerializeField] private CanvasGroup groupFade;
+
+    //画面が暗くなっているかどうか
+    private bool isFade = false;
+    public bool IsFade
+    {
+        get { return isFade; }
+        set { isFade = value; }
+    }
 
     private void Awake()
     {
@@ -21,28 +29,26 @@ public class FadeManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    //これを入れないとバグが起きてしまう
-    private void OnDestroy()
-    {
-        SceneManager.sceneLoaded -= SceneFadeOut;
-    }
-
-    private void Start()
-    {
-        //シーンが遷移されたときにSceneFadeOutを呼ぶ
-        SceneManager.sceneLoaded += SceneFadeOut;
-    }
-
     public IEnumerator SceneFadeIn(string sceneName)
     {
-        yield return StartCoroutine(Fade(0, 1, groupSceneFade));
+        yield return StartCoroutine(Fade(0, 1, groupFade));
         SceneManager.LoadScene(sceneName);
     }
 
-    void SceneFadeOut(Scene scene, LoadSceneMode mode)
+    //Sceneのスタートで呼ぶ
+    public void SceneFadeOut()
     {
-        Debug.Log("Sceneの遷移を検知！！");
-        StartCoroutine(Fade(1, 0, groupSceneFade));
+        StartCoroutine(Fade(1, 0, groupFade));
+    }
+
+    //Sceneを変更しないFadeInFadeOut
+    public IEnumerator FadeInOut(WarpManager warp, WarpManager.WarpPoint point)
+    {
+        yield return StartCoroutine(Fade(0, 1, groupFade));
+        warp.StageAllNotActive();
+        DestinationUI.Instance.SetDestinationText(warp.WarpAfterText[point]);
+        isFade = true;
+        yield return StartCoroutine(Fade(1, 0, groupFade));
     }
 
     public IEnumerator Fade(float start, float end, CanvasGroup group)

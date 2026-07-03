@@ -26,6 +26,11 @@ public class StageChage : MonoBehaviour
 
     private void Start()
     {
+        if (FadeManager.instance != null)
+        {
+            FadeManager.instance.SceneFadeOut();
+        }
+
         if (StageNumber < 0 || StageNumber > 3)
         { 
             StageNumber = 0;
@@ -50,14 +55,34 @@ public class StageChage : MonoBehaviour
     {
         //一旦キャラクターコントロールを無効化する
 
-        if (StageNumber == 1 /*&& !EndWarp*/)
-            transform.position = SpawnPoint_B1.transform.position;
-        else if (StageNumber == 2 /*&& !EndWarp*/)
-            transform.position = SpawnPoint_B2.transform.position;
-        else if (StageNumber == 3 /*&& !EndWarp*/)
-            transform.position = SpawnPoint_B3.transform.position;
-        else if (StageNumber == 0 /*&& !EndWarp*/)
-            transform.position = new Vector3(0, 0, 0);
+        //if (StageNumber == 1 /*&& !EndWarp*/)
+        //    transform.position = SpawnPoint_B1.transform.position;
+        //else if (StageNumber == 2 /*&& !EndWarp*/)
+        //    transform.position = SpawnPoint_B2.transform.position;
+        //else if (StageNumber == 3 /*&& !EndWarp*/)
+        //    transform.position = SpawnPoint_B3.transform.position;
+        //else if (StageNumber == 0 /*&& !EndWarp*/)
+        //    transform.position = new Vector3(0, 0, 0);
+
+        switch(StageNumber)
+        {
+            case 1:
+                transform.position = SpawnPoint_B1.transform.position;
+                DestinationUI.Instance.SetDestinationText("敵をすべて倒す");
+                break;
+            case 2:
+                transform.position = SpawnPoint_B2.transform.position;
+                DestinationUI.Instance.SetDestinationText("敵を倒す");
+                break;
+            case 3:
+                transform.position = SpawnPoint_B3.transform.position;
+                DestinationUI.Instance.SetDestinationText("最後の敵を倒す"); 
+                break;
+            default:
+                transform.position = new Vector3(0, 0, 0);
+                DestinationUI.Instance.SetDestinationText("遺跡に向かう");
+                break;
+        }
 
         Physics.SyncTransforms();
 

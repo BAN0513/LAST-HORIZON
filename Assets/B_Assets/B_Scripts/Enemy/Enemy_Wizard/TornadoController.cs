@@ -1,8 +1,5 @@
 using Takato;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.GraphicsBuffer;
 
 public class TornadoController : MonoBehaviour
 {

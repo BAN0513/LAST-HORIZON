@@ -2224,6 +2224,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
+--- !u!225 &638940544 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 171044086745439615, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
+  m_PrefabInstance: {fileID: 8016978168742193572}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &658657390
 GameObject:
   m_ObjectHideFlags: 0
@@ -8812,6 +8817,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 171044086745439615, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4773420886967931904, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
       propertyPath: m_Name
       value: FadeManager
@@ -8820,6 +8829,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5337332271289551180, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
+      propertyPath: groupFade
+      value: 
+      objectReference: {fileID: 638940544}
     - target: {fileID: 8368639255512370105, guid: 893345d2e52dbb74e8a1827a7b9e485a, type: 3}
       propertyPath: m_Pivot.x
       value: 0

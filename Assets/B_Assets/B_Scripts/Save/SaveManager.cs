@@ -1,7 +1,5 @@
 using System.IO;
-using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
@@ -26,8 +24,6 @@ public class SaveManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
-        //save = new SaveData();
     }
 
     private void Start()
@@ -48,7 +44,7 @@ public class SaveManager : MonoBehaviour
         save = new SaveData(character);
         playTimeCnt = 0;
         isPlay = true;
-        StartCoroutine(fadeManager.SceneFadeIn("B_TestScene"));
+        StartCoroutine(fadeManager.SceneFadeIn("Ozo_Scene_copy"));
     }
 
     public void SaveGame(int slot)
@@ -57,16 +53,19 @@ public class SaveManager : MonoBehaviour
 
         // --- ここで現在のゲーム状態をgameDataオブジェクトに反映させる ---
         GameObject target = GameObject.FindWithTag("Player");
-        //StageChage stage = target.GetComponent<StageChage>();
-
+        WarpManager warpManager = GameObject.FindWithTag("StageManager").GetComponent<WarpManager>();
         save.playTime = playTimeCnt;
         save.playerPosition = target.transform.position;
-        //save.stage = stage.StageNumber;
+        save.destinationText = DestinationUI.Instance.Text_Destination.text;
+        save.stage = warpManager.StageNum;
 
         WarpPointerController warpPointerController = target.GetComponentInChildren<WarpPointerController>();
         if (warpPointerController != null)
         {
-            save.warpPointName = warpPointerController.warpObj.name;
+            if (warpPointerController.warpObj != null)
+            {
+                save.warpPointName = warpPointerController.warpObj.name;
+            }
         }
         // ----------------------------------------------------------
 
@@ -96,10 +95,9 @@ public class SaveManager : MonoBehaviour
             // JSON文字列からSaveDataオブジェクトに復元
             save = JsonUtility.FromJson<SaveData>(json);
 
-            StartCoroutine(fadeManager.SceneFadeIn("B_TestScene"));
+            StartCoroutine(fadeManager.SceneFadeIn("Ozo_Scene_copy"));
 
             // --- ここで復元したデータをゲームに反映させる ---
-
             //levelやstageは各スクリプトのスタートで反映する
             //PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
             //player.transform.position = save.playerPosition;

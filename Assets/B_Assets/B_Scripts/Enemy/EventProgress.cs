@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EventProgress : MonoBehaviour
 {
-    [SerializeField] private string startText;
+    //[SerializeField] private string startText;
     [SerializeField] private string changeText;
     [SerializeField] private GameObject warpPoint;
     private List<Enemy> enemies = new List<Enemy>();
@@ -14,21 +14,6 @@ public class EventProgress : MonoBehaviour
     private void Start()
     {
         destinationUI = DestinationUI.Instance;
-
-        warpPointerController = GameObject.FindWithTag("Player").GetComponentInChildren<WarpPointerController>();
-
-        if (destinationUI != null)
-        {
-            destinationUI.SetDestinationText(startText);
-            if (warpPointerController != null)
-            {
-                warpPointerController.SetWarpPoint(warpPoint);
-            }
-            else
-            {
-                Debug.LogWarning("warpPointerController‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
-            }
-        }
 
         Enemy[] e = GetComponentsInChildren<Enemy>();
 
@@ -42,7 +27,11 @@ public class EventProgress : MonoBehaviour
     {
         if (destinationUI != null)
         {
-            destinationUI.SetDestinationText(startText);
+            if (warpPointerController == null)
+            {
+                warpPointerController = GameObject.FindWithTag("Player").GetComponentInChildren<WarpPointerController>();
+            }
+            //destinationUI.SetDestinationText(startText);
             warpPointerController.DestroyWarpPoint();
         }
     }
@@ -60,7 +49,15 @@ public class EventProgress : MonoBehaviour
         if (enemies.Count == 0)
         {
             destinationUI.SetDestinationText(changeText);
-            warpPointerController.SetWarpPoint(warpPoint);
+
+            if (warpPoint != null)
+            {
+                if (warpPointerController == null)
+                {
+                    warpPointerController = GameObject.FindWithTag("Player").GetComponentInChildren<WarpPointerController>();
+                }
+                warpPointerController.SetWarpPoint(warpPoint);
+            }
         }
     }
 

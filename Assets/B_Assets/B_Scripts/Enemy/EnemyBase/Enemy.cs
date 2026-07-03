@@ -95,7 +95,7 @@ public abstract class Enemy : MonoBehaviour
 
     //敵が攻撃された後に連続で攻撃が当たらないようにするための変数
     private float invincibilityTime  = 0.5f;
-    private float invincibilityTimer = 0;
+    protected float invincibilityTimer = 0;
 
     //振り向きのスピード
     private float lookRotationSpeed = 0;
@@ -381,10 +381,15 @@ public abstract class Enemy : MonoBehaviour
         return null;
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
     {
         if (enemyAnimatorController.CheckCurrentAnim("Death")) { return; }
         if (invincibilityTimer > 0) { return; }
+
+        if (sound != null)
+        {
+            sound.PlaySE(seNumber);
+        }
 
         damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }
@@ -392,6 +397,8 @@ public abstract class Enemy : MonoBehaviour
         hp -= damage;
 
         hpSliider.value = hp;
+
+        Debug.Log("Enemy_HP" + hp);
 
         if (hp <= 0)
         {
@@ -520,12 +527,5 @@ public abstract class Enemy : MonoBehaviour
         // デバッグ用ログ
         if (playerController == null)
             Debug.LogWarning($"[{gameObject.name}] PlayerController の取得に失敗しました。Playerプレハブにスクリプトが付いているか確認してください。");
-    }
-
-    //デバッグ用
-    [ContextMenu("Damage")]
-    public void Damage()
-    {
-        TakeDamage(600);
     }
 }

@@ -1,4 +1,3 @@
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Wolf_Boss_Attack2_SO", menuName = "EnemyActionSO/Wolf_BossActionSO/Wolf_Boss_Attack2_SO")]

@@ -3420,6 +3420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7800012150467727527}
   - component: {fileID: 3055169499888519815}
+  - component: {fileID: 4596926953769078332}
   m_Layer: 0
   m_Name: pelvis
   m_TagString: Untagged
@@ -3460,7 +3461,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3468,6 +3469,18 @@ CapsuleCollider:
   m_Height: 0.4202352
   m_Direction: 2
   m_Center: {x: 0.017884731, y: 0.0015856952, z: 0.0030321165}
+--- !u!114 &4596926953769078332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438685545015259282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
 --- !u!1 &1520603755151274549
 GameObject:
   m_ObjectHideFlags: 0
@@ -3549,7 +3562,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -4010,7 +4023,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -4442,7 +4455,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -5221,7 +5234,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

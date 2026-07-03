@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PausManeger : MonoBehaviour
 {
+    [SerializeField] private Canvas canvas;
+
     [Header("ポーズ画面の各UI")]
     public GameObject BackImage;
     public GameObject BackBrownImage;
@@ -70,12 +72,14 @@ public class PausManeger : MonoBehaviour
             PauseGame();
             IsPause = true;
             ToPause = true;
+            canvas.sortingOrder = 2;
         }
         else if(IsPause && !IsGameOver)
         {
             ResumeGame();
             IsPause = false;
             ToPause = false;
+            canvas.sortingOrder = 1;
         }
     }
 
@@ -86,12 +90,14 @@ public class PausManeger : MonoBehaviour
             EndGame();
             IsGameOver = true;
             ToGameOver = true;
+            canvas.sortingOrder = 2;
         }
         else if (IsGameOver && !IsPause)
         {
             ResetGame();
             IsGameOver = false;
             ToGameOver = false;
+            canvas.sortingOrder = 1;
         }
     }
 }
