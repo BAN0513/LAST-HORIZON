@@ -27,7 +27,7 @@ namespace Takato
         private float damageCutRate;        //プレイヤーのダメージカット率を格納する変数（0～1の範囲で、例えば0.2なら20%カットとかです）
         private SkillSelectUI skillSelectUI;//スキル選択UIのスクリプトを格納する変数
 
-        //バフ・デバフの合計値を管理する変数（重ね掛けで元の数値を壊さないため）
+        //バフ・デバフの合計値を管理する変数
         private float moveSpeedBuffTotal = 0f;
         private float damageCutBuffTotal = 0f;
 
