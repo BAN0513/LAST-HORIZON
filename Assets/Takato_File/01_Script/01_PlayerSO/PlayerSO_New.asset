@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSO_New
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSO_New
   moveSpeed: 3
+  accelerationMultiplier: 25
+  decelerationMultiplier: 5
   jumpHeight: 3
   gravityScale: 9.81

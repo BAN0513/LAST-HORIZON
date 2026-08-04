@@ -7,7 +7,7 @@ using UnityEngine;
 public class Player_Script_New : MonoBehaviour
 {
     [Header("プレイヤーデータ参照")]
-    [SerializeField] private PlayerSO_New playerSO; // ScriptableObjectの参照を追加
+    [SerializeField] private PlayerSO_New playerSO; // ScriptableObjectの参照
 
     // 他スクリプトの参照
     private Player_Input_New playerInput; // プレイヤーの入力を管理するクラスの参照
@@ -18,11 +18,12 @@ public class Player_Script_New : MonoBehaviour
     // 内部状態
     private bool isGrounded; // 地面に接地しているか
     private Vector3 velocity; // 上下方向の速度を保持
+    private Vector3 currentMoveVelocity; // 水平方向の現在の移動速度を保持
 
     private void Awake()
     {
-        playerInput = GetComponent<Player_Input_New>();
-        characterController = GetComponent<CharacterController>();
+        playerInput = GetComponent<Player_Input_New>();           // Player_Input_Newコンポーネントの参照を取得
+        characterController = GetComponent<CharacterController>();// CharacterControllerコンポーネントの参照を取得
     }
 
     private void Update()
@@ -64,17 +65,24 @@ public class Player_Script_New : MonoBehaviour
     }
 
     /// <summary>
-    /// プレイヤーの水平移動を行うメソッド
+    /// プレイヤーの水平移動（加減速付き）を行うメソッド
     /// </summary>
     private void MovePlayer()
     {
         if (playerInput == null) return;
 
         Vector2 moveInput = playerInput.MoveInput;
-        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+        // 目標となる移動方向と最高速度のベクトル
+        Vector3 targetVelocity = new Vector3(moveInput.x, 0f, moveInput.y).normalized * playerSO.MoveSpeed;
 
-        // 水平移動を適用（SOの値を使用）
-        characterController.Move(moveDirection * playerSO.MoveSpeed * Time.deltaTime);
+        // 入力があるか判定して加減速の倍率を切り替え
+        float rate = moveInput.sqrMagnitude > 0f ? playerSO.AccelerationMultiplier : playerSO.DecelerationMultiplier;
+
+        // 現在の速度から目標速度へ徐々に変化させる
+        currentMoveVelocity = Vector3.MoveTowards(currentMoveVelocity, targetVelocity, rate * Time.deltaTime);
+
+        // 水平移動を適用
+        characterController.Move(currentMoveVelocity * Time.deltaTime);
     }
 
     /// <summary>
