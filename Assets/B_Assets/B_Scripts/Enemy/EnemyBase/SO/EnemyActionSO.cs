@@ -20,7 +20,7 @@ public class EnemyActionSO : ScriptableObject
     [Range(0, 1)] public float baseDot = 0.5f;
 
     [Header("倍率")]
-    [Range(0, 1)] public float basea = 1.0f;
+    [Range(0, 1)] public float magnification = 1.0f;
 
     //スコアの計算
     //今後アクションによって条件を付けることがあるかもしれないから、overrideできるようにしておく
@@ -33,7 +33,7 @@ public class EnemyActionSO : ScriptableObject
         float disScore = 1 - Mathf.Clamp01(disDiff / maxDis);
         float dotScore = 1 - Mathf.Clamp01(dotDiff / maxDot);
 
-        return (disScore * baseDis + dotScore * baseDot) * basea;
+        return (disScore * baseDis + dotScore * baseDot) * magnification;
     }
 
     public virtual float ScoreCalculation(float dis, float dot, Enemy enemy)
