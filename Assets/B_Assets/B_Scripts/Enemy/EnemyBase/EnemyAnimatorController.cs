@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyAnimatorController : MonoBehaviour
 {
-    protected Enemy enemy;
+    public Enemy enemy { get; private set; }
     protected Animator animator;
 
     public enum AnimationBase

@@ -57,7 +57,7 @@ public class Enemy_FourLegs : Enemy
 
     private void MoveAnimControl()
     {
-        if (isAnimation)
+        if (isAttackAnimation)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }

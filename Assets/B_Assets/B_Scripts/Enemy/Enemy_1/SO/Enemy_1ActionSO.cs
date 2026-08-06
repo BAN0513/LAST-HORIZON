@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy_1ActionSO : EnemyActionSO
 {
-    public override float ScoreCalculation(float dis, float dot)
+    public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
         return base.ScoreCalculation(dis, dot);
     }

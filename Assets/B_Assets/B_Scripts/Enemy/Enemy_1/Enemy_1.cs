@@ -6,6 +6,8 @@ public class Enemy_1 : Enemy_Humanoid
     [Header("ìÒíiñ⁄ÇÃçUåÇÇ…îhê∂Ç∑ÇÈämó¶")]
     [Range(0, 100)][SerializeField] private float melee2Probability = 50;
 
+    Enemy_1ActionSO prevAction;
+
     private Enemy_1AnimatorController enemy_1AnimatorController;
 
     protected override void Start()
@@ -18,38 +20,30 @@ public class Enemy_1 : Enemy_Humanoid
     protected override void Update()
     {
         base.Update();
+
+        ExecuteAction();
     }
 
-    protected override void AttackAction()
+    private void ExecuteAction()
     {
+        if (isAttackAnimation) { return; }
         Enemy_1ActionSO action = (Enemy_1ActionSO)CalcAction(enemySO.action);
 
+        if (prevAction != action)
+        {
+            InitAnim();
+        }
+
         if (action != null)
         {
-            AnimStart();
             action.Execute(enemy_1AnimatorController);
-            AttackProbabilityReset();
-        }
-        else
-        {
-            DoNotAttackAction();
+            prevAction = action;
         }
     }
 
-    protected override void DoNotAttackAction()
+    public override void AttackAnimStart()
     {
-        Enemy_1ActionSO action = (Enemy_1ActionSO)CalcAction(enemySO.doNotAttack_Action);
-
-        if (action != null)
-        {
-            AnimStart();
-            action.Execute(enemy_1AnimatorController);
-            AttackProbabilityUP();
-        }
-        else
-        {
-            Init();
-        }
+        base.AttackAnimStart();
     }
 
     //Ç±Ç±Ç©ÇÁâ∫ÇÕAnimatorä÷òAÇÃä÷êî
@@ -81,5 +75,8 @@ public class Enemy_1 : Enemy_Humanoid
 
         enemy_1AnimatorController.ResetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee1);
         enemy_1AnimatorController.ResetTriggerAnim(Enemy_1AnimatorController.Enemy_1Animation.Melee2);
+        enemy_1AnimatorController.SetBoolAnim(Enemy_1AnimatorController.Enemy_1Animation.Strafe_Left, false);
+        enemy_1AnimatorController.SetBoolAnim(Enemy_1AnimatorController.Enemy_1Animation.Strafe_Right, false);
+        enemy_1AnimatorController.SetBoolAnim(Enemy_1AnimatorController.Enemy_1Animation.BackMove, false);
     }
 }

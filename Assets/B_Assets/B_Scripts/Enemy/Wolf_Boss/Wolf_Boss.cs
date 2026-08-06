@@ -24,7 +24,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            AnimStart();
+            AttackAnimStart();
             action.Execute(wolf_Anim);
             AttackProbabilityReset();
         }
@@ -40,7 +40,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            AnimStart();
+            AttackAnimStart();
             action.Execute(wolf_Anim);
             AttackProbabilityUP();
         }

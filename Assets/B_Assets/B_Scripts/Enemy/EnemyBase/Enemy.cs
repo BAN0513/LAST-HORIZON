@@ -31,7 +31,7 @@ public abstract class Enemy : MonoBehaviour
     protected int rand;
     protected float lotteryTime;
     protected float lotteryMinTime = 0.5f;
-    protected float lotteryMaxTime = 1.0f;
+    protected float lotteryMaxTime = 3.0f;
     protected float dot;
 
     [Header("敵のScriptable Object")]
@@ -75,10 +75,10 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //何かしらアクションが抽選されているかどうか
-    protected bool isAction = false;
+    public bool isAction { get; set; }
 
     //アニメーションが再生されているかどうか
-    protected bool isAnimation = false;
+    protected bool isAttackAnimation = false;
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
@@ -132,6 +132,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
+        isAction = false;
+
         if (hpSliider != null)
         {
             hpSliider.maxValue = enemySO.maxHP;
@@ -185,7 +187,7 @@ public abstract class Enemy : MonoBehaviour
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
 
-        if (isAnimation) { return; }
+        if (isAttackAnimation) { return; }
 
         //交戦時の処理
         EngageMoveControl();
@@ -240,10 +242,10 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void AnimStart()
+    public virtual void AttackAnimStart()
     {
         isLookPlayer = false;
-        isAnimation = true;
+        isAttackAnimation = true;
         agent.isStopped = true;
     }
 
@@ -278,7 +280,7 @@ public abstract class Enemy : MonoBehaviour
 
             if (!isAction)
             {
-                if (!isAnimation) lotteryTime -= Time.deltaTime;
+                lotteryTime -= Time.deltaTime;
                 
 
                 if (lotteryTime <= 0)
@@ -292,23 +294,15 @@ public abstract class Enemy : MonoBehaviour
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-            else if (!isAnimation)
-            {
-                switch (rand)
-                {
-                    case int r when (r > 0 && r <= attackProbability):
-                        AttackAction();
-                        break;
-                    default:
-                        DoNotAttackAction();
-                        break;
-                }
-            }
+            //else
+            //{
+            //    AttackAction();
+            //}
         }
         else
         {
             agent.speed = enemySO.dashMoveSpeed - DebufDEX;
-            isAction = false;
+            //isAction = false;
             rand = 0;
         }
     }
@@ -323,7 +317,7 @@ public abstract class Enemy : MonoBehaviour
         EnemyActionSO secondActionSO = null;
         foreach (var a in action)
         {
-            scores.Add(a.ScoreCalculation(distance, dot));
+            scores.Add(a.ScoreCalculation(distance, dot, this));
         }
 
         float firstScore = 0;
@@ -355,26 +349,27 @@ public abstract class Enemy : MonoBehaviour
 
         if (firstActionSO != null)
         {
-            if (lastAction_1 == firstActionSO || lastAction_2 == firstActionSO)
-            {
-                if (secondActionSO != null)
-                {
-                    lastAction_2 = lastAction_1;
-                    lastAction_1 = secondActionSO;
-                    return secondActionSO;
-                }
-                else
-                {
-                    lastAction_2 = null;
-                    Init();
-                }
-            }
-            else
-            {
-                lastAction_2 = lastAction_1;
-                lastAction_1 = firstActionSO;
-                return firstActionSO;
-            }
+            return firstActionSO;
+            //if (lastAction_1 == firstActionSO || lastAction_2 == firstActionSO)
+            //{
+            //    if (secondActionSO != null)
+            //    {
+            //        lastAction_2 = lastAction_1;
+            //        lastAction_1 = secondActionSO;
+            //        return secondActionSO;
+            //    }
+            //    else
+            //    {
+            //        lastAction_2 = null;
+            //        Init();
+            //    }
+            //}
+            //else
+            //{
+            //    lastAction_2 = lastAction_1;
+            //    lastAction_1 = firstActionSO;
+            //    return firstActionSO;
+            //}
         }
 
         lastAction_1 = null;
@@ -458,7 +453,7 @@ public abstract class Enemy : MonoBehaviour
         rand = 0;
         agent.isStopped = false;
         isAction = false;
-        isAnimation = false;
+        isAttackAnimation = false;
     }
 
     public virtual void AttackProbabilityUP()

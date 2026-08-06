@@ -23,52 +23,44 @@ public class Enemy_Wizard : Enemy_Humanoid
     protected override void Update()
     {
         base.Update();
+
+        ExecuteAction();
     }
 
-    protected override void AttackAction()
+    private void ExecuteAction()
     {
-        if (isTeleport)
-        {
-            isTeleport = false;
-            int warpLimit = 10;
-            int randomWarp = 0;
-
-            for (int i = 0; i < warpLimit; i++)
-            {
-                randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
-                if (Vector3.Distance(transform.position, warpPos[randomWarp].position) <= 3) { continue; }
-                break;
-            }
-
-            transform.position = warpPos[randomWarp].position;
-            Init();
-            return;
-        }
-
+        if (isAttackAnimation) { return; }
         Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.action);
 
         if (action != null)
         {
-            AnimStart();
-            action.Execute(enemy_WizardAnimator);
-            AttackProbabilityReset();
-        }
-        else
-        {
-            DoNotAttackAction();
-        }
-    }
+            if (isTeleport)
+            {
+                isTeleport = false;
+                int warpLimit = 10;
+                int randomWarp = 0;
 
-    protected override void DoNotAttackAction()
-    {
-        Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.doNotAttack_Action);
-        Init();
+                for (int i = 0; i < warpLimit; i++)
+                {
+                    randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
+                    if (Vector3.Distance(transform.position, warpPos[randomWarp].position) <= 3) { continue; }
+                    break;
+                }
+
+                transform.position = warpPos[randomWarp].position;
+                Init();
+                return;
+            }
+            else
+            {
+                action.Execute(enemy_WizardAnimator);
+            }
+        }
     }
 
     public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
         base.TakeDamage(damage, sound, seNumber);
-        AttackProbabilityUP();
         isTeleport = true;
     }
 

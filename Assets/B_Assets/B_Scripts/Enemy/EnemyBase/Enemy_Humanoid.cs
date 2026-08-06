@@ -29,7 +29,7 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
-        if (isAnimation) 
+        if (isAttackAnimation) 
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
@@ -66,7 +66,7 @@ public class Enemy_Humanoid : Enemy
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
 
-            AnimStart();
+            AttackAnimStart();
         }
     }
 
