@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Enemy_Humanoid : Enemy
 {
@@ -29,7 +27,7 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
-        if (isAttackAnimation) 
+        if (isNotLoopAnimation) 
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
@@ -42,7 +40,7 @@ public class Enemy_Humanoid : Enemy
         }
         else
         {
-            if (distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
+            if (distance >= enemySO.engageDis || Mathf.Abs(target.position.y - transform.position.y) >= 0.5f)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
@@ -66,7 +64,7 @@ public class Enemy_Humanoid : Enemy
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
 
-            AttackAnimStart();
+            NotLoopAnimStart();
         }
     }
 

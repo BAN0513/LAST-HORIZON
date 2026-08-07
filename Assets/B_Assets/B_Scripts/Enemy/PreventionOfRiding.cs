@@ -19,7 +19,7 @@ public class PreventionOfRiding : MonoBehaviour
         {
             if (playerController == null)
             {
-                playerController = enemy.PlayerCharacterController;
+                playerController = enemy.playerCharacterController;
             }
 
             dir = Vector3.Normalize(playerController.transform.position - transform.position);

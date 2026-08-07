@@ -29,7 +29,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     private void ExecuteAction()
     {
-        if (isAttackAnimation) { return; }
+        if (isNotLoopAnimation) { return; }
         Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.action);
 
         if (action != null)
@@ -68,7 +68,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void FireSpawn()
     {
-        Vector3 toTarget = Target.position - transform.position + transform.forward;
+        Vector3 toTarget = target.position - transform.position + transform.forward;
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
 

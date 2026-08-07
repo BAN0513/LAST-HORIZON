@@ -16,6 +16,15 @@ public class Wolf_Boss : Enemy_FourLegs
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();
+
+        if (isNotLoopAnimation) { return; }
+        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
+
+        if (action != null)
+        {
+            NotLoopAnimStart();
+            action.Execute(wolf_Anim);
+        }
     }
 
     protected override void AttackAction()
@@ -24,7 +33,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            AttackAnimStart();
+            NotLoopAnimStart();
             action.Execute(wolf_Anim);
             AttackProbabilityReset();
         }
@@ -40,7 +49,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            AttackAnimStart();
+            NotLoopAnimStart();
             action.Execute(wolf_Anim);
             AttackProbabilityUP();
         }
