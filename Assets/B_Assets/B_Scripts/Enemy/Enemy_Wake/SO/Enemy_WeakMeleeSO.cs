@@ -11,6 +11,7 @@ public class Enemy_WeakMeleeSO : Enemy_WeakActionSO
 
     public override void Execute(Enemy_WeakAnimatorController animator)
     {
-        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee1, true);
+        base.Execute(animator);
+        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee, true);
     }
 }

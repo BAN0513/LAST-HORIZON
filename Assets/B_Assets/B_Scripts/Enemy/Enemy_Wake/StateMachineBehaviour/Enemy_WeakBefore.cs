@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Enemy_WeakBefore : StateMachineBehaviour
 {
@@ -15,10 +16,12 @@ public class Enemy_WeakBefore : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        enemy.agent.SetDestination(enemy.target.transform.position);
+
         if (enemy.distance <= stopDis)
         {
-            enemy.NotLoopAnimStart();
-            enemy.enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee1, false);
+            enemy.SetLookPlayer(false);
+            enemy.enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee, false);
         }
     }
 }

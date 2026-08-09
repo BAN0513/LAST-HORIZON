@@ -17,45 +17,13 @@ public class Wolf_Boss : Enemy_FourLegs
 
         base.Update();
 
-        if (isNotLoopAnimation) { return; }
+        if (isActionAnimation) { return; }
         Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
 
         if (action != null)
         {
-            NotLoopAnimStart();
+            SetLookPlayer(false);
             action.Execute(wolf_Anim);
-        }
-    }
-
-    protected override void AttackAction()
-    {
-        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
-
-        if (action != null)
-        {
-            NotLoopAnimStart();
-            action.Execute(wolf_Anim);
-            AttackProbabilityReset();
-        }
-        else
-        {
-            DoNotAttackAction();
-        }
-    }
-
-    protected override void DoNotAttackAction()
-    {
-        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.doNotAttack_Action);
-
-        if (action != null)
-        {
-            NotLoopAnimStart();
-            action.Execute(wolf_Anim);
-            AttackProbabilityUP();
-        }
-        else
-        {
-            Init();
         }
     }
 

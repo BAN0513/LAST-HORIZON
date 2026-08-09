@@ -7,5 +7,8 @@ public class Enemy_WeakActionSO : EnemyActionSO
         return base.ScoreCalculation(dis, dot, enemy);
     }
 
-    public virtual void Execute(Enemy_WeakAnimatorController animator) { }
+    public virtual void Execute(Enemy_WeakAnimatorController animator)
+    {
+        animator.enemy.isActionAnimation = true;
+    }
 }

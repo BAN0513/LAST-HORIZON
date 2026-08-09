@@ -29,7 +29,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     private void ExecuteAction()
     {
-        if (isNotLoopAnimation) { return; }
+        if (isActionAnimation) { return; }
         Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.action);
 
         if (action != null)

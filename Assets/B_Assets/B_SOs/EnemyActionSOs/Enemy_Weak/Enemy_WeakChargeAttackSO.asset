@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c85cfb2274d606748bb89b7b6ac417be, type: 3}
-  m_Name: Enemy_WeakMeleeSO
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WeakMeleeSO
-  bestDis: 3
+  m_Script: {fileID: 11500000, guid: c80439ba8c49c0542ad7d2aa210a8e75, type: 3}
+  m_Name: Enemy_WeakChargeAttackSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WeakChargeAttackSO
+  bestDis: 0
   bestDot: 1
-  maxDis: 5
+  maxDis: 3
   maxDot: 1
   minDis: 0
   minDot: -1
-  baseDis: 0.5
-  baseDot: 1
+  baseDis: 1
+  baseDot: 0.5
   magnification: 1

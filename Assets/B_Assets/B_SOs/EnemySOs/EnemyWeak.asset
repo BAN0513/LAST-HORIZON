@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   action:
   - {fileID: 11400000, guid: 0537978d0028ae64396a29c6e7f94a6c, type: 2}
+  - {fileID: 11400000, guid: 9aa4a08c9a2b9614fad2f1a97142f66a, type: 2}
+  - {fileID: 11400000, guid: 63e16586d6df35140914a8851716f566, type: 2}
   doNotAttack_Action: []
   maxHP: 50
   damage: 1

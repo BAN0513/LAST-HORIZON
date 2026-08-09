@@ -7,7 +7,10 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
 
     public enum Enemy_WeakAnimation
     {
-        Melee1,
+        Melee,
+        ChargeAttack,
+        Block,
+        BlockReaction
     }
 
     private Dictionary<Enemy_WeakAnimation, int> enemy_WeakAnims;
@@ -19,7 +22,10 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
 
         enemy_WeakAnims = new Dictionary<Enemy_WeakAnimation, int>
         {
-            {Enemy_WeakAnimation.Melee1, Animator.StringToHash("isMeleeBefore") },
+            {Enemy_WeakAnimation.Melee, Animator.StringToHash("isMeleeBefore") },
+            {Enemy_WeakAnimation.ChargeAttack, Animator.StringToHash("isChargeAttack") },
+            {Enemy_WeakAnimation.Block, Animator.StringToHash("isBlock") },
+            {Enemy_WeakAnimation.BlockReaction, Animator.StringToHash("isBlockReaction") }
         };
     }
 

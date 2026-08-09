@@ -65,7 +65,7 @@ public abstract class Enemy : MonoBehaviour
     public bool isAction { get; set; }
 
     //アニメーションが再生されているかどうか
-    protected bool isNotLoopAnimation = false;
+    public bool isActionAnimation { get; set; }
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
@@ -97,6 +97,9 @@ public abstract class Enemy : MonoBehaviour
     private EnemyActionSO lastAction_2;
 
     EventProgress eventProgress;
+
+    //敵が死亡したかどうか
+    public bool isDead { get; private set; }
 
     private void Awake()
     {
@@ -142,6 +145,10 @@ public abstract class Enemy : MonoBehaviour
 
         lookRotationSpeed = enemySO.lookRotationSpeed;
 
+        isActionAnimation = false;
+
+        isDead = false;
+
 
         //画面の明るさ変更（後で別のとこに書く）
         //RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
@@ -149,8 +156,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        Debug.Log(agent.isStopped);
-        if (enemyAnimatorController.CheckCurrentAnim("Death") || enemyAnimatorController.CheckCurrentAnim("Hit")) { return; }
+        //Debug.Log(distance);
+        if (isDead) { return; }
 
         if (invincibilityTimer > 0)
         {
@@ -179,7 +186,7 @@ public abstract class Enemy : MonoBehaviour
         EngageMoveControl();
 
 
-        if (isNotLoopAnimation) { return; }
+        if (isActionAnimation) { return; }
 
         //追跡するかしないかを調整する関数
         AgentContact();
@@ -420,25 +427,19 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Death()
     {
+        isDead = true;
         InitAll();
         hpSliider.gameObject.SetActive(false);
         agent.isStopped = true;
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
-    public virtual void NotLoopAnimStart()
+    public void SetLookPlayer(bool value)
     {
-        isLookPlayer = false;
-        isNotLoopAnimation = true;
-        agent.isStopped = true;
+        isLookPlayer = value;
+        agent.isStopped = !value;
     }
 
-    public void NotLoopAnimEnd()
-    {
-        isLookPlayer = true;
-        isNotLoopAnimation = false;
-        agent.isStopped = false;
-    }
 
     public virtual void Init()
     {
@@ -449,7 +450,7 @@ public abstract class Enemy : MonoBehaviour
         rand = 0;
         agent.isStopped = false;
         isAction = false;
-        isNotLoopAnimation = false;
+        isActionAnimation = false;
     }
 
     public virtual void AttackProbabilityUP()
