@@ -58,4 +58,9 @@ public class EnemyAnimatorController : MonoBehaviour
         }
         return false;
     }
+
+    public void ForcedQuitAnimation()
+    {
+        animator.Play("Idle", 0, 0.0f);
+    }
 }

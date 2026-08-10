@@ -8,7 +8,6 @@ public class Wolf_Boss : Enemy_FourLegs
     protected override void Start()
     {
         base.Start();
-        attackProbability = enemySO.attackInitProbability;
     }
 
     protected override void Update()

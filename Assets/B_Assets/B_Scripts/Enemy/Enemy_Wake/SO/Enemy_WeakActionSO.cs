@@ -11,4 +11,6 @@ public class Enemy_WeakActionSO : EnemyActionSO
     {
         animator.enemy.isActionAnimation = true;
     }
+
+    public virtual void ActionEnd(Enemy_WeakAnimatorController animator) { }
 }

@@ -101,6 +101,12 @@ public abstract class Enemy : MonoBehaviour
     //敵が死亡したかどうか
     public bool isDead { get; private set; }
 
+    protected bool isContact { get; private set; }
+
+    private float contactDis;
+    private float contactDot;
+    private float searchDis;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -139,16 +145,16 @@ public abstract class Enemy : MonoBehaviour
 
         agent.stoppingDistance = enemySO.stoopingDis;
 
-        lotteryTime = enemySO.attackCoolDown;
-
-        attackProbability = enemySO.attackInitProbability;
-
         lookRotationSpeed = enemySO.lookRotationSpeed;
 
         isActionAnimation = false;
 
         isDead = false;
 
+        isContact = false;
+        contactDis = enemySO.contactDis;
+        contactDot = enemySO.contactDot;
+        searchDis = enemySO.searchDis;
 
         //画面の明るさ変更（後で別のとこに書く）
         //RenderSettings.ambientIntensity = SystemManager.instance.valueLight;
@@ -156,7 +162,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        //Debug.Log(distance);
         if (isDead) { return; }
 
         if (invincibilityTimer > 0)
@@ -179,17 +184,16 @@ public abstract class Enemy : MonoBehaviour
         //自身からプレイヤーのDotを取る
         DotPlayer();
 
+        //追跡するかしないかを調整する関数
+        AgentContact();
+
+        if (!isContact) { return; }
+
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
 
         //交戦時の処理
         EngageMoveControl();
-
-
-        if (isActionAnimation) { return; }
-
-        //追跡するかしないかを調整する関数
-        AgentContact();
     }
 
     private void DotPlayer()
@@ -242,9 +246,23 @@ public abstract class Enemy : MonoBehaviour
     {
         if (agent.isOnNavMesh)
         {
-            agent.SetDestination(target.position);
-
+            if (distance <= contactDis && dot >= contactDot && !isContact)
+            {
+                agent.SetDestination(target.position);
+                agent.isStopped = false;
+                isContact = true;
+                ContactAnimation();
+            }
+            else if (distance >= searchDis && isContact)
+            {
+                isContact = false;
+                InitAll();
+                agent.isStopped = true;
+                enemyAnimatorController.ForcedQuitAnimation();
+            }
         }
+
+        if (isActionAnimation) { return; }
 
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
         if (distance <= agent.stoppingDistance && isWalk)
@@ -259,7 +277,9 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void EngageMoveControl()
+    protected virtual void ContactAnimation() { }
+
+    private void EngageMoveControl()
     {
         if (distance <= enemySO.engageDis && Mathf.Abs(target.position.y - transform.position.y) < 0.5f)
         {
@@ -295,9 +315,6 @@ public abstract class Enemy : MonoBehaviour
             rand = 0;
         }
     }
-    protected virtual void AttackAction() { }
-
-    protected virtual void DoNotAttackAction() { }
 
     protected EnemyActionSO CalcAction(EnemyActionSO[] action)
     {
@@ -451,16 +468,6 @@ public abstract class Enemy : MonoBehaviour
         agent.isStopped = false;
         isAction = false;
         isActionAnimation = false;
-    }
-
-    public virtual void AttackProbabilityUP()
-    {
-        attackProbability += enemySO.attackUpProbability;
-    }
-
-    public virtual void AttackProbabilityReset()
-    {
-        attackProbability = enemySO.attackInitProbability;
     }
 
     public virtual void InitAnim()

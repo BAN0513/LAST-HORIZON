@@ -24,6 +24,6 @@ MonoBehaviour:
   stoopingDis: 8
   lookRotationSpeed: 3
   engageDis: 50
-  attackInitProbability: 50
-  attackUpProbability: 50
-  attackCoolDown: 1
+  contactDis: 5
+  contactDot: 0.3
+  searchDis: 10

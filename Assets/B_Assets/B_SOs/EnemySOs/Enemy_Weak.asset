@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53a70e6778d4aec43a5bd19515c399fc, type: 3}
-  m_Name: EnemyWeak
+  m_Name: Enemy_Weak
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   action:
   - {fileID: 11400000, guid: 0537978d0028ae64396a29c6e7f94a6c, type: 2}
@@ -25,6 +25,6 @@ MonoBehaviour:
   stoopingDis: 2
   lookRotationSpeed: 5
   engageDis: 5
-  attackInitProbability: 0
-  attackUpProbability: 0
-  attackCoolDown: 0
+  contactDis: 5
+  contactDot: 0.3
+  searchDis: 10

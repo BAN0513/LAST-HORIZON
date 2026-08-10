@@ -36,12 +36,12 @@ public class EnemySO : ScriptableObject
     [Header("接敵距離（この値以下になると攻撃の抽選を開始する）")]
     public float engageDis;
 
-    [Header("攻撃の確率")]
-    public float attackInitProbability;
+    [Header("探知範囲（この値以下の距離になると戦闘を開始する）")]
+    public float contactDis;
 
-    [Header("抽選で攻撃以外になった時に攻撃確率を上げるための値")]
-    public float attackUpProbability;
+    [Header("探知範囲（この値以上のDotになると戦闘を開始する）")]
+    public float contactDot;
 
-    [Header("攻撃後、この値の分の秒数は攻撃の抽選は行わない")]
-    public float attackCoolDown;
+    [Header("追跡範囲（この値以上の距離になると戦闘を終了する）")]
+    public float searchDis;
 }

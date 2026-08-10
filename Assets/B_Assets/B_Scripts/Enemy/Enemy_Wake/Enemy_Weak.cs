@@ -4,6 +4,8 @@ public class Enemy_Weak : Enemy_Humanoid
 {
     public Enemy_WeakAnimatorController enemy_WeakAnimator { get; set; }
 
+    private Enemy_WeakActionSO currentAction;
+
     public bool isBlocking { get; set; }
 
     protected override void Start()
@@ -25,7 +27,19 @@ public class Enemy_Weak : Enemy_Humanoid
         if (action != null)
         {
             action.Execute(enemy_WeakAnimator);
+            currentAction = action;
         }
+        else if (currentAction  != null)
+        {
+            currentAction.ActionEnd(enemy_WeakAnimator);
+            currentAction = null;
+        }
+    }
+
+    protected override void ContactAnimation()
+    {
+        SetLookPlayer(false);
+        enemy_WeakAnimator.SetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Contact);
     }
 
     public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)

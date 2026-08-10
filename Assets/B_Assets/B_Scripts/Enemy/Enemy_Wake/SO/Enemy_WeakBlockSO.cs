@@ -12,4 +12,9 @@ public class Enemy_WeakBlockSO : Enemy_WeakActionSO
     {
         animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, true);
     }
+
+    public override void ActionEnd(Enemy_WeakAnimatorController animator)
+    {
+        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, false);
+    }
 }
