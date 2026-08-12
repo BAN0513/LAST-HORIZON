@@ -7,6 +7,9 @@ public class Enemy_Weak : Enemy_Humanoid
     private Enemy_WeakActionSO currentAction;
 
     public bool isBlocking { get; set; }
+    private bool isDown = false;
+
+    private int downDamage = 0;
 
     protected override void Start()
     {
@@ -21,7 +24,7 @@ public class Enemy_Weak : Enemy_Humanoid
     {
         base.Update();
 
-        if (isActionAnimation || isDead) { return; }
+        if (isActionAnimation || isDead || isDown) { return; }
         Enemy_WeakActionSO action = (Enemy_WeakActionSO)CalcAction(enemySO.action);
 
         if (action != null)
@@ -38,16 +41,28 @@ public class Enemy_Weak : Enemy_Humanoid
 
     protected override void ContactAnimation()
     {
-        SetLookPlayer(false);
+        SetLookPlayerAndEnemyStop(false, true);
         enemy_WeakAnimator.SetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Contact);
     }
 
     public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
     {
+        if (isDead) { return; }
+
         if (enemyAnimatorController.CheckCurrentAnim("Block"))
         {
-            isBlocking = true;
-            damage /= 2;
+            if (damage / 2 < downDamage)
+            {
+                isBlocking = true;
+                damage /= 2;
+            }
+        }
+
+        if (!isBlocking && !isDown && damage >= downDamage)
+        {
+            InitAnim();
+            enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Down, true);
+            isDown = true;
         }
 
         base.TakeDamage(damage, sound, seNumber);
@@ -56,6 +71,7 @@ public class Enemy_Weak : Enemy_Humanoid
     public override void Init()
     {
         base.Init();
+        isDown = false;
     }
 
     public override void InitAnim()
@@ -65,5 +81,6 @@ public class Enemy_Weak : Enemy_Humanoid
         enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, false);
         enemy_WeakAnimator.ResetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.ChargeAttack);
         enemy_WeakAnimator.ResetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.BlockReaction);
+        enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Down, false);
     }
 }

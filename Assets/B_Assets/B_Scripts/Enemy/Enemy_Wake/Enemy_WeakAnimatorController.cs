@@ -11,7 +11,8 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
         ChargeAttack,
         Block,
         BlockReaction,
-        Contact
+        Contact, 
+        Down
     }
 
     private Dictionary<Enemy_WeakAnimation, int> enemy_WeakAnims;
@@ -27,7 +28,8 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
             {Enemy_WeakAnimation.ChargeAttack, Animator.StringToHash("isChargeAttack") },
             {Enemy_WeakAnimation.Block, Animator.StringToHash("isBlock") },
             {Enemy_WeakAnimation.BlockReaction, Animator.StringToHash("isBlockReaction") },
-            {Enemy_WeakAnimation.Contact, Animator.StringToHash("isContact") }
+            {Enemy_WeakAnimation.Contact, Animator.StringToHash("isContact") },
+            {Enemy_WeakAnimation.Down, Animator.StringToHash("isDown") }
         };
     }
 

@@ -12,7 +12,6 @@ public class Enemy_WeakChargeAttackSO : Enemy_WeakActionSO
     public override void Execute(Enemy_WeakAnimatorController animator)
     {
         base.Execute(animator);
-        animator.enemy.SetLookPlayer(false);
         animator.SetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.ChargeAttack);
     }
 }

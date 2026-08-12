@@ -64,7 +64,7 @@ public class Enemy_Humanoid : Enemy
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
 
-            SetLookPlayer(false);
+            SetLookPlayerAndEnemyStop(false, true);
         }
     }
 

@@ -8,7 +8,7 @@ public class Enemy_WeakBlock : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.GetComponent<Enemy_Weak>();
-        enemy.SetLookPlayer(false);
+        enemy.SetLookPlayerAndEnemyStop(false, true);
         enemy.enemy_WeakAnimator.ResetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.BlockReaction);
     }
 
@@ -28,6 +28,6 @@ public class Enemy_WeakBlock : StateMachineBehaviour
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemy.SetLookPlayer(true);
+        enemy.SetLookPlayerAndEnemyStop(true, false);
     }
 }

@@ -21,7 +21,7 @@ public class Wolf_Boss : Enemy_FourLegs
 
         if (action != null)
         {
-            SetLookPlayer(false);
+            SetLookPlayerAndEnemyStop(false, true);
             action.Execute(wolf_Anim);
         }
     }

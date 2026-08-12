@@ -11,7 +11,7 @@ public class Enemy_Wizard_ImpactSO : Enemy_WizardActionSO
 
     public override void Execute(Enemy_WizardAnimatorController enemy_WizardAnim)
     {
-        enemy_WizardAnim.enemy.SetLookPlayer(false);
+        enemy_WizardAnim.enemy.SetLookPlayerAndEnemyStop(false, true);
         enemy_WizardAnim.SetTriggerAnim(Enemy_WizardAnimatorController.Enemy_1Animation.Impact);
     }
 }

@@ -451,10 +451,15 @@ public abstract class Enemy : MonoBehaviour
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
-    public void SetLookPlayer(bool value)
+    /// <summary>
+    /// 第一引数はtrueの場合プレイヤーを見る。 第二引数はtrueの場合移動を止める
+    /// </summary>
+    /// <param name="isLook"></param>
+    /// <param name="isStop"></param>
+    public void SetLookPlayerAndEnemyStop(bool isLook, bool isStop)
     {
-        isLookPlayer = value;
-        agent.isStopped = !value;
+        isLookPlayer = isLook;
+        agent.isStopped = isStop;
     }
 
 
@@ -476,6 +481,7 @@ public abstract class Enemy : MonoBehaviour
         enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
         enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+        enemyAnimatorController.ForcedQuitAnimation();
     }
 
     public virtual void InitAll()
