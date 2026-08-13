@@ -6,10 +6,10 @@ public class Enemy_Weak : Enemy_Humanoid
 
     private Enemy_WeakActionSO currentAction;
 
-    public bool isBlocking { get; set; }
+    public bool IsBlocking { get; set; }
     private bool isDown = false;
 
-    private int downDamage = 0;
+    private int downDamage = 1;
 
     protected override void Start()
     {
@@ -17,14 +17,14 @@ public class Enemy_Weak : Enemy_Humanoid
 
         enemy_WeakAnimator = GetComponent<Enemy_WeakAnimatorController>();
 
-        isBlocking = false;
+        IsBlocking = false;
     }
 
     protected override void Update()
     {
         base.Update();
 
-        if (isActionAnimation || isDead || isDown) { return; }
+        if (isActionAnimation || isDead || isDown || isHit) { return; }
         Enemy_WeakActionSO action = (Enemy_WeakActionSO)CalcAction(enemySO.action);
 
         if (action != null)
@@ -34,9 +34,14 @@ public class Enemy_Weak : Enemy_Humanoid
         }
         else if (currentAction  != null)
         {
-            currentAction.ActionEnd(enemy_WeakAnimator);
-            currentAction = null;
+            CurrentActionEnd();
         }
+    }
+
+    void CurrentActionEnd()
+    {
+        currentAction.ActionEnd(enemy_WeakAnimator);
+        currentAction = null;
     }
 
     protected override void ContactAnimation()
@@ -53,19 +58,29 @@ public class Enemy_Weak : Enemy_Humanoid
         {
             if (damage / 2 < downDamage)
             {
-                isBlocking = true;
+                IsBlocking = true;
+                isHit = true;
                 damage /= 2;
             }
         }
 
-        if (!isBlocking && !isDown && damage >= downDamage)
+        if (!IsBlocking && !isDown && damage >= downDamage)
         {
             InitAnim();
             enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Down, true);
             isDown = true;
+            isHit = true;
         }
 
         base.TakeDamage(damage, sound, seNumber);
+
+        if (isHit)
+        {
+            if (currentAction != null)
+            {
+                CurrentActionEnd();
+            }
+        }
     }
 
     public override void Init()

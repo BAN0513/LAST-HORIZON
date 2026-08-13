@@ -18,13 +18,13 @@ public class Enemy_WeakDown : StateMachineBehaviour
     {
         enemy = animator.GetComponent<Enemy_Weak>();
         animatorController = animator.GetComponent<Enemy_WeakAnimatorController>();
-        enemy.isActionAnimation = true;
+        enemy.IsActionAnimation = true;
         enemy.SetLookPlayerAndEnemyStop(false, true);
 
         downTimer = downTime;
 
         startPos = enemy.transform.position;
-        Vector3 dir = enemy.transform.position - enemy.target.position;
+        Vector3 dir = enemy.transform.position - enemy.Target.position;
         dir.Normalize();
         enemy.transform.rotation = Quaternion.LookRotation(-dir);
         endPos = enemy.transform.position + distance * dir;
@@ -37,7 +37,6 @@ public class Enemy_WeakDown : StateMachineBehaviour
     {
         if (isKnockback)
         {
-            Debug.Log("isKnock");
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / duration);
 
@@ -46,7 +45,6 @@ public class Enemy_WeakDown : StateMachineBehaviour
             if (t >= 1.0f)
             {
                 isKnockback = false;
-                Debug.Log("knockBack");
             }
         }
         else

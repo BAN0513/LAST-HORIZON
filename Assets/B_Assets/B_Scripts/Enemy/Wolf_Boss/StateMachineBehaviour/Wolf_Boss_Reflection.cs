@@ -10,8 +10,8 @@ public class Wolf_Boss_Reflection : StateMachineBehaviour
     {
         enemy = animator.GetComponent<Enemy>();
 
-        enemy.LookRotaionSpeed = reflectionSpeed;
-        enemy.IsLookPlayer = true;
+        enemy.LookRotationSpeed = reflectionSpeed;
+        enemy.SetLookPlayerAndEnemyStop(false, true);
 
         //dir = enemy.Target.position - enemy.transform.position;
         //dir.y = 0;

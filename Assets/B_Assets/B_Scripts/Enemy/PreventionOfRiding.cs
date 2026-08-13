@@ -10,19 +10,14 @@ public class PreventionOfRiding : MonoBehaviour
     private void Start()
     {
         enemy = GetComponentInParent<Enemy>();
-
+        playerController = enemy.Target.GetComponent<CharacterController>();
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (playerController == null)
-            {
-                playerController = enemy.playerCharacterController;
-            }
-
-            dir = Vector3.Normalize(playerController.transform.position - transform.position);
+            dir = Vector3.Normalize(enemy.Target.position - transform.position);
             dir.y = 0;
             dir *= 0.1f;
             playerController.Move(dir);

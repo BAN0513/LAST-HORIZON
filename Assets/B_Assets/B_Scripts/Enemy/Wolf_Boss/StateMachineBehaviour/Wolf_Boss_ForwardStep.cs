@@ -15,8 +15,8 @@ public class Wolf_Boss_ForwardStep : StateMachineBehaviour
 
         movePos = enemy.transform.forward;
 
-        enemy.LookRotaionSpeed = rotationSpeed;
-        enemy.IsLookPlayer = true;
+        enemy.LookRotationSpeed = rotationSpeed;
+        enemy.SetLookPlayerAndEnemyStop(false, true);
 
         //dir = enemy.Target.position - enemy.transform.position;
         //dir.y = 0;

@@ -6,7 +6,7 @@ public class Wolf_Boss_Attack1_SO : Wolf_BossActionSO
 {
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
-        if (!enemy.isAction) { return 0.0f; }
+        if (!enemy.IsAction) { return 0.0f; }
         return base.ScoreCalculation(dis, dot);
     }
 

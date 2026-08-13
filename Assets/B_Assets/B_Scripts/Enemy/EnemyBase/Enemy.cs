@@ -6,76 +6,58 @@ using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
-    public Transform target { get; private set; }
-
-    public NavMeshAgent agent { get; set; }
-
-    protected PlayerController playerController;
-    public CharacterController playerCharacterController { get; private set; }
-    protected PlayerAnimationController playerAnimationController;
-    protected EnemyAnimatorController enemyAnimatorController;
-
-    protected int rand;
-    protected float lotteryTime;
-    protected float lotteryMinTime = 0.5f;
-    protected float lotteryMaxTime = 3.0f;
-    public float dot { get; set; }
-
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
 
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
 
+    public Transform Target {  get { return target; } }
+    protected Transform target;
+
+    public NavMeshAgent Agent { get { return agent; } }
+    protected NavMeshAgent agent;
+
+    protected PlayerController playerController;
+    protected CharacterController playerCharacterController;
+    protected PlayerAnimationController playerAnimationController;
+    protected EnemyAnimatorController enemyAnimatorController;
+    protected EventProgress eventProgress;
+
+    protected float lotteryTime;
+    protected float lotteryMinTime = 0.5f;
+    protected float lotteryMaxTime = 3.0f;
+
+    protected float dot;
+
+    //プレイヤーと自身の距離
+    public float Distance { get { return distance; } set { distance = value; } }
+    protected float distance;
+
     //攻撃確率の保存用変数
     protected float attackProbability = 0;
 
     //敵のHP
-    public int hp { get; private set; }
+    protected int hp;
 
     //敵のスピードにかかるデバフ
+    public float DebufDEX { get { return debufDEX; } set { debufDEX = value; } }
     private float debufDEX = 1.0f;
-    public float DebufDEX
-    {
-        get
-        {
-            return debufDEX;
-        }
-        set
-        {
-            debufDEX = value;
-        }
-    }
 
     //敵の防御力にかかるデバフ
+    public int DebufDEF { get { return debufDEF; } set { debufDEF = value; } }
     private int debufDEF;
-    public int DebufDEF
-    {
-        get
-        {
-            return debufDEF;
-        }
-        set
-        {
-            debufDEF = value;
-        }
-    }
 
     //何かしらアクションが抽選されているかどうか
-    public bool isAction { get; set; }
+    public bool IsAction { get { return isAction; } set { isAction = value; } }
+    protected bool isAction;
 
     //アニメーションが再生されているかどうか
-    public bool isActionAnimation { get; set; }
+    public bool IsActionAnimation { get { return isActionAnimation; } set { isActionAnimation = value; } }
+    protected bool isActionAnimation;
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
-    public bool IsLookPlayer
-    {
-        set { isLookPlayer = value; }
-    }
-
-    //プレイヤーと自身の距離
-    public float distance { get; set; }
 
     //歩いているか
     protected bool isWalk = true;
@@ -85,24 +67,18 @@ public abstract class Enemy : MonoBehaviour
     protected float invincibilityTimer = 0;
 
     //振り向きのスピード
-    private float lookRotationSpeed = 0;
-    public float LookRotaionSpeed
-    {
-        get { return lookRotationSpeed; }
-        set { lookRotationSpeed = value; }
-    }
+    public float LookRotationSpeed { get { return lookRotationSpeed; } set { lookRotationSpeed = value; } }
+    protected float lookRotationSpeed = 0;
 
     //最後に使用したアクションの保存用
     private EnemyActionSO lastAction_1;
     private EnemyActionSO lastAction_2;
 
-    EventProgress eventProgress;
-
     //敵が死亡したかどうか
-    public bool isDead { get; private set; }
+    protected bool isDead = false;
 
-    protected bool isContact { get; private set; }
-
+    //敵がプレイヤーを発見しているかどうか
+    protected bool isContact = false;
     private float contactDis;
     private float contactDot;
     private float searchDis;
@@ -111,7 +87,7 @@ public abstract class Enemy : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
 
-        if (agent == null )
+        if (agent == null)
         {
             Debug.LogError("navMeshが見つからない");
         }
@@ -289,30 +265,21 @@ public abstract class Enemy : MonoBehaviour
 
             if (!isAction)
             {
-                lotteryTime -= Time.deltaTime;
-                
+                lotteryTime -= Time.deltaTime;      
 
                 if (lotteryTime <= 0)
                 {
-                    //行動の抽選で使う
-                    rand = Random.Range(1, 101);
-
                     isAction = true;
 
                     //次の抽選に必要な時間をランダムで決める
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-            //else
-            //{
-            //    AttackAction();
-            //}
         }
         else
         {
             agent.speed = enemySO.dashMoveSpeed - DebufDEX;
             //isAction = false;
-            rand = 0;
         }
     }
 
@@ -466,10 +433,8 @@ public abstract class Enemy : MonoBehaviour
     public virtual void Init()
     {
         agent.stoppingDistance = enemySO.stoopingDis;
-        //lotteryTime = enemySO.attackCoolDown;
-        //attackProbability = enemySO.attackInitProbability;
         lookRotationSpeed = enemySO.lookRotationSpeed;
-        rand = 0;
+        isLookPlayer = true;
         agent.isStopped = false;
         isAction = false;
         isActionAnimation = false;

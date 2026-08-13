@@ -4,6 +4,9 @@ public class Enemy_Humanoid : Enemy
 {
     protected EnemyAttackRollController _weaponController;
 
+    //被弾アニメーション中かどうか
+    protected bool isHit = false;
+
     protected override void Start()
     {
         base.Start();
@@ -18,6 +21,7 @@ public class Enemy_Humanoid : Enemy
 
     protected override void Update()
     {
+        Debug.Log(isHit);
         base.Update();
 
         //移動アニメーションの変更処理
@@ -59,19 +63,18 @@ public class Enemy_Humanoid : Enemy
     {
         base.TakeDamage(damage, sound, seNumber);
 
-        if (invincibilityTimer > 0) { return; }
-        if (!enemyAnimatorController.CheckCurrentAnim("Hit") && hp > 0)
+        if (!isHit && hp > 0)
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
-
             SetLookPlayerAndEnemyStop(false, true);
+            isHit = true;
         }
     }
 
     public override void Init()
     {
         base.Init();
-        isLookPlayer = true;
+        isHit = false;
     }
 
     protected override void Death()

@@ -10,15 +10,15 @@ public class Enemy_WeakBefore : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.GetComponent<Enemy_Weak>();
-        enemy.agent.isStopped = false;
-        enemy.agent.stoppingDistance = stopDis;
+        enemy.Agent.isStopped = false;
+        enemy.Agent.stoppingDistance = stopDis;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        enemy.agent.SetDestination(enemy.target.transform.position);
+        enemy.Agent.SetDestination(enemy.Target.transform.position);
 
-        if (enemy.distance <= stopDis)
+        if (enemy.Distance <= stopDis)
         {
             enemy.SetLookPlayerAndEnemyStop(false, true);
             enemy.enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee, false);

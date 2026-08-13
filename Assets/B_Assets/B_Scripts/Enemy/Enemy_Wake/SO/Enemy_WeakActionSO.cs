@@ -9,7 +9,7 @@ public class Enemy_WeakActionSO : EnemyActionSO
 
     public virtual void Execute(Enemy_WeakAnimatorController animator)
     {
-        animator.enemy.isActionAnimation = true;
+        animator.enemy.IsActionAnimation = true;
     }
 
     public virtual void ActionEnd(Enemy_WeakAnimatorController animator) { }

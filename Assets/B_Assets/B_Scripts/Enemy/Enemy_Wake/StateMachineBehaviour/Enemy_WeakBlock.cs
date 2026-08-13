@@ -14,15 +14,15 @@ public class Enemy_WeakBlock : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (enemy.isAction)
+        if (enemy.IsAction)
         {
             enemy.enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, false);
         }
-        else if (enemy.isBlocking)
+        else if (enemy.IsBlocking)
         {
             enemy.enemy_WeakAnimator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, false);
             enemy.enemy_WeakAnimator.SetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.BlockReaction);
-            enemy.isBlocking = false;
+            enemy.IsBlocking = false;
         }
     }
 
