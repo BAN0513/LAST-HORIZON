@@ -20,4 +20,4 @@ MonoBehaviour:
   minDot: 0.5
   baseDis: 0.5
   baseDot: 1
-  magnification: 0.5
+  magnification: 0.1

@@ -21,7 +21,6 @@ public class Enemy_Humanoid : Enemy
 
     protected override void Update()
     {
-        Debug.Log(isHit);
         base.Update();
 
         //移動アニメーションの変更処理

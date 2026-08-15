@@ -224,9 +224,6 @@ public abstract class Enemy : MonoBehaviour
         {
             if (distance <= contactDis && dot >= contactDot && !isContact)
             {
-                agent.SetDestination(target.position);
-                agent.isStopped = false;
-                isContact = true;
                 ContactAnimation();
             }
             else if (distance >= searchDis && isContact)
@@ -240,6 +237,10 @@ public abstract class Enemy : MonoBehaviour
 
         if (isActionAnimation) { return; }
 
+        if (isContact)
+        {
+            agent.SetDestination(target.position);
+        }
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
         if (distance <= agent.stoppingDistance && isWalk)
         {
@@ -253,7 +254,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void ContactAnimation() { }
+    protected virtual void ContactAnimation() { isContact = true; }
 
     private void EngageMoveControl()
     {
@@ -354,10 +355,8 @@ public abstract class Enemy : MonoBehaviour
         if (enemyAnimatorController.CheckCurrentAnim("Death")) { return; }
         if (invincibilityTimer > 0) { return; }
 
-        if (sound != null)
-        {
-            sound.PlaySE(seNumber);
-        }
+        if (sound != null) { sound.PlaySE(seNumber); }
+        if (!isContact) { ContactAnimation(); }  //未発見状態の場合は強制的に発見状態に変更する
 
         damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }

@@ -38,6 +38,11 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
         animator.SetBool(enemy_WeakAnims[animation], isAnim);
     }
 
+    public bool GetboolAnim(Enemy_WeakAnimation animation)
+    {
+        return animator.GetBool(enemy_WeakAnims[animation]);
+    }
+
     public void SetTriggerAnim(Enemy_WeakAnimation animation)
     {
         animator.SetTrigger(enemy_WeakAnims[animation]);
