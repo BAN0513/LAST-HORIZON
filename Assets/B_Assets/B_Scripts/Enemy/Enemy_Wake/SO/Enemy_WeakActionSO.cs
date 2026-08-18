@@ -7,10 +7,14 @@ public class Enemy_WeakActionSO : EnemyActionSO
         return base.ScoreCalculation(dis, dot, enemy);
     }
 
-    public virtual void Execute(Enemy_WeakAnimatorController animator)
+    public override void Execute(EnemyAnimatorController animator)
     {
         animator.enemy.IsActionAnimation = true;
+        base.Execute(animator);
     }
 
-    public virtual void ActionEnd(Enemy_WeakAnimatorController animator) { }
+    public override void ActionEnd(EnemyAnimatorController animator)
+    {
+        base.ActionEnd(animator);
+    }
 }

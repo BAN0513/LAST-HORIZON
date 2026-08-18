@@ -11,7 +11,14 @@ public class EnemyAnimatorController : MonoBehaviour
         Walk,
         Dash,
         Death,
-        Hit
+        Hit,
+
+        Weak_Melee,
+        Weak_ChargeAttack,
+        Weak_Block,
+        Weak_BlockReaction,
+        Weak_Contact,
+        Weak_Down
     }
 
     protected Dictionary<AnimationBase, int> anims;
@@ -28,10 +35,6 @@ public class EnemyAnimatorController : MonoBehaviour
             { AnimationBase.Death, Animator.StringToHash("isDeath") },
             { AnimationBase.Hit,  Animator.StringToHash("isHit") },
         };
-    }
-
-    protected virtual void Update()
-    {
     }
 
     public virtual void SetBoolAnim(AnimationBase animation, bool isAnim)

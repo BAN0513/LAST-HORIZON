@@ -41,11 +41,6 @@ public class Wolf_BossAnimatorController : EnemyAnimatorController
         };
     }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
-
     public void SetBoolAnim(WolfAnimation animation, bool isAnim)
     {
         animator.SetBool(wolfAnims[animation], isAnim);

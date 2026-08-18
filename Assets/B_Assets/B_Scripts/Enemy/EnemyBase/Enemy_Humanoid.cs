@@ -30,7 +30,7 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
-        if (isActionAnimation || !isContact) 
+        if (isActionAnimation || enemyBaseState != EnemyBaseState.Contact) 
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);

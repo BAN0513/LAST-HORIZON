@@ -74,14 +74,21 @@ public abstract class Enemy : MonoBehaviour
     private EnemyActionSO lastAction_1;
     private EnemyActionSO lastAction_2;
 
-    //敵が死亡したかどうか
-    protected bool isDead = false;
-
     //敵がプレイヤーを発見しているかどうか
-    protected bool isContact = false;
     private float contactDis;
     private float contactDot;
     private float searchDis;
+
+    protected enum EnemyBaseState
+    {
+        Search,
+        Contact,
+        Dead
+
+    }
+    protected EnemyBaseState enemyBaseState = EnemyBaseState.Search;
+
+    protected EnemyActionSO currentAction;
 
     private void Awake()
     {
@@ -125,9 +132,6 @@ public abstract class Enemy : MonoBehaviour
 
         isActionAnimation = false;
 
-        isDead = false;
-
-        isContact = false;
         contactDis = enemySO.contactDis;
         contactDot = enemySO.contactDot;
         searchDis = enemySO.searchDis;
@@ -138,7 +142,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (isDead) { return; }
+        if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)
         {
@@ -163,13 +167,16 @@ public abstract class Enemy : MonoBehaviour
         //追跡するかしないかを調整する関数
         AgentContact();
 
-        if (!isContact) { return; }
+        if (enemyBaseState != EnemyBaseState.Contact) { return; }
 
         //常にプレイヤーの方向を見るようにする
         LookPlayer();
 
         //交戦時の処理
         EngageMoveControl();
+
+        //行動の計算
+        CalcActionUpdate();
     }
 
     private void DotPlayer()
@@ -222,13 +229,13 @@ public abstract class Enemy : MonoBehaviour
     {
         if (agent.isOnNavMesh)
         {
-            if (distance <= contactDis && dot >= contactDot && !isContact)
+            if (distance <= contactDis && dot >= contactDot && enemyBaseState != EnemyBaseState.Contact)
             {
                 ContactAnimation();
             }
-            else if (distance >= searchDis && isContact)
+            else if (distance >= searchDis && enemyBaseState == EnemyBaseState.Contact)
             {
-                isContact = false;
+                enemyBaseState = EnemyBaseState.Search;
                 InitAll();
                 agent.isStopped = true;
                 enemyAnimatorController.ForcedQuitAnimation();
@@ -237,7 +244,7 @@ public abstract class Enemy : MonoBehaviour
 
         if (isActionAnimation) { return; }
 
-        if (isContact)
+        if (enemyBaseState == EnemyBaseState.Contact)
         {
             agent.SetDestination(target.position);
         }
@@ -254,13 +261,12 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void ContactAnimation() { isContact = true; }
+    protected virtual void ContactAnimation() { enemyBaseState = EnemyBaseState.Contact; }
 
     private void EngageMoveControl()
     {
         if (distance <= enemySO.engageDis && Mathf.Abs(target.position.y - transform.position.y) < 0.5f)
         {
-
             //敵のスピードを少しだけ遅くする
             agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 
@@ -282,6 +288,35 @@ public abstract class Enemy : MonoBehaviour
             agent.speed = enemySO.dashMoveSpeed - DebufDEX;
             //isAction = false;
         }
+    }
+
+    protected void CalcActionUpdate()
+    {
+        if (isActionAnimation || enemyBaseState == EnemyBaseState.Dead) { return; }
+
+        EnemyActionSO action = CalcAction(enemySO.action);
+
+        if (action != null)
+        {
+            action.Execute(enemyAnimatorController);
+
+            if (currentAction != null && currentAction != action)
+            {
+                CurrentActionEnd();
+            }
+
+            currentAction = action;
+        }
+        else if (currentAction != null)
+        {
+            CurrentActionEnd();
+        }
+    }
+
+    protected void CurrentActionEnd()
+    {
+        currentAction.ActionEnd(enemyAnimatorController);
+        currentAction = null;
     }
 
     protected EnemyActionSO CalcAction(EnemyActionSO[] action)
@@ -356,7 +391,7 @@ public abstract class Enemy : MonoBehaviour
         if (invincibilityTimer > 0) { return; }
 
         if (sound != null) { sound.PlaySE(seNumber); }
-        if (!isContact) { ContactAnimation(); }  //未発見状態の場合は強制的に発見状態に変更する
+        if (enemyBaseState != EnemyBaseState.Contact) { ContactAnimation(); }  //未発見状態の場合は強制的に発見状態に変更する
 
         damage -= (enemySO.def - debufDEF);
         if (damage <= 0) { return; }
@@ -410,7 +445,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Death()
     {
-        isDead = true;
+        enemyBaseState = EnemyBaseState.Dead;
         InitAll();
         hpSliider.gameObject.SetActive(false);
         agent.isStopped = true;

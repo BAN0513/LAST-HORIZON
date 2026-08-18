@@ -52,7 +52,7 @@ public class Enemy_WeakDown : StateMachineBehaviour
             downTimer -= Time.deltaTime;
             if (downTimer <= 0)
             {
-                animatorController.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Down, false);
+                animatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, true);
             }
         }
     }

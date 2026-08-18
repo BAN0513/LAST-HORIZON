@@ -5,56 +5,57 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
 {
     private Enemy_Weak enemy_Weak;
 
-    public enum Enemy_WeakAnimation
-    {
-        Melee,
-        ChargeAttack,
-        Block,
-        BlockReaction,
-        Contact, 
-        Down
-    }
-
-    private Dictionary<Enemy_WeakAnimation, int> enemy_WeakAnims;
+    private Dictionary<AnimationBase, int> weakAnims;
 
     protected override void Start()
     {
         base.Start();
         enemy_Weak = GetComponent<Enemy_Weak>();
 
-        enemy_WeakAnims = new Dictionary<Enemy_WeakAnimation, int>
+        weakAnims = new Dictionary<AnimationBase, int>()
         {
-            {Enemy_WeakAnimation.Melee, Animator.StringToHash("isMeleeBefore") },
-            {Enemy_WeakAnimation.ChargeAttack, Animator.StringToHash("isChargeAttack") },
-            {Enemy_WeakAnimation.Block, Animator.StringToHash("isBlock") },
-            {Enemy_WeakAnimation.BlockReaction, Animator.StringToHash("isBlockReaction") },
-            {Enemy_WeakAnimation.Contact, Animator.StringToHash("isContact") },
-            {Enemy_WeakAnimation.Down, Animator.StringToHash("isDown") }
-        };
+            {AnimationBase.Weak_Melee, Animator.StringToHash("isMeleeBefore") },
+            {AnimationBase.Weak_ChargeAttack, Animator.StringToHash("isChargeAttack") },
+            {AnimationBase.Weak_Block, Animator.StringToHash("isBlock") },
+            {AnimationBase.Weak_BlockReaction, Animator.StringToHash("isBlockReaction") },
+            {AnimationBase.Weak_Contact, Animator.StringToHash("isContact") },
+            {AnimationBase.Weak_Down, Animator.StringToHash("isDown") }
+        };   
     }
 
-    public void SetBoolAnim(Enemy_WeakAnimation animation, bool isAnim)
+    public override void SetBoolAnim(AnimationBase animation, bool isAnim)
     {
-        animator.SetBool(enemy_WeakAnims[animation], isAnim);
+        if (weakAnims.ContainsKey(animation))
+        {
+            animator.SetBool(weakAnims[animation], isAnim);
+        }
+        else
+        {
+            base.SetBoolAnim(animation, isAnim);
+        }
     }
 
-    public bool GetboolAnim(Enemy_WeakAnimation animation)
+    public override void SetTriggerAnim(AnimationBase animation)
     {
-        return animator.GetBool(enemy_WeakAnims[animation]);
+        if (weakAnims.ContainsKey(animation))
+        {
+            animator.SetTrigger(weakAnims[animation]);
+        }
+        else
+        {
+            base.SetTriggerAnim(animation);
+        }
     }
 
-    public void SetTriggerAnim(Enemy_WeakAnimation animation)
+    public override void ResetTriggerAnim(AnimationBase animation)
     {
-        animator.SetTrigger(enemy_WeakAnims[animation]);
-    }
-
-    public void ResetTriggerAnim(Enemy_WeakAnimation animation)
-    {
-        animator.ResetTrigger(enemy_WeakAnims[animation]);
-    }
-
-    public override bool CheckCurrentAnim(string name)
-    {
-        return base.CheckCurrentAnim(name);
+        if (weakAnims.ContainsKey(animation))
+        {
+            animator.ResetTrigger(weakAnims[animation]);
+        }
+        else
+        {
+            base.ResetTriggerAnim(animation);
+        }
     }
 }

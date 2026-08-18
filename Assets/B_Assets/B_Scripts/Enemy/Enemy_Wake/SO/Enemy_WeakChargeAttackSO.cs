@@ -9,9 +9,9 @@ public class Enemy_WeakChargeAttackSO : Enemy_WeakActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WeakAnimatorController animator)
+    public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.SetTriggerAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.ChargeAttack);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_ChargeAttack);
     }
 }

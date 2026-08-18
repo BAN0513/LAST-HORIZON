@@ -8,13 +8,13 @@ public class Enemy_WeakBlockSO : Enemy_WeakActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WeakAnimatorController animator)
+    public override void Execute(EnemyAnimatorController animator)
     {
-        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, true);
+        animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, true);
     }
 
-    public override void ActionEnd(Enemy_WeakAnimatorController animator)
+    public override void ActionEnd(EnemyAnimatorController animator)
     {
-        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Block, false);
+        animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
     }
 }

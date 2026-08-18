@@ -9,9 +9,9 @@ public class Enemy_WeakMeleeSO : Enemy_WeakActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WeakAnimatorController animator)
+    public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.SetBoolAnim(Enemy_WeakAnimatorController.Enemy_WeakAnimation.Melee, true);
+        animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, true);
     }
 }
