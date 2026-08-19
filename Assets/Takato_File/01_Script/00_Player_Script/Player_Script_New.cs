@@ -11,6 +11,7 @@ public class Player_Script_New : MonoBehaviour
 
     // 他スクリプトの参照
     private Player_Input_New playerInput; // プレイヤーの入力を管理するクラスの参照
+    private Player_Animation_New playerAnimation; // アニメーション管理クラスの参照
 
     // コンポーネントの参照
     private CharacterController characterController; // CharacterControllerコンポーネントの参照
@@ -23,6 +24,7 @@ public class Player_Script_New : MonoBehaviour
     private void Awake()
     {
         playerInput = GetComponent<Player_Input_New>();           // Player_Input_Newコンポーネントの参照を取得
+        playerAnimation = GetComponent<Player_Animation_New>();   // Player_Animation_Newコンポーネントの参照を取得
         characterController = GetComponent<CharacterController>();// CharacterControllerコンポーネントの参照を取得
     }
 
@@ -48,8 +50,7 @@ public class Player_Script_New : MonoBehaviour
             Jump();
         }
 
-        // 重力の計算と垂直移動の適用
-        ApplyGravity();
+        ApplyGravity(); // 重力の計算と垂直移動の適用
     }
 
     /// <summary>
@@ -57,7 +58,7 @@ public class Player_Script_New : MonoBehaviour
     /// </summary>
     private void ApplyGravity()
     {
-        // 重力を下向きに計算（SOの値を使用）
+        // 重力を下向きに計算
         velocity.y -= playerSO.GravityScale * Time.deltaTime;
 
         // 計算した垂直速度をCharacterControllerに渡して移動させる
@@ -72,8 +73,13 @@ public class Player_Script_New : MonoBehaviour
         if (playerInput == null) return;
 
         Vector2 moveInput = playerInput.MoveInput;
+
+        // 前方向かつスプリント入力中の場合のみ速度倍率を適用
+        bool isForwardSprinting = playerInput.IsSprinting && moveInput.y > 0f;
+        float currentSpeedMultiplier = isForwardSprinting ? playerSO.SpeedMultiplier : 1f;
+
         // 目標となる移動方向と最高速度のベクトル
-        Vector3 targetVelocity = new Vector3(moveInput.x, 0f, moveInput.y).normalized * playerSO.MoveSpeed;
+        Vector3 targetVelocity = new Vector3(moveInput.x, 0f, moveInput.y).normalized * (playerSO.MoveSpeed * currentSpeedMultiplier);
 
         // 入力があるか判定して加減速の倍率を切り替え
         float rate = moveInput.sqrMagnitude > 0f ? playerSO.AccelerationMultiplier : playerSO.DecelerationMultiplier;
@@ -83,6 +89,12 @@ public class Player_Script_New : MonoBehaviour
 
         // 水平移動を適用
         characterController.Move(currentMoveVelocity * Time.deltaTime);
+
+        // アニメーション側へ現在の移動速度情報を送る
+        if (playerAnimation != null)
+        {
+            playerAnimation.UpdateMoveAnimation(currentMoveVelocity, playerSO.MoveSpeed);
+        }
     }
 
     /// <summary>

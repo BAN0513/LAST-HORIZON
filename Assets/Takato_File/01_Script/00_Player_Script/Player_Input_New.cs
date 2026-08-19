@@ -10,8 +10,10 @@ public class Player_Input_New : MonoBehaviour
    private InputSystem_Actions playerInputActions; //プレイヤーの入力アクションを格納する変数
 
 
-    public Vector2 MoveInput { get; private set; }   // プレイヤーの移動入力を格納するプロパティ
-    public bool JumpInput { get; private set; }      // プレイヤーのジャンプ入力を格納するプロパティ
+    public Vector2 MoveInput { get; private set; }       // プレイヤーの移動入力を格納するプロパティ
+    public bool JumpInput { get; private set; }          // プレイヤーのジャンプ入力を格納するプロパティ
+
+    public bool IsSprinting { get; private set; } = false; // プレイヤーのダッシュ入力を格納するプロパティ
 
     private void Awake()
     {
@@ -26,7 +28,10 @@ public class Player_Input_New : MonoBehaviour
         playerInputActions.Player.Jump.started += context => JumpInput = true;   // ジャンプ入力が開始されたときのイベント
         playerInputActions.Player.Jump.canceled += context => JumpInput = false; // ジャンプ入力がキャンセルされたときのイベント
 
-        
+        //Sprint入力イベント登録
+        playerInputActions.Player.Sprint.started += context => IsSprinting = true;   // ダッシュ入力が開始されたときのイベント
+        playerInputActions.Player.Sprint.canceled += context => IsSprinting = false; // ダッシュ入力がキャンセルされたときのイベント
+
     }
 
     private void OnEnable()
