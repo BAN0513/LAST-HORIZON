@@ -7,16 +7,17 @@ public class Player_Animation_New : MonoBehaviour
 {
     private Animator animator;
 
-    // 2D Blend Tree 用のパラメータハッシュ化
+    // パラメータハッシュ化
     private static readonly int MoveXHash = Animator.StringToHash("MoveX");
     private static readonly int MoveYHash = Animator.StringToHash("MoveY");
+    private static readonly int JumpHash = Animator.StringToHash("Jump");
+    private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
 
     [Header("アニメーション設定")]
-    [SerializeField] private float dampTime = 0.1f; // アニメーション遷移の滑らかさ
+    [SerializeField] private float dampTime;
 
     private void Awake()
     {
-        // 子オブジェクトを含めて Animator を取得
         animator = GetComponentInChildren<Animator>();
     }
 
@@ -27,18 +28,33 @@ public class Player_Animation_New : MonoBehaviour
     {
         if (animator == null || baseMoveSpeed <= 0f) return;
 
-        // 微小な慣性残りをカットして Idle ポーズへ強制移行させる
         if (moveVelocity.magnitude < 0.01f)
         {
             moveVelocity = Vector3.zero;
         }
 
-        // MoveX と MoveY の値を正規化して 2D Blend Tree に渡す
         float normalizedX = moveVelocity.x / baseMoveSpeed;
         float normalizedY = moveVelocity.z / baseMoveSpeed;
 
-        // Animator の 2D Blend Tree パラメータを更新
         animator.SetFloat(MoveXHash, normalizedX, dampTime, Time.deltaTime);
         animator.SetFloat(MoveYHash, normalizedY, dampTime, Time.deltaTime);
+    }
+
+    /// <summary>
+    /// ジャンプ開始アニメーションを呼び出す
+    /// </summary>
+    public void PlayJump()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(JumpHash);
+    }
+
+    /// <summary>
+    /// 接地状態のアニメーションパラメータを更新する
+    /// </summary>
+    public void UpdateGroundedState(bool isGrounded)
+    {
+        if (animator == null) return;
+        animator.SetBool(IsGroundedHash, isGrounded);
     }
 }
