@@ -7,5 +7,13 @@ public class Enemy_WizardActionSO : EnemyActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public virtual void Execute(Enemy_WizardAnimatorController enemy_WizardAnim) { }
+    public override void Execute(EnemyAnimatorController animator)
+    {
+        base.Execute(animator);
+    }
+
+    public override void ActionEnd(EnemyAnimatorController animator)
+    {
+        base.ActionEnd(animator);
+    }
 }

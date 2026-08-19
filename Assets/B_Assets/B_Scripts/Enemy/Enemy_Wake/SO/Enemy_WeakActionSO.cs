@@ -9,7 +9,6 @@ public class Enemy_WeakActionSO : EnemyActionSO
 
     public override void Execute(EnemyAnimatorController animator)
     {
-        animator.enemy.IsActionAnimation = true;
         base.Execute(animator);
     }
 

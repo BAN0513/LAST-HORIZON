@@ -9,9 +9,10 @@ public class Enemy_Wizard_ImpactSO : Enemy_WizardActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WizardAnimatorController enemy_WizardAnim)
+    public override void Execute(EnemyAnimatorController animator)
     {
-        enemy_WizardAnim.enemy.SetLookPlayerAndEnemyStop(false, true);
-        enemy_WizardAnim.SetTriggerAnim(Enemy_WizardAnimatorController.Enemy_1Animation.Impact);
+        base.Execute(animator);
+        animator.enemy.SetLookPlayerAndEnemyStop(false, true);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_MeraStorm);
     }
 }

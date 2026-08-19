@@ -18,7 +18,12 @@ public class EnemyAnimatorController : MonoBehaviour
         Weak_Block,
         Weak_BlockReaction,
         Weak_Contact,
-        Weak_Down
+        Weak_Down,
+
+        Wizard_Mera,
+        Wizard_MeraZoma,
+        Wizard_MeraStorm,
+        Wizard_Shield,
     }
 
     protected Dictionary<AnimationBase, int> anims;
