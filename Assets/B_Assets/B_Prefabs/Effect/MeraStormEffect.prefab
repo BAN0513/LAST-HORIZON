@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8779465866527136624}
   - component: {fileID: 1309278099852101724}
   m_Layer: 0
-  m_Name: TornadoEffect
+  m_Name: MeraStormEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4852,3 +4852,4 @@ MonoBehaviour:
   _axis: {x: 0.3, y: 1, z: 0.3}
   attractionDis: 10
   attractionPower: 3
+  activeTimer: 5

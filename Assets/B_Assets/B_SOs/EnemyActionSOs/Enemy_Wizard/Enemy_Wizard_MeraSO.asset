@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15e3612402021d6409fc4a4718c9f3b1, type: 3}
-  m_Name: Enemy_Wizard_FireSO
+  m_Name: Enemy_Wizard_MeraSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_FireSO
-  bestDis: 10
+  bestDis: 5
   bestDot: 1
-  maxDis: 15
+  maxDis: 10
   maxDot: 1
   minDis: 0
   minDot: 0
   baseDis: 0.5
   baseDot: 0.7
+  magnification: 1

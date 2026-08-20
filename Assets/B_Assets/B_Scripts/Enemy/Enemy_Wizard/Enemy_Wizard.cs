@@ -1,13 +1,28 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy_Wizard : Enemy_Humanoid
 {
     private Enemy_WizardAnimatorController enemy_WizardAnimator;
 
-    [SerializeField] private GameObject fireEffect;
+    public enum SummonEnemyWeakState 
+    {
+        NotSpawn,
+        Spawn,
+        FiftyPercentSpawn,
+        SpawnEnd,
+    }
+    private SummonEnemyWeakState enemy_WeakSpawnState = SummonEnemyWeakState.NotSpawn;
+    public SummonEnemyWeakState Enemy_WeakSpawnState
+    {
+        get {  return enemy_WeakSpawnState; }
+        set {  enemy_WeakSpawnState = value; }
+    }
+
+    [SerializeField] private GameObject meraObj;
     [SerializeField] private GameObject impactEffect;
+    [SerializeField] private GameObject meraStormObj;
+    [SerializeField] private GameObject enemy_WeakObj;
+    [SerializeField] private Transform[] summonPos;
 
     [SerializeField] private Transform[] warpPos;
 
@@ -23,56 +38,29 @@ public class Enemy_Wizard : Enemy_Humanoid
     protected override void Update()
     {
         base.Update();
-
-        ExecuteAction();
-    }
-
-    private void ExecuteAction()
-    {
-        if (isActionAnimation) { return; }
-        Enemy_WizardActionSO action = (Enemy_WizardActionSO)CalcAction(enemySO.action);
-
-        if (action != null)
-        {
-            if (isTeleport)
-            {
-                isTeleport = false;
-                int warpLimit = 10;
-                int randomWarp = 0;
-
-                for (int i = 0; i < warpLimit; i++)
-                {
-                    randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
-                    if (Vector3.Distance(transform.position, warpPos[randomWarp].position) <= 3) { continue; }
-                    break;
-                }
-
-                transform.position = warpPos[randomWarp].position;
-                Init();
-                return;
-            }
-            else
-            {
-                action.Execute(enemy_WizardAnimator);
-            }
-        }
     }
 
     public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
         base.TakeDamage(damage, sound, seNumber);
+
+        if (hp <= enemySO.maxHP / 2 && enemy_WeakSpawnState != SummonEnemyWeakState.SpawnEnd)
+        {
+            enemy_WeakSpawnState = SummonEnemyWeakState.FiftyPercentSpawn; 
+        }
+
         isTeleport = true;
     }
 
     //ここから下はAnimator関連の関数
 
-    public void FireSpawn()
+    public void Mera()
     {
         Vector3 toTarget = target.position - transform.position + transform.forward;
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
 
-        GameObject fire = Instantiate(fireEffect, transform.position + transform.forward + transform.up, quaternion);
+        GameObject fire = Instantiate(meraObj, transform.position + transform.forward + transform.up, quaternion);
         FireController fireController = fire.GetComponent<FireController>();
         fireController.Damage = enemySO.damage;
         fireController.Player = playerController;
@@ -82,12 +70,26 @@ public class Enemy_Wizard : Enemy_Humanoid
         rb.linearVelocity = nor * 5;
     }
 
+    public void MeraStorm()
+    {
+        Instantiate(meraStormObj, transform.position, Quaternion.identity);
+    }
+
     public void Impact()
     {
         GameObject impact = Instantiate(impactEffect, transform.position, Quaternion.identity);
         ImpactController impactController = impact.GetComponentInChildren<ImpactController>();
         impactController.damage = enemySO.damage;
         Destroy(impact, 1);
+    }
+
+    public void Summon()
+    {
+        Vector3 dir = (target.position - transform.position).normalized;
+        foreach (var pos in summonPos)
+        {
+            Instantiate(enemy_WeakObj, pos.position, Quaternion.LookRotation(dir));
+        }
     }
 
     //攻撃のアニメーションが終わったら全部初期化する

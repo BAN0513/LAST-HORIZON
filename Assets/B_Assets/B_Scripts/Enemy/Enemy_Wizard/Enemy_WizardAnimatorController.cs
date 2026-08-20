@@ -18,6 +18,7 @@ public class Enemy_WizardAnimatorController : EnemyAnimatorController
             {AnimationBase.Wizard_MeraZoma,  Animator.StringToHash("isMeraZoma")  },
             {AnimationBase.Wizard_MeraStorm, Animator.StringToHash("isMeraStorm") },
             {AnimationBase.Wizard_Shield,    Animator.StringToHash("isShield")    },
+            {AnimationBase.Wizard_SummonEnemyWeak, Animator.StringToHash("isSummonEnemyWeak") }
         };
     }
 

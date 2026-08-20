@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy_Wizard_FireSO", menuName = "EnemyActionSO/Enemy_WizardActionSO/Enemy_Wizard_FireSO")]
-public class Enemy_Wizard_FireSO : Enemy_WizardActionSO
+[CreateAssetMenu(fileName = "Enemy_Wizard_MeraStormSO", menuName = "EnemyActionSO/Enemy_WizardActionSO/Enemy_Wizard_MeraStormSO")]
+public class Enemy_Wizard_MeraStormSO : Enemy_WizardActionSO
 {
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
@@ -13,6 +13,6 @@ public class Enemy_Wizard_FireSO : Enemy_WizardActionSO
     {
         base.Execute(animator);
         animator.enemy.SetLookPlayerAndEnemyStop(false, true);
-        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_Mera);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_MeraStorm);
     }
 }

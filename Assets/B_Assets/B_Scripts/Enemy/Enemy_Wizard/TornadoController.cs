@@ -19,9 +19,14 @@ public class TornadoController : MonoBehaviour
     [Header("ˆø‚«Šñ‚¹‚é—Í")]
     [SerializeField] private float attractionPower = 1;
 
+    [Header("‰½•bŠÔŽc‚è‘±‚¯‚é‚©")]
+    [SerializeField] private float activeTimer = 3.0f;
+
     private ParticleSystem particle;
     private GameObject target;
     private int damage;
+
+
     public int Damage
     {
         set
@@ -29,6 +34,7 @@ public class TornadoController : MonoBehaviour
             damage = value;
         }
     }
+
     private void Start()
     {
         transform.Rotate(-90, 0, 0);
@@ -53,6 +59,12 @@ public class TornadoController : MonoBehaviour
         if (distance <= attractionDis)
         {
             target.transform.position = Vector3.MoveTowards(target.transform.position,transform.position, attractionPower * Time.deltaTime);
+        }
+
+        activeTimer -= Time.deltaTime;
+        if (activeTimer <= 0.0f)
+        {
+            Destroy(gameObject);
         }
     }
 

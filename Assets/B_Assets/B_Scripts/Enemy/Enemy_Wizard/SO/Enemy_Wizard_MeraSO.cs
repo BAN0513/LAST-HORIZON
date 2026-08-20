@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy_Wizard_ImpactSO", menuName = "EnemyActionSO/Enemy_WizardActionSO/Enemy_Wizard_ImpactSO")]
-public class Enemy_Wizard_ImpactSO : Enemy_WizardActionSO
+[CreateAssetMenu(fileName = "Enemy_Wizard_MeraSO", menuName = "EnemyActionSO/Enemy_WizardActionSO/Enemy_Wizard_MeraSO")]
+public class Enemy_Wizard_MeraSO : Enemy_WizardActionSO
 {
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
@@ -13,6 +13,6 @@ public class Enemy_Wizard_ImpactSO : Enemy_WizardActionSO
     {
         base.Execute(animator);
         animator.enemy.SetLookPlayerAndEnemyStop(false, true);
-        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_MeraStorm);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_Mera);
     }
 }

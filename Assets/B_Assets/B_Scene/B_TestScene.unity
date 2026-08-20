@@ -2373,6 +2373,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: meraObj
+      value: 
+      objectReference: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: meraStormObj
+      value: 
+      objectReference: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: enemy_WeakObj
+      value: 
+      objectReference: {fileID: 56609770559436359, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: 'warpPos.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1062443159}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: 'warpPos.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1767366045}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: 'warpPos.Array.data[2]'
+      value: 
+      objectReference: {fileID: 102130489}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: 'warpPos.Array.data[3]'
+      value: 
+      objectReference: {fileID: 997930822}
     - target: {fileID: 884714866272646523, guid: ec415dc81ed338542acce749ad117812, type: 3}
       propertyPath: m_Name
       value: Enemy_Wizard
