@@ -4851,5 +4851,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TornadoController
   _axis: {x: 0.3, y: 1, z: 0.3}
   attractionDis: 10
-  attractionPower: 3
+  attractionPower: 2
   activeTimer: 5

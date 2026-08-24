@@ -9,6 +9,8 @@ public class Enemy_Wizard_SummonEnemyWeakSO : Enemy_WizardActionSO
 
         if (enemy is Enemy_Wizard wizard)
         {
+            //テレポートが発動中は雑魚敵召喚は後回しにする
+            if (wizard.IsTeleport) { return 0.0f; }
             switch(wizard.Enemy_WeakSpawnState)
             {
                 case Enemy_Wizard.SummonEnemyWeakState.NotSpawn:

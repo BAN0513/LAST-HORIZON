@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb4b16bf28af3d46aaf1d70cfe7cfc7, type: 3}
+  m_Name: Enemy_Wizard_TeleportationSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_TeleportationSO
+  bestDis: 0
+  bestDot: 0
+  maxDis: 0
+  maxDot: 0
+  minDis: 0
+  minDot: 0
+  baseDis: 0.5
+  baseDot: 0.5
+  magnification: 1

@@ -27,6 +27,11 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private Transform[] warpPos;
 
     private bool isTeleport = false;
+    public bool IsTeleport 
+    {
+        get { return isTeleport; }
+        set { isTeleport = value; }
+    }
 
     protected override void Start()
     {
@@ -42,6 +47,8 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
+        if (isTeleport) { isHit = true; }
+
         base.TakeDamage(damage, sound, seNumber);
 
         if (hp <= enemySO.maxHP / 2 && enemy_WeakSpawnState != SummonEnemyWeakState.SpawnEnd)
@@ -56,7 +63,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void Mera()
     {
-        Vector3 toTarget = target.position - transform.position + transform.forward;
+        Vector3 toTarget = target.position - transform.position;
         Vector3 nor = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
 
@@ -90,6 +97,24 @@ public class Enemy_Wizard : Enemy_Humanoid
         {
             Instantiate(enemy_WeakObj, pos.position, Quaternion.LookRotation(dir));
         }
+    }
+
+    public void Teleport()
+    {
+        isTeleport = false;
+        int warpLimit = 10;
+        int randomWarp = 0;
+        float notWarpLength = 3.0f;
+
+        for (int i = 0; i < warpLimit; i++)
+        {
+            randomWarp = UnityEngine.Random.Range(0, warpPos.Length);
+            if (Vector3.Distance(transform.position, warpPos[randomWarp].position) <= notWarpLength) { continue; }
+            break;
+        }
+        transform.position = warpPos[randomWarp].position;
+        transform.rotation = Quaternion.LookRotation((target.position - transform.position).normalized);
+        return;
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
