@@ -640,6 +640,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_Script_New
   playerSO: {fileID: 11400000, guid: 7904e388a35fd5f438e480d683f27a37, type: 2}
+  rollHeight: 0
+  rollCenterY: 0
 --- !u!114 &2082600335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118af72143770664c8c8636e27802327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player_Input_New
+  doubleTapThreshold: 0.3
 --- !u!143 &2082600336
 CharacterController:
   m_ObjectHideFlags: 0
@@ -757,6 +760,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1862642725739276737, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: doubleTapThreshold
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2228136874385453676, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4333796824999223972, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: dampTime
+      value: 0.14
+      objectReference: {fileID: 0}
     - target: {fileID: 4845893911588909740, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_Name
       value: Player_Prefab
@@ -800,6 +815,14 @@ PrefabInstance:
     - target: {fileID: 5191456825149253654, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7506178952676961221, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: rollHeight
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7506178952676961221, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: rollCenterY
+      value: 1.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

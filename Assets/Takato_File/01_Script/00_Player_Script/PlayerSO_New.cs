@@ -18,6 +18,8 @@ public class PlayerSO_New : ScriptableObject
     [SerializeField] private float decelerationMultiplier;
     [Header("プレイヤーのジャンプの高さ")]
     [SerializeField] private float jumpHeight;
+    [Header("プレイヤーのロール時の移動速度倍率")]
+    [SerializeField] private float rollSpeedMultiplier;
     [Header("重力の設定")]
     [SerializeField] private float gravityScale;
 
@@ -28,5 +30,6 @@ public class PlayerSO_New : ScriptableObject
     public float AccelerationMultiplier => accelerationMultiplier; // 加速倍率のプロパティ
     public float DecelerationMultiplier => decelerationMultiplier; // 減速倍率のプロパティ
     public float JumpHeight => jumpHeight;                         // ジャンプの高さのプロパティ
+    public float RollSpeedMultiplier => rollSpeedMultiplier;       // ロール時の移動速度倍率のプロパティ
     public float GravityScale => gravityScale;                     // 重力の設定のプロパティ
 }

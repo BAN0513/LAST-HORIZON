@@ -17,4 +17,5 @@ MonoBehaviour:
   accelerationMultiplier: 25
   decelerationMultiplier: 10
   jumpHeight: 2
+  rollSpeedMultiplier: 1.25
   gravityScale: 9.81

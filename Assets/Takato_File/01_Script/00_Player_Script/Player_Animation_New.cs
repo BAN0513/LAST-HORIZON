@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -12,18 +13,19 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int MoveYHash = Animator.StringToHash("MoveY");
     private static readonly int JumpHash = Animator.StringToHash("Jump");
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
+    private static readonly int RollHash = Animator.StringToHash("Roll");
 
     [Header("アニメーション設定")]
     [SerializeField] private float dampTime;
+
+    // 前転アニメーション終了時に発火するイベント
+    public event Action OnRollEnd;
 
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
     }
 
-    /// <summary>
-    /// 2D Blend Tree 用の移動パラメータ(MoveX, MoveY)を更新する
-    /// </summary>
     public void UpdateMoveAnimation(Vector3 moveVelocity, float baseMoveSpeed)
     {
         if (animator == null || baseMoveSpeed <= 0f) return;
@@ -40,9 +42,6 @@ public class Player_Animation_New : MonoBehaviour
         animator.SetFloat(MoveYHash, normalizedY, dampTime, Time.deltaTime);
     }
 
-    /// <summary>
-    /// ジャンプ開始アニメーションを呼び出す
-    /// </summary>
     public void PlayJump()
     {
         if (animator == null) return;
@@ -50,11 +49,28 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 接地状態のアニメーションパラメータを更新する
+    /// プレイヤーの前転アニメーションを再生するメソッド
+    /// </summary>
+    public void PlayRoll()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(RollHash);
+    }
+
+    /// <summary>
+    /// プレイヤーの接地状態を更新するメソッド
     /// </summary>
     public void UpdateGroundedState(bool isGrounded)
     {
         if (animator == null) return;
         animator.SetBool(IsGroundedHash, isGrounded);
+    }
+
+    /// <summary>
+    /// Animation Event から呼び出すメソッド
+    /// </summary>
+    public void OnRollCompleted()
+    {
+        OnRollEnd?.Invoke();// 前転アニメーション終了時にイベントを発火
     }
 }
