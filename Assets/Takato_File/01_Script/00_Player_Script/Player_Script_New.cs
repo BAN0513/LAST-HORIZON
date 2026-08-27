@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
@@ -13,6 +14,12 @@ public class Player_Script_New : MonoBehaviour
     [Header("前転時のCharacterController設定")]
     [SerializeField] private float rollHeight; // ロール中の高さ
     [SerializeField] private float rollCenterY; // ロール中の中心Y座標
+
+    [Header("カメラの参照")]
+    [SerializeField] private Transform cameraTransform; // カメラのTransform参照
+    [Header("プレイヤーがカメラの向いている方向にどれくらい滑らかに向くかの度合い")]
+    [Range(5f, 20f)]
+    [SerializeField] private float rotationSmoothness; // プレイヤーの回転の滑らかさ
 
     // 他スクリプトの参照
     private Player_Input_New playerInput;
@@ -51,6 +58,9 @@ public class Player_Script_New : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// イベントの登録処理を行うメソッド
+    /// </summary>
     private void OnEnable()
     {
         // アニメーション終了イベントの登録
@@ -60,6 +70,9 @@ public class Player_Script_New : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// イベントの解除処理を行うメソッド
+    /// </summary>
     private void OnDisable()
     {
         // イベント解除
@@ -85,6 +98,12 @@ public class Player_Script_New : MonoBehaviour
             velocity.y = GroundedDownwardForce;
         }
 
+        //移動入力がある時のみ体をカメラの向きに合わせる（停止時はカメラだけ周回可能）
+        if (playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
+        {
+            RotatePlayerToCamera();// プレイヤーの体をカメラと同じ向きにする処理を呼び出す
+        }
+
         MovePlayer(); // プレイヤーの移動処理を呼び出す
 
         // ロール中ではない場合のみ新規ロールやジャンプを受け付ける
@@ -102,6 +121,21 @@ public class Player_Script_New : MonoBehaviour
         }
 
         ApplyGravity(); // 重力処理を呼び出す
+    }
+
+    /// <summary>
+    /// プレイヤーの体をカメラと同じ向きにする
+    /// </summary>
+    private void RotatePlayerToCamera()
+    {
+        if (cameraTransform == null) return;
+
+        // Y軸の回転のみを抽出して適用
+        float targetYaw = cameraTransform.eulerAngles.y;
+        Quaternion targetRotation = Quaternion.Euler(0f, targetYaw, 0f);
+
+        // 滑らかに向かせる処理
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothness * Time.deltaTime);
     }
 
     /// <summary>
@@ -128,12 +162,20 @@ public class Player_Script_New : MonoBehaviour
             return;
         }
 
-        Vector2 moveInput = playerInput.MoveInput;
+        Vector2 moveInput = playerInput.MoveInput; // プレイヤーの移動入力を取得
+
+        // カメラの正面・右方向を取得
+        Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1)).normalized;
+
+        // 入力値とカメラの向きを掛け合わせてワールド移動方向を算出
+        Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
 
         bool isForwardSprinting = playerInput.IsSprinting && moveInput.y > 0f;
         float currentSpeedMultiplier = isForwardSprinting ? playerSO.SpeedMultiplier : 1f;
 
-        Vector3 targetVelocity = new Vector3(moveInput.x, 0f, moveInput.y).normalized * (playerSO.MoveSpeed * currentSpeedMultiplier);
+        // moveDirection をベースにターゲット速度を確定
+        Vector3 targetVelocity = moveDirection * (playerSO.MoveSpeed * currentSpeedMultiplier);
 
         float rate = moveInput.sqrMagnitude > 0f ? playerSO.AccelerationMultiplier : playerSO.DecelerationMultiplier;
 
@@ -141,9 +183,11 @@ public class Player_Script_New : MonoBehaviour
 
         characterController.Move(currentMoveVelocity * Time.deltaTime);
 
+        // アニメーション側にはプレイヤーから見たローカル速度を渡す
         if (playerAnimation != null)
         {
-            playerAnimation.UpdateMoveAnimation(currentMoveVelocity, playerSO.MoveSpeed);
+            Vector3 relativeVelocity = transform.InverseTransformDirection(currentMoveVelocity);
+            playerAnimation.UpdateMoveAnimation(relativeVelocity, playerSO.MoveSpeed);
         }
     }
 
@@ -156,9 +200,18 @@ public class Player_Script_New : MonoBehaviour
 
         isRolling = true; // ロール状態開始
 
-        // 入力方向があればその方向、なければプレイヤーの前方を推進方向に設定
-        Vector3 inputDir = new Vector3(playerInput.MoveInput.x, 0f, playerInput.MoveInput.y).normalized;
-        rollDirection = inputDir.sqrMagnitude > 0.01f ? inputDir : transform.forward;
+        // 入力方向があればその方向（カメラ基準）、なければ体の正面方向
+        Vector2 input = playerInput.MoveInput;
+        if (input.sqrMagnitude > 0.01f)
+        {
+            Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1)).normalized;
+            rollDirection = (cameraForward * input.y + cameraRight * input.x).normalized;
+        }
+        else
+        {
+            rollDirection = transform.forward;
+        }
 
         // CharacterControllerのサイズをロール用に縮小
         characterController.height = rollHeight;
@@ -188,6 +241,9 @@ public class Player_Script_New : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ジャンプ処理を行うメソッド
+    /// </summary>
     private void Jump()
     {
         velocity.y = Mathf.Sqrt(playerSO.JumpHeight * 2f * playerSO.GravityScale);

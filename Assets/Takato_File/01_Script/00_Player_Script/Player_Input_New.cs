@@ -12,6 +12,7 @@ public class Player_Input_New : MonoBehaviour
     public Vector2 MoveInput { get; private set; }       // プレイヤーの移動入力を格納するプロパティ
     public bool JumpInput { get; private set; }          // プレイヤーのジャンプ入力を格納するプロパティ
     public bool IsSprinting { get; private set; } = false; // プレイヤーのダッシュ入力を格納するプロパティ
+    public Vector2 LookInput { get; private set; }       // プレイヤーの視点入力を格納するプロパティ
 
     //前転用のプロパティと内部変数
     public bool RollInput { get; private set; }
@@ -34,6 +35,11 @@ public class Player_Input_New : MonoBehaviour
         // Sprint入力イベント登録
         playerInputActions.Player.Sprint.started += context => IsSprinting = true;   // ダッシュ入力が開始されたときのイベント
         playerInputActions.Player.Sprint.canceled += context => IsSprinting = false; // ダッシュ入力がキャンセルされたときのイベント
+
+        // Look入力イベント登録
+        playerInputActions.Player.Look.started += OnLookInput;
+        playerInputActions.Player.Look.performed += OnLookInput;
+        playerInputActions.Player.Look.canceled += OnLookInput;
     }
 
     private void OnEnable()
@@ -64,6 +70,14 @@ public class Player_Input_New : MonoBehaviour
         }
 
         MoveInput = newInput; // プレイヤーの移動入力を更新
+    }
+
+    /// <summary>
+    /// 視点移動の入力を処理するメソッド
+    /// </summary>
+    private void OnLookInput(InputAction.CallbackContext context)
+    {
+        LookInput = context.ReadValue<Vector2>();
     }
 
     /// <summary>

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSO_New
   moveSpeed: 3
   speedMultiplier: 2
-  accelerationMultiplier: 25
+  accelerationMultiplier: 20
   decelerationMultiplier: 10
   jumpHeight: 2
   rollSpeedMultiplier: 1.25
