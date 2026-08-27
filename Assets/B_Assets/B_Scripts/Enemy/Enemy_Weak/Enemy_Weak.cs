@@ -58,10 +58,15 @@ public class Enemy_Weak : Enemy_Humanoid
 
         base.TakeDamage(damage, sound, seNumber);
 
-        if (currentAction != null)
+        if (!IsBlocking)
         {
-            CurrentActionEnd();
+            IsBlocking = true;
         }
+
+        //if (currentAction != null)
+        //{
+        //    CurrentActionEnd();
+        //}
     }    
 
     public override void Init()
