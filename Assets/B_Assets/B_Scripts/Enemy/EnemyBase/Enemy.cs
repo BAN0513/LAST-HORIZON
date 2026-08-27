@@ -34,6 +34,8 @@ public abstract class Enemy : MonoBehaviour
     public float Distance { get { return distance; } set { distance = value; } }
     protected float distance;
 
+    private float currentStoppingDistance = 0.0f;
+
     //攻撃確率の保存用変数
     protected float attackProbability = 0;
 
@@ -142,6 +144,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        Debug.Log("dis : " + agent.stoppingDistance);
         if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)
@@ -242,22 +245,25 @@ public abstract class Enemy : MonoBehaviour
             }
         }
 
+        //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
+        if (distance <= agent.stoppingDistance && isWalk)
+        {
+            isWalk = false;
+            agent.stoppingDistance = enemySO.stoopingDis + 1;
+            currentStoppingDistance = agent.stoppingDistance;
+        }
+        else if (distance >= agent.stoppingDistance && !isWalk)
+        {
+            isWalk = true;
+            agent.stoppingDistance = enemySO.stoopingDis - 1;
+            currentStoppingDistance = agent.stoppingDistance;
+        }
+
         if (isActionAnimation) { return; }
 
         if (enemyBaseState == EnemyBaseState.Contact)
         {
             agent.SetDestination(target.position);
-        }
-        //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
-        if (distance <= agent.stoppingDistance && isWalk)
-        {
-            isWalk = false;
-            agent.stoppingDistance++;
-        }
-        else if (distance >= agent.stoppingDistance && !isWalk)
-        {
-            isWalk = true;
-            agent.stoppingDistance--;
         }
     }
 
@@ -387,7 +393,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
     {
-        if (enemyAnimatorController.CheckCurrentAnim("Death")) { return; }
+        if (enemyBaseState == EnemyBaseState.Dead) { return; }
         if (invincibilityTimer > 0) { return; }
 
         if (sound != null) { sound.PlaySE(seNumber); }
@@ -466,7 +472,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        agent.stoppingDistance = enemySO.stoopingDis;
+        agent.stoppingDistance = currentStoppingDistance;
         lookRotationSpeed = enemySO.lookRotationSpeed;
         isLookPlayer = true;
         agent.isStopped = false;

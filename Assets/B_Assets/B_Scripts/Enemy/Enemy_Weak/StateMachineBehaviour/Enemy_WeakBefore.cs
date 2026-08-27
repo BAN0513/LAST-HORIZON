@@ -10,7 +10,6 @@ public class Enemy_WeakBefore : StateMachineBehaviour
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.GetComponent<Enemy_Weak>();
-        enemy.Agent.isStopped = false;
         enemy.Agent.stoppingDistance = stopDis;
     }
 

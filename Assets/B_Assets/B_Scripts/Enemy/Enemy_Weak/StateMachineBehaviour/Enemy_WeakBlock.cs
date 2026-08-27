@@ -5,22 +5,27 @@ public class Enemy_WeakBlock : StateMachineBehaviour
 {
     Enemy_Weak enemy;
 
+    [SerializeField] float blockTime = 2.0f;
+    float blockTimer = 0.0f;
+
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy = animator.GetComponent<Enemy_Weak>();
         enemy.SetLookPlayerAndEnemyStop(false, true);
         enemy.enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
-        enemy.IsBlocking = true;
+        blockTimer = blockTime;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (enemy.IsAction)
+        blockTimer -= Time.deltaTime;
+        if (blockTimer <= 0.0f && !enemy.IsBlockingReaction)
         {
-            enemy.enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
             enemy.IsBlocking = false;
+            enemy.enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
         }
-        else if (enemy.IsBlockingReaction)
+
+        if (enemy.IsBlockingReaction)
         {
             enemy.enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
         }
@@ -29,6 +34,5 @@ public class Enemy_WeakBlock : StateMachineBehaviour
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         enemy.SetLookPlayerAndEnemyStop(true, false);
-        enemy.IsBlocking = false;
     }
 }
