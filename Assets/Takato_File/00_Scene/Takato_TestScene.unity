@@ -461,7 +461,7 @@ Transform:
   m_GameObject: {fileID: 1787687343}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.67, y: 1.86, z: -7.658}
+  m_LocalPosition: {x: 0.053024054, y: 1.88, z: 6.9740543}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -558,7 +558,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.72119, y: 0, z: 2.8339396}
-  m_LocalScale: {x: 10, y: 1, z: 10}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 113653077}
@@ -815,7 +815,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5191456825149253654, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5069759
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5191456825149253654, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -823,7 +823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5191456825149253654, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.711946
+      value: 8.47
       objectReference: {fileID: 0}
     - target: {fileID: 5191456825149253654, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -855,11 +855,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7506178952676961221, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: rollHeight
-      value: 0.2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7506178952676961221, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: rollCenterY
-      value: 1.2
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 7506178952676961221, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: cameraTransform
