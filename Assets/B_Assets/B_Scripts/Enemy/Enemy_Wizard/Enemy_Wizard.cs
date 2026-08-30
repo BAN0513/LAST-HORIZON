@@ -4,19 +4,6 @@ public class Enemy_Wizard : Enemy_Humanoid
 {
     private Enemy_WizardAnimatorController enemy_WizardAnimator;
 
-    public enum SummonEnemyWeakState 
-    {
-        NotSpawn,
-        Spawn,
-        FiftyPercentSpawn,
-        SpawnEnd,
-    }
-    private SummonEnemyWeakState enemy_WeakSpawnState = SummonEnemyWeakState.NotSpawn;
-    public SummonEnemyWeakState Enemy_WeakSpawnState
-    {
-        get {  return enemy_WeakSpawnState; }
-        set {  enemy_WeakSpawnState = value; }
-    }
 
     [SerializeField] private GameObject meraObj;
     [SerializeField] private GameObject impactEffect;
@@ -50,11 +37,6 @@ public class Enemy_Wizard : Enemy_Humanoid
         if (isTeleport) { isHit = true; }
 
         base.TakeDamage(damage, sound, seNumber);
-
-        if (hp <= enemySO.maxHP / 2 && enemy_WeakSpawnState != SummonEnemyWeakState.SpawnEnd)
-        {
-            enemy_WeakSpawnState = SummonEnemyWeakState.FiftyPercentSpawn; 
-        }
 
         isTeleport = true;
     }

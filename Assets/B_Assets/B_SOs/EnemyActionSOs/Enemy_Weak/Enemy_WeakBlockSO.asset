@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af162e04fac2ffd488af8e6f4392b425, type: 3}
   m_Name: Enemy_WeakBlockSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WeakBlockSO
+  actionName: "\u9632\u5FA1"
   bestDis: 0
-  bestDot: 1
-  maxDis: 0.5
-  maxDot: 1
+  maxDis: 0
   minDis: 0
-  minDot: 0.5
-  baseDis: 0.5
-  baseDot: 1
-  magnification: 0.1
+  baseProbability: 1

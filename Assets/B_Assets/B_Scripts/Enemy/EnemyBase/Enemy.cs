@@ -144,7 +144,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        Debug.Log("dis : " + agent.stoppingDistance);
         if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)
@@ -300,20 +299,23 @@ public abstract class Enemy : MonoBehaviour
     {
         if (isActionAnimation || enemyBaseState == EnemyBaseState.Dead) { return; }
 
-        EnemyActionSO action = CalcAction(enemySO.action);
+        //SOは並びかえ手はいけないから変数に代入する
+        List<EnemyActionSO> action = new List<EnemyActionSO>(enemySO.action);
 
-        if (action != null)
+        EnemyActionSO executeAction = CalcAction(action);
+
+        if (executeAction != null)
         {
-            action.Execute(enemyAnimatorController);
+            executeAction.Execute(enemyAnimatorController);
 
-            if (currentAction != null && currentAction != action)
+            if (executeAction != currentAction)
             {
                 CurrentActionEnd();
             }
 
-            currentAction = action;
+            currentAction = executeAction;
         }
-        else if (currentAction != null)
+        else
         {
             CurrentActionEnd();
         }
@@ -321,73 +323,90 @@ public abstract class Enemy : MonoBehaviour
 
     protected void CurrentActionEnd()
     {
+        if (currentAction == null) { return; }
         currentAction.ActionEnd(enemyAnimatorController);
         currentAction = null;
     }
 
-    protected EnemyActionSO CalcAction(EnemyActionSO[] action)
+    EnemyActionSO CalcAction(List<EnemyActionSO> action)
     {
         List<float> scores = new List<float>();
-        EnemyActionSO firstActionSO = null;
-        EnemyActionSO secondActionSO = null;
-        foreach (var a in action)
+
+        //各行動のスコアを計算して、0.0fの物はListから削除する
+        for (int i = 0; i < action.Count; i++)
         {
-            scores.Add(a.ScoreCalculation(distance, dot, this));
+            float score = action[i].ScoreCalculation(distance, dot, this);
+
+            if (score == Mathf.Infinity) { return action[i]; }
+
+            if (score == 0.0f)
+            {
+                action.RemoveAt(i);
+                i--;
+            }
+            else
+            {
+                scores.Add(score);
+            }
         }
 
-        float firstScore = 0;
-        float secondScore = 0;
-        int firstIndex = -1;
-        int secondIndex = -1;
+        //アクションが空の場合はreturnする
+        if (action.Count <= 0) { return null; }
 
+        //スコアの大きい順にアクションを並び替える
         for (int i = 0; i < scores.Count; i++)
         {
-            float score = scores[i];
-
-            if (score > firstScore)
+            for (int j = 1; j < scores.Count; j++)
             {
-                secondScore = firstScore;
-                secondIndex = firstIndex;
+                if (scores[i] <= scores[j])
+                {
+                    float saveScore = scores[i];
+                    EnemyActionSO saveAction = action[i];
 
-                firstScore = score;
-                firstIndex = i;
-            }
-            else if (score > secondScore)
-            {
-                secondScore = score;
-                secondIndex = i;
+                    scores[i] = scores[j];
+                    action[i] = action[j];
+
+                    scores[j] = saveScore;
+                    action[j] = saveAction;
+                    break;
+                }
             }
         }
 
-        if (firstScore != 0)  { firstActionSO = action[firstIndex]; }
-        if (secondScore != 0) { secondActionSO = action[secondIndex]; }
-
-        if (firstActionSO != null)
+        //各行動の確率をリストに入れて、すべての確率の合計を取っておく
+        List<float> actionProbability = new List<float>();
+        float totalProbability = 0.0f;
+        for (int i = 0; i < action.Count; i++)
         {
-            return firstActionSO;
-            //if (lastAction_1 == firstActionSO || lastAction_2 == firstActionSO)
-            //{
-            //    if (secondActionSO != null)
-            //    {
-            //        lastAction_2 = lastAction_1;
-            //        lastAction_1 = secondActionSO;
-            //        return secondActionSO;
-            //    }
-            //    else
-            //    {
-            //        lastAction_2 = null;
-            //        Init();
-            //    }
-            //}
-            //else
-            //{
-            //    lastAction_2 = lastAction_1;
-            //    lastAction_1 = firstActionSO;
-            //    return firstActionSO;
-            //}
+            actionProbability.Add(action[i].baseProbability / (i + 1));
+
+            totalProbability += actionProbability[i];
         }
 
-        lastAction_1 = null;
+        //余った確率をアクションの数で割る
+        float equal = (100 - totalProbability) / action.Count;
+
+        float rand = Random.Range(0, 101);
+        float save = 0.0f;
+
+        Debug.Log("<color=yellow> Random : " + rand + "</color>");
+        //Debugですべての行動の確率を確認するために一時的に分けて書いてます。
+        for (int i = 0; i < action.Count; i++)
+        {
+            actionProbability[i] += equal;
+            Debug.Log("<color=yellow>" + action[i].actionName + " : " + actionProbability[i] + "%</color>");
+        }
+
+        //ランダムの数値と確率を使ってアクションを決める
+        for (int i = 0; i < action.Count; i++)
+        {
+            save += actionProbability[i];
+
+            if (save >= rand)
+            {
+                return action[i];
+            }
+        }
         return null;
     }
 

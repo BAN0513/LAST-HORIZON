@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14bff83ea697184195625af63e98100, type: 3}
   m_Name: Enemy_Wizard_MeraStormSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_ImpactSO
+  actionName: "\u30E1\u30E9\u30B9\u30C8\u30FC\u30E0"
   bestDis: 3
-  bestDot: 1
-  maxDis: 10
-  maxDot: 1
-  minDis: 0
-  minDot: -1
-  baseDis: 0.7
-  baseDot: 0.5
-  magnification: 1
+  maxDis: 40
+  minDis: 1
+  baseProbability: 10

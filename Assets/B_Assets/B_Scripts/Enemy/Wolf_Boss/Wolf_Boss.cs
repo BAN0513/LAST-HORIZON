@@ -12,18 +12,18 @@ public class Wolf_Boss : Enemy_FourLegs
 
     protected override void Update()
     {
-        if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
+        //if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
-        base.Update();
+        //base.Update();
 
-        if (isActionAnimation) { return; }
-        Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
+        //if (isActionAnimation) { return; }
+        //Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
 
-        if (action != null)
-        {
-            SetLookPlayerAndEnemyStop(false, true);
-            action.Execute(wolf_Anim);
-        }
+        //if (action != null)
+        //{
+        //    SetLookPlayerAndEnemyStop(false, true);
+        //    action.Execute(wolf_Anim);
+        //}
     }
 
     //Ç±Ç±Ç©ÇÁâ∫ÇÕAnimatorä÷òAÇÃä÷êî

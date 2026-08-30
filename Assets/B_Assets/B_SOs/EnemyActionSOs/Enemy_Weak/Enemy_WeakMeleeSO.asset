@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c85cfb2274d606748bb89b7b6ac417be, type: 3}
   m_Name: Enemy_WeakMeleeSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WeakMeleeSO
-  bestDis: 3
-  bestDot: 1
+  actionName: "\u5207\u308A\u4ED8\u3051"
+  bestDis: 2.5
   maxDis: 5
-  maxDot: 1
   minDis: 0
-  minDot: -1
-  baseDis: 0.5
-  baseDot: 1
-  magnification: 1
+  baseProbability: 70

@@ -21,9 +21,10 @@ public class Enemy_Weak : Enemy_Humanoid
 
     protected override void Update()
     {
+        //Debug.Log("dis" + distance);
         if (isDown || isHit) { return; }
 
-        base.Update();        
+        base.Update();
     }
 
     protected override void ContactAnimation()

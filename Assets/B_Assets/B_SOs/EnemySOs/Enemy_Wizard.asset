@@ -24,7 +24,7 @@ MonoBehaviour:
   def: 0
   stoopingDis: 8
   lookRotationSpeed: 3
-  engageDis: 50
-  contactDis: 5
+  engageDis: 100
+  contactDis: 100
   contactDot: 0.3
-  searchDis: 20
+  searchDis: 120

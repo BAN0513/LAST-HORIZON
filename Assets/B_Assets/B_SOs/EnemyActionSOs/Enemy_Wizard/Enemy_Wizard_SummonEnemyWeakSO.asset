@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ba31546bb50c21409297d8f58e54d2b, type: 3}
   m_Name: Enemy_Wizard_SummonEnemyWeakSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_SummonEnemyWeakSO
-  bestDis: 0
-  bestDot: 0
-  maxDis: 0
-  maxDot: 0
-  minDis: 0
-  minDot: 0
-  baseDis: 0.5
-  baseDot: 0.5
-  magnification: 1
+  actionName: "\u96D1\u9B5A\u6575\u53EC\u559A"
+  bestDis: 8
+  maxDis: 100
+  minDis: 1
+  baseProbability: 40

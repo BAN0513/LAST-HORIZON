@@ -12,12 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bb4b16bf28af3d46aaf1d70cfe7cfc7, type: 3}
   m_Name: Enemy_Wizard_TeleportationSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard_TeleportationSO
+  actionName: "\u30C6\u30EC\u30DD\u30FC\u30C8"
   bestDis: 0
-  bestDot: 0
   maxDis: 0
-  maxDot: 0
   minDis: 0
-  minDot: 0
-  baseDis: 0.5
-  baseDot: 0.5
-  magnification: 1
+  baseProbability: 1
