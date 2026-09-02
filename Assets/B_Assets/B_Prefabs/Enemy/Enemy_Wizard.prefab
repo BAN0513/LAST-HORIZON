@@ -418,10 +418,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_Wizard
   enemySO: {fileID: 11400000, guid: 3a1298ffb1e4476458e3f5ef13fa7e78, type: 2}
   hpSliider: {fileID: 2660115946879318116}
+  isNoObstacleAvoidance: 1
   meraObj: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
   impactEffect: {fileID: 3856664211485569777, guid: 21e0af4b08cd8114b898e08c2f625120, type: 3}
   meraStormObj: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
   enemy_WeakObj: {fileID: 56609770559436359, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}
+  shieldObj: {fileID: 5374694314431584760, guid: 6eb8305eedde5a349a1a8a6f391e8ddf, type: 3}
   summonPos:
   - {fileID: 3391421305911472790}
   - {fileID: 6586357170622914288}

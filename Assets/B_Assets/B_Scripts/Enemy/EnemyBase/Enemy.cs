@@ -12,6 +12,9 @@ public abstract class Enemy : MonoBehaviour
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
 
+    [Header("ほぼ中ボス用。\nNav Mesh Obstacleの影響を受けなくなる")]
+    [SerializeField] private bool isNoObstacleAvoidance = false;
+
     public Transform Target {  get { return target; } }
     protected Transform target;
 
@@ -72,10 +75,6 @@ public abstract class Enemy : MonoBehaviour
     public float LookRotationSpeed { get { return lookRotationSpeed; } set { lookRotationSpeed = value; } }
     protected float lookRotationSpeed = 0;
 
-    //最後に使用したアクションの保存用
-    private EnemyActionSO lastAction_1;
-    private EnemyActionSO lastAction_2;
-
     //敵がプレイヤーを発見しているかどうか
     private float contactDis;
     private float contactDot;
@@ -124,11 +123,16 @@ public abstract class Enemy : MonoBehaviour
 
         distance = Vector3.Distance(transform.position, target.position);
 
-        agent.updateRotation = false;
-
         hp = enemySO.maxHP;
 
+        agent.updateRotation = false;
+
         agent.stoppingDistance = enemySO.stoopingDis;
+
+        if (isNoObstacleAvoidance)
+        {
+            agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+        }
 
         lookRotationSpeed = enemySO.lookRotationSpeed;
 

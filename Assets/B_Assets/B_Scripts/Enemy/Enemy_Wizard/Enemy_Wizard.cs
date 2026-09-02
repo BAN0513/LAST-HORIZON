@@ -9,6 +9,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private GameObject impactEffect;
     [SerializeField] private GameObject meraStormObj;
     [SerializeField] private GameObject enemy_WeakObj;
+    [SerializeField] private GameObject shieldObj;
     [SerializeField] private Transform[] summonPos;
 
     [SerializeField] private Transform[] warpPos;
@@ -19,6 +20,9 @@ public class Enemy_Wizard : Enemy_Humanoid
         get { return isTeleport; }
         set { isTeleport = value; }
     }
+
+    private bool isShield = false;
+    public bool IsShield { set { isShield = value; } }
 
     protected override void Start()
     {
@@ -34,6 +38,8 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
+        if (isShield) { return; }  //シールド中は念のためダメージが入らないようにする
+
         if (isTeleport) { isHit = true; }
 
         base.TakeDamage(damage, sound, seNumber);
@@ -97,6 +103,18 @@ public class Enemy_Wizard : Enemy_Humanoid
         transform.position = warpPos[randomWarp].position;
         transform.rotation = Quaternion.LookRotation((target.position - transform.position).normalized);
         return;
+    }
+
+    public void ShieldSpawn()
+    {
+        isShield = true;
+
+        GameObject shield = Instantiate(shieldObj, transform.position, Quaternion.identity);
+        
+        if (shield.TryGetComponent<ShieldController>(out var shieldController))
+        {
+            shieldController.ParentEnemyWizard = this;
+        }
     }
 
     //攻撃のアニメーションが終わったら全部初期化する

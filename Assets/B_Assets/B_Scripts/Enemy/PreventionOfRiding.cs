@@ -6,20 +6,28 @@ public class PreventionOfRiding : MonoBehaviour
     Enemy enemy;
     CharacterController playerController;
     Vector3 dir;
+    [SerializeField] private float power = 0.1f;
 
     private void Start()
     {
         enemy = GetComponentInParent<Enemy>();
-        playerController = enemy.Target.GetComponent<CharacterController>();
+
+        if (enemy == null)
+        {
+            playerController = GameObject.FindWithTag("Player").GetComponent<CharacterController>();
+        }
+        else
+        {
+            playerController = enemy.Target.GetComponent<CharacterController>();
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            dir = Vector3.Normalize(enemy.Target.position - transform.position);
-            dir.y = 0;
-            dir *= 0.1f;
+            dir = Vector3.Normalize(playerController.transform.position - transform.position);
+            dir *= power;
             playerController.Move(dir);
         }
     }
