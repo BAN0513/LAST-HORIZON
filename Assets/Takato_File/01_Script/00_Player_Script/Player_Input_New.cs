@@ -26,8 +26,10 @@ public class Player_Input_New : MonoBehaviour
     public bool HeavyAttackInput { get; private set; }
 
     [Header("長押し判定設定")]
-    [SerializeField] private float heavyAttackHoldThreshold = 0.4f; // 長押しと判定する時間(秒)
-    private float attackPressStartTime = 0f;
+    [SerializeField] private float heavyAttackHoldThreshold;
+    [Header("ダブルタップ判定設定")]
+    [SerializeField] private float doubleTapThreshold;
+
 
     // 回避用のプロパティと内部変数
     public bool RollInput { get; private set; }
@@ -35,7 +37,8 @@ public class Player_Input_New : MonoBehaviour
 
     private float lastForwardTapTime = 0f;
     private float lastBackwardTapTime = 0f;
-    [SerializeField] private float doubleTapThreshold = 0.3f; // ダブルタップと判定する制限時間(秒)
+    private float attackPressStartTime = 0f;
+
 
     private void Awake()
     {
