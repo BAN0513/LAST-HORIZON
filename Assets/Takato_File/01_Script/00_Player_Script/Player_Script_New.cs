@@ -12,14 +12,14 @@ public class Player_Script_New : MonoBehaviour
     [Space(10)]
 
     [Header("前転・後転時のCharacterController設定")]
-    [SerializeField] private float rollHeight; // ロール中の高さ
-    [SerializeField] private float rollCenterY; // ロール中の中心Y座標
+    [SerializeField] private float rollHeight;
+    [SerializeField] private float rollCenterY;
 
     [Header("カメラの参照")]
-    [SerializeField] private Transform cameraTransform; // カメラのTransform参照
+    [SerializeField] private Transform cameraTransform;
     [Header("プレイヤーがカメラの向いている方向にどれくらい滑らかに向くかの度合い")]
     [Range(5f, 20f)]
-    [SerializeField] private float rotationSmoothness; // プレイヤーの回転の滑らかさ
+    [SerializeField] private float rotationSmoothness;
 
     // 他スクリプトの参照
     private Player_Input_New playerInput;
@@ -33,14 +33,13 @@ public class Player_Script_New : MonoBehaviour
     private Vector3 velocity;
     private Vector3 currentMoveVelocity;
 
-    // ロール状態のフラグと前進/後退方向の保持
+    // ロール状態および攻撃状態のフラグ
     private bool isRolling = false;
+    private bool isAttacking = false;
     private Vector3 rollDirection;
 
-    // 変数の初期化
     private const float GroundedDownwardForce = -2f;
 
-    // デフォルトのCharacterControllerサイズ設定値
     private float defaultHeight;
     private Vector3 defaultCenter;
 
@@ -62,6 +61,7 @@ public class Player_Script_New : MonoBehaviour
         if (playerAnimation != null)
         {
             playerAnimation.OnRollEnd += OnRollEndHandler;
+            playerAnimation.OnAttackEnd += OnAttackEndHandler;
         }
     }
 
@@ -70,6 +70,7 @@ public class Player_Script_New : MonoBehaviour
         if (playerAnimation != null)
         {
             playerAnimation.OnRollEnd -= OnRollEndHandler;
+            playerAnimation.OnAttackEnd -= OnAttackEndHandler;
         }
     }
 
@@ -89,7 +90,7 @@ public class Player_Script_New : MonoBehaviour
             velocity.y = GroundedDownwardForce;
         }
 
-        // 移動入力がある時のみ体をカメラの向きに合わせる（ロール中は向き固定）
+        // ロール中でなく移動入力がある場合はカメラの向きに回転
         if (!isRolling && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
         {
             RotatePlayerToCamera();
@@ -97,16 +98,27 @@ public class Player_Script_New : MonoBehaviour
 
         MovePlayer();
 
-        if (!isRolling)
+        // ロール中でなく接地している場合は攻撃を受け付ける
+        if (!isRolling && isGrounded)
         {
-            if (playerInput != null && playerInput.RollInput && isGrounded)
+            if (playerInput != null && !isAttacking)
             {
-                Roll();
-            }
-
-            if (playerInput != null && playerInput.JumpInput && isGrounded)
-            {
-                Jump();
+                if (playerInput.HeavyAttackInput)
+                {
+                    HeavyAttack(); // 強攻撃処理
+                }
+                else if (playerInput.LightAttackInput)
+                {
+                    LightAttack(); // 通常攻撃処理
+                }
+                else if (playerInput.RollInput)
+                {
+                    Roll();
+                }
+                else if (playerInput.JumpInput)
+                {
+                    Jump();
+                }
             }
         }
 
@@ -132,6 +144,7 @@ public class Player_Script_New : MonoBehaviour
     {
         if (playerInput == null) return;
 
+        // ロール中の移動
         if (isRolling)
         {
             currentMoveVelocity = rollDirection * (playerSO.MoveSpeed * playerSO.RollSpeedMultiplier);
@@ -165,8 +178,51 @@ public class Player_Script_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 前転・後転処理を行うメソッド
+    /// 通常攻撃処理を行うメソッド
     /// </summary>
+    private void LightAttack()
+    {
+        if (playerInput == null) return;
+
+        isAttacking = true;
+
+        if (cameraTransform != null)
+        {
+            float targetYaw = cameraTransform.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
+        }
+
+        if (playerAnimation != null)
+        {
+            playerAnimation.PlayLightAttack();
+        }
+
+        playerInput.ResetAttackInput();
+    }
+
+    /// <summary>
+    /// 強攻撃処理を行うメソッド
+    /// </summary>
+    private void HeavyAttack()
+    {
+        if (playerInput == null) return;
+
+        isAttacking = true;
+
+        if (cameraTransform != null)
+        {
+            float targetYaw = cameraTransform.eulerAngles.y;
+            transform.rotation = Quaternion.Euler(0f, targetYaw, 0f);
+        }
+
+        if (playerAnimation != null)
+        {
+            playerAnimation.PlayHeavyAttack();
+        }
+
+        playerInput.ResetAttackInput();
+    }
+
     private void Roll()
     {
         if (playerInput == null) return;
@@ -175,19 +231,18 @@ public class Player_Script_New : MonoBehaviour
 
         Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
 
-        // ダブルタップの方向によって移動ベクトルと再生アニメーションを分岐
         if (playerInput.CurrentRollType == RollType.Backward)
         {
-            rollDirection = -cameraForward; // カメラの後方へ退避
+            rollDirection = -cameraForward;
 
             if (playerAnimation != null)
             {
                 playerAnimation.PlayBackRoll();
             }
         }
-        else // RollType.Forward
+        else
         {
-            rollDirection = cameraForward; // カメラの前方へ回避
+            rollDirection = cameraForward;
 
             if (playerAnimation != null)
             {
@@ -195,7 +250,6 @@ public class Player_Script_New : MonoBehaviour
             }
         }
 
-        // CharacterControllerのサイズを回避用に縮小
         characterController.height = rollHeight;
         characterController.center = new Vector3(defaultCenter.x, rollCenterY, defaultCenter.z);
 
@@ -211,6 +265,14 @@ public class Player_Script_New : MonoBehaviour
             characterController.height = defaultHeight;
             characterController.center = defaultCenter;
         }
+    }
+
+    /// <summary>
+    /// アニメーションイベントから呼ばれる攻撃終了ハンドラー
+    /// </summary>
+    private void OnAttackEndHandler()
+    {
+        isAttacking = false;
     }
 
     private void Jump()

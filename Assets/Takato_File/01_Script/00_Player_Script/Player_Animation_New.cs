@@ -15,12 +15,15 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private static readonly int RollHash = Animator.StringToHash("Roll");
     private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
+    private static readonly int LightAttackHash = Animator.StringToHash("LightAttack"); // 通常攻撃トリガー
+    private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack"); // 強攻撃トリガー
 
     [Header("アニメーション設定")]
     [SerializeField] private float dampTime;
 
-    // アニメーション終了時に発火するイベント
+    // イベント定義
     public event Action OnRollEnd;
+    public event Action OnAttackEnd; // 攻撃終了時イベント（通常攻撃・強攻撃共通）
 
     private void Awake()
     {
@@ -49,27 +52,38 @@ public class Player_Animation_New : MonoBehaviour
         animator.SetTrigger(JumpHash);
     }
 
-    /// <summary>
-    /// プレイヤーの前転アニメーションを再生するメソッド
-    /// </summary>
     public void PlayRoll()
     {
         if (animator == null) return;
         animator.SetTrigger(RollHash);
     }
 
-    /// <summary>
-    /// プレイヤーの後転アニメーションを再生するメソッド
-    /// </summary>
     public void PlayBackRoll()
     {
         if (animator == null) return;
-        // ※ AnimatorにBackRollトリガーがない場合は PlayRoll() を呼び出しても動作します
         animator.SetTrigger(BackRollHash);
     }
 
     /// <summary>
-    /// プレイヤーの接地状態を更新するメソッド
+    /// 通常攻撃アニメーションを再生するメソッド
+    /// </summary>
+    public void PlayLightAttack()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(LightAttackHash);
+    }
+
+    /// <summary>
+    /// 強攻撃アニメーションを再生するメソッド
+    /// </summary>
+    public void PlayHeavyAttack()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(HeavyAttackHash);
+    }
+
+    /// <summary>
+    /// 地面に接地しているかどうかの状態を更新するメソッド
     /// </summary>
     public void UpdateGroundedState(bool isGrounded)
     {
@@ -78,10 +92,18 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// Animation Event から呼び出すメソッド（前転・後転共通）
+    /// Animation Event から呼び出すメソッド（回避用）
     /// </summary>
     public void OnRollCompleted()
     {
         OnRollEnd?.Invoke();
+    }
+
+    /// <summary>
+    /// Animation Event から呼び出すメソッド（攻撃用：通常攻撃・強攻撃共通）
+    /// </summary>
+    public void OnAttackCompleted()
+    {
+        OnAttackEnd?.Invoke();
     }
 }
