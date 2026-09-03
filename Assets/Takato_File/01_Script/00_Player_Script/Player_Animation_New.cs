@@ -14,11 +14,12 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int JumpHash = Animator.StringToHash("Jump");
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private static readonly int RollHash = Animator.StringToHash("Roll");
+    private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
 
     [Header("アニメーション設定")]
     [SerializeField] private float dampTime;
 
-    // 前転アニメーション終了時に発火するイベント
+    // アニメーション終了時に発火するイベント
     public event Action OnRollEnd;
 
     private void Awake()
@@ -58,6 +59,16 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
+    /// プレイヤーの後転アニメーションを再生するメソッド
+    /// </summary>
+    public void PlayBackRoll()
+    {
+        if (animator == null) return;
+        // ※ AnimatorにBackRollトリガーがない場合は PlayRoll() を呼び出しても動作します
+        animator.SetTrigger(BackRollHash);
+    }
+
+    /// <summary>
     /// プレイヤーの接地状態を更新するメソッド
     /// </summary>
     public void UpdateGroundedState(bool isGrounded)
@@ -67,10 +78,10 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// Animation Event から呼び出すメソッド
+    /// Animation Event から呼び出すメソッド（前転・後転共通）
     /// </summary>
     public void OnRollCompleted()
     {
-        OnRollEnd?.Invoke();// 前転アニメーション終了時にイベントを発火
+        OnRollEnd?.Invoke();
     }
 }

@@ -2,39 +2,49 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum RollType
+{
+    None,
+    Forward,
+    Backward
+}
+
 /// <summary>
 /// プレイヤーの入力を管理するクラス(New)
 /// </summary>
 public class Player_Input_New : MonoBehaviour
 {
-    private InputSystem_Actions playerInputActions; // プレイヤーの入力アクションを格納する変数
+    private InputSystem_Actions playerInputActions;
 
-    public Vector2 MoveInput { get; private set; }       // プレイヤーの移動入力を格納するプロパティ
-    public bool JumpInput { get; private set; }          // プレイヤーのジャンプ入力を格納するプロパティ
-    public bool IsSprinting { get; private set; } = false; // プレイヤーのダッシュ入力を格納するプロパティ
-    public Vector2 LookInput { get; private set; }       // プレイヤーの視点入力を格納するプロパティ
+    public Vector2 MoveInput { get; private set; }
+    public bool JumpInput { get; private set; }
+    public bool IsSprinting { get; private set; } = false;
+    public Vector2 LookInput { get; private set; }
 
-    //前転用のプロパティと内部変数
+    // 回避用のプロパティと内部変数
     public bool RollInput { get; private set; }
+    public RollType CurrentRollType { get; private set; } = RollType.None;
+
     private float lastForwardTapTime = 0f;
+    private float lastBackwardTapTime = 0f;
     [SerializeField] private float doubleTapThreshold = 0.3f; // ダブルタップと判定する制限時間(秒)
 
     private void Awake()
     {
-        playerInputActions = new InputSystem_Actions(); // InputSystem_Actionsのインスタンスを作成
+        playerInputActions = new InputSystem_Actions();
 
         // Move入力イベント登録
-        playerInputActions.Player.Move.started += OnMoveInput;   // 入力が開始されたときのイベント
-        playerInputActions.Player.Move.performed += OnMoveInput; // 入力が実行されたときのイベント
-        playerInputActions.Player.Move.canceled += OnMoveInput;  // 入力がキャンセルされたときのイベント
+        playerInputActions.Player.Move.started += OnMoveInput;
+        playerInputActions.Player.Move.performed += OnMoveInput;
+        playerInputActions.Player.Move.canceled += OnMoveInput;
 
         // Jump入力イベント登録
-        playerInputActions.Player.Jump.started += context => JumpInput = true;   // ジャンプ入力が開始されたときのイベント
-        playerInputActions.Player.Jump.canceled += context => JumpInput = false; // ジャンプ入力がキャンセルされたときのイベント
+        playerInputActions.Player.Jump.started += context => JumpInput = true;
+        playerInputActions.Player.Jump.canceled += context => JumpInput = false;
 
         // Sprint入力イベント登録
-        playerInputActions.Player.Sprint.started += context => IsSprinting = true;   // ダッシュ入力が開始されたときのイベント
-        playerInputActions.Player.Sprint.canceled += context => IsSprinting = false; // ダッシュ入力がキャンセルされたときのイベント
+        playerInputActions.Player.Sprint.started += context => IsSprinting = true;
+        playerInputActions.Player.Sprint.canceled += context => IsSprinting = false;
 
         // Look入力イベント登録
         playerInputActions.Player.Look.started += OnLookInput;
@@ -44,12 +54,12 @@ public class Player_Input_New : MonoBehaviour
 
     private void OnEnable()
     {
-        playerInputActions.Player.Enable(); // プレイヤーの入力アクションを有効化
+        playerInputActions.Player.Enable();
     }
 
     private void OnDisable()
     {
-        playerInputActions.Player.Disable(); // プレイヤーの入力アクションを無効化
+        playerInputActions.Player.Disable();
     }
 
     /// <summary>
@@ -59,17 +69,31 @@ public class Player_Input_New : MonoBehaviour
     {
         Vector2 newInput = context.ReadValue<Vector2>();
 
-        //Wキーまたは上矢印キーが押された場合のダブルタップ判定
-        if (context.started && newInput.y > 0.5f)
+        if (context.started)
         {
-            if (Time.time - lastForwardTapTime <= doubleTapThreshold)
+            // Wキーまたは上矢印キーのダブルタップ判定 (前転)
+            if (newInput.y > 0.5f)
             {
-                RollInput = true; // ダブルタップ成立
+                if (Time.time - lastForwardTapTime <= doubleTapThreshold)
+                {
+                    RollInput = true;
+                    CurrentRollType = RollType.Forward;
+                }
+                lastForwardTapTime = Time.time;
             }
-            lastForwardTapTime = Time.time;
+            // Sキーまたは下矢印キーのダブルタップ判定 (後転)
+            else if (newInput.y < -0.5f)
+            {
+                if (Time.time - lastBackwardTapTime <= doubleTapThreshold)
+                {
+                    RollInput = true;
+                    CurrentRollType = RollType.Backward;
+                }
+                lastBackwardTapTime = Time.time;
+            }
         }
 
-        MoveInput = newInput; // プレイヤーの移動入力を更新
+        MoveInput = newInput;
     }
 
     /// <summary>
@@ -86,5 +110,6 @@ public class Player_Input_New : MonoBehaviour
     public void ResetRollInput()
     {
         RollInput = false;
+        CurrentRollType = RollType.None;
     }
 }
