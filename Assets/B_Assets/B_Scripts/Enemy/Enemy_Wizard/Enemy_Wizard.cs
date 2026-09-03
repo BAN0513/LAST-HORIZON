@@ -11,7 +11,6 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private GameObject enemy_WeakObj;
     [SerializeField] private GameObject shieldObj;
     [SerializeField] private Transform[] summonPos;
-
     [SerializeField] private Transform[] warpPos;
 
     private bool isTeleport = false;
@@ -23,6 +22,13 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     private bool isShield = false;
     public bool IsShield { set { isShield = value; } }
+
+    private int summonEnemyCount = 0;
+    public int SummonEnemyCount
+    {
+        get { return summonEnemyCount; }
+        set { summonEnemyCount = value; }
+    }
 
     protected override void Start()
     {
@@ -83,7 +89,9 @@ public class Enemy_Wizard : Enemy_Humanoid
         Vector3 dir = (target.position - transform.position).normalized;
         foreach (var pos in summonPos)
         {
-            Instantiate(enemy_WeakObj, pos.position, Quaternion.LookRotation(dir));
+            Enemy_Weak weak = Instantiate(enemy_WeakObj, pos.position, Quaternion.LookRotation(dir)).GetComponent<Enemy_Weak>();
+            summonEnemyCount++;
+            weak.Wizard = this;
         }
     }
 

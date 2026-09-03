@@ -10,6 +10,9 @@ public class Enemy_Weak : Enemy_Humanoid
 
     private int downDamage = 21;
 
+    //中ボスの能力で召喚されたとき用の変数
+    public Enemy_Wizard Wizard { private get; set; }
+
     protected override void Start()
     {
         base.Start();
@@ -63,11 +66,6 @@ public class Enemy_Weak : Enemy_Humanoid
         {
             IsBlocking = true;
         }
-
-        //if (currentAction != null)
-        //{
-        //    CurrentActionEnd();
-        //}
     }    
 
     public override void Init()
@@ -85,6 +83,15 @@ public class Enemy_Weak : Enemy_Humanoid
         enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_ChargeAttack);
         enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
         enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, false);
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+        
+        if (Wizard == null) { return; }
+
+        Wizard.SummonEnemyCount--;
     }
 
     [ContextMenu("DownDamage")]
