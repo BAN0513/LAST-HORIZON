@@ -521,6 +521,7 @@ public abstract class Enemy : MonoBehaviour
     //UŒ‚”»’è‚ÌoŒ»
     public void AttackJudgmentActive(EnemyAttackRollController _weaponController)
     {
+        _weaponController.Damage = currentAction.damage;
         _weaponController.SetColliderActive(true);
     }
 

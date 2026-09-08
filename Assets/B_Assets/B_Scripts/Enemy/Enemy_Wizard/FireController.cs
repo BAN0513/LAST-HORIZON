@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class FireController : MonoBehaviour
 {
+    [SerializeField] private float moveSpeed = 5.0f; 
+    private Rigidbody rb;
+
+    private Vector3 direction;
+    public Vector3 Direction { set { direction = value; } }
+
     private int damage;
-    public int Damage
-    {
-        set
-        {
-            damage = value;
-        }
-    }
+    public int Damage { set { damage = value; } }
     private PlayerController player;
-    public PlayerController Player
-    {
-        set
-        {
-            player = value;
-        }
-    }
+    public PlayerController Player { set { player = value; } }
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         StartCoroutine(DestroyCnt());
+    }
+
+    private void Update()
+    {
+        rb.linearVelocity = direction * moveSpeed;
     }
 
     IEnumerator DestroyCnt()

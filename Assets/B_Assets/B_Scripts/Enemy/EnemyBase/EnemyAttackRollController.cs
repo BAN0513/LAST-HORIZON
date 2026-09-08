@@ -8,8 +8,8 @@ public class EnemyAttackRollController : MonoBehaviour
 
     [Header("武器のコライダー")]
     [SerializeField] private BoxCollider boxCollider; // 武器のコライダー
-    [Header("攻撃のダメージ")]
-    [SerializeField] private int damage;
+    
+    public int Damage { get; set; }
 
     // ※この変数やプロパティは使わなくてもよくなるため、残しておいても削除しても大丈夫です
     private PlayerController player;
@@ -55,13 +55,13 @@ public class EnemyAttackRollController : MonoBehaviour
             if (shield != null)
             {
                 // シールドがある場合はガード処理（見つかった targetPlayer を渡す）
-                shield.ReceiveAttack(damage, targetPlayer);
+                shield.ReceiveAttack(Damage, targetPlayer);
             }
             else
             {
                 // 【修正】見つかった targetPlayer に対してダメージを与える
-                targetPlayer.TakeDamage(damage);
-                Debug.Log($"[Hit] 敵の攻撃がプレイヤーに命中！ ダメージ: {damage}");
+                targetPlayer.TakeDamage(Damage);
+                Debug.Log($"[Hit] 敵の攻撃がプレイヤーに命中！ ダメージ: {Damage}");
             }
         }
     }

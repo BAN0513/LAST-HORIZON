@@ -4876,7 +4876,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   boxCollider: {fileID: 31848338589756540}
-  damage: 3
 --- !u!54 &5367454221775748305
 Rigidbody:
   m_ObjectHideFlags: 0

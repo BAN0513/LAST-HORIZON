@@ -15,5 +15,6 @@ MonoBehaviour:
   actionName: "\u6E9C\u3081\u5207\u308A"
   bestDis: 7.5
   maxDis: 10
-  minDis: 5
+  minDis: 0
   baseProbability: 30
+  damage: 150

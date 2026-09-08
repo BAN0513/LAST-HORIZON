@@ -2386,6 +2386,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
     - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
+      propertyPath: meraZomaObj
+      value: 
+      objectReference: {fileID: 1402218633731653722, guid: 968853248f334c049ab28f35fb656927, type: 3}
+    - target: {fileID: 877016646394575372, guid: ec415dc81ed338542acce749ad117812, type: 3}
       propertyPath: meraStormObj
       value: 
       objectReference: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}

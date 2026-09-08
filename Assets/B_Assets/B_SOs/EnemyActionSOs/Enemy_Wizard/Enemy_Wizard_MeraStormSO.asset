@@ -17,3 +17,4 @@ MonoBehaviour:
   maxDis: 40
   minDis: 1
   baseProbability: 10
+  damage: 250

@@ -9,7 +9,7 @@ public class Enemy_Wizard_TeleportationSO : Enemy_WizardActionSO
 
         if (enemy is Enemy_Wizard wizard)
         {
-            if (wizard.IsTeleport) { return Mathf.Infinity; }
+            if (wizard.IsHitAction) { return Mathf.Infinity; }
         }
 
         return 0.0f;

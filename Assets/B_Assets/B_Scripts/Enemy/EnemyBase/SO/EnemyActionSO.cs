@@ -18,6 +18,9 @@ public class EnemyActionSO : ScriptableObject
     [Header("確率")]
     [Range(0, 100)] public float baseProbability = 1.0f;
 
+    [Header("ダメージ")]
+    public int damage = 0;
+
     //スコアの計算
     //今後アクションによって条件を付けることがあるかもしれないから、overrideできるようにしておく
     public virtual float ScoreCalculation(float dis, float dot)

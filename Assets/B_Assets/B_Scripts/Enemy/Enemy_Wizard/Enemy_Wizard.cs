@@ -6,6 +6,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
 
     [SerializeField] private GameObject meraObj;
+    [SerializeField] private GameObject meraZomaObj;
     [SerializeField] private GameObject impactEffect;
     [SerializeField] private GameObject meraStormObj;
     [SerializeField] private GameObject enemy_WeakObj;
@@ -13,11 +14,11 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private Transform[] summonPos;
     [SerializeField] private Transform[] warpPos;
 
-    private bool isTeleport = false;
-    public bool IsTeleport 
+    private bool isHitAction = false;
+    public bool IsHitAction 
     {
-        get { return isTeleport; }
-        set { isTeleport = value; }
+        get { return isHitAction; }
+        set { isHitAction = value; }
     }
 
     private bool isShield = false;
@@ -46,34 +47,42 @@ public class Enemy_Wizard : Enemy_Humanoid
     {
         if (isShield) { return; }  //シールド中は念のためダメージが入らないようにする
 
-        if (isTeleport) { isHit = true; }
+        if (isHitAction) { isHit = true; }
 
         base.TakeDamage(damage, sound, seNumber);
 
-        isTeleport = true;
+        isHitAction = true;
     }
 
     //ここから下はAnimator関連の関数
 
     public void Mera()
     {
+        MeraObjSpawn(meraObj);
+    }
+
+    public void MeraZoma()
+    {
+        MeraObjSpawn(meraZomaObj);
+    }
+
+    private void MeraObjSpawn(GameObject spawnMeraObj)
+    {
         Vector3 toTarget = target.position - transform.position;
-        Vector3 nor = (toTarget).normalized;
+        Vector3 dir = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
-
-        GameObject fire = Instantiate(meraObj, transform.position + transform.forward + transform.up, quaternion);
+        GameObject fire = Instantiate(spawnMeraObj, transform.position + transform.forward + transform.up, quaternion);
         FireController fireController = fire.GetComponent<FireController>();
-        fireController.Damage = enemySO.damage;
+        fireController.Damage = currentAction.damage;
         fireController.Player = playerController;
-
-        Rigidbody rb = fire.GetComponent<Rigidbody>();
-
-        rb.linearVelocity = nor * 5;
+        fireController.Direction = dir;
     }
 
     public void MeraStorm()
     {
-        Instantiate(meraStormObj, transform.position, Quaternion.identity);
+        GameObject storm = Instantiate(meraStormObj, transform.position, Quaternion.identity);
+        TornadoController tornadoController = storm.GetComponent<TornadoController>();
+        tornadoController.Damage = currentAction.damage;
     }
 
     public void Impact()
@@ -97,7 +106,6 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void Teleport()
     {
-        isTeleport = false;
         int warpLimit = 10;
         int randomWarp = 0;
         float notWarpLength = 3.0f;
@@ -116,6 +124,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     public void ShieldSpawn()
     {
         isShield = true;
+        isHitAction = false;
 
         GameObject shield = Instantiate(shieldObj, transform.position, Quaternion.identity);
         
