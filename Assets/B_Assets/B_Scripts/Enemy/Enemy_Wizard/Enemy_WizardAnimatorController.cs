@@ -14,12 +14,14 @@ public class Enemy_WizardAnimatorController : EnemyAnimatorController
 
         wizardAnims = new Dictionary<AnimationBase, int>
         {
-            {AnimationBase.Wizard_Mera,      Animator.StringToHash("isMera")      },
-            {AnimationBase.Wizard_MeraZoma,  Animator.StringToHash("isMeraZoma")  },
-            {AnimationBase.Wizard_MeraStorm, Animator.StringToHash("isMeraStorm") },
-            {AnimationBase.Wizard_Shield,    Animator.StringToHash("isShield")    },
+            {AnimationBase.Wizard_Mera,            Animator.StringToHash("isMera")            },
+            {AnimationBase.Wizard_MeraZoma,        Animator.StringToHash("isMeraZoma")        },
+            {AnimationBase.Wizard_MeraStorm,       Animator.StringToHash("isMeraStorm")       },
+            {AnimationBase.Wizard_Shield,          Animator.StringToHash("isShield")          },
             {AnimationBase.Wizard_SummonEnemyWeak, Animator.StringToHash("isSummonEnemyWeak") },
-            {AnimationBase.Wizard_Teleportation, Animator.StringToHash("isTeleport") }
+            {AnimationBase.Wizard_Teleportation,   Animator.StringToHash("isTeleport")        },
+            {AnimationBase.Wizard_ShortManaCharge, Animator.StringToHash("isShortManaCharge") },
+            {AnimationBase.Wizard_LongManaCharge,  Animator.StringToHash("isLongManaCharge")  }
         };
     }
 

@@ -25,7 +25,9 @@ public class EnemyAnimatorController : MonoBehaviour
         Wizard_MeraStorm,
         Wizard_Shield,
         Wizard_SummonEnemyWeak,
-        Wizard_Teleportation
+        Wizard_Teleportation,
+        Wizard_ShortManaCharge,
+        Wizard_LongManaCharge
     }
 
     protected Dictionary<AnimationBase, int> anims;

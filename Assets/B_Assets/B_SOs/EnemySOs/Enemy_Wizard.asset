@@ -18,6 +18,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ae813d33592e5340ab7da1b798de55a, type: 2}
   - {fileID: 11400000, guid: 264203e3c80e8224eb0b230746953f66, type: 2}
   - {fileID: 11400000, guid: f30eff99498e94c4483567a400065cda, type: 2}
+  - {fileID: 11400000, guid: 4ac2180ad0942824fa55cbc4abaa098c, type: 2}
+  - {fileID: 11400000, guid: 8a163e0e286b8e248ac8d027d5f26212, type: 2}
   maxHP: 100
   damage: 10
   dashMoveSpeed: 0

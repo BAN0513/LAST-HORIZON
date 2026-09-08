@@ -4,7 +4,6 @@ public class Enemy_Wizard : Enemy_Humanoid
 {
     private Enemy_WizardAnimatorController enemy_WizardAnimator;
 
-
     [SerializeField] private GameObject meraObj;
     [SerializeField] private GameObject meraZomaObj;
     [SerializeField] private GameObject impactEffect;
@@ -30,6 +29,13 @@ public class Enemy_Wizard : Enemy_Humanoid
         get { return summonEnemyCount; }
         set { summonEnemyCount = value; }
     }
+
+    private int weakMagicCnt = 0;
+    private int shortManaChargePlayCnt = 2;
+    private bool shortManaCharge = false;
+    public  bool ShortManaCharge { get { return shortManaCharge; } }
+    private bool longManaCharge  = false;
+    public  bool LongManaCharge { get { return longManaCharge; } }
 
     protected override void Start()
     {
@@ -58,11 +64,13 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void Mera()
     {
+        CheckShortManaCharge();
         MeraObjSpawn(meraObj);
     }
 
     public void MeraZoma()
     {
+        longManaCharge = true;
         MeraObjSpawn(meraZomaObj);
     }
 
@@ -80,6 +88,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void MeraStorm()
     {
+        longManaCharge = true;
         GameObject storm = Instantiate(meraStormObj, transform.position, Quaternion.identity);
         TornadoController tornadoController = storm.GetComponent<TornadoController>();
         tornadoController.Damage = currentAction.damage;
@@ -95,6 +104,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void Summon()
     {
+        CheckShortManaCharge();
         Vector3 dir = (target.position - transform.position).normalized;
         foreach (var pos in summonPos)
         {
@@ -134,10 +144,32 @@ public class Enemy_Wizard : Enemy_Humanoid
         }
     }
 
+    private void CheckShortManaCharge()
+    {
+        weakMagicCnt++;
+
+        if (weakMagicCnt >= shortManaChargePlayCnt)
+        {
+            shortManaCharge = true;
+        }
+    }
+
+    public void ManaChargeReset()
+    {
+        weakMagicCnt    = 0;
+        shortManaCharge = false;
+        longManaCharge  = false;
+    }
+
     //攻撃のアニメーションが終わったら全部初期化する
     public override void Init()
     {
         base.Init();
+
+        if (isHitAction || shortManaCharge || longManaCharge)
+        {
+            isAction = true;
+        }
     }
 
     public override void InitAnim()
