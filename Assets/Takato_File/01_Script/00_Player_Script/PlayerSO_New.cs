@@ -8,6 +8,8 @@ public class PlayerSO_New : ScriptableObject
 {
     [Header("プレイヤーのステータス詳細設定")]
 
+    [Header("プレイヤーの最大体力")]
+    [SerializeField] private float maxHealth;
     [Header("プレイヤーの移動速度")]
     [SerializeField] private float moveSpeed;
     [Header("移動速度の倍率(スプリント時)")]
@@ -25,6 +27,7 @@ public class PlayerSO_New : ScriptableObject
 
 
     // プロパティ経由で値を参照できるように設定
+    public float MaxHealth => maxHealth;                           // 最大体力のプロパティ
     public float MoveSpeed => moveSpeed;                           // 移動速度のプロパティ
     public float SpeedMultiplier => speedMultiplier;               // 移動速度の倍率のプロパティ
     public float AccelerationMultiplier => accelerationMultiplier; // 加速倍率のプロパティ

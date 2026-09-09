@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20484c4a3bb4943468628d97f55b1b4f, type: 3}
   m_Name: PlayerSO_New
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSO_New
-  moveSpeed: 3
+  maxHealth: 0
+  moveSpeed: 2
   speedMultiplier: 2
   accelerationMultiplier: 20
   decelerationMultiplier: 10

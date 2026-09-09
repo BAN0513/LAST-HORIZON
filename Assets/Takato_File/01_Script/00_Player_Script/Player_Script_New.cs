@@ -253,7 +253,7 @@ public class Player_Script_New : MonoBehaviour
         characterController.height = rollHeight;
         characterController.center = new Vector3(defaultCenter.x, rollCenterY, defaultCenter.z);
 
-        playerInput.ResetRollInput();
+        playerInput.ResetRollInput(); //プレイヤーのロール入力を消費した後にリセット
     }
 
     private void OnRollEndHandler()
