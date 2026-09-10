@@ -1,5 +1,7 @@
+using System;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// プレイヤーの移動等のステータスを管理するクラス(New)
@@ -21,6 +23,14 @@ public class Player_Script_New : MonoBehaviour
     [Range(5f, 20f)]
     [SerializeField] private float rotationSmoothness;
 
+    // 体力・死亡関連プロパティ
+    public float CurrentHealth { get; private set; }
+    public bool IsDead => isDead;
+
+    // イベント定義 (UI等との通知用)
+    public event Action<float, float> OnHealthChanged; // (現在体力, 最大体力)
+    public event Action OnPlayerDied;                  // 死亡時イベント
+
     // 他スクリプトの参照
     private Player_Input_New playerInput;
     private Player_Animation_New playerAnimation;
@@ -33,9 +43,10 @@ public class Player_Script_New : MonoBehaviour
     private Vector3 velocity;
     private Vector3 currentMoveVelocity;
 
-    // ロール状態および攻撃状態のフラグ
+    // フラグ
     private bool isRolling = false;
     private bool isAttacking = false;
+    private bool isDead = false;
     private Vector3 rollDirection;
 
     private const float GroundedDownwardForce = -2f;
@@ -53,6 +64,16 @@ public class Player_Script_New : MonoBehaviour
         {
             defaultHeight = characterController.height;
             defaultCenter = characterController.center;
+        }
+    }
+
+    private void Start()
+    {
+        // 体力の初期化
+        if (playerSO != null)
+        {
+            CurrentHealth = playerSO.MaxHealth;
+            OnHealthChanged?.Invoke(CurrentHealth, playerSO.MaxHealth);
         }
     }
 
@@ -76,7 +97,8 @@ public class Player_Script_New : MonoBehaviour
 
     private void Update()
     {
-        if (characterController == null || playerSO == null) return;
+        // 死亡時や必要なコンポーネントがない場合は処理を行わない
+        if (characterController == null || playerSO == null || isDead) return;
 
         isGrounded = characterController.isGrounded;
 
@@ -93,10 +115,10 @@ public class Player_Script_New : MonoBehaviour
         // ロール中でなく移動入力がある場合はカメラの向きに回転
         if (!isRolling && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
         {
-            RotatePlayerToCamera();
+            RotatePlayerToCamera(); // カメラの向きに回転
         }
 
-        MovePlayer();
+        MovePlayer(); // 移動処理
 
         // ロール中でなく接地している場合は攻撃を受け付ける
         if (!isRolling && isGrounded)
@@ -113,18 +135,79 @@ public class Player_Script_New : MonoBehaviour
                 }
                 else if (playerInput.RollInput)
                 {
-                    Roll();
+                    Roll(); // ロール処理
                 }
                 else if (playerInput.JumpInput)
                 {
-                    Jump();
+                    Jump(); // ジャンプ処理
                 }
             }
         }
 
-        ApplyGravity();
+        ApplyGravity(); // 重力処理
+
+        #if UNITY_EDITOR
+        if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            TakeDamage(10f); // Tキーを押したときに10ダメージ
+        }
+        #endif
     }
 
+    /// <summary>
+    /// ダメージ受傷処理
+    /// </summary>
+    public void TakeDamage(float damage)
+    {
+        if (isDead || damage <= 0f) return;
+
+        CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
+        OnHealthChanged?.Invoke(CurrentHealth, playerSO.MaxHealth);
+
+        if (CurrentHealth <= 0f)
+        {
+            Die();
+        }
+        else
+        {
+            if (playerAnimation != null)
+            {
+                playerAnimation.PlayTakeDamage();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 回復処理
+    /// </summary>
+    public void Heal(float amount)
+    {
+        if (isDead || amount <= 0f) return;
+
+        CurrentHealth = Mathf.Min(playerSO.MaxHealth, CurrentHealth + amount);
+        OnHealthChanged?.Invoke(CurrentHealth, playerSO.MaxHealth);
+    }
+
+    /// <summary>
+    /// 死亡処理
+    /// </summary>
+    private void Die()
+    {
+        isDead = true;
+        isAttacking = false;
+        isRolling = false;
+
+        if (playerAnimation != null)
+        {
+            playerAnimation.PlayDie(); // 死亡アニメーション再生
+        }
+
+        OnPlayerDied?.Invoke(); // 死亡イベント通知
+    }
+
+    /// <summary>
+    /// プレイヤーをカメラの向きに回転させるメソッド
+    /// </summary>
     private void RotatePlayerToCamera()
     {
         if (cameraTransform == null) return;
@@ -197,7 +280,7 @@ public class Player_Script_New : MonoBehaviour
             playerAnimation.PlayLightAttack();
         }
 
-        playerInput.ResetAttackInput();
+        playerInput.ResetAttackInput(); // 攻撃入力をリセット
     }
 
     /// <summary>
@@ -223,6 +306,9 @@ public class Player_Script_New : MonoBehaviour
         playerInput.ResetAttackInput();
     }
 
+    /// <summary>
+    /// プレイヤーのロール処理を行うメソッド
+    /// </summary>
     private void Roll()
     {
         if (playerInput == null) return;
@@ -253,9 +339,12 @@ public class Player_Script_New : MonoBehaviour
         characterController.height = rollHeight;
         characterController.center = new Vector3(defaultCenter.x, rollCenterY, defaultCenter.z);
 
-        playerInput.ResetRollInput(); //プレイヤーのロール入力を消費した後にリセット
+        playerInput.ResetRollInput();
     }
 
+    /// <summary>
+    /// プレイヤーのロール終了時に呼ばれるハンドラー
+    /// </summary>
     private void OnRollEndHandler()
     {
         isRolling = false;

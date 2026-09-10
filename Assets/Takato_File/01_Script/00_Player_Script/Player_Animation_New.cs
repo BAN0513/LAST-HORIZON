@@ -17,6 +17,8 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
     private static readonly int LightAttackHash = Animator.StringToHash("LightAttack"); // 通常攻撃トリガー
     private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack"); // 強攻撃トリガー
+    private static readonly int TakeDamageHash = Animator.StringToHash("TakeDamage");   // 被ダメージトリガー
+    private static readonly int DieHash = Animator.StringToHash("Die");                 // 死亡トリガー
 
     [Header("アニメーション設定")]
     [SerializeField] private float dampTime;
@@ -80,6 +82,24 @@ public class Player_Animation_New : MonoBehaviour
     {
         if (animator == null) return;
         animator.SetTrigger(HeavyAttackHash);
+    }
+
+    /// <summary>
+    /// 被ダメージアニメーションを再生するメソッド
+    /// </summary>
+    public void PlayTakeDamage()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(TakeDamageHash);
+    }
+
+    /// <summary>
+    /// 死亡アニメーションを再生するメソッド
+    /// </summary>
+    public void PlayDie()
+    {
+        if (animator == null) return;
+        animator.SetTrigger(DieHash);
     }
 
     /// <summary>
