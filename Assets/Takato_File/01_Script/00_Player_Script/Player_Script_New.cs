@@ -217,12 +217,18 @@ public class Player_Script_New : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSmoothness * Time.deltaTime);
     }
 
+    /// <summary>
+    /// プレイヤーに重力を適用するメソッド
+    /// </summary>
     private void ApplyGravity()
     {
         velocity.y -= playerSO.GravityScale * Time.deltaTime;
         characterController.Move(velocity * Time.deltaTime);
     }
 
+    /// <summary>
+    /// プレイヤーの移動処理を行うメソッド
+    /// </summary>
     private void MovePlayer()
     {
         if (playerInput == null) return;
@@ -235,7 +241,7 @@ public class Player_Script_New : MonoBehaviour
             return;
         }
 
-        Vector2 moveInput = playerInput.MoveInput;
+        Vector2 moveInput = playerInput.MoveInput; // 入力ベクトル (x: 水平方向, y: 前後方向)
 
         Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1)).normalized;

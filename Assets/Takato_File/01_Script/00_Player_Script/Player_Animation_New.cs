@@ -15,17 +15,17 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int IsGroundedHash = Animator.StringToHash("IsGrounded");
     private static readonly int RollHash = Animator.StringToHash("Roll");
     private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
-    private static readonly int LightAttackHash = Animator.StringToHash("LightAttack"); // 通常攻撃トリガー
-    private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack"); // 強攻撃トリガー
-    private static readonly int TakeDamageHash = Animator.StringToHash("TakeDamage");   // 被ダメージトリガー
-    private static readonly int DieHash = Animator.StringToHash("Die");                 // 死亡トリガー
+    private static readonly int LightAttackHash = Animator.StringToHash("LightAttack");
+    private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack");
+    private static readonly int TakeDamageHash = Animator.StringToHash("TakeDamage");
+    private static readonly int DieHash = Animator.StringToHash("Die");
 
     [Header("アニメーション設定")]
     [SerializeField] private float dampTime;
 
     // イベント定義
     public event Action OnRollEnd;
-    public event Action OnAttackEnd; // 攻撃終了時イベント（通常攻撃・強攻撃共通）
+    public event Action OnAttackEnd;
 
     private void Awake()
     {
@@ -67,7 +67,7 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 通常攻撃アニメーションを再生するメソッド
+    /// プレイヤーの軽攻撃アニメーションを再生する
     /// </summary>
     public void PlayLightAttack()
     {
@@ -76,7 +76,7 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 強攻撃アニメーションを再生するメソッド
+    /// プレイヤーの重攻撃アニメーションを再生する
     /// </summary>
     public void PlayHeavyAttack()
     {
@@ -85,7 +85,7 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 被ダメージアニメーションを再生するメソッド
+    /// プレイヤーがダメージを受けたときのアニメーションを再生する
     /// </summary>
     public void PlayTakeDamage()
     {
@@ -94,7 +94,7 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 死亡アニメーションを再生するメソッド
+    /// プレイヤーが死亡したときのアニメーションを再生する
     /// </summary>
     public void PlayDie()
     {
@@ -103,8 +103,9 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 地面に接地しているかどうかの状態を更新するメソッド
+    /// プレイヤーが地面に接地しているかどうかの状態を更新する
     /// </summary>
+    /// <param name="isGrounded"></param>
     public void UpdateGroundedState(bool isGrounded)
     {
         if (animator == null) return;
@@ -112,7 +113,7 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// Animation Event から呼び出すメソッド（回避用）
+    /// Animation Event から呼び出すメソッド
     /// </summary>
     public void OnRollCompleted()
     {
@@ -120,7 +121,15 @@ public class Player_Animation_New : MonoBehaviour
     }
 
     /// <summary>
-    /// Animation Event から呼び出すメソッド（攻撃用：通常攻撃・強攻撃共通）
+    /// Animation Event から呼び出すメソッド
+    /// </summary>
+    public void OnBackRollCompleted()
+    {
+        OnRollEnd?.Invoke();
+    }
+
+    /// <summary>
+    /// Animation Event から呼び出すメソッド
     /// </summary>
     public void OnAttackCompleted()
     {

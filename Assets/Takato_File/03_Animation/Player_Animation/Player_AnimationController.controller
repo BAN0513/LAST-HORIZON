@@ -708,13 +708,13 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 1afc632a031d7724a9af55a9c275fd4d, type: 2}
+    m_Motion: {fileID: 7400000, guid: 25ab223c045afa34492ad84be6f941c5, type: 2}
     m_Threshold: 1.5
     m_Position: {x: -0.5, y: 0}
     m_TimeScale: 1
-    m_CycleOffset: 0
+    m_CycleOffset: 0.5
     m_DirectBlendParameter: Blend
-    m_Mirror: 0
+    m_Mirror: 1
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 25ab223c045afa34492ad84be6f941c5, type: 2}
     m_Threshold: 2
@@ -724,10 +724,10 @@ BlendTree:
     m_DirectBlendParameter: Blend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: a3667a9fe75fbf342ac847e96b4ca41e, type: 2}
+    m_Motion: {fileID: 7400000, guid: 063fa633400e47b4ca9c2c25482f4a5e, type: 2}
     m_Threshold: 2.5
     m_Position: {x: 0, y: -1}
-    m_TimeScale: 1
+    m_TimeScale: -1
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
@@ -770,21 +770,21 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: forward_Roll
-  m_Speed: 1
+  m_Name: Back_Roll
+  m_Speed: -1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -2807832819473468081}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 1
+  m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 78e9f5e8169ba4142afc150a58006d4e, type: 2}
+  m_Motion: {fileID: 7400000, guid: 0c64b67351919fd43a5270243aa35fff, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
