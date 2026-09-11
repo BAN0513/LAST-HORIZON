@@ -1023,7 +1023,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73cd06a312bc4d4f976f03b9484983c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PausManeger
-  canvas: {fileID: 0}
+  canvas: {fileID: 274004461}
   BackImage: {fileID: 583377062}
   BackBrownImage: {fileID: 133594471}
   PauseTextImage: {fileID: 2002958351}
