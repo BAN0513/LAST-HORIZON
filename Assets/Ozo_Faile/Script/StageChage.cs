@@ -34,9 +34,9 @@ public class StageChage : MonoBehaviour
         if (StageNumber < 0 || StageNumber > 3)
         { 
             StageNumber = 0;
-            IsStage = StageNumber;
             transform.position = Vector3.zero;
         }
+            IsStage = StageNumber;
     }
 
     private void FixedUpdate()
@@ -68,19 +68,19 @@ public class StageChage : MonoBehaviour
         {
             case 1:
                 transform.position = SpawnPoint_B1.transform.position;
-                DestinationUI.Instance.SetDestinationText("敵をすべて倒す");
+                //DestinationUI.Instance.SetDestinationText("敵をすべて倒す");
                 break;
             case 2:
                 transform.position = SpawnPoint_B2.transform.position;
-                DestinationUI.Instance.SetDestinationText("敵を倒す");
+                //DestinationUI.Instance.SetDestinationText("敵を倒す");
                 break;
             case 3:
                 transform.position = SpawnPoint_B3.transform.position;
-                DestinationUI.Instance.SetDestinationText("最後の敵を倒す"); 
+                //DestinationUI.Instance.SetDestinationText("最後の敵を倒す"); 
                 break;
             default:
                 transform.position = new Vector3(0, 0, 0);
-                DestinationUI.Instance.SetDestinationText("遺跡に向かう");
+                //DestinationUI.Instance.SetDestinationText("遺跡に向かう");
                 break;
         }
 

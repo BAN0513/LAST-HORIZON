@@ -6,6 +6,9 @@ public class DayNightController : MonoBehaviour
     [SerializeField] private Light directionalLight;
     [Header("サイクルの時間")]
     [SerializeField] private float dayLength = 120f; // 時間の調整をここでします。
+
+    //[Header("ダンジョン突入時の明かりの角度")]
+    //[SerializeField] private float dayLngthDanjon = -90.0f;
     public float time;
 
     //public Material daySkybox;
@@ -20,6 +23,21 @@ public class DayNightController : MonoBehaviour
 
     void Update()
     {
+        if (StageChage.IsStage != 0)
+        {
+            directionalLight.transform.localRotation = Quaternion.Euler(-90.0f, -190.0f, 0.0f);
+
+            //directionalLight.intensity = 0f;
+
+            //RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+
+            //RenderSettings.ambientLight = Color.black;
+
+            //DynamicGI.UpdateEnvironment();
+
+            return; 
+        }
+
         // 秒数カウント
         time += Time.deltaTime / dayLength;
         time %= 1;
