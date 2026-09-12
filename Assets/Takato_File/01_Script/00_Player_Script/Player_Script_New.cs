@@ -25,11 +25,13 @@ public class Player_Script_New : MonoBehaviour
 
     // 体力・死亡関連プロパティ
     public float CurrentHealth { get; private set; }
+    public float CurrentStamina { get; private set; }
     public bool IsDead => isDead;
 
     // イベント定義 (UI等との通知用)
-    public event Action<float, float> OnHealthChanged; // (現在体力, 最大体力)
-    public event Action OnPlayerDied;                  // 死亡時イベント
+    public event Action<float, float> OnHealthChanged;  // (現在体力, 最大体力)
+    public event Action<float, float> OnStaminaChanged; // (現在スタミナ, 最大スタミナ)
+    public event Action OnPlayerDied;                   // 死亡時イベント
 
     // 他スクリプトの参照
     private Player_Input_New playerInput;
@@ -42,6 +44,7 @@ public class Player_Script_New : MonoBehaviour
     private bool isGrounded;
     private Vector3 velocity;
     private Vector3 currentMoveVelocity;
+    private float staminaRegenTimer;
 
     // フラグ
     private bool isRolling = false;
@@ -69,11 +72,14 @@ public class Player_Script_New : MonoBehaviour
 
     private void Start()
     {
-        // 体力の初期化
+        // 体力・スタミナの初期化
         if (playerSO != null)
         {
             CurrentHealth = playerSO.MaxHealth;
+            CurrentStamina = playerSO.MaxStamina;
+
             OnHealthChanged?.Invoke(CurrentHealth, playerSO.MaxHealth);
+            OnStaminaChanged?.Invoke(CurrentStamina, playerSO.MaxStamina);
         }
     }
 
@@ -112,8 +118,8 @@ public class Player_Script_New : MonoBehaviour
             velocity.y = GroundedDownwardForce;
         }
 
-        // ロール中でなく移動入力がある場合はカメラの向きに回転
-        if (!isRolling && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
+        // ロール中・攻撃中でなく移動入力がある場合はカメラの向きに回転
+        if (!isRolling && !isAttacking && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
         {
             RotatePlayerToCamera(); // カメラの向きに回転
         }
@@ -146,12 +152,12 @@ public class Player_Script_New : MonoBehaviour
 
         ApplyGravity(); // 重力処理
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame)
         {
             TakeDamage(10f); // Tキーを押したときに10ダメージ
         }
-        #endif
+#endif
     }
 
     /// <summary>
@@ -241,6 +247,17 @@ public class Player_Script_New : MonoBehaviour
             return;
         }
 
+        // 攻撃中の移動停止
+        if (isAttacking)
+        {
+            currentMoveVelocity = Vector3.zero;
+            if (playerAnimation != null)
+            {
+                playerAnimation.UpdateMoveAnimation(Vector3.zero, playerSO.MoveSpeed);
+            }
+            return;
+        }
+
         Vector2 moveInput = playerInput.MoveInput; // 入力ベクトル (x: 水平方向, y: 前後方向)
 
         Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
@@ -248,8 +265,33 @@ public class Player_Script_New : MonoBehaviour
 
         Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
 
-        bool isForwardSprinting = playerInput.IsSprinting && moveInput.y > 0f;
-        float currentSpeedMultiplier = isForwardSprinting ? playerSO.SpeedMultiplier : 1f;
+        // 前進入力かつスプリント入力があり、スタミナが残っているか判定
+        bool isSprintingRequested = playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
+
+        float currentSpeedMultiplier = 1f;
+
+        if (isSprintingRequested && moveDirection.sqrMagnitude > 0.01f)
+        {
+            currentSpeedMultiplier = playerSO.SpeedMultiplier;
+
+            // スタミナ消費
+            CurrentStamina = Mathf.Max(0f, CurrentStamina - playerSO.StaminaDrainRate * Time.deltaTime);
+            staminaRegenTimer = playerSO.StaminaRegenDelay; // 回復タイマーリセット
+            OnStaminaChanged?.Invoke(CurrentStamina, playerSO.MaxStamina);
+        }
+        else
+        {
+            // スタミナ自動回復
+            if (staminaRegenTimer > 0f)
+            {
+                staminaRegenTimer -= Time.deltaTime;
+            }
+            else if (CurrentStamina < playerSO.MaxStamina)
+            {
+                CurrentStamina = Mathf.Min(playerSO.MaxStamina, CurrentStamina + playerSO.StaminaRegenRate * Time.deltaTime);
+                OnStaminaChanged?.Invoke(CurrentStamina, playerSO.MaxStamina);
+            }
+        }
 
         Vector3 targetVelocity = moveDirection * (playerSO.MoveSpeed * currentSpeedMultiplier);
 
