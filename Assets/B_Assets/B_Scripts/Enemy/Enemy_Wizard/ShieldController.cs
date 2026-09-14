@@ -19,8 +19,7 @@ public class ShieldController : MonoBehaviour
     private float invincibilityTime = 0.5f;
     private float invincibilityTimer = 0;
 
-    private Enemy_Wizard parentEnemyWizard;
-    public Enemy_Wizard ParentEnemyWizard { set { parentEnemyWizard = value; } }
+    public Enemy_Wizard ParentEnemyWizard { private get; set; }
 
     private void Update()
     {
@@ -54,7 +53,7 @@ public class ShieldController : MonoBehaviour
 
             if (shieldHP <= 0)
             {
-                parentEnemyWizard.IsShield = false;
+                ParentEnemyWizard.IsShield = false;
                 Destroy(gameObject);
             }
         }

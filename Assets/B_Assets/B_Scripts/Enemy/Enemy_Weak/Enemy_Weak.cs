@@ -1,14 +1,15 @@
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class Enemy_Weak : Enemy_Humanoid
 {
-    public Enemy_WeakAnimatorController enemy_WeakAnimator { get; set; }
+    private bool isDown = false;
+    private int downDamage = 21;
 
+
+    public Enemy_WeakAnimatorController Enemy_WeakAnimator { get; private set; }
     public bool IsBlocking { get; set; }
     public bool IsBlockingReaction { get; set; }
-    private bool isDown = false;
-
-    private int downDamage = 21;
 
     //中ボスの能力で召喚されたとき用の変数
     public Enemy_Wizard Wizard { private get; set; }
@@ -17,7 +18,7 @@ public class Enemy_Weak : Enemy_Humanoid
     {
         base.Start();
 
-        enemy_WeakAnimator = GetComponent<Enemy_WeakAnimatorController>();
+        Enemy_WeakAnimator = GetComponent<Enemy_WeakAnimatorController>();
 
         IsBlocking = false;
     }
@@ -34,8 +35,8 @@ public class Enemy_Weak : Enemy_Humanoid
     {
         base.ContactAnimation();
         SetLookPlayerAndEnemyStop(false, true);
-        enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_Contact);
-        isActionAnimation = true;
+        Enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_Contact);
+        IsActionAnimation = true;
     }
 
     public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
@@ -55,7 +56,7 @@ public class Enemy_Weak : Enemy_Humanoid
         if (!IsBlocking && !isDown && damage >= downDamage)
         {
             InitAnim();
-            enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, true);
+            Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, true);
             isDown = true;
             isHit = true;
         }
@@ -78,11 +79,11 @@ public class Enemy_Weak : Enemy_Humanoid
     public override void InitAnim()
     {
         base.InitAnim();
-        enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, false);
-        enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
-        enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_ChargeAttack);
-        enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
-        enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, false);
+        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, false);
+        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
+        Enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_ChargeAttack);
+        Enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
+        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, false);
     }
 
     protected override void Death()

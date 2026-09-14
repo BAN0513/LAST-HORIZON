@@ -18,7 +18,7 @@ public class Enemy_Wizard_TeleportationSO : Enemy_WizardActionSO
     public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.enemy.SetLookPlayerAndEnemyStop(false, true);
+        animator.Enemy.SetLookPlayerAndEnemyStop(false, true);
         animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_Teleportation);
     }
 }

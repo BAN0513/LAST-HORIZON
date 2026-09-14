@@ -31,7 +31,7 @@ public class Wolf_Boss : Enemy_FourLegs
     //攻撃のアニメーションが終わったら全部初期化する
     public override void Init()
     {
-        agent.enabled = true;
+        Agent.enabled = true;
         base.Init();
     }
 
@@ -61,7 +61,7 @@ public class Wolf_Boss : Enemy_FourLegs
         wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
         AttackJudgmentActive(BodyPart.AllBody);
 
-        agent.enabled = false;
+        Agent.enabled = false;
     }
 }
 

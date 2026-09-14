@@ -12,7 +12,7 @@ public class Enemy_Wizard_MeraZomaSO : Enemy_WeakActionSO
     public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.enemy.SetLookPlayerAndEnemyStop(false, true);
+        animator.Enemy.SetLookPlayerAndEnemyStop(false, true);
         animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Wizard_MeraZoma);
     }
 }

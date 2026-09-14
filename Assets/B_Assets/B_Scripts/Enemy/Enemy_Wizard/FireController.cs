@@ -7,8 +7,7 @@ public class FireController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5.0f; 
     private Rigidbody rb;
 
-    private Vector3 direction;
-    public Vector3 Direction { set { direction = value; } }
+    public Vector3 Direction { private get; set; }
 
     private int damage;
     public int Damage { set { damage = value; } }
@@ -23,7 +22,7 @@ public class FireController : MonoBehaviour
 
     private void Update()
     {
-        rb.linearVelocity = direction * moveSpeed;
+        rb.linearVelocity = Direction * moveSpeed;
     }
 
     IEnumerator DestroyCnt()

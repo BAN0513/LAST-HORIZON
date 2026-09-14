@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyAnimatorController : MonoBehaviour
 {
-    public Enemy enemy { get; private set; }
+    public Enemy Enemy { get; private set; }
     protected Animator animator;
 
     public enum AnimationBase
@@ -34,7 +34,7 @@ public class EnemyAnimatorController : MonoBehaviour
 
     protected virtual void Start()
     {
-        enemy = GetComponent<Enemy>();
+        Enemy = GetComponent<Enemy>();
         animator = GetComponent<Animator>();
 
         anims = new Dictionary<AnimationBase, int>()

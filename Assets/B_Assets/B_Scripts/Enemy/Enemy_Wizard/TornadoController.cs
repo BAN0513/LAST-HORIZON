@@ -24,16 +24,8 @@ public class TornadoController : MonoBehaviour
 
     private ParticleSystem particle;
     private GameObject target;
-    private int damage;
 
-
-    public int Damage
-    {
-        set
-        {
-            damage = value;
-        }
-    }
+    public int Damage { private get; set; }
 
     private void Start()
     {
@@ -72,6 +64,6 @@ public class TornadoController : MonoBehaviour
     {
         Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
         PlayerController player = target.GetComponent<PlayerController>();
-        player.TakeDamage(damage);
+        player.TakeDamage(Damage);
     }
 }

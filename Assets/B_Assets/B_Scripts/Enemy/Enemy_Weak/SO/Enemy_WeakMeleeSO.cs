@@ -12,7 +12,7 @@ public class Enemy_WeakMeleeSO : Enemy_WeakActionSO
     public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.enemy.SetLookPlayerAndEnemyStop(true, false);
+        animator.Enemy.SetLookPlayerAndEnemyStop(true, false);
         animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, true);
     }
 

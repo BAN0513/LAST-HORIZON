@@ -30,20 +30,20 @@ public class Enemy_Humanoid : Enemy
 
     private void MoveAnimControl()
     {
-        if (isActionAnimation || enemyBaseState != EnemyBaseState.Contact) 
+        if (IsActionAnimation || enemyBaseState != EnemyBaseState.Contact) 
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
             return;
         }
 
-        if (agent.velocity.magnitude < 0.1f || distance <= agent.stoppingDistance)
+        if (Agent.velocity.magnitude < 0.1f || Distance <= Agent.stoppingDistance)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }
         else
         {
-            if (distance >= enemySO.engageDis || Mathf.Abs(target.position.y - transform.position.y) >= 0.5f)
+            if (Distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);

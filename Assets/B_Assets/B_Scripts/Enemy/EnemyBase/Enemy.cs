@@ -15,51 +15,15 @@ public abstract class Enemy : MonoBehaviour
     [Header("ほぼ中ボス用。\nNav Mesh Obstacleの影響を受けなくなる")]
     [SerializeField] private bool isNoObstacleAvoidance = false;
 
-    public Transform Target {  get { return target; } }
-    protected Transform target;
-
-    public NavMeshAgent Agent { get { return agent; } }
-    protected NavMeshAgent agent;
-
     protected PlayerController playerController;
     protected CharacterController playerCharacterController;
-    protected PlayerAnimationController playerAnimationController;
     protected EnemyAnimatorController enemyAnimatorController;
     protected EventProgress eventProgress;
 
-    protected float lotteryTime;
-    protected float lotteryMinTime = 0.5f;
-    protected float lotteryMaxTime = 3.0f;
-
     protected float dot;
-
-    //プレイヤーと自身の距離
-    public float Distance { get { return distance; } set { distance = value; } }
-    protected float distance;
-
-    private float currentStoppingDistance = 0.0f;
-
-    //攻撃確率の保存用変数
-    protected float attackProbability = 0;
 
     //敵のHP
     protected int hp;
-
-    //敵のスピードにかかるデバフ
-    public float DebufDEX { get { return debufDEX; } set { debufDEX = value; } }
-    private float debufDEX = 1.0f;
-
-    //敵の防御力にかかるデバフ
-    public int DebufDEF { get { return debufDEF; } set { debufDEF = value; } }
-    private int debufDEF;
-
-    //何かしらアクションが抽選されているかどうか
-    public bool IsAction { get { return isAction; } set { isAction = value; } }
-    protected bool isAction;
-
-    //アニメーションが再生されているかどうか
-    public bool IsActionAnimation { get { return isActionAnimation; } set { isActionAnimation = value; } }
-    protected bool isActionAnimation;
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
@@ -68,17 +32,42 @@ public abstract class Enemy : MonoBehaviour
     protected bool isWalk = true;
 
     //敵が攻撃された後に連続で攻撃が当たらないようにするための変数
-    private float invincibilityTime  = 0.5f;
+    protected float invincibilityTime  = 0.5f;
     protected float invincibilityTimer = 0;
 
-    //振り向きのスピード
-    public float LookRotationSpeed { get { return lookRotationSpeed; } set { lookRotationSpeed = value; } }
-    protected float lookRotationSpeed = 0;
+    private float lotteryTime;
+    private float lotteryMinTime = 0.5f;
+    private float lotteryMaxTime = 3.0f;
+
+    private float currentStoppingDistance = 0.0f;
 
     //敵がプレイヤーを発見しているかどうか
     private float contactDis;
     private float contactDot;
     private float searchDis;
+
+    //プレイヤーと自身の距離
+    public float Distance { get; set; }
+
+    public Transform Target { get; private set; }
+
+    public NavMeshAgent Agent { get; private set; }
+
+    //敵のスピードにかかるデバフ
+    public float DebufDEX { get; set; } = 1.0f;
+
+    //敵の防御力にかかるデバフ
+    public int DebufDEF { get; set; }
+
+    //何かしらアクションが抽選されているかどうか
+    public bool IsAction { get; set; }
+
+    //アニメーションが再生されているかどうか
+    public bool IsActionAnimation { get; set; }
+
+    //振り向きのスピード
+    public float LookRotationSpeed { get; set; }
+
 
     protected enum EnemyBaseState
     {
@@ -93,9 +82,9 @@ public abstract class Enemy : MonoBehaviour
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        Agent = GetComponent<NavMeshAgent>();
 
-        if (agent == null)
+        if (Agent == null)
         {
             Debug.LogError("navMeshが見つからない");
         }
@@ -112,7 +101,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Start()
     {
-        isAction = false;
+        IsAction = false;
 
         if (hpSliider != null)
         {
@@ -121,22 +110,22 @@ public abstract class Enemy : MonoBehaviour
             hpSliider.value = enemySO.maxHP;
         }
 
-        distance = Vector3.Distance(transform.position, target.position);
+        Distance = Vector3.Distance(transform.position, Target.position);
 
         hp = enemySO.maxHP;
 
-        agent.updateRotation = false;
+        Agent.updateRotation = false;
 
-        agent.stoppingDistance = enemySO.stoopingDis;
+        Agent.stoppingDistance = enemySO.stoopingDis;
 
         if (isNoObstacleAvoidance)
         {
-            agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
+            Agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         }
 
-        lookRotationSpeed = enemySO.lookRotationSpeed;
+        LookRotationSpeed = enemySO.lookRotationSpeed;
 
-        isActionAnimation = false;
+        IsActionAnimation = false;
 
         contactDis = enemySO.contactDis;
         contactDot = enemySO.contactDot;
@@ -156,16 +145,15 @@ public abstract class Enemy : MonoBehaviour
         }
 
         //playerタグのついたオブジェクトを見つける(Awakeで取得失敗した際の保険です。)
-        if(target == null)
+        if(Target == null)
         {
-            target = GameObject.FindWithTag("Player").transform;
-            playerController = target.GetComponent<PlayerController>();
-            playerCharacterController = target.GetComponent<CharacterController>();
-            playerAnimationController = target.GetComponent<PlayerAnimationController>();
+            Target = GameObject.FindWithTag("Player").transform;
+            playerController = Target.GetComponent<PlayerController>();
+            playerCharacterController = Target.GetComponent<CharacterController>();
         }
 
         //プレイヤーと自身の距離計算
-        distance = Vector3.Distance(transform.position, target.position);
+        Distance = Vector3.Distance(transform.position, Target.position);
 
         //自身からプレイヤーのDotを取る
         DotPlayer();
@@ -188,7 +176,7 @@ public abstract class Enemy : MonoBehaviour
     private void DotPlayer()
     {
         //自身からプレイヤーの方向を取る
-        Vector3 toTarget = (target.position - transform.position).normalized;
+        Vector3 toTarget = (Target.position - transform.position).normalized;
         toTarget.y = 0;
         //自身の前方方向を取る
         Vector3 forwardDir = (transform.position + transform.forward - transform.position).normalized;
@@ -206,14 +194,14 @@ public abstract class Enemy : MonoBehaviour
             dir.x = 0;
             dir.z = 0;
 
-            if (agent.speed == enemySO.walkMoveSpeed)
+            if (Agent.speed == enemySO.walkMoveSpeed)
             {
-                dir = target.position - transform.position;
+                dir = Target.position - transform.position;
 
             }
             else
             {
-                dir = (transform.position + agent.velocity) - transform.position;
+                dir = (transform.position + Agent.velocity) - transform.position;
             }
             dir.y = 0;
             SetRotation(dir);
@@ -226,47 +214,47 @@ public abstract class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 Quaternion.LookRotation(dir),
-                Time.deltaTime * lookRotationSpeed
+                Time.deltaTime * LookRotationSpeed
                 );
         }
     }
 
     private void AgentContact()
     {
-        if (agent.isOnNavMesh)
+        if (Agent.isOnNavMesh)
         {
-            if (distance <= contactDis && dot >= contactDot && enemyBaseState != EnemyBaseState.Contact)
+            if (Distance <= contactDis && dot >= contactDot && enemyBaseState != EnemyBaseState.Contact)
             {
                 ContactAnimation();
             }
-            else if (distance >= searchDis && enemyBaseState == EnemyBaseState.Contact)
+            else if (Distance >= searchDis && enemyBaseState == EnemyBaseState.Contact)
             {
                 enemyBaseState = EnemyBaseState.Search;
                 InitAll();
-                agent.isStopped = true;
+                Agent.isStopped = true;
                 enemyAnimatorController.ForcedQuitAnimation();
             }
         }
 
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
-        if (distance <= agent.stoppingDistance && isWalk)
+        if (Distance <= Agent.stoppingDistance && isWalk)
         {
             isWalk = false;
-            agent.stoppingDistance = enemySO.stoopingDis + 1;
-            currentStoppingDistance = agent.stoppingDistance;
+            Agent.stoppingDistance = enemySO.stoopingDis + 1;
+            currentStoppingDistance = Agent.stoppingDistance;
         }
-        else if (distance >= agent.stoppingDistance && !isWalk)
+        else if (Distance >= Agent.stoppingDistance && !isWalk)
         {
             isWalk = true;
-            agent.stoppingDistance = enemySO.stoopingDis - 1;
-            currentStoppingDistance = agent.stoppingDistance;
+            Agent.stoppingDistance = enemySO.stoopingDis - 1;
+            currentStoppingDistance = Agent.stoppingDistance;
         }
 
-        if (isActionAnimation) { return; }
+        if (IsActionAnimation) { return; }
 
         if (enemyBaseState == EnemyBaseState.Contact)
         {
-            agent.SetDestination(target.position);
+            Agent.SetDestination(Target.position);
         }
     }
 
@@ -274,18 +262,18 @@ public abstract class Enemy : MonoBehaviour
 
     private void EngageMoveControl()
     {
-        if (distance <= enemySO.engageDis && Mathf.Abs(target.position.y - transform.position.y) < 0.5f)
+        if (Distance <= enemySO.engageDis && Mathf.Abs(Target.position.y - transform.position.y) < 0.5f)
         {
             //敵のスピードを少しだけ遅くする
-            agent.speed = enemySO.walkMoveSpeed * DebufDEX;
+            Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 
-            if (!isAction)
+            if (!IsAction)
             {
                 lotteryTime -= Time.deltaTime;      
 
                 if (lotteryTime <= 0)
                 {
-                    isAction = true;
+                    IsAction = true;
 
                     //次の抽選に必要な時間をランダムで決める
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
@@ -294,14 +282,14 @@ public abstract class Enemy : MonoBehaviour
         }
         else
         {
-            agent.speed = enemySO.dashMoveSpeed - DebufDEX;
+            Agent.speed = enemySO.dashMoveSpeed - DebufDEX;
             //isAction = false;
         }
     }
 
     protected void CalcActionUpdate()
     {
-        if (isActionAnimation || enemyBaseState == EnemyBaseState.Dead) { return; }
+        if (IsActionAnimation || enemyBaseState == EnemyBaseState.Dead) { return; }
 
         //SOは並びかえ手はいけないから変数に代入する
         List<EnemyActionSO> action = new List<EnemyActionSO>(enemySO.action);
@@ -339,7 +327,7 @@ public abstract class Enemy : MonoBehaviour
         //各行動のスコアを計算して、0.0fの物はListから削除する
         for (int i = 0; i < action.Count; i++)
         {
-            float score = action[i].ScoreCalculation(distance, dot, this);
+            float score = action[i].ScoreCalculation(Distance, dot, this);
 
             if (score == Mathf.Infinity) { return action[i]; }
 
@@ -422,7 +410,7 @@ public abstract class Enemy : MonoBehaviour
         if (sound != null) { sound.PlaySE(seNumber); }
         if (enemyBaseState != EnemyBaseState.Contact) { ContactAnimation(); }  //未発見状態の場合は強制的に発見状態に変更する
 
-        damage -= (enemySO.def - debufDEF);
+        damage -= (enemySO.def - DebufDEF);
         if (damage <= 0) { return; }
 
         hp -= damage;
@@ -461,15 +449,15 @@ public abstract class Enemy : MonoBehaviour
     // NavMeshAgentの速度を更新するメソッド
     protected void SetDashSpeed()
     {
-        if (agent != null && enemySO != null)
-            debufDEX = moveSpeedMultiplier;
+        if (Agent != null && enemySO != null)
+            DebufDEX = moveSpeedMultiplier;
     }
 
     // NavMeshAgentの速度を更新するメソッド
     protected void SetWalkSpeed()
     {
-        if (agent != null && enemySO != null)
-            debufDEX = moveSpeedMultiplier;
+        if (Agent != null && enemySO != null)
+            DebufDEX = moveSpeedMultiplier;
     }
 
     protected virtual void Death()
@@ -477,7 +465,7 @@ public abstract class Enemy : MonoBehaviour
         enemyBaseState = EnemyBaseState.Dead;
         InitAll();
         hpSliider.gameObject.SetActive(false);
-        agent.isStopped = true;
+        Agent.isStopped = true;
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
@@ -489,18 +477,18 @@ public abstract class Enemy : MonoBehaviour
     public void SetLookPlayerAndEnemyStop(bool isLook, bool isStop)
     {
         isLookPlayer = isLook;
-        agent.isStopped = isStop;
+        Agent.isStopped = isStop;
     }
 
 
     public virtual void Init()
     {
-        agent.stoppingDistance = currentStoppingDistance;
-        lookRotationSpeed = enemySO.lookRotationSpeed;
+        Agent.stoppingDistance = currentStoppingDistance;
+        LookRotationSpeed = enemySO.lookRotationSpeed;
         isLookPlayer = true;
-        agent.isStopped = false;
-        isAction = false;
-        isActionAnimation = false;
+        Agent.isStopped = false;
+        IsAction = false;
+        IsActionAnimation = false;
     }
 
     public virtual void InitAnim()
@@ -551,12 +539,11 @@ public abstract class Enemy : MonoBehaviour
     {
         if (newPlayer == null) return;
 
-        target = newPlayer.transform;
+        Target = newPlayer.transform;
 
         //ここで各コンポーネントを安全に取得
-        playerController = target.GetComponent<Takato.PlayerController>();
-        playerCharacterController = target.GetComponent<CharacterController>();
-        playerAnimationController = target.GetComponent<Takato.PlayerAnimationController>();
+        playerController = Target.GetComponent<Takato.PlayerController>();
+        playerCharacterController = Target.GetComponent<CharacterController>();
 
         // デバッグ用ログ
         if (playerController == null)

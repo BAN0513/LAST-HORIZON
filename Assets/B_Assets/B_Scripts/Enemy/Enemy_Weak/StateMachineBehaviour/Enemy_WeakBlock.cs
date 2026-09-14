@@ -12,7 +12,7 @@ public class Enemy_WeakBlock : StateMachineBehaviour
     {
         enemy = animator.GetComponent<Enemy_Weak>();
         enemy.SetLookPlayerAndEnemyStop(false, true);
-        enemy.enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
+        enemy.Enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
         blockTimer = blockTime;
     }
 
@@ -22,12 +22,12 @@ public class Enemy_WeakBlock : StateMachineBehaviour
         if (blockTimer <= 0.0f && !enemy.IsBlockingReaction)
         {
             enemy.IsBlocking = false;
-            enemy.enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
+            enemy.Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
         }
 
         if (enemy.IsBlockingReaction)
         {
-            enemy.enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
+            enemy.Enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
         }
     }
 

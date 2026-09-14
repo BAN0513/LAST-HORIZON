@@ -57,11 +57,11 @@ public class Enemy_FourLegs : Enemy
 
     private void MoveAnimControl()
     {
-        if (isActionAnimation)
+        if (IsActionAnimation)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
         }
-        else if (agent.velocity.magnitude > 0)
+        else if (Agent.velocity.magnitude > 0)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
             isLookPlayer = true;

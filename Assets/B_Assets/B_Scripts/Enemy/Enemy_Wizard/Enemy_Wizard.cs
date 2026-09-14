@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class Enemy_Wizard : Enemy_Humanoid
 {
-    private Enemy_WizardAnimatorController enemy_WizardAnimator;
-
     [SerializeField] private GameObject meraObj;
     [SerializeField] private GameObject meraZomaObj;
     [SerializeField] private GameObject impactEffect;
@@ -13,29 +11,19 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private Transform[] summonPos;
     [SerializeField] private Transform[] warpPos;
 
-    private bool isHitAction = false;
-    public bool IsHitAction 
-    {
-        get { return isHitAction; }
-        set { isHitAction = value; }
-    }
-
-    private bool isShield = false;
-    public bool IsShield { set { isShield = value; } }
-
-    private int summonEnemyCount = 0;
-    public int SummonEnemyCount
-    {
-        get { return summonEnemyCount; }
-        set { summonEnemyCount = value; }
-    }
-
+    private Enemy_WizardAnimatorController enemy_WizardAnimator;
     private int weakMagicCnt = 0;
     private int shortManaChargePlayCnt = 2;
-    private bool shortManaCharge = false;
-    public  bool ShortManaCharge { get { return shortManaCharge; } }
-    private bool longManaCharge  = false;
-    public  bool LongManaCharge { get { return longManaCharge; } }
+
+    public bool IsHitAction { get; set; } = false;
+
+    public bool IsShield { private get; set; }
+
+    public int SummonEnemyCount { get; set; }
+
+    public bool ShortManaCharge { get; private set; } = false;
+
+    public bool LongManaCharge { get; private set; } = false;
 
     protected override void Start()
     {
@@ -51,13 +39,13 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public override void TakeDamage(int damage, SoundManager sound, int seNumber)
     {
-        if (isShield) { return; }  //シールド中は念のためダメージが入らないようにする
+        if (IsShield) { return; }  //シールド中は念のためダメージが入らないようにする
 
-        if (isHitAction) { isHit = true; }
+        if (IsHitAction) { isHit = true; }
 
         base.TakeDamage(damage, sound, seNumber);
 
-        isHitAction = true;
+        IsHitAction = true;
     }
 
     //ここから下はAnimator関連の関数
@@ -70,13 +58,13 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void MeraZoma()
     {
-        longManaCharge = true;
+        LongManaCharge = true;
         MeraObjSpawn(meraZomaObj);
     }
 
     private void MeraObjSpawn(GameObject spawnMeraObj)
     {
-        Vector3 toTarget = target.position - transform.position;
+        Vector3 toTarget = Target.position - transform.position;
         Vector3 dir = (toTarget).normalized;
         Quaternion quaternion = Quaternion.LookRotation(toTarget);
         GameObject fire = Instantiate(spawnMeraObj, transform.position + transform.forward + transform.up, quaternion);
@@ -88,7 +76,7 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void MeraStorm()
     {
-        longManaCharge = true;
+        LongManaCharge = true;
         GameObject storm = Instantiate(meraStormObj, transform.position, Quaternion.identity);
         TornadoController tornadoController = storm.GetComponent<TornadoController>();
         tornadoController.Damage = currentAction.damage;
@@ -105,11 +93,11 @@ public class Enemy_Wizard : Enemy_Humanoid
     public void Summon()
     {
         CheckShortManaCharge();
-        Vector3 dir = (target.position - transform.position).normalized;
+        Vector3 dir = (Target.position - transform.position).normalized;
         foreach (var pos in summonPos)
         {
             Enemy_Weak weak = Instantiate(enemy_WeakObj, pos.position, Quaternion.LookRotation(dir)).GetComponent<Enemy_Weak>();
-            summonEnemyCount++;
+            SummonEnemyCount++;
             weak.Wizard = this;
         }
     }
@@ -127,14 +115,14 @@ public class Enemy_Wizard : Enemy_Humanoid
             break;
         }
         transform.position = warpPos[randomWarp].position;
-        transform.rotation = Quaternion.LookRotation((target.position - transform.position).normalized);
+        transform.rotation = Quaternion.LookRotation((Target.position - transform.position).normalized);
         return;
     }
 
     public void ShieldSpawn()
     {
-        isShield = true;
-        isHitAction = false;
+        IsShield = true;
+        IsHitAction = false;
 
         GameObject shield = Instantiate(shieldObj, transform.position, Quaternion.identity);
         
@@ -150,15 +138,15 @@ public class Enemy_Wizard : Enemy_Humanoid
 
         if (weakMagicCnt >= shortManaChargePlayCnt)
         {
-            shortManaCharge = true;
+            ShortManaCharge = true;
         }
     }
 
     public void ManaChargeReset()
     {
         weakMagicCnt    = 0;
-        shortManaCharge = false;
-        longManaCharge  = false;
+        ShortManaCharge = false;
+        LongManaCharge  = false;
     }
 
     //攻撃のアニメーションが終わったら全部初期化する
@@ -166,9 +154,9 @@ public class Enemy_Wizard : Enemy_Humanoid
     {
         base.Init();
 
-        if (isHitAction || shortManaCharge || longManaCharge)
+        if (IsHitAction || ShortManaCharge || LongManaCharge)
         {
-            isAction = true;
+            IsAction = true;
         }
     }
 

@@ -15,7 +15,7 @@ public class Enemy_WeakBlockSO : Enemy_WeakActionSO
 
     public override void Execute(EnemyAnimatorController animator)
     {
-        animator.enemy.SetLookPlayerAndEnemyStop(false, true);
+        animator.Enemy.SetLookPlayerAndEnemyStop(false, true);
         animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, true);
     }
 
@@ -23,7 +23,7 @@ public class Enemy_WeakBlockSO : Enemy_WeakActionSO
     {
         animator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
 
-        if (animator.enemy is Enemy_Weak weak)
+        if (animator.Enemy is Enemy_Weak weak)
         {
             weak.IsBlocking = false;
             weak.IsBlockingReaction = false;

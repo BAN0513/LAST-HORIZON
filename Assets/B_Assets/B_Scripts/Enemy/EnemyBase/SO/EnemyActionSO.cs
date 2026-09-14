@@ -38,7 +38,7 @@ public class EnemyActionSO : ScriptableObject
         return ScoreCalculation(dis, dot);
     }
 
-    public virtual void Execute(EnemyAnimatorController animator) { animator.enemy.IsActionAnimation = true; }
+    public virtual void Execute(EnemyAnimatorController animator) { animator.Enemy.IsActionAnimation = true; }
 
     public virtual void ActionEnd(EnemyAnimatorController animator) { }
 }

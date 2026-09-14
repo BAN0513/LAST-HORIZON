@@ -20,7 +20,7 @@ public class Enemy_WeakBefore : StateMachineBehaviour
         if (enemy.Distance <= stopDis)
         {
             enemy.SetLookPlayerAndEnemyStop(false, true);
-            enemy.enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, false);
+            enemy.Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, false);
         }
     }
 }
