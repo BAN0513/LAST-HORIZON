@@ -27,7 +27,15 @@ public class EnemyAnimatorController : MonoBehaviour
         Wizard_SummonEnemyWeak,
         Wizard_Teleportation,
         Wizard_ShortManaCharge,
-        Wizard_LongManaCharge
+        Wizard_LongManaCharge,
+
+        WolfBoss_Tearing,
+        WolfBoss_LeapAndSlash,
+        WolfBoss_DashAttackBefore,
+        WolfBoss_RotationAttack,
+        WolfBoss_TailAttack,
+        WolfBoss_DownBefore,
+        WolfBoss_BackStep
     }
 
     protected Dictionary<AnimationBase, int> anims;
