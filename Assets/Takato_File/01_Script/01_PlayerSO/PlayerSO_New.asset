@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: PlayerSO_New
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSO_New
   maxHealth: 50
-  maxStamina: 100
-  staminaDrainRate: 10
+  maxStamina: 50
+  staminaDrainRate: 1
+  jumpStaminaCost: 3
   staminaRegenRate: 5
-  staminaRegenDelay: 0.3
+  staminaRegenDelay: 1
   moveSpeed: 2
   speedMultiplier: 2
   accelerationMultiplier: 20

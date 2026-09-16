@@ -28,7 +28,7 @@ public class Player_Script_New : MonoBehaviour
     public float CurrentStamina { get; private set; }
     public bool IsDead => isDead;
 
-    // イベント定義 (UI等との通知用)
+    // イベント定義
     public event Action<float, float> OnHealthChanged;  // (現在体力, 最大体力)
     public event Action<float, float> OnStaminaChanged; // (現在スタミナ, 最大スタミナ)
     public event Action OnPlayerDied;                   // 死亡時イベント
@@ -52,7 +52,7 @@ public class Player_Script_New : MonoBehaviour
     private bool isDead = false;
     private Vector3 rollDirection;
 
-    private const float GroundedDownwardForce = -2f;
+    private const float GroundedDownwardForce = -2f; // 接地時に下方向に力を加えることで、CharacterControllerが地面にしっかり接地するようにするための定数
 
     private float defaultHeight;
     private Vector3 defaultCenter;
@@ -126,26 +126,44 @@ public class Player_Script_New : MonoBehaviour
 
         MovePlayer(); // 移動処理
 
+        //スプリント中かどうかの判定
+        Vector2 moveInput = playerInput != null ? playerInput.MoveInput : Vector2.zero;
+        bool isSprinting = playerInput != null && playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
+
         // ロール中でなく接地している場合は攻撃を受け付ける
-        if (!isRolling && isGrounded)
+        if (!isRolling && isGrounded && playerInput != null)
         {
-            if (playerInput != null && !isAttacking)
+            if (isSprinting)
             {
+                //スプリント中に攻撃入力があった場合はフラグをリセットして先行入力を無効化
+                if (playerInput.LightAttackInput || playerInput.HeavyAttackInput)
+                {
+                    playerInput.ResetAttackInput(); // 攻撃入力をリセット
+                }
+            }
+            else if (!isAttacking)
+            {
+                // スプリント中でない場合のみ通常通り攻撃を処理
                 if (playerInput.HeavyAttackInput)
                 {
-                    HeavyAttack(); // 強攻撃処理
+                    HeavyAttack(); // 強攻撃
                 }
                 else if (playerInput.LightAttackInput)
                 {
-                    LightAttack(); // 通常攻撃処理
+                    LightAttack(); // 通常攻撃
                 }
-                else if (playerInput.RollInput)
+            }
+
+            // ロールやジャンプは攻撃中でなければ受付
+            if (!isAttacking)
+            {
+                if (playerInput.RollInput)
                 {
-                    Roll(); // ロール処理
+                    Roll(); // ロール
                 }
-                else if (playerInput.JumpInput)
+                else if (playerInput.JumpInput && CurrentStamina >= playerSO.JumpStaminaCost)
                 {
-                    Jump(); // ジャンプ処理
+                    Jump(); // ジャンプ
                 }
             }
         }
@@ -244,17 +262,6 @@ public class Player_Script_New : MonoBehaviour
         {
             currentMoveVelocity = rollDirection * (playerSO.MoveSpeed * playerSO.RollSpeedMultiplier);
             characterController.Move(currentMoveVelocity * Time.deltaTime);
-            return;
-        }
-
-        // 攻撃中の移動停止
-        if (isAttacking)
-        {
-            currentMoveVelocity = Vector3.zero;
-            if (playerAnimation != null)
-            {
-                playerAnimation.UpdateMoveAnimation(Vector3.zero, playerSO.MoveSpeed);
-            }
             return;
         }
 
@@ -414,6 +421,11 @@ public class Player_Script_New : MonoBehaviour
 
     private void Jump()
     {
+        //スタミナの消費処理
+        CurrentStamina = Mathf.Max(0f, CurrentStamina - playerSO.JumpStaminaCost);
+        staminaRegenTimer = playerSO.StaminaRegenDelay; 
+        OnStaminaChanged?.Invoke(CurrentStamina, playerSO.MaxStamina);
+
         velocity.y = Mathf.Sqrt(playerSO.JumpHeight * 2f * playerSO.GravityScale);
 
         if (playerAnimation != null)

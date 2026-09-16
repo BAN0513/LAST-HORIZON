@@ -10,31 +10,27 @@ public class Player_UI_Manager_New : MonoBehaviour
     [SerializeField] private Player_Script_New playerScript;
 
     [Header("UIコンポーネント参照")]
-    [SerializeField] private Image staminaFillImage; // Circle設定にしたFill用Image
+    [SerializeField] private Image staminaFillImage;
+    [SerializeField] private GameObject staminaUIRoot; 
 
     private void Awake()
     {
         if (playerScript == null)
         {
-           //プレイヤータグを持つオブジェクトを探して取得
             GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
             if (playerObject != null)
             {
                 playerScript = playerObject.GetComponent<Player_Script_New>();
-                if (playerScript == null)
-                {
-                    Debug.LogError("Player_Script_Newが見つかりません。");
-                }
-            }
-            else
-            {
-                Debug.LogError("タグ 'Player' を持つオブジェクトが見つかりません。");
             }
         }
+    }
 
-        if (staminaFillImage == null)
+    private void Start()
+    {
+        // 初期状態は非表示にする
+        if (staminaUIRoot != null)
         {
-            Debug.LogError("スタミナ用のImageがアタッチされていません。");
+            staminaUIRoot.SetActive(false);
         }
     }
 
@@ -42,7 +38,7 @@ public class Player_UI_Manager_New : MonoBehaviour
     {
         if (playerScript != null)
         {
-            playerScript.OnStaminaChanged += UpdateStaminaUI; // スタミナが変化したときにUIを更新するイベントを登録
+            playerScript.OnStaminaChanged += UpdateStaminaUI;
         }
     }
 
@@ -50,21 +46,27 @@ public class Player_UI_Manager_New : MonoBehaviour
     {
         if (playerScript != null)
         {
-            playerScript.OnStaminaChanged -= UpdateStaminaUI; // イベントの登録を解除
+            playerScript.OnStaminaChanged -= UpdateStaminaUI;
         }
     }
 
     /// <summary>
     /// スタミナUIの表示を更新する
     /// </summary>
-    /// <param name="currentStamina">現在のスタミナ</param>
-    /// <param name="maxStamina">最大スタミナ</param>
     private void UpdateStaminaUI(float currentStamina, float maxStamina)
     {
         if (staminaFillImage == null || maxStamina <= 0f) return;
 
-        // 0.0 ~ 1.0 の範囲に正規化して FillAmount に適用
+        // 割合を計算
         float fillValue = Mathf.Clamp01(currentStamina / maxStamina);
         staminaFillImage.fillAmount = fillValue;
+
+        if (staminaUIRoot != null)
+        {
+            //スタミナが最大値未満の場合にUIを表示する
+            bool shouldShow = currentStamina < maxStamina;
+
+            staminaUIRoot.SetActive(shouldShow); // UIの表示・非表示を切り替える
+        }
     }
 }

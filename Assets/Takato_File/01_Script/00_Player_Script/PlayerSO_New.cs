@@ -15,8 +15,10 @@ public class PlayerSO_New : ScriptableObject
     [Space(10)]
     [Header("プレイヤーの最大スタミナ")]
     [SerializeField] private float maxStamina;
-    [Header("スタミナ消費量")]
+    [Header("スプリント時のスタミナ消費量")]
     [SerializeField] private float staminaDrainRate;
+    [Header("ジャンプ時のスタミナ消費量")]
+    [SerializeField] private float jumpStaminaCost;
     [Header("スタミナ回復量")]
     [SerializeField] private float staminaRegenRate;
     [Header("スタミナ回復遅延時間")]
@@ -43,7 +45,8 @@ public class PlayerSO_New : ScriptableObject
     public float MaxHealth => maxHealth;                           // 最大体力のプロパティ
 
     public float MaxStamina => maxStamina;                         // 最大スタミナのプロパティ
-    public float StaminaDrainRate => staminaDrainRate;             // スタミナ消費量のプロパティ
+    public float StaminaDrainRate => staminaDrainRate;             // スプリント時のスタミナ消費量のプロパティ
+    public float JumpStaminaCost => jumpStaminaCost;               // ジャンプ時のスタミナ消費量のプロパティ
     public float StaminaRegenRate => staminaRegenRate;             // スタミナ回復量のプロパティ
     public float StaminaRegenDelay => staminaRegenDelay;           // 回復遅延時間のプロパティ
 
