@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Wolf_Boss_Retreat : StateMachineBehaviour
+public class Enemy_WolfBoss_Retreat : StateMachineBehaviour
 {
     [SerializeField] private float dashSpeed = 5.0f;
     private Enemy enemy;

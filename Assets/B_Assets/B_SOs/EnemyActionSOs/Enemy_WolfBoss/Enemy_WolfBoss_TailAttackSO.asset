@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b52541a6c1e53e44a3c4b17e11c5367, type: 3}
-  m_Name: Wolf_Boss_AttackTail_SO
-  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_AttackTail_SO
-  bestDis: 5
-  bestDot: -1
-  maxDis: 7
-  maxDot: 0
+  m_Name: Enemy_WolfBoss_TailAttackSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_TailAttackSO
+  actionName: "\u305F\u305F\u304D\u3064\u3051"
   minDis: 0
-  minDot: -1
-  baseDis: 0.5
-  baseDot: 0.7
+  maxDis: 10
+  baseProbability: 10
+  damage: 300

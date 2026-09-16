@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy_WolfBoss_TailAttackSO", menuName = "EnemyActionSO/Wolf_BossActionSO/Enemy_WolfBoss_TailAttackSO")]
+[CreateAssetMenu(fileName = "Enemy_WolfBoss_TailAttackSO", menuName = "EnemyActionSO/Enemy_WolfBossActionSO/Enemy_WolfBoss_TailAttackSO")]
 public class Enemy_WolfBoss_TailAttackSO : Enemy_WolfBossActionSO
 {
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
@@ -9,8 +9,9 @@ public class Enemy_WolfBoss_TailAttackSO : Enemy_WolfBossActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WolfBossAnimatorController wolf_Anim)
+    public override void Execute(EnemyAnimatorController animator)
     {
-        wolf_Anim.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_TailAttack);
+        base.Execute(animator);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_TailAttack);
     }
 }

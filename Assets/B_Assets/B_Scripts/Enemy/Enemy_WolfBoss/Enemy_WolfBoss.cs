@@ -12,18 +12,9 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     protected override void Update()
     {
-        //if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
+        if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
-        //base.Update();
-
-        //if (isActionAnimation) { return; }
-        //Wolf_BossActionSO action = (Wolf_BossActionSO)CalcAction(enemySO.action);
-
-        //if (action != null)
-        //{
-        //    SetLookPlayerAndEnemyStop(false, true);
-        //    action.Execute(wolf_Anim);
-        //}
+        base.Update();
     }
 
     //Ç±Ç±Ç©ÇÁâ∫ÇÕAnimatorä÷òAÇÃä÷êî
@@ -55,7 +46,7 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     public void DashAttak()
     {
-        wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
+        wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DashAttack, true);
         AttackJudgmentActive(BodyPart.AllBody);
 
         Agent.enabled = false;

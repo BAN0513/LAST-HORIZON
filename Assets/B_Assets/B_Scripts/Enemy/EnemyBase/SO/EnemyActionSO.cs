@@ -6,14 +6,11 @@ public class EnemyActionSO : ScriptableObject
     [Header("–¼‘O")]
     public string actionName;
 
-    [Header("Å“K‹——£")]
-    public float bestDis = 0;
+    [Header("Å¬‹——£")]
+    public float minDis = 0;
 
     [Header("Å‘å‹——£")]
     public float maxDis = 0;
-
-    [Header("Å¬‹——£")]
-    public float minDis = 0;
 
     [Header("Šm—¦")]
     [Range(0, 100)] public float baseProbability = 1.0f;
@@ -27,7 +24,7 @@ public class EnemyActionSO : ScriptableObject
     {
         if (dis > maxDis || dis < minDis) { return 0; }
 
-        float disDiff = Mathf.Abs(dis - bestDis);
+        float disDiff = Mathf.Abs(dis - maxDis / 2);
         float disScore = 1 - Mathf.Clamp01(disDiff / maxDis);
 
         return disScore;

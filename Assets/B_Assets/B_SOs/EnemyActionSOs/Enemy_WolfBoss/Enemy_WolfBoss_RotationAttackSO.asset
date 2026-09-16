@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0109bf7e27d436b4e9e37511312daa99, type: 3}
-  m_Name: Wolf_Boss_AttackRotation_SO
-  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_AttackRotation_SO
-  bestDis: 2
-  bestDot: 0
-  maxDis: 5
-  maxDot: 0.5
+  m_Name: Enemy_WolfBoss_RotationAttackSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_RotationAttackSO
+  actionName: "\u9AD8\u901F\u56DE\u8EE2"
   minDis: 0
-  minDot: -1
-  baseDis: 0.7
-  baseDot: 0.5
+  maxDis: 5
+  baseProbability: 10
+  damage: 200

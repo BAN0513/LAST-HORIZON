@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy_WolfBoss_BackStepSO", menuName = "EnemyActionSO/Wolf_BossActionSO/Enemy_WolfBoss_BackStepSO")]
+[CreateAssetMenu(fileName = "Enemy_WolfBoss_BackStepSO", menuName = "EnemyActionSO/Enemy_WolfBossActionSO/Enemy_WolfBoss_BackStepSO")]
 public class Enemy_WolfBoss_BackStepSO : Enemy_WolfBossActionSO
 {
     public override float ScoreCalculation(float dis, float dot)
@@ -8,8 +8,9 @@ public class Enemy_WolfBoss_BackStepSO : Enemy_WolfBossActionSO
         return base.ScoreCalculation(dis, dot);
     }
 
-    public override void Execute(Enemy_WolfBossAnimatorController wolf_Anim)
+    public override void Execute(EnemyAnimatorController animator)
     {
-        wolf_Anim.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_BackStep);
+        base.Execute(animator);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_BackStep);
     }
 }

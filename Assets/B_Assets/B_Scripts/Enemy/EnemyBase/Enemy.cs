@@ -137,6 +137,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        //Debug.Log("Dis" +  Distance);
         if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)
@@ -298,6 +299,7 @@ public abstract class Enemy : MonoBehaviour
 
         if (executeAction != null)
         {
+            Debug.Log("EX");
             executeAction.Execute(enemyAnimatorController);
 
             if (executeAction != currentAction)

@@ -8,6 +8,13 @@ public class Enemy_WolfBossActionSO : EnemyActionSO
     }
 
     //アニメーションの実行
+    public override void Execute(EnemyAnimatorController animator)
+    {
+        base.Execute(animator);
+    }
 
-    public virtual void Execute(Enemy_WolfBossAnimatorController wolf_BossAnim) { }  
+    public override void ActionEnd(EnemyAnimatorController animator)
+    {
+        base.ActionEnd(animator);
+    }
 }

@@ -24,7 +24,7 @@ public class ChargeAttackCheckHit : MonoBehaviour
             wolf.wolf_Anim.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DownBefore);
         }
 
-        wolf.wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+        wolf.wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DashAttack, false);
         wolf.Agent.enabled = true;
         wolf.AttackJudgmentEnd(BodyPart.AllBody);
     }

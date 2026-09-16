@@ -10,14 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ce3070ab045f234aab3efb655f0693c, type: 3}
-  m_Name: Wolf_Boss_Attack2_SO
-  m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss_Attack2_SO
-  bestDis: 5
-  bestDot: 1
-  maxDis: 7
-  maxDot: 1
-  minDis: 0
-  minDot: 0
-  baseDis: 0.5
-  baseDot: 0.5
-  basea: 1
+  m_Name: Enemy_WolfBoss_LeapAndSlashSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_LeapAndSlashSO
+  actionName: "\u98DB\u3073\u639B\u304B\u308A\u5207\u308A"
+  minDis: 5
+  maxDis: 15
+  baseProbability: 20
+  damage: 200

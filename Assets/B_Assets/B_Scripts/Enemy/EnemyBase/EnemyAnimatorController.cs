@@ -32,10 +32,11 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_Tearing,
         WolfBoss_LeapAndSlash,
         WolfBoss_DashAttackBefore,
+        WolfBoss_DashAttack,
         WolfBoss_RotationAttack,
         WolfBoss_TailAttack,
         WolfBoss_DownBefore,
-        WolfBoss_BackStep
+        WolfBoss_BackStep,
     }
 
     protected Dictionary<AnimationBase, int> anims;
