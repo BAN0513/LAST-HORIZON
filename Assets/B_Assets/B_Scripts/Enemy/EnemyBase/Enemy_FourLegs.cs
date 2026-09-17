@@ -23,6 +23,15 @@ public class Enemy_FourLegs : Enemy
 
     private Dictionary<BodyPart, EnemyAttackRollController[]> _weaponControllers;
 
+    private enum WalkType
+    {
+        Walk,
+        Run
+    };
+    private WalkType walkType = WalkType.Run;
+
+    float runTimer = 0.0f;
+    float runTime = 1.0f;
 
     protected override void Start()
     {
@@ -57,13 +66,34 @@ public class Enemy_FourLegs : Enemy
 
     private void MoveAnimControl()
     {
-        if (IsActionAnimation)
+        if (runTimer > 0.0f)
         {
+            runTimer -= Time.deltaTime;
+        }
+
+        if (IsActionAnimation || enemyBaseState != EnemyBaseState.Contact)
+        {
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            return;
         }
         else if (Agent.velocity.magnitude > 0)
         {
-            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+            if (Distance >= 20.0f && walkType == WalkType.Walk)
+            {
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+                Agent.speed = enemySO.dashMoveSpeed * DebufDEX;
+                walkType = WalkType.Run;
+                runTimer = runTime;
+            }
+            else if (Distance < 20.0f && walkType == WalkType.Run && runTimer <= 0.0f)
+            {
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+                Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
+                walkType = WalkType.Walk;
+            }
             isLookPlayer = true;
         }
         else

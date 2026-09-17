@@ -28,6 +28,7 @@ public class PreventionOfRiding : MonoBehaviour
         {
             dir = Vector3.Normalize(playerController.transform.position - transform.position);
             dir *= power;
+            if (!playerController.enabled) { return; }
             playerController.Move(dir);
         }
     }

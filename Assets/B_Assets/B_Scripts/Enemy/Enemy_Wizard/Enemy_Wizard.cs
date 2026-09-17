@@ -86,7 +86,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     {
         GameObject impact = Instantiate(impactEffect, transform.position, Quaternion.identity);
         ImpactController impactController = impact.GetComponentInChildren<ImpactController>();
-        impactController.damage = enemySO.damage;
+        impactController.damage = currentAction.damage;
         Destroy(impact, 1);
     }
 

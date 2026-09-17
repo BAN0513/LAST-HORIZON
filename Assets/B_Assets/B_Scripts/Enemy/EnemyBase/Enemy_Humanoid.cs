@@ -40,21 +40,25 @@ public class Enemy_Humanoid : Enemy
         if (Agent.velocity.magnitude < 0.1f || Distance <= Agent.stoppingDistance)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
         }
         else
         {
-            if (Distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
-            {
-                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
-                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-                SetDashSpeed(); // ダッシュ速度に設定
-            }
-            else
-            {
-                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
-                enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
-                SetWalkSpeed(); // 歩き速度に設定
-            }
+            enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+            Agent.speed = enemySO.dashMoveSpeed * DebufDEX;
+
+            //if (Distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
+            //{
+            //    enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
+            //    enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
+            //    SetDashSpeed(); // ダッシュ速度に設定
+            //}
+            //else
+            //{
+            //    enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
+            //    enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+            //    SetWalkSpeed(); // 歩き速度に設定
+            //}
         }
     }
 

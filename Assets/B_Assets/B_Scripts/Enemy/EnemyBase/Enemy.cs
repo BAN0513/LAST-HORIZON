@@ -28,9 +28,6 @@ public abstract class Enemy : MonoBehaviour
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
 
-    //歩いているか
-    protected bool isWalk = true;
-
     //敵が攻撃された後に連続で攻撃が当たらないようにするための変数
     protected float invincibilityTime  = 0.5f;
     protected float invincibilityTimer = 0;
@@ -42,6 +39,7 @@ public abstract class Enemy : MonoBehaviour
     private float currentStoppingDistance = 0.0f;
 
     //敵がプレイヤーを発見しているかどうか
+    protected bool isContact = true;
     private float contactDis;
     private float contactDot;
     private float searchDis;
@@ -123,6 +121,8 @@ public abstract class Enemy : MonoBehaviour
             Agent.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
         }
 
+        Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
+
         LookRotationSpeed = enemySO.lookRotationSpeed;
 
         IsActionAnimation = false;
@@ -137,7 +137,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        //Debug.Log("Dis" +  Distance);
+        Debug.Log("speed" + Agent.speed);
         if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)
@@ -238,15 +238,15 @@ public abstract class Enemy : MonoBehaviour
         }
 
         //agent.stoppingDistanceの値の付近を行ったり来たりするとアニメーションがガタガタするのでそれ対策
-        if (Distance <= Agent.stoppingDistance && isWalk)
+        if (Distance <= Agent.stoppingDistance && isContact)
         {
-            isWalk = false;
+            isContact = false;
             Agent.stoppingDistance = enemySO.stoopingDis + 1;
             currentStoppingDistance = Agent.stoppingDistance;
         }
-        else if (Distance >= Agent.stoppingDistance && !isWalk)
+        else if (Distance >= Agent.stoppingDistance && !isContact)
         {
-            isWalk = true;
+            isContact = true;
             Agent.stoppingDistance = enemySO.stoopingDis - 1;
             currentStoppingDistance = Agent.stoppingDistance;
         }
@@ -265,9 +265,6 @@ public abstract class Enemy : MonoBehaviour
     {
         if (Distance <= enemySO.engageDis && Mathf.Abs(Target.position.y - transform.position.y) < 0.5f)
         {
-            //敵のスピードを少しだけ遅くする
-            Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
-
             if (!IsAction)
             {
                 lotteryTime -= Time.deltaTime;      
@@ -280,11 +277,6 @@ public abstract class Enemy : MonoBehaviour
                     lotteryTime = Random.Range(lotteryMinTime, lotteryMaxTime);
                 }
             }
-        }
-        else
-        {
-            Agent.speed = enemySO.dashMoveSpeed - DebufDEX;
-            //isAction = false;
         }
     }
 
@@ -299,7 +291,6 @@ public abstract class Enemy : MonoBehaviour
 
         if (executeAction != null)
         {
-            Debug.Log("EX");
             executeAction.Execute(enemyAnimatorController);
 
             if (executeAction != currentAction)
