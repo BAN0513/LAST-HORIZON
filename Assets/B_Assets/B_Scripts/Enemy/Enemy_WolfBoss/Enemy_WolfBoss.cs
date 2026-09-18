@@ -17,6 +17,14 @@ public class Enemy_WolfBoss : Enemy_FourLegs
         base.Update();
     }
 
+    protected override void ContactAnimation()
+    {
+        base.ContactAnimation();
+        SetLookPlayerAndEnemyStop(false, true);
+        enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Contact);
+        IsActionAnimation = true;
+    }
+
     //ここから下はAnimator関連の関数
 
     //攻撃のアニメーションが終わったら全部初期化する

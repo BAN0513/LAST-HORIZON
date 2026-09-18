@@ -40,12 +40,12 @@ public class Enemy_Humanoid : Enemy
         if (Agent.velocity.magnitude < 0.1f || Distance <= Agent.stoppingDistance)
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-            Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
+            //Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
         }
         else
         {
             enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
-            Agent.speed = enemySO.dashMoveSpeed * DebufDEX;
+            Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
 
             //if (Distance >= enemySO.engageDis || Mathf.Abs(Target.position.y - transform.position.y) >= 0.5f)
             //{

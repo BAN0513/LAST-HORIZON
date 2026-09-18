@@ -11,6 +11,7 @@ public class Enemy_WolfBoss_DashAttackSO : Enemy_WolfBossActionSO
     public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
+        animator.Enemy.SetLookPlayerAndEnemyStop(false, false);
         animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DashAttackBefore);
     }
 }

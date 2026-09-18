@@ -79,20 +79,28 @@ public class Enemy_FourLegs : Enemy
         }
         else if (Agent.velocity.magnitude > 0)
         {
-            if (Distance >= 20.0f && walkType == WalkType.Walk)
+            if (Distance >= 20.0f)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, true);
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-                Agent.speed = enemySO.dashMoveSpeed * DebufDEX;
-                walkType = WalkType.Run;
-                runTimer = runTime;
+
+                if (walkType == WalkType.Walk)
+                {
+                    Agent.speed = enemySO.dashMoveSpeed * DebufDEX;
+                    walkType = WalkType.Run;
+                    runTimer = runTime;
+                }
             }
-            else if (Distance < 20.0f && walkType == WalkType.Run && runTimer <= 0.0f)
+            else if (Distance < 20.0f && runTimer <= 0.0f)
             {
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, true);
                 enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
-                Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
-                walkType = WalkType.Walk;
+
+                if (walkType == WalkType.Run)
+                {
+                    Agent.speed = enemySO.walkMoveSpeed * DebufDEX;
+                    walkType = WalkType.Walk;
+                }
             }
             isLookPlayer = true;
         }
@@ -107,6 +115,7 @@ public class Enemy_FourLegs : Enemy
     {
         base.Init();
         isLookPlayer = false;
+        runTimer = 0.0f;
     }
 
     public override void InitAnim()

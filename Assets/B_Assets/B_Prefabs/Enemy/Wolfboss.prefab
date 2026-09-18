@@ -220,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &1009225671809478058
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,7 +372,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 1490661895615327341}
-  damage: 4
 --- !u!114 &2481268277635391286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &1345780250737764489
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,8 +600,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2028472948467155177}
   serializedVersion: 2
-  m_LocalRotation: {x: -5.8998373e-10, y: 0.00000018725257, z: -0.0031507218, w: 0.99999505}
-  m_LocalPosition: {x: -1.2762183, y: -0.0018930112, z: -0.0007879335}
+  m_LocalRotation: {x: -8.849756e-10, y: 0.00000028087888, z: -0.0031507218, w: 0.99999505}
+  m_LocalPosition: {x: -1.2795622, y: -0.0019482161, z: -0.000787932}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -620,7 +621,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 721442454212197328}
-  damage: 4
 --- !u!65 &721442454212197328
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -702,6 +702,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &2184221346823539382
 GameObject:
   m_ObjectHideFlags: 0
@@ -812,6 +813,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &2239300470441904896
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,7 +844,7 @@ Transform:
   m_GameObject: {fileID: 2239300470441904896}
   serializedVersion: 2
   m_LocalRotation: {x: 0.000000088501686, y: -0.000000030551934, z: 0.3263163, w: 0.94526064}
-  m_LocalPosition: {x: -1.1667945, y: 0.0018338561, z: 0.0013810843}
+  m_LocalPosition: {x: -1.1654984, y: 0.0022056103, z: 0.0016539395}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -931,7 +933,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 6387604458046054212}
-  damage: 4
 --- !u!114 &8987996467014755037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -944,6 +945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &2334745955311627158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1040,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 9075336877907899413}
-  damage: 4
 --- !u!1773428102 &9146557787211492172
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -1078,6 +1079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &2566543683153758793
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,7 +1093,6 @@ GameObject:
   - component: {fileID: 7685441193719080015}
   - component: {fileID: 2420534345735745436}
   - component: {fileID: 2257857460379893532}
-  - component: {fileID: 1713276770377749321}
   m_Layer: 0
   m_Name: Wolfboss
   m_TagString: Enemy
@@ -1154,6 +1155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Wolf_Boss
   enemySO: {fileID: 11400000, guid: 3ca847a470a89164f988b27bcc5ba8d0, type: 2}
   hpSliider: {fileID: 4688475866539488939}
+  isNoObstacleAvoidance: 0
   _weaponController_LeftLeg:
   - {fileID: 6809656843924528999}
   - {fileID: 7215841190176113087}
@@ -1216,33 +1218,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &1713276770377749321
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2566543683153758793}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &2593156465923755276
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,7 +1279,7 @@ Transform:
   m_GameObject: {fileID: 2707727879590609296}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0, z: -0.6388433, w: 0.76933694}
-  m_LocalPosition: {x: -0.8656188, y: -0.0056681708, z: 0.0025745595}
+  m_LocalPosition: {x: -0.86284196, y: -0.0067948997, z: 0.0030333512}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1393,7 +1368,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 4438093998276628651}
-  damage: 4
 --- !u!114 &2003754308207646130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,6 +1380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &2801410476763105381
 GameObject:
   m_ObjectHideFlags: 0
@@ -1958,7 +1933,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 5069332841871784226}
-  damage: 3
 --- !u!114 &2695645166196782682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1971,6 +1945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &4057290636087770119
 GameObject:
   m_ObjectHideFlags: 0
@@ -2031,8 +2006,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4069455929687147492}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20719174, y: 0.015303915, z: 0.08324124, w: 0.97463244}
-  m_LocalPosition: {x: -1.1309701, y: -0.009813786, z: 0.0030920804}
+  m_LocalRotation: {x: 0.20514768, y: 0.013845183, z: 0.08559418, w: 0.9748828}
+  m_LocalPosition: {x: -1.1311136, y: -0.010073662, z: 0.0030956864}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2052,7 +2027,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 8236569564089074353}
-  damage: 5
 --- !u!1773428102 &2652336540169278895
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -2134,6 +2108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &4094222354680725067
 GameObject:
   m_ObjectHideFlags: 0
@@ -2285,7 +2260,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 2588373124361421520}
-  damage: 3
 --- !u!114 &2998765313119892505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2298,6 +2272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &4400082932763196083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2423,7 +2398,7 @@ Transform:
   m_GameObject: {fileID: 5198711957980620008}
   serializedVersion: 2
   m_LocalRotation: {x: -0.14721856, y: -0.05231502, z: -0.0013433071, w: 0.98771864}
-  m_LocalPosition: {x: -1.3405946, y: 0.0019407747, z: 0.0011442186}
+  m_LocalPosition: {x: -1.3405949, y: 0.0019405843, z: 0.0011440994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2446,7 +2421,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 5665356035769706446}
-  damage: 5
 --- !u!65 &5665356035769706446
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2528,6 +2502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &5456093431839490298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2623,6 +2598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &5570540883484177582
 GameObject:
   m_ObjectHideFlags: 0
@@ -2735,7 +2711,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 2140853691540253883}
-  damage: 3
 --- !u!65 &2140853691540253883
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2817,6 +2792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &5813762188365765434
 GameObject:
   m_ObjectHideFlags: 0
@@ -2911,7 +2887,7 @@ Transform:
   m_GameObject: {fileID: 6059859073403751850}
   serializedVersion: 2
   m_LocalRotation: {x: -0.23662393, y: 0.096350394, z: 0.17673361, w: 0.9505214}
-  m_LocalPosition: {x: -0.62174404, y: 0.012646675, z: 0.0003733444}
+  m_LocalPosition: {x: -0.6205646, y: 0.014903069, z: 0.00047008274}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3002,7 +2978,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 9104324939423911114}
-  damage: 5
 --- !u!114 &5482803610284849909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3015,6 +2990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &6206512260811193833
 GameObject:
   m_ObjectHideFlags: 0
@@ -3142,7 +3118,7 @@ Transform:
   m_GameObject: {fileID: 6628965298579845666}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000355959, y: 0.00000025743697, z: -0.0065875314, w: 0.9999783}
-  m_LocalPosition: {x: -1.0005351, y: 0.0031753941, z: -0.000019211915}
+  m_LocalPosition: {x: -1.0070021, y: 0.0023843045, z: -0.000019214956}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3161,7 +3137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 1604940603176797457}
-  damage: 5
 --- !u!65 &1604940603176797457
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3243,6 +3218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &6727453050263513119
 GameObject:
   m_ObjectHideFlags: 0
@@ -3291,7 +3267,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 6136311534605250217}
-  damage: 5
 --- !u!65 &6136311534605250217
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3433,7 +3408,7 @@ Transform:
   m_GameObject: {fileID: 6864469484227750084}
   serializedVersion: 2
   m_LocalRotation: {x: -0.0000014979944, y: -0.000000010041097, z: -0.006702876, w: 0.9999775}
-  m_LocalPosition: {x: -0.98190576, y: 0.00036271114, z: 0.0067539928}
+  m_LocalPosition: {x: -0.9870142, y: -0.00005996553, z: 0.0076909782}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3453,7 +3428,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 6645571248624294450}
-  damage: 4
 --- !u!65 &6645571248624294450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3535,6 +3509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &7068060008267353204
 GameObject:
   m_ObjectHideFlags: 0
@@ -3627,8 +3602,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7159439910838217888}
   serializedVersion: 2
-  m_LocalRotation: {x: -3.2235914e-10, y: 0.0000000936262, z: -0.0034430237, w: 0.9999941}
-  m_LocalPosition: {x: -0.8907016, y: 0.0013475321, z: 0.003874798}
+  m_LocalRotation: {x: -0, y: 0, z: -0.0034430234, w: 0.9999941}
+  m_LocalPosition: {x: -0.8951716, y: 0.0014441675, z: 0.003876061}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3648,7 +3623,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 1969330960730396027}
-  damage: 4
 --- !u!65 &1969330960730396027
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3730,6 +3704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &7358565552226372271
 GameObject:
   m_ObjectHideFlags: 0
@@ -3843,7 +3818,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 9171903942866119376}
-  damage: 5
 --- !u!65 &9171903942866119376
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3925,6 +3899,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &7560661522890978728
 GameObject:
   m_ObjectHideFlags: 0
@@ -4020,6 +3995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &7621519473883636464
 GameObject:
   m_ObjectHideFlags: 0
@@ -4202,7 +4178,7 @@ Transform:
   m_GameObject: {fileID: 7966043303634695816}
   serializedVersion: 2
   m_LocalRotation: {x: -0.548441, y: -0.40355223, z: 0.5177141, w: 0.5180061}
-  m_LocalPosition: {x: -0.3728147, y: 0.00003844029, z: -0.00006392598}
+  m_LocalPosition: {x: -0.37328377, y: 0.00003844084, z: -0.00006392598}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4223,7 +4199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 6020528033129671817}
-  damage: 5
 --- !u!65 &6020528033129671817
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4305,6 +4280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &7989624690495550427
 GameObject:
   m_ObjectHideFlags: 0
@@ -4389,7 +4365,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 782232676721120812}
-  damage: 5
 --- !u!1773428102 &7269159509601604010
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -4471,6 +4446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &8122671096644262098
 GameObject:
   m_ObjectHideFlags: 0
@@ -4522,7 +4498,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 676265658644874424}
-  damage: 3
 --- !u!1773428102 &7461638993489814879
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -4604,6 +4579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &8197228636916273763
 GameObject:
   m_ObjectHideFlags: 0
@@ -4666,7 +4642,7 @@ Transform:
   m_GameObject: {fileID: 8290229417788605057}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.00898992, w: 0.99995965}
-  m_LocalPosition: {x: -1.2309791, y: -0.0010012791, z: -0.0007880945}
+  m_LocalPosition: {x: -1.2323103, y: -0.001027104, z: -0.00078809384}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4686,7 +4662,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyWeaponController
   boxCollider: {fileID: 4091525163600762999}
-  damage: 3
 --- !u!65 &4091525163600762999
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4768,6 +4743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &8592327101128701257
 GameObject:
   m_ObjectHideFlags: 0
@@ -4891,7 +4867,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackRollController
   boxCollider: {fileID: 1594584855175139977}
-  damage: 4
 --- !u!1773428102 &6528614305762476392
 ParentConstraint:
   m_ObjectHideFlags: 0
@@ -4931,6 +4906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
+  power: 0.1
 --- !u!1 &8715534816753186224
 GameObject:
   m_ObjectHideFlags: 0

@@ -137,7 +137,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        Debug.Log("speed" + Agent.speed);
         if (enemyBaseState == EnemyBaseState.Dead) { return; }
 
         if (invincibilityTimer > 0)

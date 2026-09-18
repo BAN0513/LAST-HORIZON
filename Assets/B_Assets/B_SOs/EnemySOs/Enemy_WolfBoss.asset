@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySO
   action:
   - {fileID: 11400000, guid: b2d8d7a93d80aa144b42d29da5de28d2, type: 2}
-  - {fileID: 11400000, guid: b10a43359f6184542834ceefa81960a0, type: 2}
+  - {fileID: 11400000, guid: b89a56f912dd8924faf9c9babce9b6bb, type: 2}
   - {fileID: 11400000, guid: 9bf08bcd0afc9944e8b1d869730f73ee, type: 2}
   - {fileID: 11400000, guid: df0d9a8f0f0eeee4f9895c8c61d21956, type: 2}
   - {fileID: 11400000, guid: b10a43359f6184542834ceefa81960a0, type: 2}
   - {fileID: 11400000, guid: ae478aaa49c271b45b6c6ccf2e4df283, type: 2}
   maxHP: 1000
-  dashMoveSpeed: 1
-  walkMoveSpeed: 0.3
+  dashMoveSpeed: 3
+  walkMoveSpeed: 1
   def: 50
   stoopingDis: 6
   lookRotationSpeed: 1
