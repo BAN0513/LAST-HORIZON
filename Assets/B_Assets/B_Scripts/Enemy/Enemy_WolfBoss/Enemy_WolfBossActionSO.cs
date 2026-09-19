@@ -10,6 +10,7 @@ public class Enemy_WolfBossActionSO : EnemyActionSO
     //アニメーションの実行
     public override void Execute(EnemyAnimatorController animator)
     {
+        animator.Enemy.SetLookPlayerAndEnemyStop(false, true);
         base.Execute(animator);
     }
 

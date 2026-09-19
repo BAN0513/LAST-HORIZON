@@ -12,6 +12,7 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     protected override void Update()
     {
+        Debug.Log("dis" + Distance);
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();

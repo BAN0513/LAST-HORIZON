@@ -37,7 +37,8 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_TailAttack,
         WolfBoss_DownBefore,
         WolfBoss_BackStep,
-        WolfBoss_Contact
+        WolfBoss_Contact,
+        WolfBoss_Jump
     }
 
     protected Dictionary<AnimationBase, int> anims;

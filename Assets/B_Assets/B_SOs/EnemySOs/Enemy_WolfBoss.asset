@@ -19,13 +19,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df0d9a8f0f0eeee4f9895c8c61d21956, type: 2}
   - {fileID: 11400000, guid: b10a43359f6184542834ceefa81960a0, type: 2}
   - {fileID: 11400000, guid: ae478aaa49c271b45b6c6ccf2e4df283, type: 2}
+  - {fileID: 11400000, guid: 0f630b2343b0f8845a53fed9bddf48e2, type: 2}
   maxHP: 1000
   dashMoveSpeed: 3
   walkMoveSpeed: 1
   def: 50
   stoopingDis: 6
   lookRotationSpeed: 1
-  engageDis: 100
+  engageDis: 50
   contactDis: 50
   contactDot: 0.3
   searchDis: 100
