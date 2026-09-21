@@ -5,6 +5,8 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 {
     public Enemy_WolfBossAnimatorController wolf_Anim;
 
+    public bool IsGuard { get; set; }
+
     protected override void Start()
     {
         base.Start();
@@ -12,7 +14,6 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     protected override void Update()
     {
-        Debug.Log("dis" + Distance);
         if (wolf_Anim.CheckCurrentAnim("DownBefore") || wolf_Anim.CheckCurrentAnim("Down")) { return; }
 
         base.Update();
@@ -24,6 +25,21 @@ public class Enemy_WolfBoss : Enemy_FourLegs
         SetLookPlayerAndEnemyStop(false, true);
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Contact);
         IsActionAnimation = true;
+    }
+
+    public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
+    {
+        if (!IsGuard)
+        {
+            IsGuard = true;
+            IsAction = true;
+        }
+        else
+        {
+            damage /= 2;
+        }
+
+        base.TakeDamage(damage, sound, seNumber);
     }
 
     //Ç±Ç±Ç©ÇÁâ∫ÇÕAnimatorä÷òAÇÃä÷êî

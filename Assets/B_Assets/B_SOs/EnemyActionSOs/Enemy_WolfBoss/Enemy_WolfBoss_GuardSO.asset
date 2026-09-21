@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa1d3a75ea016648ab7168dce2566ed, type: 3}
+  m_Name: Enemy_WolfBoss_GuardSO
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_GuardSO
+  actionName: 
+  minDis: 0
+  maxDis: 0
+  baseProbability: 1
+  damage: 0
