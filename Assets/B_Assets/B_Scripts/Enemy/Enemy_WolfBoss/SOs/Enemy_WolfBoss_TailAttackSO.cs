@@ -6,7 +6,7 @@ public class Enemy_WolfBoss_TailAttackSO : Enemy_WolfBossActionSO
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
         if (!enemy.IsAction) { return 0.0f; }
-        return base.ScoreCalculation(dis, dot);
+        return base.ScoreCalculation(dis, dot, enemy);
     }
 
     public override void Execute(EnemyAnimatorController animator)

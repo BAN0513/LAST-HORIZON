@@ -38,6 +38,7 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_DownBefore,
         WolfBoss_BackStep,
         WolfBoss_Contact,
+        WolfBoss_FormChange,
         WolfBoss_Jump,
         WolfBoss_Guard
     }

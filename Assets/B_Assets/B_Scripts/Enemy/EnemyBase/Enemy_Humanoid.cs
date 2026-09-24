@@ -12,11 +12,6 @@ public class Enemy_Humanoid : Enemy
         base.Start();
 
         _weaponController = GetComponentInChildren<EnemyAttackRollController>();
-
-        if (_weaponController != null)
-        {
-            _weaponController.Player = playerController;
-        }
     }
 
     protected override void Update()
@@ -66,7 +61,7 @@ public class Enemy_Humanoid : Enemy
     {
         base.TakeDamage(damage, sound, seNumber);
 
-        if (!isHit && hp > 0)
+        if (!isHit && HP > 0)
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
             SetLookPlayerAndEnemyStop(false, true);

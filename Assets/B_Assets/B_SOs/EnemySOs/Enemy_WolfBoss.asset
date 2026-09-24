@@ -19,12 +19,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df0d9a8f0f0eeee4f9895c8c61d21956, type: 2}
   - {fileID: 11400000, guid: b10a43359f6184542834ceefa81960a0, type: 2}
   - {fileID: 11400000, guid: ae478aaa49c271b45b6c6ccf2e4df283, type: 2}
+  - {fileID: 11400000, guid: 74b3243a59ec8a148a7336b15c1561c8, type: 2}
   - {fileID: 11400000, guid: 0f630b2343b0f8845a53fed9bddf48e2, type: 2}
   - {fileID: 11400000, guid: abb02fc2f4de59d44b3903b726531d0d, type: 2}
-  maxHP: 1000
+  - {fileID: 11400000, guid: b2d8d7a93d80aa144b42d29da5de28d2, type: 2}
+  maxHP: 100
   dashMoveSpeed: 3
   walkMoveSpeed: 1
-  def: 50
+  def: 0
   stoopingDis: 6
   lookRotationSpeed: 1
   engageDis: 50

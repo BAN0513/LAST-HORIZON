@@ -11,8 +11,6 @@ public class FireController : MonoBehaviour
 
     private int damage;
     public int Damage { set { damage = value; } }
-    private PlayerController player;
-    public PlayerController Player { set { player = value; } }
 
     private void Start()
     {
@@ -37,6 +35,7 @@ public class FireController : MonoBehaviour
         if (other.CompareTag("Player") || other.CompareTag("Shield"))
         {
             PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+            PlayerController player = other.GetComponent<PlayerController>();
 
             if (shield != null)
             {

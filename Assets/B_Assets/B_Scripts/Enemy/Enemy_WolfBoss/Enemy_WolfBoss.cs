@@ -7,6 +7,15 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     public bool IsGuard { get; set; }
 
+    public enum WolfBoss_Form
+    {
+        None,
+        One,
+        Two
+    }
+    public WolfBoss_Form Form { get; set; } = WolfBoss_Form.One;
+
+
     protected override void Start()
     {
         base.Start();

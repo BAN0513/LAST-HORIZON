@@ -70,7 +70,6 @@ public class Enemy_Wizard : Enemy_Humanoid
         GameObject fire = Instantiate(spawnMeraObj, transform.position + transform.forward + transform.up, quaternion);
         FireController fireController = fire.GetComponent<FireController>();
         fireController.Damage = currentAction.damage;
-        fireController.Player = playerController;
         fireController.Direction = dir;
     }
 

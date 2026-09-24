@@ -8,6 +8,7 @@ public abstract class Enemy : MonoBehaviour
 {
     [Header("敵のScriptable Object")]
     [SerializeField] protected EnemySO enemySO;
+    public EnemySO EnemySO { get { return enemySO; } }
 
     [Header("HPのスライダー")]
     [SerializeField] protected Slider hpSliider;
@@ -15,15 +16,13 @@ public abstract class Enemy : MonoBehaviour
     [Header("ほぼ中ボス用。\nNav Mesh Obstacleの影響を受けなくなる")]
     [SerializeField] private bool isNoObstacleAvoidance = false;
 
-    protected PlayerController playerController;
-    protected CharacterController playerCharacterController;
     protected EnemyAnimatorController enemyAnimatorController;
     protected EventProgress eventProgress;
 
     protected float dot;
 
     //敵のHP
-    protected int hp;
+    public int HP { get; private set; }
 
     //プレイヤーを見続けるかどうか
     protected bool isLookPlayer = true;
@@ -66,13 +65,15 @@ public abstract class Enemy : MonoBehaviour
     //振り向きのスピード
     public float LookRotationSpeed { get; set; }
 
+    //プレイヤーがスキルを発動したかどうか
+    public bool IsPlayerSkillActive {  get; set; }
+
 
     protected enum EnemyBaseState
     {
         Search,
         Contact,
         Dead
-
     }
     protected EnemyBaseState enemyBaseState = EnemyBaseState.Search;
 
@@ -110,7 +111,7 @@ public abstract class Enemy : MonoBehaviour
 
         Distance = Vector3.Distance(transform.position, Target.position);
 
-        hp = enemySO.maxHP;
+        HP = enemySO.maxHP;
 
         Agent.updateRotation = false;
 
@@ -148,8 +149,6 @@ public abstract class Enemy : MonoBehaviour
         if(Target == null)
         {
             Target = GameObject.FindWithTag("Player").transform;
-            playerController = Target.GetComponent<PlayerController>();
-            playerCharacterController = Target.GetComponent<CharacterController>();
         }
 
         //プレイヤーと自身の距離計算
@@ -405,13 +404,13 @@ public abstract class Enemy : MonoBehaviour
         damage -= (enemySO.def - DebufDEF);
         if (damage <= 0) { return; }
 
-        hp -= damage;
+        HP -= damage;
 
-        hpSliider.value = hp;
+        hpSliider.value = HP;
 
-        Debug.Log("Enemy_HP" + hp);
+        Debug.Log("Enemy_HP" + HP);
 
-        if (hp <= 0)
+        if (HP <= 0)
         {
             Death();
         }
@@ -532,13 +531,11 @@ public abstract class Enemy : MonoBehaviour
         if (newPlayer == null) return;
 
         Target = newPlayer.transform;
+    }
 
-        //ここで各コンポーネントを安全に取得
-        playerController = Target.GetComponent<Takato.PlayerController>();
-        playerCharacterController = Target.GetComponent<CharacterController>();
-
-        // デバッグ用ログ
-        if (playerController == null)
-            Debug.LogWarning($"[{gameObject.name}] PlayerController の取得に失敗しました。Playerプレハブにスクリプトが付いているか確認してください。");
+    [ContextMenu("SkillActive")]
+    private void SkillActive()
+    {
+        IsPlayerSkillActive = true;
     }
 }

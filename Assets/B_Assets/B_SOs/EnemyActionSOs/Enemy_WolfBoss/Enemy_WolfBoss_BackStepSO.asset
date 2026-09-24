@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Enemy_WolfBoss_BackStepSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_BackStepSO
   actionName: 
-  bestDis: 0
-  maxDis: 0
   minDis: 0
+  maxDis: 0
   baseProbability: 1
   damage: 0
+  availableForms: 1

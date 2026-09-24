@@ -17,3 +17,4 @@ MonoBehaviour:
   maxDis: 15
   baseProbability: 20
   damage: 200
+  availableForms: 1

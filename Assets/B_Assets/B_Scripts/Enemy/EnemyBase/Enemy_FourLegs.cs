@@ -47,14 +47,6 @@ public class Enemy_FourLegs : Enemy
            { BodyPart.Tail, _weaponController_Tail },
            { BodyPart.AllBody, _weaponController_AllBody },
         };
-
-        foreach (var w in _weaponControllers)
-        {
-            for (int i = 0; i < w.Value.Length; i++)
-            {
-                w.Value[i].Player = playerController;
-            }
-        }
     }
 
     protected override void Update()

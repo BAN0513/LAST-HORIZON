@@ -22,7 +22,8 @@ public class Enemy_WolfBossAnimatorController : EnemyAnimatorController
             {AnimationBase.WolfBoss_DashAttack,       Animator.StringToHash("isDashAttack")       },
             {AnimationBase.WolfBoss_DownBefore,       Animator.StringToHash("isDownBefore")       },
             {AnimationBase.WolfBoss_BackStep,         Animator.StringToHash("isBackStep")         },
-            {AnimationBase.WolfBoss_Contact,          Animator.StringToHash("isRoar")             },
+            {AnimationBase.WolfBoss_Contact,          Animator.StringToHash("isContactRoar")      },
+            {AnimationBase.WolfBoss_FormChange,       Animator.StringToHash("isFormChangeRoar")   },
             {AnimationBase.WolfBoss_Jump,             Animator.StringToHash("isJump")             },
             {AnimationBase.WolfBoss_Guard,            Animator.StringToHash("isGuard")            }
         };
