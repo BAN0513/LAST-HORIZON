@@ -14,7 +14,8 @@ public class Enemy_WolfBossAnimatorController : EnemyAnimatorController
 
         wolfBossAnims = new Dictionary<AnimationBase, int>
         {
-            {AnimationBase.WolfBoss_Tearing,          Animator.StringToHash("isTearing")          },
+            {AnimationBase.WolfBoss_Tearing_FormOne,  Animator.StringToHash("isTearing_FormOne")  },
+            {AnimationBase.WolfBoss_Tearing_FormTwo,  Animator.StringToHash("isTearing_FormTwo")  },
             {AnimationBase.WolfBoss_LeapAndSlash,     Animator.StringToHash("isLerpAndSlash")     },
             {AnimationBase.WolfBoss_RotationAttack,   Animator.StringToHash("isRotationAttack")   },
             {AnimationBase.WolfBoss_TailAttack,       Animator.StringToHash("isTailAttack")       },
@@ -25,7 +26,8 @@ public class Enemy_WolfBossAnimatorController : EnemyAnimatorController
             {AnimationBase.WolfBoss_Contact,          Animator.StringToHash("isContactRoar")      },
             {AnimationBase.WolfBoss_FormChange,       Animator.StringToHash("isFormChangeRoar")   },
             {AnimationBase.WolfBoss_Jump,             Animator.StringToHash("isJump")             },
-            {AnimationBase.WolfBoss_Guard,            Animator.StringToHash("isGuard")            }
+            {AnimationBase.WolfBoss_Guard,            Animator.StringToHash("isGuard")            },
+            {AnimationBase.WolfBoss_Laser,            Animator.StringToHash("isLaser")            }
         };
     }
 

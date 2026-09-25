@@ -29,7 +29,8 @@ public class EnemyAnimatorController : MonoBehaviour
         Wizard_ShortManaCharge,
         Wizard_LongManaCharge,
 
-        WolfBoss_Tearing,
+        WolfBoss_Tearing_FormOne,
+        WolfBoss_Tearing_FormTwo,
         WolfBoss_LeapAndSlash,
         WolfBoss_DashAttackBefore,
         WolfBoss_DashAttack,
@@ -40,7 +41,8 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_Contact,
         WolfBoss_FormChange,
         WolfBoss_Jump,
-        WolfBoss_Guard
+        WolfBoss_Guard,
+        WolfBoss_Laser
     }
 
     protected Dictionary<AnimationBase, int> anims;

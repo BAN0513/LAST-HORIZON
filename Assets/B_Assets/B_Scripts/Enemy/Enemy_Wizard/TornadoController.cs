@@ -23,7 +23,7 @@ public class TornadoController : MonoBehaviour
     [SerializeField] private float activeTimer = 3.0f;
 
     private ParticleSystem particle;
-    private GameObject target;
+    public GameObject Target { private get; set; }
 
     public int Damage { private get; set; }
 
@@ -34,8 +34,7 @@ public class TornadoController : MonoBehaviour
         _center.y = 0;
 
         particle = GetComponent<ParticleSystem>();
-        target = GameObject.FindWithTag("Player");
-        particle.trigger.SetCollider(0, target.transform);
+        particle.trigger.SetCollider(0, Target.transform);
     }
 
     private void Update()
@@ -47,10 +46,10 @@ public class TornadoController : MonoBehaviour
             360 / _period * Time.deltaTime
         );
 
-        distance = Vector3.Distance(transform.position, target.transform.position);
+        distance = Vector3.Distance(transform.position, Target.transform.position);
         if (distance <= attractionDis)
         {
-            target.transform.position = Vector3.MoveTowards(target.transform.position,transform.position, attractionPower * Time.deltaTime);
+            Target.transform.position = Vector3.MoveTowards(Target.transform.position,transform.position, attractionPower * Time.deltaTime);
         }
 
         activeTimer -= Time.deltaTime;
@@ -63,7 +62,7 @@ public class TornadoController : MonoBehaviour
     private void OnParticleTrigger()
     {
         Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
-        PlayerController player = target.GetComponent<PlayerController>();
+        PlayerController player = Target.GetComponent<PlayerController>();
         player.TakeDamage(Damage);
     }
 }

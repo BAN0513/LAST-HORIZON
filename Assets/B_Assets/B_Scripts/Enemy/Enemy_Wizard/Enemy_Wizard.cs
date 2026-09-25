@@ -79,6 +79,8 @@ public class Enemy_Wizard : Enemy_Humanoid
         GameObject storm = Instantiate(meraStormObj, transform.position, Quaternion.identity);
         TornadoController tornadoController = storm.GetComponent<TornadoController>();
         tornadoController.Damage = currentAction.damage;
+        tornadoController.Target = Target.gameObject;
+       
     }
 
     public void Impact()

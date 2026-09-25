@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Enemy_WolfBoss : Enemy_FourLegs
 {
+    [SerializeField] private Transform laserPosition;
+    [SerializeField] private GameObject laserObj;
+
     public Enemy_WolfBossAnimatorController wolf_Anim;
 
     public bool IsGuard { get; set; }
@@ -69,7 +72,7 @@ public class Enemy_WolfBoss : Enemy_FourLegs
     {
         base.InitAll();
 
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Tearing);
+        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Tearing_FormOne);
         wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_LeapAndSlash);
         wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_RotationAttack);
         wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_TailAttack);
@@ -84,6 +87,15 @@ public class Enemy_WolfBoss : Enemy_FourLegs
         AttackJudgmentActive(BodyPart.AllBody);
 
         Agent.enabled = false;
+    }
+
+    public void Laser()
+    {
+        GameObject laser = Instantiate(laserObj, laserPosition.position, Quaternion.identity);
+        LaserController laserController = laser.GetComponent<LaserController>();
+        laserController.Damage = currentAction.damage;
+        laserController.Target = Target.gameObject;
+        Destroy(laser, 5.0f);
     }
 }
 

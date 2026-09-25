@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy_WolfBoss_TearingSO", menuName = "EnemyActionSO/Enemy_WolfBossActionSO/Enemy_WolfBoss_TearingSO")]
-public class Enemy_WolfBoss_TearingSO : Enemy_WolfBossActionSO
+[CreateAssetMenu(fileName = "Enemy_WolfBoss_Tearing_FormTwoSO", menuName = "EnemyActionSO/Enemy_WolfBossActionSO/Enemy_WolfBoss_Tearing_FormTwoSO")]
+public class Enemy_WolfBoss_Tearing_FormTwoSO : Enemy_WolfBossActionSO
 {
     public override float ScoreCalculation(float dis, float dot, Enemy enemy)
     {
@@ -12,6 +12,6 @@ public class Enemy_WolfBoss_TearingSO : Enemy_WolfBossActionSO
     public override void Execute(EnemyAnimatorController animator)
     {
         base.Execute(animator);
-        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Tearing);
+        animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Tearing_FormTwo);
     }
 }
