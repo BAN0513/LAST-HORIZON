@@ -25,6 +25,7 @@ public class Player_Animation_New : MonoBehaviour
 
     // イベント定義
     public event Action OnRollEnd;
+    public event Action OnAttackHitStart;
     public event Action OnAttackEnd;
 
     private void Awake()
@@ -126,6 +127,14 @@ public class Player_Animation_New : MonoBehaviour
     public void OnBackRollCompleted()
     {
         OnRollEnd?.Invoke();
+    }
+
+    ///<summary>
+    ///Animation Event から呼び出すメソッド
+    ///</summary>
+    public void OnAttackHitStartEvent()
+    {
+        OnAttackHitStart?.Invoke();
     }
 
     /// <summary>
