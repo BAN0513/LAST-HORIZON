@@ -32,7 +32,8 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_Tearing_FormOne,
         WolfBoss_Tearing_FormTwo,
         WolfBoss_LeapAndSlash,
-        WolfBoss_DashAttackBefore,
+        WolfBoss_DashAttackBefore_FormOne,
+        WolfBoss_DashAttackBefore_FormTwo,
         WolfBoss_DashAttack,
         WolfBoss_RotationAttack,
         WolfBoss_TailAttack,
@@ -74,6 +75,15 @@ public class EnemyAnimatorController : MonoBehaviour
     public virtual void ResetTriggerAnim(AnimationBase animation)
     {
         animator.ResetTrigger(anims[animation]);
+    }
+
+    public virtual void ResetAllAnim() 
+    {
+        foreach(var anim in anims.Values)
+        {
+            animator.ResetTrigger(anim);
+            animator.SetBool(anim, false);
+        }
     }
 
     public virtual bool CheckCurrentAnim(string name)
