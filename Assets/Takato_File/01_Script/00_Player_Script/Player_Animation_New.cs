@@ -17,6 +17,7 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
     private static readonly int LightAttackHash = Animator.StringToHash("LightAttack");
     private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack");
+    private static readonly int IsChargingHash = Animator.StringToHash("IsCharging");
     private static readonly int TakeDamageHash = Animator.StringToHash("TakeDamage");
     private static readonly int DieHash = Animator.StringToHash("Die");
 
@@ -74,6 +75,15 @@ public class Player_Animation_New : MonoBehaviour
     {
         if (animator == null) return;
         animator.SetTrigger(LightAttackHash);
+    }
+
+    ///<summary>
+    ///強攻撃のチャージアニメーションを再生する
+    ///</summary>
+    public void PlayChargeAttack(bool isCharging)
+    {
+        if (animator == null) return;
+        animator.SetBool(IsChargingHash, isCharging);
     }
 
     /// <summary>
