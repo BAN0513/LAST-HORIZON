@@ -485,9 +485,7 @@ public abstract class Enemy : MonoBehaviour
     public virtual void InitAnim()
     {
         //全アニメーションのリセット
-        enemyAnimatorController.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
-        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Walk, false);
-        enemyAnimatorController.SetBoolAnim(EnemyAnimatorController.AnimationBase.Dash, false);
+        enemyAnimatorController.ResetAllAnim();
         enemyAnimatorController.ForcedQuitAnimation();
     }
 

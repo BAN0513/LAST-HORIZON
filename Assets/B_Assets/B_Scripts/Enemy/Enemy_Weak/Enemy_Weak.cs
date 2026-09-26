@@ -79,11 +79,7 @@ public class Enemy_Weak : Enemy_Humanoid
     public override void InitAnim()
     {
         base.InitAnim();
-        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Melee, false);
-        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Block, false);
-        Enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_ChargeAttack);
-        Enemy_WeakAnimator.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_BlockReaction);
-        Enemy_WeakAnimator.SetBoolAnim(EnemyAnimatorController.AnimationBase.Weak_Down, false);
+        Enemy_WeakAnimator.ResetAllAnim();
     }
 
     protected override void Death()

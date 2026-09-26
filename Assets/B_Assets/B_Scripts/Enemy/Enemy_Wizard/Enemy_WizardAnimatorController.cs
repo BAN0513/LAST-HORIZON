@@ -60,4 +60,15 @@ public class Enemy_WizardAnimatorController : EnemyAnimatorController
             base.ResetTriggerAnim(animation);
         }
     }
+
+    public override void ResetAllAnim()
+    {
+        base.ResetAllAnim();
+
+        foreach(var anims in wizardAnims.Values)
+        {
+            animator.ResetTrigger(anims);
+            animator.SetBool(anims, false);
+        }
+    }
 }

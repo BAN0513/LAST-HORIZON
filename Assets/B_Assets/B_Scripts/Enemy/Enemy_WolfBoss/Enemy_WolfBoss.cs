@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class Enemy_WolfBoss : Enemy_FourLegs
 {
-    [SerializeField] private Transform laserPosition;
+    [Header("レーザーの出現位置")]
+    [SerializeField] private Transform laserSpawnPosition;
+
+    [Header("レーザーのプレハブ")]
     [SerializeField] private GameObject laserObj;
 
     public Enemy_WolfBossAnimatorController wolf_Anim;
@@ -72,13 +75,7 @@ public class Enemy_WolfBoss : Enemy_FourLegs
     {
         base.InitAll();
 
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Tearing_FormOne);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_LeapAndSlash);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_RotationAttack);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_TailAttack);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_BackStep);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DownBefore);
-        wolf_Anim.ResetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DashAttackBefore);
+        wolf_Anim.ResetAllAnim();
     }
 
     public void DashAttak()
@@ -91,7 +88,7 @@ public class Enemy_WolfBoss : Enemy_FourLegs
 
     public void Laser()
     {
-        GameObject laser = Instantiate(laserObj, laserPosition.position, Quaternion.identity);
+        GameObject laser = Instantiate(laserObj, laserSpawnPosition.position, Quaternion.identity);
         LaserController laserController = laser.GetComponent<LaserController>();
         laserController.Damage = currentAction.damage;
         laserController.Target = Target.gameObject;

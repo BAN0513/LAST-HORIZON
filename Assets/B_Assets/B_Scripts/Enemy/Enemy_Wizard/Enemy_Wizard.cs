@@ -164,5 +164,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     public override void InitAnim()
     {
         base.InitAnim();
+
+        enemy_WizardAnimator.ResetAllAnim();
     }
 }

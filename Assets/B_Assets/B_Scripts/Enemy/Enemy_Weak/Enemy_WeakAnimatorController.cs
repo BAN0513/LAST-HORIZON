@@ -58,4 +58,15 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
             base.ResetTriggerAnim(animation);
         }
     }
+
+    public override void ResetAllAnim()
+    {
+        base.ResetAllAnim();
+
+        foreach(var anim in weakAnims.Values)
+        {
+            animator.ResetTrigger(anim);
+            animator.SetBool(anim, false);
+        }
+    }
 }
