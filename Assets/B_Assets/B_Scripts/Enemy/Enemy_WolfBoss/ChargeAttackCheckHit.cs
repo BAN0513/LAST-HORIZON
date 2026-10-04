@@ -4,6 +4,8 @@ using static Enemy_FourLegs;
 
 public class ChargeAttackCheckHit : MonoBehaviour
 {
+    [SerializeField] private BoxCollider boxCollider;
+
     Enemy_WolfBoss wolf;
 
     private void Start()
@@ -13,8 +15,7 @@ public class ChargeAttackCheckHit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!wolf.wolf_Anim.CheckCurrentAnim("DashAttack")) { return; }
-        Debug.Log("Hit");
+        if (!boxCollider.enabled) { return; }
         if (other.CompareTag("Wall"))
         {
             wolf.Init();

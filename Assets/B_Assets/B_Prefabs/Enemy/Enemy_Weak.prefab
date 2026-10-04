@@ -148,7 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
-  power: 0.1
+  power_PushPlayer: 0.1
+  power_PushEnemy: 3
 --- !u!1 &95649404462255287
 GameObject:
   m_ObjectHideFlags: 0
@@ -3495,7 +3496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
-  power: 0.1
+  power_PushPlayer: 0.1
+  power_PushEnemy: 3
 --- !u!1 &1520603755151274549
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,8 @@ public class Enemy_WolfBoss_DashAttack_FormOneSO : Enemy_WolfBossActionSO
 
     public override void Execute(EnemyAnimatorController animator)
     {
-        base.Execute(animator);
+        animator.Enemy.IsActionAnimation = true;
+        animator.Enemy.SetLookPlayerAndEnemyStop(true, true);
         animator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.WolfBoss_DashAttackBefore_FormOne);
     }
 }

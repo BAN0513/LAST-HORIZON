@@ -28,7 +28,8 @@ public class Enemy_WolfBossAnimatorController : EnemyAnimatorController
             {AnimationBase.WolfBoss_FormChange,               Animator.StringToHash("isFormChangeRoar")           },
             {AnimationBase.WolfBoss_Guard,                    Animator.StringToHash("isGuard")                    },
             {AnimationBase.WolfBoss_Jump,                     Animator.StringToHash("isJump")                     },
-            {AnimationBase.WolfBoss_Laser,                    Animator.StringToHash("isLaser")                    }
+            {AnimationBase.WolfBoss_Laser,                    Animator.StringToHash("isLaser")                    },
+            {AnimationBase.WolfBoss_Teleport,                 Animator.StringToHash("isTeleport")                 }
         };
     }
 

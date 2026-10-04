@@ -43,7 +43,8 @@ public class EnemyAnimatorController : MonoBehaviour
         WolfBoss_FormChange,
         WolfBoss_Jump,
         WolfBoss_Guard,
-        WolfBoss_Laser
+        WolfBoss_Laser,
+        WolfBoss_Teleport
     }
 
     protected Dictionary<AnimationBase, int> anims;

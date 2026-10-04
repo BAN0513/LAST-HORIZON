@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Enemy_WolfBoss_LaserSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_LaserSO
   actionName: "\u30EC\u30FC\u30B6\u30FC"
-  minDis: 5
-  maxDis: 20
+  minDis: 20
+  maxDis: 50
   baseProbability: 25
   damage: 300
   availableForms: 2

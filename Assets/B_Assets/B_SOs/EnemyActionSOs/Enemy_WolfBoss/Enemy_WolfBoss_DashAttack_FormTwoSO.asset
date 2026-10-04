@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_WolfBoss_DashAttack_FormTwoSO
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_DashAttack_FormTwoSO
   actionName: "\u9AD8\u901F\u7A81\u9032"
-  minDis: 5
+  minDis: 50
   maxDis: 20
   baseProbability: 25
   damage: 300

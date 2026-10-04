@@ -9,6 +9,7 @@ public class Enemy_FourLegs : Enemy
     [SerializeField] private EnemyAttackRollController[] _weaponController_LeftArm;
     [SerializeField] private EnemyAttackRollController[] _weaponController_RightArm;
     [SerializeField] private EnemyAttackRollController[] _weaponController_Tail;
+    [SerializeField] private EnemyAttackRollController[] _weaponController_Head;
     [SerializeField] private EnemyAttackRollController[] _weaponController_AllBody;
 
     public enum BodyPart
@@ -18,6 +19,7 @@ public class Enemy_FourLegs : Enemy
         LeftArm,
         RightArm,
         Tail,
+        Head,
         AllBody
     };
 
@@ -45,6 +47,7 @@ public class Enemy_FourLegs : Enemy
            { BodyPart.LeftArm, _weaponController_LeftArm },
            { BodyPart.RightArm, _weaponController_RightArm },
            { BodyPart.Tail, _weaponController_Tail },
+           { BodyPart.Head, _weaponController_Head },
            { BodyPart.AllBody, _weaponController_AllBody },
         };
     }

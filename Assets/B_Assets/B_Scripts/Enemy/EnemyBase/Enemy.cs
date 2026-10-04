@@ -193,19 +193,27 @@ public abstract class Enemy : MonoBehaviour
             dir.x = 0;
             dir.z = 0;
 
-            if (Agent.speed == enemySO.walkMoveSpeed)
-            {
-                dir = Target.position - transform.position;
 
+            if (Agent != null && Agent.isOnNavMesh)
+            {
+                if (!Agent.isStopped || Agent.velocity != Vector3.zero)
+                {
+                    dir = Agent.velocity;
+                }
+                else
+                {
+                    dir = Target.position - transform.position;
+                }
             }
             else
             {
-                dir = (transform.position + Agent.velocity) - transform.position;
+                dir = Target.position - transform.position;
             }
             dir.y = 0;
             SetRotation(dir);
         }
     }
+
     private void SetRotation(Vector3 dir)
     {
         if (dir != Vector3.zero)
@@ -220,6 +228,8 @@ public abstract class Enemy : MonoBehaviour
 
     private void AgentContact()
     {
+        if (Agent == null) { return; }
+
         if (Agent.isOnNavMesh)
         {
             if (Distance <= contactDis && dot >= contactDot && enemyBaseState != EnemyBaseState.Contact)
@@ -456,7 +466,7 @@ public abstract class Enemy : MonoBehaviour
         enemyBaseState = EnemyBaseState.Dead;
         InitAll();
         hpSliider.gameObject.SetActive(false);
-        Agent.isStopped = true;
+        if (Agent != null) { Agent.isStopped = true; }
         enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Death);
     }
 
@@ -468,18 +478,37 @@ public abstract class Enemy : MonoBehaviour
     public void SetLookPlayerAndEnemyStop(bool isLook, bool isStop)
     {
         isLookPlayer = isLook;
+
+        if (Agent == null) { return; }
         Agent.isStopped = isStop;
+
+        //Ž~‚Ü‚é‚Æ‚«‚Ívelocity‚à‚O‚É‚µ‚Ä‚¨‚­
+        if (isStop) 
+        {
+            Agent.velocity = Vector3.zero;
+        }
     }
 
 
     public virtual void Init()
     {
-        Agent.stoppingDistance = currentStoppingDistance;
         LookRotationSpeed = enemySO.lookRotationSpeed;
         isLookPlayer = true;
-        Agent.isStopped = false;
         IsAction = false;
         IsActionAnimation = false;
+
+        if (Agent != null)
+        {
+            Agent.stoppingDistance = currentStoppingDistance;
+            Agent.isStopped = false;
+            Agent.speed = enemySO.walkMoveSpeed;
+        }
+
+        if (currentAction != null)
+        {
+            currentAction.ActionEnd(enemyAnimatorController);
+            currentAction = null;
+        }
     }
 
     public virtual void InitAnim()
