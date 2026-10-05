@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class Enemy_WolfBoss_Teleport : StateMachineBehaviour
 {
     [Header("何秒後にテレポートするか")]
@@ -8,13 +9,20 @@ public class Enemy_WolfBoss_Teleport : StateMachineBehaviour
     private float teleportTimer = 0.0f;
 
     [Header("テレポートする時のプレイヤーとの距離")]
-    [SerializeField] private float distance = 10.0f;
+    [SerializeField] private float initDistance = 10.0f;
+    private float distance = 10.0f;
 
-    private float checkDistance = 3.0f;
+    [Header("障害物のレイヤー")]
+    [SerializeField] private LayerMask layerMask;
+
+    private float checkDistance = 5.0f;
 
     private bool isTeleport = false;
     private Vector3[] teleportPosition = new Vector3[4];
     private int[] teleportRand = new int[4] { 0, 1, 2, 3 };
+
+    Vector3 forward = Vector3.zero;
+    Vector3 right = Vector3.zero;
 
     private Enemy_WolfBoss enemy;
 
@@ -25,11 +33,20 @@ public class Enemy_WolfBoss_Teleport : StateMachineBehaviour
         teleportTimer = teleportTime;
         isTeleport = false;
 
-        teleportPosition[0] = enemy.Target.transform.forward * distance;
-        teleportPosition[1] = -enemy.Target.transform.forward * distance;
-        teleportPosition[2] = enemy.Target.transform.right * distance;
-        teleportPosition[3] = -enemy.Target.transform.right * distance;
+        distance = initDistance;
 
+        TeleportPositionInit();
+
+    }
+
+    private void TeleportPositionInit()
+    {
+        forward = enemy.Target.forward.normalized;
+        right = enemy.Target.right.normalized;
+        teleportPosition[0] = forward * distance;
+        teleportPosition[1] = -forward * distance;
+        teleportPosition[2] = right * distance;
+        teleportPosition[3] = -right * distance;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -49,29 +66,40 @@ public class Enemy_WolfBoss_Teleport : StateMachineBehaviour
             }
 
             bool hit = false;
-            for (int i = 0; i < teleportRand.Length; i++)
+            for (int j = 0; j < teleportRand.Length; j++)
             {
-                hit = CheckTeleport(teleportRand[i]);
+                hit = CheckTeleport(teleportRand[j]);
 
                 if (hit)
                 {
-                    Debug.Log("rand" + teleportRand[i]);
-                    enemy.transform.position = enemy.Target.transform.position + teleportPosition[teleportRand[i]];
+                    enemy.transform.position = enemy.Target.transform.position + teleportPosition[teleportRand[j]];
                     enemy.transform.rotation = Quaternion.LookRotation((enemy.Target.position - enemy.transform.position).normalized);
                     enemy.wolf_Anim.SetBoolAnim(EnemyAnimatorController.AnimationBase.WolfBoss_Teleport, false);
                     isTeleport = true;
                     break;
                 }
             }
+
+            //テレポート失敗したので距離を離してやり直す
+            distance++;
+            TeleportPositionInit();
         }
     }
 
     private bool CheckTeleport(int num)
     {
+        Vector3 checkPosition = enemy.Target.transform.position + teleportPosition[num];
         NavMeshHit hit;
 
-        if (NavMesh.SamplePosition(teleportPosition[0], out hit, checkDistance, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(checkPosition, out hit, checkDistance, NavMesh.AllAreas))
         {
+            Collider[] col = Physics.OverlapSphere(checkPosition, checkDistance, layerMask);
+
+            if (col.Length > 0)
+            {
+                Debug.Log("障害物に当たった");
+                return false;
+            }
             return true;
         }
 

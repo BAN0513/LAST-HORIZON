@@ -1967,7 +1967,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WolfBoss_Teleport
   teleportTime: 3
-  distance: 5
+  initDistance: 10
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &4503743461262973383
 MonoBehaviour:
   m_ObjectHideFlags: 1
