@@ -36,6 +36,7 @@ public class Player_Script_New : MonoBehaviour
     // 他スクリプトの参照
     private Player_Input_New playerInput;
     private Player_Animation_New playerAnimation;
+    private Player_WeaponController_New playerWeaponController;
 
     // コンポーネントの参照
     private CharacterController characterController;
@@ -45,6 +46,7 @@ public class Player_Script_New : MonoBehaviour
     private Vector3 velocity;
     private Vector3 currentMoveVelocity;
     private float staminaRegenTimer;
+    private float chargeStartTime; 
 
     // フラグ
     private bool isRolling = false;
@@ -53,15 +55,16 @@ public class Player_Script_New : MonoBehaviour
     private bool isCharging = false;
     private Vector3 rollDirection;
 
-    private const float GroundedDownwardForce = -2f;
+    private const float GroundedDownwardForce = -2f; // 地面に接地しているときの下方向の力
 
-    private float defaultHeight;
-    private Vector3 defaultCenter;
+    private float defaultHeight; // CharacterControllerのデフォルトの高さ
+    private Vector3 defaultCenter;// CharacterControllerのデフォルトの中心位置
 
     private void Awake()
     {
         playerInput = GetComponent<Player_Input_New>();
         playerAnimation = GetComponent<Player_Animation_New>();
+        playerWeaponController = GetComponent<Player_WeaponController_New>();
         characterController = GetComponent<CharacterController>();
 
         if (characterController != null)
@@ -122,7 +125,7 @@ public class Player_Script_New : MonoBehaviour
             RotatePlayerToCamera(); // 移動中は常にカメラの方向に向く
         }
 
-        MovePlayer();
+        MovePlayer(); // プレイヤーの移動処理を呼び出す
 
         // 溜め状態の分岐
         if (isCharging)
@@ -131,15 +134,10 @@ public class Player_Script_New : MonoBehaviour
 
             if (playerInput != null)
             {
-                // ★十分な溜め時間クリア後に離された場合 -> 溜め強攻撃を発動
-                if (playerInput.HeavyAttackReleasedInput)
+                //溜め中にボタンが離されたら、押していた時間に関わらず溜め攻撃を発動！
+                if (!playerInput.IsAttackHolding)
                 {
                     ReleaseChargeAttack(); // 溜め攻撃の発動処理を呼び出す
-                }
-                // ★溜め時間未満で離された（キャンセルされた）場合 -> 何もしないで元に戻る
-                else if (playerInput.IsAttackCanceled || !playerInput.IsAttackHolding)
-                {
-                    CancelChargeAttack(); // 溜め攻撃のキャンセル処理を呼び出す
                 }
             }
             ApplyGravity(); // 重力の適用
@@ -361,41 +359,46 @@ public class Player_Script_New : MonoBehaviour
 
         RotatePlayerToCamera();
 
+        Debug.Log("<color=cyan>[Charge Attack] 溜めを開始しました。</color>");
+
         if (playerAnimation != null)
         {
             playerAnimation.PlayChargeAttack(true);
         }
     }
 
+    /// <summary>
+    /// チャージ攻撃の発動
+    /// </summary>
     private void ReleaseChargeAttack()
     {
         isCharging = false;
 
+        Weapon_SO_New currentWeaponSO = playerWeaponController.CurrentWeaponData;
+
+        if (currentWeaponSO != null && currentWeaponSO.MaxChargeTime > 0f)
+        {
+            //溜め開始からの経過時間を計算
+            float chargeTime = Time.time - chargeStartTime;
+            float chargeRatio = chargeTime / currentWeaponSO.MaxChargeTime;
+
+            // 0.0 ～ 1.0 の範囲に収める
+            chargeRatio = Mathf.Clamp01(chargeRatio);
+
+            Debug.Log($"<color=yellow>[Charge Attack] 溜め解放！ 純粋溜め時間: {chargeTime:F2}秒 | 溜め率: {chargeRatio * 100:F0}%</color>");
+
+            // 計算した溜め比率を WeaponController に渡す
+            playerWeaponController.SetChargeRatio(chargeRatio);
+        }
+
+        //プレイヤーの攻撃アニメーションを再生
         if (playerAnimation != null)
         {
-            playerAnimation.PlayChargeAttack(false);
-            playerAnimation.PlayHeavyAttack();
+            playerAnimation.PlayChargeAttack(false); // 溜めアニメーションのフラグを解除
+            playerAnimation.PlayHeavyAttack();       // 強攻撃（溜め解放）アニメーションを再生
         }
 
-        if (playerInput != null)
-        {
-            playerInput.ResetAttackInput();
-        }
-    }
-
-    /// <summary>
-    ///溜め攻撃のキャンセル（しきい値未満で離された場合）
-    /// </summary>
-    private void CancelChargeAttack()
-    {
-        isCharging = false;
-        isAttacking = false; // 攻撃ステートを解除
-
-        if (playerAnimation != null)
-        {
-            playerAnimation.PlayChargeAttack(false); // 溜めBoolを解除して待機モーションへ戻す
-        }
-
+        // 攻撃入力をリセット
         if (playerInput != null)
         {
             playerInput.ResetAttackInput(); // 攻撃入力をリセット

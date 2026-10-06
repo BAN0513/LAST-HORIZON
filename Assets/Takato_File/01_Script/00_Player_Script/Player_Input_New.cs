@@ -19,30 +19,30 @@ public class Player_Input_New : MonoBehaviour
 {
     private InputSystem_Actions playerInputActions;
 
-    public Vector2 MoveInput { get; private set; }
-    public bool JumpInput { get; private set; }
-    public bool IsSprinting { get; private set; } = false;
-    public Vector2 LookInput { get; private set; }
-
-    // 攻撃入力用プロパティ
-    public bool LightAttackInput { get; private set; }
-    public bool HeavyAttackInput { get; private set; }
-
-    public bool IsAttackHolding { get; private set; } // ボタンを押し続けているか
-    public bool HeavyAttackReleasedInput { get; private set; } // 溜め後にボタンを離した瞬間か
-    public bool IsAttackCanceled { get; private set; } //溜め中にしきい値未満で離されたか
-
     [Header("長押し判定設定")]
     [SerializeField] private float heavyAttackHoldThreshold;
     [Header("ダブルタップ判定設定")]
     [SerializeField] private float doubleTapThreshold;
 
-    public bool RollInput { get; private set; }
-    public RollType CurrentRollType { get; private set; } = RollType.None;
+    // 入力状態を保持するプロパティ
+    public Vector2 MoveInput { get; private set; } // 移動入力
+    public bool JumpInput { get; private set; }    // ジャンプ入力
+    public bool IsSprinting { get; private set; } = false; // ダッシュ入力
+    public Vector2 LookInput { get; private set; } // 視点入力
 
-    private float lastForwardTapTime = 0f;
-    private float lastBackwardTapTime = 0f;
-    private float attackPressStartTime = 0f;
+    // 攻撃入力用プロパティ
+    public bool LightAttackInput { get; private set; }         // 通常攻撃の入力があったか
+    public bool HeavyAttackInput { get; private set; }         // 溜め攻撃の入力があったか
+    public bool IsAttackHolding { get; private set; }          // ボタンを押し続けているか
+    public bool HeavyAttackReleasedInput { get; private set; } // 溜め後にボタンを離した瞬間か
+    public bool IsAttackCanceled { get; private set; }         //溜め中にしきい値未満で離されたか
+    public bool RollInput { get; private set; }                // ロール入力があったか
+    public RollType CurrentRollType { get; private set; } = RollType.None; // 現在のロールの種類
+
+    private float lastForwardTapTime = 0f;   // 前方へのダブルタップの最後の時間
+    private float lastBackwardTapTime = 0f;  // 後方へのダブルタップの最後の時間
+    private float attackPressStartTime = 0f; // 攻撃ボタンが押された時間を記録する変数
+    private float lastHoldDuration = 0f;     // 攻撃ボタンが離されたときの最後の保持時間を記録する変数
 
     private void Awake()
     {
@@ -76,6 +76,10 @@ public class Player_Input_New : MonoBehaviour
         playerInputActions.Player.Disable();
     }
 
+    /// <summary>
+    /// 攻撃ボタンが押されたときの処理。長押し判定の開始を記録する。
+    /// </summary>
+    /// <param name="context"></param>
     private void OnAttackStarted(InputAction.CallbackContext context)
     {
         attackPressStartTime = Time.time;
@@ -83,22 +87,23 @@ public class Player_Input_New : MonoBehaviour
         IsAttackCanceled = false; // フラグ初期化
     }
 
+    /// <summary>
+    /// 攻撃ボタンが離されたときの処理。長押し判定を行い、攻撃タイプを決定する。
+    /// </summary>
+    /// <param name="context"></param>
     private void OnAttackCanceled(InputAction.CallbackContext context)
     {
+        lastHoldDuration = Time.time - attackPressStartTime;
         IsAttackHolding = false;
 
         float holdDuration = Time.time - attackPressStartTime;
-
         if (holdDuration >= heavyAttackHoldThreshold)
         {
             HeavyAttackInput = true;
-            HeavyAttackReleasedInput = true;
         }
         else
         {
-            //すでに溜め動作に入っている状態から短時間で離された場合はキャンセル扱いにする
-            IsAttackCanceled = true;
-            LightAttackInput = true; // タップ操作用の通常攻撃入力を無効化
+            LightAttackInput = true; // 短いタップは通常攻撃へ
         }
     }
 
@@ -108,7 +113,8 @@ public class Player_Input_New : MonoBehaviour
     /// <returns></returns>
     public float GetAttackHoldDuration()
     {
-        return IsAttackHolding ? (Time.time - attackPressStartTime) : 0f;
+        // 押しっぱなし中なら現在の継続時間、離された直後なら最後に保持した時間を返す
+        return IsAttackHolding ? (Time.time - attackPressStartTime) : lastHoldDuration;
     }
 
     private void OnMoveInput(InputAction.CallbackContext context)

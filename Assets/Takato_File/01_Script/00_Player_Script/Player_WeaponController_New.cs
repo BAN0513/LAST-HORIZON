@@ -15,6 +15,8 @@ public class Player_WeaponController_New : MonoBehaviour
 
     private Collider weaponCollider; // 生成した武器のコライダー
     private List<Enemy> hitEnemies = new List<Enemy>(); // 攻撃判定中にヒットした敵を管理するリスト
+    private float currentChargeRatio = 0f;
+    private bool isChargedAttack = false;
 
     private void Start()
     {
@@ -25,6 +27,7 @@ public class Player_WeaponController_New : MonoBehaviour
         }
     }
 
+    public Weapon_SO_New CurrentWeaponData => weaponData; // 現在装備している武器のデータを外部から取得可能にする
     /// <summary>
     /// 武器を装備・生成するメソッド
     /// </summary>
@@ -69,6 +72,17 @@ public class Player_WeaponController_New : MonoBehaviour
     }
 
     /// <summary>
+    /// 溜め攻撃の比率を設定するメソッド
+    /// </summary>
+    /// <param name="ratio"></param>
+    public void SetChargeRatio(float ratio)
+    {
+        if (weaponData == null) return;
+        isChargedAttack = true;
+        currentChargeRatio = Mathf.Clamp01(ratio);
+    }
+
+    /// <summary>
     /// 武器の攻撃判定を有効化する
     /// </summary>
     public void EnableAttackCollider()
@@ -89,7 +103,11 @@ public class Player_WeaponController_New : MonoBehaviour
         {
             weaponCollider.enabled = false;
         }
-        hitEnemies.Clear();
+        hitEnemies.Clear(); // 攻撃判定を無効化した際にヒットした敵のリストをクリア
+
+        //溜め攻撃のフラグをリセット
+        isChargedAttack = false;
+        currentChargeRatio = 0f;
     }
 
     private void OnEnable()
@@ -131,11 +149,58 @@ public class Player_WeaponController_New : MonoBehaviour
             {
                 hitEnemies.Add(enemy);
 
-                int damage = weaponData != null ? weaponData.AttackPower : 10;
-                enemy.TakeDamage(damage);
+                // ダメージ計算処理
+                int finalDamage = CalculateDamage(out bool isCritical);
 
-                Debug.Log($"{enemy.name} に武器で {damage} のダメージを与えました！");
+                enemy.TakeDamage(finalDamage); // 敵にダメージを与える
+
+                if (isCritical)
+                {
+                    Debug.Log($"<color=yellow>【クリティカル攻撃】</color> {enemy.name} に {finalDamage} のダメージを与えました！");
+                }
+                else
+                {
+                    Debug.Log($"{enemy.name} に武器で {finalDamage} のダメージを与えました！");
+                }
             }
         }
+    }
+
+
+    /// <summary>
+    /// クリティカル判定を含めたダメージを計算するメソッド
+    /// </summary>
+    private int CalculateDamage(out bool isCritical)
+    {
+        isCritical = false;
+
+        if (weaponData == null) return 10; // 武器データがない場合のデフォルト
+
+        float finalDamage = weaponData.AttackPower;
+
+        //溜め攻撃の場合の倍率補正
+        if (isChargedAttack)
+        {
+            float chargeMultiplier = Mathf.Lerp(weaponData.MinChargeDamageMultiplier, weaponData.MaxChargeDamageMultiplier, currentChargeRatio);
+            finalDamage *= chargeMultiplier;
+            Debug.Log($"<color=orange>[Hit Info] 溜め率: {currentChargeRatio * 100:F0}% | 倍率: {chargeMultiplier:F2}倍 | 基礎威力を計算: {finalDamage:F1}</color>");
+
+            if (currentChargeRatio >= 1.0f)
+            {
+                Debug.Log("<color=orange>【最大溜め攻撃！】</color>");
+            }
+        }
+
+        // クリティカル判定
+        if (Random.value < weaponData.CriticalRate)
+        {
+            isCritical = true;
+            finalDamage *= weaponData.CriticalDamageMultiplier;
+        }
+        int resultDamage = Mathf.RoundToInt(finalDamage);
+
+        //デバッグログ: 最終出力ダメージ
+        Debug.Log($"<color=green>[Hit Info] 最終ダメージ確定: {resultDamage}</color>");
+        return resultDamage;
     }
 }

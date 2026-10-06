@@ -14,4 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Weapon_SO_New
   weaponName: NormalSowrd
   weaponPrefab: {fileID: 4455826238869806579, guid: a5b4d247fa9b7c34b98dfd6f4f734462, type: 3}
-  attackPower: 5
+  attackPower: 10
+  criticalRate: 0.5
+  criticalDamageMultiplier: 2
+  minChargeDamageMultiplier: 1
+  maxChargeDamageMultiplier: 1.5
+  maxChargeTime: 3
