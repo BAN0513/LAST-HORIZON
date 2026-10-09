@@ -2827,6 +2827,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NightCheck
   mainLight: {fileID: 410087040}
   NightHold: 0.2
+  EnemyPre: {fileID: 0}
+  SpawnPosition: {fileID: 4979740843595546703}
+  SpawnTime: 10
+  Probability_Value: 30
 --- !u!1 &860852438
 GameObject:
   m_ObjectHideFlags: 0
@@ -5572,6 +5576,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 777fcd4f349ef2a46ab436a4d238a5cd, type: 3}
+--- !u!1 &4979740843595546703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5563223836493525677, guid: 777fcd4f349ef2a46ab436a4d238a5cd, type: 3}
+  m_PrefabInstance: {fileID: 4979740843595546702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6785251924872813311
 PrefabInstance:
   m_ObjectHideFlags: 0
