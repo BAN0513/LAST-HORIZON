@@ -1274,7 +1274,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1862642725739276737, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: heavyAttackHoldThreshold
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4845893911588909740, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: m_Name

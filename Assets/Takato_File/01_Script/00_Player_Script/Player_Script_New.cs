@@ -186,7 +186,7 @@ public class Player_Script_New : MonoBehaviour
 #if UNITY_EDITOR
         if (Keyboard.current != null && Keyboard.current.tKey.wasPressedThisFrame)
         {
-            TakeDamage(10f);
+            TakeDamage(10f); // デバッグ用にTキーで10のダメージを受ける
         }
 #endif
     }
@@ -343,10 +343,10 @@ public class Player_Script_New : MonoBehaviour
 
         if (playerAnimation != null)
         {
-            playerAnimation.PlayLightAttack();
+            playerAnimation.PlayLightAttack(); // 軽攻撃アニメーションを再生
         }
 
-        playerInput.ResetAttackInput();
+        playerInput.ResetAttackInput(); // 攻撃入力をリセット
     }
 
     /// <summary>
@@ -354,13 +354,15 @@ public class Player_Script_New : MonoBehaviour
     /// </summary>
     private void StartCharging()
     {
-        isCharging = true;
-        isAttacking = true;
+        isCharging = true;           // 溜め状態を開始
+        isAttacking = true;          // 攻撃状態も開始
+        chargeStartTime = Time.time; // 溜め開始時刻を記録 
 
-        RotatePlayerToCamera();
+        RotatePlayerToCamera(); // 溜め開始時にカメラの方向に向く
 
         Debug.Log("<color=cyan>[Charge Attack] 溜めを開始しました。</color>");
 
+        //プレイヤーの溜め攻撃アニメーションを再生
         if (playerAnimation != null)
         {
             playerAnimation.PlayChargeAttack(true);

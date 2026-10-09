@@ -17,6 +17,6 @@ MonoBehaviour:
   attackPower: 10
   criticalRate: 0.5
   criticalDamageMultiplier: 2
-  minChargeDamageMultiplier: 1
-  maxChargeDamageMultiplier: 1.5
-  maxChargeTime: 3
+  minChargeDamageMultiplier: 0.75
+  maxChargeDamageMultiplier: 2
+  maxChargeTime: 4
