@@ -34,17 +34,18 @@ public class FireController : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("Shield"))
         {
-            PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
-            PlayerController player = other.GetComponent<PlayerController>();
+            //PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+            Player_Script_New player = other.GetComponent<Player_Script_New>();
 
-            if (shield != null)
-            {
-                shield.ReceiveAttack(damage, player);
-            }
-            else
-            {
-                player.TakeDamage(damage);
-            }
+            player.TakeDamage(damage);
+            //if (shield != null)
+            //{
+            //    shield.ReceiveAttack(damage, player);
+            //}
+            //else
+            //{
+            //    player.TakeDamage(damage);
+            //}
             Destroy(gameObject);
         }
     }

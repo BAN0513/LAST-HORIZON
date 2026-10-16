@@ -127,7 +127,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01d67506de78334bb555c84ba97e31a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PreventionOfRiding
-  power: 0.1
+  power_PushPlayer: 0.1
+  pushPlayerOnly: 1
+  power_PushEnemy: 3
 --- !u!114 &6649186731856408376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -142,7 +144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShieldController
   shieldHP: 30
   duration: 0.5
-  maxSize: {x: 3, y: 3, z: 3}
+  maxSize: {x: 8, y: 8, z: 8}
 --- !u!208 &6820432206233539939
 NavMeshObstacle:
   m_ObjectHideFlags: 0

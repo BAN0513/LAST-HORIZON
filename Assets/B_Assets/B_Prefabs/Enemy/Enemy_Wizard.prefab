@@ -372,7 +372,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3216060281409565199}
@@ -420,6 +420,7 @@ MonoBehaviour:
   hpSliider: {fileID: 2660115946879318116}
   isNoObstacleAvoidance: 1
   meraObj: {fileID: 7098938940328657338, guid: eeb15f28f49da78419fe35275aeaa418, type: 3}
+  meraZomaObj: {fileID: 0}
   impactEffect: {fileID: 3856664211485569777, guid: 21e0af4b08cd8114b898e08c2f625120, type: 3}
   meraStormObj: {fileID: 1686693669452320046, guid: 05729c5a14b34b24092ba52f72912d45, type: 3}
   enemy_WeakObj: {fileID: 56609770559436359, guid: eccd73c9446a2c64db04774d8f08a202, type: 3}

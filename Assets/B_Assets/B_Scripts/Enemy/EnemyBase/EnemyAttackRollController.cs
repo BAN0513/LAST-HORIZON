@@ -41,7 +41,7 @@ public class EnemyAttackRollController : MonoBehaviour
         if (other.CompareTag("Player") || other.CompareTag("Shield"))
         {
             // プレイヤーに当たった場合の処理
-            PlayerController targetPlayer = other.GetComponent<PlayerController>() ?? other.GetComponentInParent<PlayerController>();
+            Player_Script_New targetPlayer = other.GetComponent<Player_Script_New>() ?? other.GetComponentInParent<Player_Script_New>();
 
             if (targetPlayer == null)
             {
@@ -49,20 +49,23 @@ public class EnemyAttackRollController : MonoBehaviour
                 return;
             }
 
-            // シールドに当たったかどうかの判定
-            PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+            targetPlayer.TakeDamage(Damage);
+            Debug.Log($"[Hit] 敵の攻撃がプレイヤーに命中！ ダメージ: {Damage}");
 
-            if (shield != null)
-            {
-                // シールドがある場合はガード処理（見つかった targetPlayer を渡す）
-                shield.ReceiveAttack(Damage, targetPlayer);
-            }
-            else
-            {
-                // 【修正】見つかった targetPlayer に対してダメージを与える
-                targetPlayer.TakeDamage(Damage);
-                Debug.Log($"[Hit] 敵の攻撃がプレイヤーに命中！ ダメージ: {Damage}");
-            }
+            //// シールドに当たったかどうかの判定
+            //PlayerShieldContoroller shield = other.GetComponent<PlayerShieldContoroller>();
+
+            //if (shield != null)
+            //{
+            //    // シールドがある場合はガード処理（見つかった targetPlayer を渡す）
+            //    shield.ReceiveAttack(Damage, targetPlayer);
+            //}
+            //else
+            //{
+            //    // 【修正】見つかった targetPlayer に対してダメージを与える
+            //    targetPlayer.TakeDamage(Damage);
+            //    Debug.Log($"[Hit] 敵の攻撃がプレイヤーに命中！ ダメージ: {Damage}");
+            //}
         }
     }
 }

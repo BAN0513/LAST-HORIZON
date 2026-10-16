@@ -1325,4 +1325,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69cc45997f230542bc6a0c42082d0e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy_WeakBefore
-  stopDis: 0.8
+  stopDis: 1

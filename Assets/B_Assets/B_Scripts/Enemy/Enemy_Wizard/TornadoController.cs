@@ -62,7 +62,7 @@ public class TornadoController : MonoBehaviour
     private void OnParticleTrigger()
     {
         Debug.Log("—³Šª‚ª“–‚½‚Á‚½");
-        PlayerController player = Target.GetComponent<PlayerController>();
+        Player_Script_New player = Target.GetComponent<Player_Script_New>();
         player.TakeDamage(Damage);
     }
 }
