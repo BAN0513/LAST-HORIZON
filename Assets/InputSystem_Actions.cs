@@ -219,18 +219,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Inventory"",
-                    ""type"": ""Button"",
-                    ""id"": ""b5fcd7bf-3945-45a9-8a29-3f6daad2a598"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""CharChange"",
                     ""type"": ""Button"",
-                    ""id"": ""37d6ed4b-910b-4b68-a0bb-56f043e2b7eb"",
+                    ""id"": ""7137a089-e865-4615-91a6-7d781febffab"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -239,7 +230,16 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""CharChangeDown"",
                     ""type"": ""Button"",
-                    ""id"": ""76c6bd3b-eccd-463f-9db4-14f3de7b8ced"",
+                    ""id"": ""0c184e52-41dd-4703-a416-be6436c2f4e2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""59d6e7a4-9ab6-4fa7-81e9-c10fffd4fa77"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -689,19 +689,8 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""63bbc230-0948-4684-8251-489376874ac6"",
-                    ""path"": ""<Keyboard>/f"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Inventory"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0a37d972-ec64-4ee9-b7b3-5baca4fe617e"",
-                    ""path"": ""<Keyboard>/r"",
+                    ""id"": ""c490eca6-9f2a-4bcf-b768-228bfec77b74"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -711,12 +700,23 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""637ae26b-4c17-4cac-9437-62cd81fdd4ca"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""id"": ""a5f46860-6c2b-4726-b03c-7dfa85511f91"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CharChangeDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6f19706f-fc73-4142-bb49-2f701dd4c75a"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1338,9 +1338,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Skill2 = m_Player.FindAction("Skill2", throwIfNotFound: true);
         m_Player_Skill3 = m_Player.FindAction("Skill3", throwIfNotFound: true);
         m_Player_Ult = m_Player.FindAction("Ult", throwIfNotFound: true);
-        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_CharChange = m_Player.FindAction("CharChange", throwIfNotFound: true);
         m_Player_CharChangeDown = m_Player.FindAction("CharChangeDown", throwIfNotFound: true);
+        m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1449,9 +1449,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Skill2;
     private readonly InputAction m_Player_Skill3;
     private readonly InputAction m_Player_Ult;
-    private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_CharChange;
     private readonly InputAction m_Player_CharChangeDown;
+    private readonly InputAction m_Player_Inventory;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1520,10 +1520,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Ult => m_Wrapper.m_Player_Ult;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Inventory".
-        /// </summary>
-        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
-        /// <summary>
         /// Provides access to the underlying input action "Player/CharChange".
         /// </summary>
         public InputAction @CharChange => m_Wrapper.m_Player_CharChange;
@@ -1531,6 +1527,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/CharChangeDown".
         /// </summary>
         public InputAction @CharChangeDown => m_Wrapper.m_Player_CharChangeDown;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Inventory".
+        /// </summary>
+        public InputAction @Inventory => m_Wrapper.m_Player_Inventory;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1599,15 +1599,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Ult.started += instance.OnUlt;
             @Ult.performed += instance.OnUlt;
             @Ult.canceled += instance.OnUlt;
-            @Inventory.started += instance.OnInventory;
-            @Inventory.performed += instance.OnInventory;
-            @Inventory.canceled += instance.OnInventory;
             @CharChange.started += instance.OnCharChange;
             @CharChange.performed += instance.OnCharChange;
             @CharChange.canceled += instance.OnCharChange;
             @CharChangeDown.started += instance.OnCharChangeDown;
             @CharChangeDown.performed += instance.OnCharChangeDown;
             @CharChangeDown.canceled += instance.OnCharChangeDown;
+            @Inventory.started += instance.OnInventory;
+            @Inventory.performed += instance.OnInventory;
+            @Inventory.canceled += instance.OnInventory;
         }
 
         /// <summary>
@@ -1661,15 +1661,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Ult.started -= instance.OnUlt;
             @Ult.performed -= instance.OnUlt;
             @Ult.canceled -= instance.OnUlt;
-            @Inventory.started -= instance.OnInventory;
-            @Inventory.performed -= instance.OnInventory;
-            @Inventory.canceled -= instance.OnInventory;
             @CharChange.started -= instance.OnCharChange;
             @CharChange.performed -= instance.OnCharChange;
             @CharChange.canceled -= instance.OnCharChange;
             @CharChangeDown.started -= instance.OnCharChangeDown;
             @CharChangeDown.performed -= instance.OnCharChangeDown;
             @CharChangeDown.canceled -= instance.OnCharChangeDown;
+            @Inventory.started -= instance.OnInventory;
+            @Inventory.performed -= instance.OnInventory;
+            @Inventory.canceled -= instance.OnInventory;
         }
 
         /// <summary>
@@ -2080,13 +2080,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUlt(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnInventory(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "CharChange" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2100,6 +2093,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCharChangeDown(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Inventory" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnInventory(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

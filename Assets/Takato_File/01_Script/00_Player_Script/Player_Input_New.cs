@@ -29,6 +29,7 @@ public class Player_Input_New : MonoBehaviour
     public bool JumpInput { get; private set; }    // ジャンプ入力
     public bool IsSprinting { get; private set; } = false; // ダッシュ入力
     public Vector2 LookInput { get; private set; } // 視点入力
+    public bool IsSkillInput { get; private set; } // スキル入力
 
     // 攻撃入力用プロパティ
     public bool LightAttackInput { get; private set; }         // 通常攻撃の入力があったか
@@ -64,6 +65,9 @@ public class Player_Input_New : MonoBehaviour
         playerInputActions.Player.Look.started += OnLookInput;
         playerInputActions.Player.Look.performed += OnLookInput;
         playerInputActions.Player.Look.canceled += OnLookInput;
+
+        playerInputActions.Player.Skill.started += context => IsSkillInput = true;
+        playerInputActions.Player.Skill.canceled += context => IsSkillInput = false;
     }
 
     private void OnEnable()
@@ -172,6 +176,14 @@ public class Player_Input_New : MonoBehaviour
         LightAttackInput = false;
         HeavyAttackInput = false;
         HeavyAttackReleasedInput = false;
-        IsAttackCanceled = false; // ★追加: キャンセルフラグもリセット
+        IsAttackCanceled = false; //キャンセルフラグもリセット
+    }
+
+    /// <summary>
+    /// プレイヤーのスキル入力をリセットするメソッド
+    /// </summary>
+    public void ResetSkillInput()
+    {
+        IsSkillInput = false;
     }
 }

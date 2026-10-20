@@ -133,18 +133,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Inventory",
-                    "type": "Button",
-                    "id": "b5fcd7bf-3945-45a9-8a29-3f6daad2a598",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "CharChange",
                     "type": "Button",
-                    "id": "37d6ed4b-910b-4b68-a0bb-56f043e2b7eb",
+                    "id": "7137a089-e865-4615-91a6-7d781febffab",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -153,7 +144,16 @@
                 {
                     "name": "CharChangeDown",
                     "type": "Button",
-                    "id": "76c6bd3b-eccd-463f-9db4-14f3de7b8ced",
+                    "id": "0c184e52-41dd-4703-a416-be6436c2f4e2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Inventory",
+                    "type": "Button",
+                    "id": "59d6e7a4-9ab6-4fa7-81e9-c10fffd4fa77",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -603,19 +603,8 @@
                 },
                 {
                     "name": "",
-                    "id": "63bbc230-0948-4684-8251-489376874ac6",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Inventory",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0a37d972-ec64-4ee9-b7b3-5baca4fe617e",
-                    "path": "<Keyboard>/r",
+                    "id": "c490eca6-9f2a-4bcf-b768-228bfec77b74",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -625,12 +614,23 @@
                 },
                 {
                     "name": "",
-                    "id": "637ae26b-4c17-4cac-9437-62cd81fdd4ca",
-                    "path": "<Keyboard>/q",
+                    "id": "a5f46860-6c2b-4726-b03c-7dfa85511f91",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "CharChangeDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f19706f-fc73-4142-bb49-2f701dd4c75a",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Inventory",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

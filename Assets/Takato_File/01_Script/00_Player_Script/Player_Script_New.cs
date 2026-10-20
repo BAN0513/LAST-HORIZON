@@ -37,6 +37,7 @@ public class Player_Script_New : MonoBehaviour
     private Player_Input_New playerInput;
     private Player_Animation_New playerAnimation;
     private Player_WeaponController_New playerWeaponController;
+    private Player_SkillController_New playerSkillController;
 
     // コンポーネントの参照
     private CharacterController characterController;
@@ -66,6 +67,7 @@ public class Player_Script_New : MonoBehaviour
         playerAnimation = GetComponent<Player_Animation_New>();
         playerWeaponController = GetComponent<Player_WeaponController_New>();
         characterController = GetComponent<CharacterController>();
+        playerSkillController = GetComponent<Player_SkillController_New>();
 
         if (characterController != null)
         {
@@ -126,6 +128,16 @@ public class Player_Script_New : MonoBehaviour
         }
 
         MovePlayer(); // プレイヤーの移動処理を呼び出す
+
+        // スキル入力の処理
+        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput)
+        {
+            if (playerSkillController != null)
+            {
+                playerSkillController.UseSkill();
+            }
+            playerInput.ResetSkillInput(); // 入力を消費してリセット
+        }
 
         // 溜め状態の分岐
         if (isCharging)
@@ -280,15 +292,20 @@ public class Player_Script_New : MonoBehaviour
             return;
         }
 
+        // プレイヤーの移動入力を取得
         Vector2 moveInput = playerInput.MoveInput;
 
+        // カメラの前方向と右方向を取得し、Y軸を無視して正規化
         Vector3 cameraForward = Vector3.Scale(cameraTransform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 cameraRight = Vector3.Scale(cameraTransform.right, new Vector3(1, 0, 1)).normalized;
 
+        // カメラの方向に基づいて移動方向を計算
         Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
 
+        // スプリントが要求されているかどうかを判定
         bool isSprintingRequested = playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
 
+        // 現在の移動速度倍率を初期化
         float currentSpeedMultiplier = 1f;
 
         if (isSprintingRequested && moveDirection.sqrMagnitude > 0.01f)
@@ -301,10 +318,12 @@ public class Player_Script_New : MonoBehaviour
         }
         else
         {
+            // スタミナ回復処理
             if (staminaRegenTimer > 0f)
             {
                 staminaRegenTimer -= Time.deltaTime;
             }
+            // スタミナ回復が可能な状態であれば回復処理を行う
             else if (CurrentStamina < playerSO.MaxStamina)
             {
                 CurrentStamina = Mathf.Min(playerSO.MaxStamina, CurrentStamina + playerSO.StaminaRegenRate * Time.deltaTime);
@@ -312,14 +331,22 @@ public class Player_Script_New : MonoBehaviour
             }
         }
 
-        Vector3 targetVelocity = moveDirection * (playerSO.MoveSpeed * currentSpeedMultiplier);
+        // スキルによる移動速度の倍率を取得
+        float speedMultiplierFromSkill = playerSkillController != null ? playerSkillController.CurrentSpeedMultiplier : 1f;
 
+        // 最終的な移動速度を計算
+        Vector3 targetVelocity = moveDirection * (playerSO.MoveSpeed * currentSpeedMultiplier * speedMultiplierFromSkill);
+
+        // 移動速度の変化率を決定するための加速・減速の係数を設定
         float rate = moveInput.sqrMagnitude > 0f ? playerSO.AccelerationMultiplier : playerSO.DecelerationMultiplier;
 
+        // 現在の移動速度を目標速度に向かって滑らかに変化させる
         currentMoveVelocity = Vector3.MoveTowards(currentMoveVelocity, targetVelocity, rate * Time.deltaTime);
 
+        // CharacterControllerを使用してプレイヤーを移動させる
         characterController.Move(currentMoveVelocity * Time.deltaTime);
 
+        // アニメーションの更新
         if (playerAnimation != null)
         {
             Vector3 relativeVelocity = transform.InverseTransformDirection(currentMoveVelocity);
