@@ -14,6 +14,7 @@ public class Player_WeaponController_New : MonoBehaviour
     [SerializeField] private Transform weaponHolderpoint;
 
     private Collider weaponCollider; // 生成した武器のコライダー
+    private TrailRenderer weaponTrail; //生成した武器のTrailRenderer
     private List<Enemy> hitEnemies = new List<Enemy>(); // 攻撃判定中にヒットした敵を管理するリスト
     private float currentChargeRatio = 0f;
     private bool isChargedAttack = false;
@@ -28,6 +29,7 @@ public class Player_WeaponController_New : MonoBehaviour
     }
 
     public Weapon_SO_New CurrentWeaponData => weaponData; // 現在装備している武器のデータを外部から取得可能にする
+
     /// <summary>
     /// 武器を装備・生成するメソッド
     /// </summary>
@@ -48,8 +50,15 @@ public class Player_WeaponController_New : MonoBehaviour
         {
             GameObject weaponInstance = Instantiate(weaponData.WeaponPrefab, weaponHolderpoint.position, weaponHolderpoint.rotation, weaponHolderpoint);
 
-            // 生成した武器オブジェクト（またはその子）からColliderを取得
+            // 生成した武器オブジェクトからColliderを取得
             weaponCollider = weaponInstance.GetComponentInChildren<Collider>();
+
+            // 武器オブジェクトからTrailRendererを取得
+            weaponTrail = weaponInstance.GetComponentInChildren<TrailRenderer>();
+            if (weaponTrail != null)
+            {
+                weaponTrail.emitting = false; // 初期状態はエフェクトオフ
+            }
 
             if (weaponCollider != null)
             {
@@ -74,7 +83,6 @@ public class Player_WeaponController_New : MonoBehaviour
     /// <summary>
     /// 溜め攻撃の比率を設定するメソッド
     /// </summary>
-    /// <param name="ratio"></param>
     public void SetChargeRatio(float ratio)
     {
         if (weaponData == null) return;
@@ -92,6 +100,13 @@ public class Player_WeaponController_New : MonoBehaviour
         {
             weaponCollider.enabled = true;
         }
+
+        // 攻撃開始時にTrailを表示
+        if (weaponTrail != null)
+        {
+            weaponTrail.Clear();
+            weaponTrail.emitting = true;
+        }
     }
 
     /// <summary>
@@ -103,6 +118,13 @@ public class Player_WeaponController_New : MonoBehaviour
         {
             weaponCollider.enabled = false;
         }
+
+        // ★追加: 攻撃終了時にTrailの吐き出しをOFF
+        if (weaponTrail != null)
+        {
+            weaponTrail.emitting = false;
+        }
+
         hitEnemies.Clear(); // 攻撃判定を無効化した際にヒットした敵のリストをクリア
 
         //溜め攻撃のフラグをリセット
@@ -165,7 +187,6 @@ public class Player_WeaponController_New : MonoBehaviour
             }
         }
     }
-
 
     /// <summary>
     /// クリティカル判定を含めたダメージを計算するメソッド

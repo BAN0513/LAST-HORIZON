@@ -20,11 +20,9 @@ public class Skill_SO_New : ScriptableObject
 
     [Header("スキル名・スキルタイプ設定")]
     [SerializeField] private string skillName;
-
     [SerializeField] private SkillType skillType;
 
     [Header("クールタイム・効果時間設定")]
-
     [Header("スキルの効果時間(秒)")]
     [SerializeField] private float duration;
 
@@ -34,11 +32,76 @@ public class Skill_SO_New : ScriptableObject
     [Header("バフ効果設定（SpeedBoost用）")]
     [SerializeField] private float speedMultiplier;
 
+    // --- 実行時のタイマー管理 ---
+    private float currentCooldownTimer = 0f;
+    private float currentDurationTimer = 0f;
+    private bool isSkillActive = false;
 
     // プロパティ
-    public string SkillName => skillName;    // スキル名を取得するプロパティ
-    public SkillType SkillType => skillType; // スキルタイプを取得するプロパティ
-    public float Duration => duration;       // スキルの効果時間を取得するプロパティ
-    public float Cooldown => cooldown;       // スキルのクールタイムを取得するプロパティ
-    public float SpeedMultiplier => speedMultiplier; // スピード倍率を取得するプロパティ
+    public string SkillName => skillName;
+    public SkillType SkillType => skillType;
+    public float Duration => duration;
+    public float Cooldown => cooldown;
+    public float SpeedMultiplier => speedMultiplier;
+
+    public bool IsSkillActive => isSkillActive;
+    public bool IsOnCooldown => currentCooldownTimer > 0f;
+
+    // クールタイム残り割合
+    public float CooldownRemainingRatio => cooldown > 0f ? Mathf.Clamp01(currentCooldownTimer / cooldown) : 0f;
+
+    /// <summary>
+    /// ゲーム開始時にタイマーを初期化する
+    /// </summary>
+    public void Initialize()
+    {
+        currentCooldownTimer = 0f;
+        currentDurationTimer = 0f;
+        isSkillActive = false;
+    }
+
+    /// <summary>
+    /// タイマー更新処理
+    /// </summary>
+    public void UpdateTimers(float deltaTime, System.Action onSkillEnd)
+    {
+        // クールタイムの更新
+        if (currentCooldownTimer > 0f)
+        {
+            currentCooldownTimer -= deltaTime; // クールタイムを減少させる
+        }
+
+        // 効果時間の更新
+        if (isSkillActive)
+        {
+            currentDurationTimer -= deltaTime; // 効果時間を減少させる
+
+            // 効果時間が終了した場合の処理
+            if (currentDurationTimer <= 0f)
+            {
+                isSkillActive = false;
+                onSkillEnd?.Invoke();
+                Debug.Log($"<color=white>[Skill Ended] {skillName} の効果が終了しました。</color>");
+            }
+        }
+    }
+
+    /// <summary>
+    /// スキル発動チェックとタイマーセット
+    /// </summary>
+    public bool TryUseSkill()
+    {
+        if (IsOnCooldown || isSkillActive)
+        {
+            Debug.Log($"[Skill] {skillName} は使用不可 (クールタイム中: {currentCooldownTimer:F1}秒)");
+            return false;
+        }
+
+        isSkillActive = true;
+        currentDurationTimer = duration;
+        currentCooldownTimer = cooldown;
+
+        Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (効果時間: {duration}秒 | CD: {cooldown}秒)</color>");
+        return true;
+    }
 }

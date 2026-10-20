@@ -134,7 +134,7 @@ public class Player_Script_New : MonoBehaviour
         {
             if (playerSkillController != null)
             {
-                playerSkillController.UseSkill();
+                playerSkillController.UseSkill(0);
             }
             playerInput.ResetSkillInput(); // “ü—Í‚ğÁ”ï‚µ‚ÄƒŠƒZƒbƒg
         }

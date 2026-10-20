@@ -1,29 +1,30 @@
 using UnityEngine;
 
 /// <summary>
-/// プレイヤーのスキルを管理するクラス(New)
+/// プレイヤーの複数スキルを管理するクラス(New)
 /// </summary>
 public class Player_SkillController_New : MonoBehaviour
 {
-    [Header("装着するスキル")]
-    [SerializeField] private Skill_SO_New activeSkill;
+    [Header("装着するスキルのSO(スロットに対応するキーで発動します。)")]
+    [SerializeField] private Skill_SO_New[] activeSkillSlots;
 
-    // タイマー管理
-    private float currentCooldownTimer = 0f;
-    private float currentDurationTimer = 0f;
-    private bool isSkillActive = false;
+    // 現在移動速度にかかっているスキル倍率（デフォルト1.0倍）
+    public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
 
-    // 現在移動速度にかかっているスキル倍率
-    public float CurrentSpeedMultiplier { get; private set; }= 1.0f; // デフォルトは1.0倍
-
-    // 外部からクールタイム情報や発動状態を取得するプロパティ
-    public bool IsSkillActive => isSkillActive;// スキルが発動中かどうか
-
-    public bool IsOnCooldown => currentCooldownTimer > 0f; // スキルがクールタイム中かどうか
-
-    // クールタイムの残り時間の割合を取得するプロパティ
-    public float CooldownRemainingRatio => (activeSkill != null && activeSkill.Cooldown > 0f) ?
-        Mathf.Clamp01(currentCooldownTimer / activeSkill.Cooldown) : 0f;
+    private void Start()
+    {
+        // 各SOのタイマー状態をリセット
+        if (activeSkillSlots != null)
+        {
+            foreach (var skillSO in activeSkillSlots)
+            {
+                if (skillSO != null)
+                {
+                    skillSO.Initialize();
+                }
+            }
+        }
+    }
 
     private void Update()
     {
@@ -31,84 +32,74 @@ public class Player_SkillController_New : MonoBehaviour
     }
 
     /// <summary>
-    /// タイマー更新処理
+    /// 各スキルのタイマー更新処理
     /// </summary>
     private void HandleTimers()
     {
-        // クールタイム計算
-        if (currentCooldownTimer > 0f)
+        if (activeSkillSlots == null) return;
+
+        foreach (var skillSO in activeSkillSlots)
         {
-            currentCooldownTimer -= Time.deltaTime;
+            if (skillSO == null) continue;
+
+            // 各SOのタイマーを更新
+            skillSO.UpdateTimers(Time.deltaTime, () =>
+            {
+                // 効果終了時のバフ解除処理
+                if (skillSO.SkillType == SkillType.SpeedBoost)
+                {
+                    CurrentSpeedMultiplier = 1.0f; // 移動速度倍率を元に戻す
+                }
+            });
+        }
+    }
+
+    /// <summary>
+    /// スロットインデックス（0番目、1番目...）のスキルのSOを発動する
+    /// </summary>
+    /// <param name="slotIndex">発動したいスキルスロットの番号</param>
+    public void UseSkill(int slotIndex = 0)
+    {
+        if (activeSkillSlots == null || slotIndex < 0 || slotIndex >= activeSkillSlots.Length)
+        {
+            Debug.LogWarning($"[Skill] 指定されたスキルスロットが無効です (Index: {slotIndex})");
+            return;
         }
 
-        // 効果時間計算
-        if (isSkillActive)
+        Skill_SO_New skillSO = activeSkillSlots[slotIndex];
+
+        if (skillSO == null)
         {
-            currentDurationTimer -= Time.deltaTime;
-            if (currentDurationTimer <= 0f)
+            Debug.LogWarning($"[Skill] スロット {slotIndex} にスキルSOがセットされていません。");
+            return;
+        }
+
+        // SO側で発動可能かチェックして発動
+        if (skillSO.TryUseSkill())
+        {
+            // スキルの種類に応じた効果を反映
+            switch (skillSO.SkillType)
             {
-                EndSkill(); // スキル効果終了処理を呼び出す
+                case SkillType.SpeedBoost:
+                    CurrentSpeedMultiplier = skillSO.SpeedMultiplier;
+                    break;
+
+                case SkillType.None:
+                default:
+                    break;
             }
         }
     }
 
     /// <summary>
-    /// スキルを発動するメソッド（キー入力などから呼び出す）
+    /// 指定スロットに入っているスキルのクールタイム割合を取得する
     /// </summary>
-    public void UseSkill()
+    public float GetCooldownRatio(int slotIndex)
     {
-        if (activeSkill == null)
+        if (activeSkillSlots != null && slotIndex >= 0 && slotIndex < activeSkillSlots.Length && activeSkillSlots[slotIndex] != null)
         {
-            Debug.LogWarning("[Skill] スキルがセットされていません。");
-            return;
+            return activeSkillSlots[slotIndex].CooldownRemainingRatio;
         }
-
-        if (IsOnCooldown || isSkillActive)
-        {
-            Debug.Log($"[Skill] スキル使用不可 (クールタイム中: {currentCooldownTimer:F1}秒)");
-            return;
-        }
-
-        // スキルの種類に応じた発動処理
-        switch (activeSkill.SkillType)
-        {
-            //スキルタイプがSpeedBoostの場合の処理
-            case SkillType.SpeedBoost:
-                ActivateSpeedBoost();
-                break;
-
-            //スキルがNoneまたはその他のタイプの場合の処理
-            case SkillType.None:
-            default:
-                break;
-        }
-    }
-
-    /// <summary>
-    /// スピードブーストの発動処理
-    /// </summary>
-    private void ActivateSpeedBoost()
-    {
-        // スキル発動中フラグを立て、タイマーをリセット
-        isSkillActive = true;
-
-        // 効果時間とクールタイムを設定
-        currentDurationTimer = activeSkill.Duration;
-        currentCooldownTimer = activeSkill.Cooldown;
-
-        CurrentSpeedMultiplier = activeSkill.SpeedMultiplier;
-
-        Debug.Log($"<color=green>[Skill Activated] {activeSkill.SkillName} 発動！ 速度倍率: {CurrentSpeedMultiplier}倍 (効果時間: {activeSkill.Duration}秒)</color>");
-    }
-
-    /// <summary>
-    /// スキル効果終了処理
-    /// </summary>
-    private void EndSkill()
-    {
-        isSkillActive = false;
-        CurrentSpeedMultiplier = 1.0f; // 倍率を戻す
-
-        Debug.Log($"<color=white>[Skill Ended] {activeSkill.SkillName} の効果が終了しました。</color>");
+        return 0f;
     }
 }
