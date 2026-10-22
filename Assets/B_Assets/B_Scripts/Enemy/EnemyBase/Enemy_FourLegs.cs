@@ -61,10 +61,7 @@ public class Enemy_FourLegs : Enemy
 
     private void MoveAnimControl()
     {
-        if (runTimer > 0.0f)
-        {
-            runTimer -= Time.deltaTime;
-        }
+        if (runTimer > 0.0f) { runTimer -= Time.deltaTime; }
 
         if (IsActionAnimation || enemyBaseState != EnemyBaseState.Contact)
         {

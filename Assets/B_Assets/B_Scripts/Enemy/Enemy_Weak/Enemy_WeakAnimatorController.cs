@@ -14,8 +14,8 @@ public class Enemy_WeakAnimatorController : EnemyAnimatorController
 
         weakAnims = new Dictionary<AnimationBase, int>()
         {
-            {AnimationBase.Weak_Melee,         Animator.StringToHash("isMeleeBefore")   },
-            {AnimationBase.Weak_ChargeAttack,  Animator.StringToHash("isChargeAttack")  },
+            {AnimationBase.Weak_MeleeBefore,         Animator.StringToHash("isMeleeBefore")   },
+            {AnimationBase.Weak_ChargeAttackBefore,  Animator.StringToHash("isChargeAttackBefore")  },
             {AnimationBase.Weak_Block,         Animator.StringToHash("isBlock")         },
             {AnimationBase.Weak_BlockReaction, Animator.StringToHash("isBlockReaction") },
             {AnimationBase.Weak_Contact,       Animator.StringToHash("isContact")       },

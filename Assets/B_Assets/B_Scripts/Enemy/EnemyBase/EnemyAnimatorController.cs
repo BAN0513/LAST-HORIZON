@@ -13,8 +13,8 @@ public class EnemyAnimatorController : MonoBehaviour
         Death,
         Hit,
 
-        Weak_Melee,
-        Weak_ChargeAttack,
+        Weak_MeleeBefore,
+        Weak_ChargeAttackBefore,
         Weak_Block,
         Weak_BlockReaction,
         Weak_Contact,

@@ -79,10 +79,7 @@ public class Enemy_Humanoid : Enemy
     {
         base.Death();
 
-        if (_weaponController != null)
-        {
-            _weaponController.SetColliderActive(false);
-        }
+        if (_weaponController != null) { _weaponController.SetColliderActive(false); }
     }
 
     public void AttackJudgmentActive()

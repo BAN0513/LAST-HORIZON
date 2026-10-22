@@ -127,20 +127,14 @@ public class Enemy_Wizard : Enemy_Humanoid
 
         GameObject shield = Instantiate(shieldObj, transform.position, Quaternion.identity);
         
-        if (shield.TryGetComponent<ShieldController>(out var shieldController))
-        {
-            shieldController.ParentEnemyWizard = this;
-        }
+        if (shield.TryGetComponent<ShieldController>(out var shieldController)) { shieldController.ParentEnemyWizard = this; }
     }
 
     private void CheckShortManaCharge()
     {
         weakMagicCnt++;
 
-        if (weakMagicCnt >= shortManaChargePlayCnt)
-        {
-            ShortManaCharge = true;
-        }
+        if (weakMagicCnt >= shortManaChargePlayCnt) { ShortManaCharge = true; }
     }
 
     public void ManaChargeReset()
@@ -155,10 +149,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     {
         base.Init();
 
-        if (IsHitAction || ShortManaCharge || LongManaCharge)
-        {
-            IsAction = true;
-        }
+        if (IsHitAction || ShortManaCharge || LongManaCharge) { IsAction = true; }
     }
 
     public override void InitAnim()

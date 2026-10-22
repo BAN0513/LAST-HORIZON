@@ -6,7 +6,6 @@ public class Enemy_Weak : Enemy_Humanoid
     private bool isDown = false;
     private int downDamage = 21;
 
-
     public Enemy_WeakAnimatorController Enemy_WeakAnimator { get; private set; }
     public bool IsBlocking { get; set; }
     public bool IsBlockingReaction { get; set; }
@@ -63,10 +62,7 @@ public class Enemy_Weak : Enemy_Humanoid
 
         base.TakeDamage(damage, sound, seNumber);
 
-        if (!IsBlocking)
-        {
-            IsBlocking = true;
-        }
+        if (!IsBlocking) { IsBlocking = true; }
     }    
 
     public override void Init()

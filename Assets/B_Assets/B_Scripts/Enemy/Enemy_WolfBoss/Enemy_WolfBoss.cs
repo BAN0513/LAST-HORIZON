@@ -22,7 +22,6 @@ public class Enemy_WolfBoss : Enemy_FourLegs
     }
     public WolfBoss_Form Form { get; set; } = WolfBoss_Form.One;
 
-
     protected override void Start()
     {
         base.Start();
