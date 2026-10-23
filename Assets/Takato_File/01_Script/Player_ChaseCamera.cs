@@ -8,6 +8,7 @@ public class Player_ChaseCamera : MonoBehaviour
     [Header("追跡対象")]
     [SerializeField] private Transform target; // 追跡対象のTransform
     [SerializeField] private Player_Input_New playerInput; // 入力クラスの参照
+    [SerializeField] private Player_Script_New playerScript;// プレイヤーのスクリプト参照
 
     [Header("カメラ設定")]
     [SerializeField] private Vector3 offset; // カメラの位置オフセット
@@ -30,29 +31,39 @@ public class Player_ChaseCamera : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         currentYaw = angles.y;
         currentPitch = angles.x;
+
+        // 追跡対象のTransformが設定されていない場合、プレイヤーオブジェクトを探して設定
+        if (playerScript == null && target != null)
+        {
+            playerScript = target.GetComponent<Player_Script_New>();
+        }
     }
 
     private void LateUpdate()
     {
-        if (target == null || playerInput == null) return; // 追跡対象または入力クラスが設定されていない場合は処理を中断
+        if (target == null || playerInput == null) return;
 
-        // マウス入力を取得
-        Vector2 lookInput = playerInput.LookInput;
+        //ポーズ中、またはプレイヤー死亡中はカメラ回転操作を行わない
+        bool isPaused = PausManeger.ToPause;
+        bool isDead = (playerScript != null && playerScript.IsDead);
 
-        //Time.deltaTime は掛けずに感度のみで計算
-        currentYaw += lookInput.x * rotationSpeed * 0.1f;
-        currentPitch -= lookInput.y * rotationSpeed * 0.1f;
+        if (!isPaused && !isDead)
+        {
+            // マウス入力を取得
+            Vector2 lookInput = playerInput.LookInput;
 
-        // 上下の首振り角度を制限
-        currentPitch = Mathf.Clamp(currentPitch, minPitch, maxPitch);
+            // 回転値を更新
+            currentYaw += lookInput.x * rotationSpeed * 0.1f;
+            currentPitch -= lookInput.y * rotationSpeed * 0.1f;
 
-        // クォータニオン回転を作成
+            // 上下の首振り角度を制限
+            currentPitch = Mathf.Clamp(currentPitch, minPitch, maxPitch);
+        }
+
+        // カメラの位置・向きの追跡更新処理
         Quaternion rotation = Quaternion.Euler(currentPitch, currentYaw, 0f);
-
-        // ターゲット位置を中心にオフセット分移動させた位置を計算
         Vector3 targetPosition = target.position + rotation * offset;
 
-        // カメラの位置と向きを適用
         transform.position = targetPosition;
         transform.LookAt(target.position + Vector3.up * offset.y);
     }
