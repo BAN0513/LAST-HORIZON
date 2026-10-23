@@ -1,17 +1,13 @@
 using UnityEngine;
 
-/// <summary>
-/// スキルの種類を表す列挙型
-/// </summary>
+/// <summary>/// スキルの種類を表す列挙型/// </summary>
 public enum SkillType
 {
     None,
     SpeedBoost, // 移動速度上昇スキル
 }
 
-/// <summary>
-/// スキルのScriptableObjectクラス(New)
-/// </summary>
+/// <summary>/// スキルのScriptableObjectクラス(New)/// </summary>
 [CreateAssetMenu(fileName = "Skill_SO_New", menuName = "ScriptableObjects/Skill_SO_New", order = 3)]
 public class Skill_SO_New : ScriptableObject
 {
@@ -50,9 +46,7 @@ public class Skill_SO_New : ScriptableObject
     // クールタイム残り割合
     public float CooldownRemainingRatio => cooldown > 0f ? Mathf.Clamp01(currentCooldownTimer / cooldown) : 0f;
 
-    /// <summary>
-    /// ゲーム開始時にタイマーを初期化する
-    /// </summary>
+    /// <summary>/// ゲーム開始時にタイマーを初期化する/// </summary>
     public void Initialize()
     {
         currentCooldownTimer = 0f;
@@ -60,18 +54,10 @@ public class Skill_SO_New : ScriptableObject
         isSkillActive = false;
     }
 
-    /// <summary>
-    /// タイマー更新処理
-    /// </summary>
+    /// <summary>/// タイマー更新処理/// </summary>
     public void UpdateTimers(float deltaTime, System.Action onSkillEnd)
     {
-        // クールタイムの更新
-        if (currentCooldownTimer > 0f)
-        {
-            currentCooldownTimer -= deltaTime; // クールタイムを減少させる
-        }
-
-        // 効果時間の更新
+        // スキル効果中の処理
         if (isSkillActive)
         {
             currentDurationTimer -= deltaTime; // 効果時間を減少させる
@@ -80,15 +66,19 @@ public class Skill_SO_New : ScriptableObject
             if (currentDurationTimer <= 0f)
             {
                 isSkillActive = false;
+                currentCooldownTimer = cooldown; 
                 onSkillEnd?.Invoke();
-                Debug.Log($"<color=white>[Skill Ended] {skillName} の効果が終了しました。</color>");
+                Debug.Log($"<color=white>[Skill Ended] {skillName} の効果が終了しました。クールタイム開始: {cooldown}秒</color>");
             }
+        }
+        // スキル効果中でない場合のみ、クールタイムをカウントダウンする
+        else if (currentCooldownTimer > 0f)
+        {
+            currentCooldownTimer -= deltaTime; // クールタイムを減少させる
         }
     }
 
-    /// <summary>
-    /// スキル発動チェックとタイマーセット
-    /// </summary>
+    /// <summary>/// スキル発動チェックとタイマーセット/// </summary>
     public bool TryUseSkill()
     {
         if (IsOnCooldown || isSkillActive)
@@ -99,9 +89,8 @@ public class Skill_SO_New : ScriptableObject
 
         isSkillActive = true;
         currentDurationTimer = duration;
-        currentCooldownTimer = cooldown;
 
-        Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (効果時間: {duration}秒 | CD: {cooldown}秒)</color>");
+        Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (効果時間: {duration}秒 | 効果終了後にCD: {cooldown}秒)</color>");
         return true;
     }
 }
