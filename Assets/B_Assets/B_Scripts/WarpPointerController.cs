@@ -3,48 +3,64 @@ using UnityEngine;
 
 public class WarpPointerController : MonoBehaviour
 {
-    private PlayerController player;
-    public GameObject warpObj;
-    [SerializeField] private GameObject arrowObj;
+    private Player_Script_New player;
+    public  GameObject warpObj;
+    private RectTransform rect;
+    private Camera mainCamera;
+
+    [Header("テスト用")]
     [SerializeField] private GameObject testWarp;
 
     private void Start()
     {
-        player = GetComponentInParent<PlayerController>();
+        player = GameObject.FindWithTag("Player").GetComponent<Player_Script_New>();
+        rect = GetComponent<RectTransform>();
+        mainCamera = Camera.main;
 
         SaveManager saveManager = SaveManager.Instance;
-
         GameObject saveWarpPoint = GameObject.Find(saveManager.save.warpPointName);
         warpObj = saveWarpPoint;
 
         if (warpObj == null)
         {
-            arrowObj.SetActive(false);
+            gameObject.SetActive(false);
         }
         else
         {
-            arrowObj.SetActive(true);
+            gameObject.SetActive(true);
         }
     }
 
     private void Update()
     {
+        //ワープ地点がないなら処理しない
         if (warpObj == null) return;
 
+        //プレイヤーの位置からワープオブジェクトの方向を求める
         Vector3 dir = warpObj.transform.position - player.transform.position;
         dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir);
+        dir = dir.normalized;
+
+        //カメラの前方向を取得
+        Vector3 cameraForward = mainCamera.transform.forward;
+        cameraForward.y = 0;
+
+        //ワープオブジェクトの方向とカメラの前方向から角度を求める
+        float angle = Vector3.SignedAngle(dir, cameraForward, Vector3.up);
+
+        //求めた角度の分矢印のを動かす
+        rect.transform.rotation = Quaternion.Euler(0, 0, angle + 90);
     }
 
     public void SetWarpPoint(GameObject warpPoint)
     {
-        arrowObj.SetActive(true);
+        gameObject.SetActive(true);
         warpObj = warpPoint;
     }
 
     public void DestroyWarpPoint()
     {
-        arrowObj.SetActive(false);
+        gameObject.SetActive(false);
         warpObj = null;
     }
 
