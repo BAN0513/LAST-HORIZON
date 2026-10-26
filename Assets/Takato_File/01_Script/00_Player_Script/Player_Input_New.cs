@@ -31,6 +31,7 @@ public class Player_Input_New : MonoBehaviour
     public Vector2 LookInput { get; private set; } // 視点入力
     public bool IsSkillInput { get; private set; } // スキル入力
     public bool IsSkillInput2 { get; private set; } // スキル2入力
+    public bool IsSkillInput3 { get; private set; } // スキル3入力
 
     // 攻撃入力用プロパティ
     public bool LightAttackInput { get; private set; }         // 通常攻撃の入力があったか
@@ -50,38 +51,49 @@ public class Player_Input_New : MonoBehaviour
     {
         playerInputActions = new InputSystem_Actions();
 
+        // Move入力のイベント登録
         playerInputActions.Player.Move.started += OnMoveInput;
         playerInputActions.Player.Move.performed += OnMoveInput;
         playerInputActions.Player.Move.canceled += OnMoveInput;
 
+        // Jump入力のイベント登録
         playerInputActions.Player.Jump.started += context => JumpInput = true;
         playerInputActions.Player.Jump.canceled += context => JumpInput = false;
 
+        // Sprint入力のイベント登録
         playerInputActions.Player.Sprint.started += context => IsSprinting = true;
         playerInputActions.Player.Sprint.canceled += context => IsSprinting = false;
 
+        // 攻撃入力のイベント登録
         playerInputActions.Player.Attack.started += OnAttackStarted;
         playerInputActions.Player.Attack.canceled += OnAttackCanceled;
 
+        // Look入力のイベント登録
         playerInputActions.Player.Look.started += OnLookInput;
         playerInputActions.Player.Look.performed += OnLookInput;
         playerInputActions.Player.Look.canceled += OnLookInput;
 
+        // スキル入力のイベント登録
         playerInputActions.Player.Skill.started += context => IsSkillInput = true;
         playerInputActions.Player.Skill.canceled += context => IsSkillInput = false;
 
+        // スキル2入力のイベント登録
         playerInputActions.Player.Skill2.started += context => IsSkillInput2 = true;
         playerInputActions.Player.Skill2.canceled += context => IsSkillInput2 = false;
+
+        // スキル3入力のイベント登録
+        playerInputActions.Player.Skill3.started += context => IsSkillInput3 = true;
+        playerInputActions.Player.Skill3.canceled += context => IsSkillInput3 = false;
     }
 
     private void OnEnable()
     {
-        playerInputActions.Player.Enable();
+        playerInputActions.Player.Enable(); // プレイヤーの入力アクションを有効化
     }
 
     private void OnDisable()
     {
-        playerInputActions.Player.Disable();
+        playerInputActions.Player.Disable(); // プレイヤーの入力アクションを無効化
     }
 
     /// <summary>
@@ -190,5 +202,6 @@ public class Player_Input_New : MonoBehaviour
     {
         IsSkillInput = false;
         IsSkillInput2 = false;
+        IsSkillInput3 = false;
     }
 }

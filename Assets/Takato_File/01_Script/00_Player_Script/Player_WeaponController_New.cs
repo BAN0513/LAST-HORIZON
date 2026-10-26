@@ -14,9 +14,20 @@ public class Player_WeaponController_New : MonoBehaviour
     [SerializeField] private Transform weaponHolderpoint;
 
     private Collider weaponCollider; // 生成した武器のコライダー
+    private Player_SkillController_New playerSkillController; // ★追加: スキルコントローラーの参照
     private List<Enemy> hitEnemies = new List<Enemy>(); // 攻撃判定中にヒットした敵を管理するリスト
     private float currentChargeRatio = 0f;
     private bool isChargedAttack = false;
+
+    private void Awake()
+    {
+        //コンポーネントの取得
+        playerSkillController = GetComponent<Player_SkillController_New>();
+        if (playerSkillController == null)
+        {
+            playerSkillController = GetComponentInParent<Player_SkillController_New>();
+        }
+    }
 
     private void Start()
     {
@@ -27,37 +38,30 @@ public class Player_WeaponController_New : MonoBehaviour
         }
     }
 
-    public Weapon_SO_New CurrentWeaponData => weaponData; // 現在装備している武器のデータを外部から取得可能にする
+    public Weapon_SO_New CurrentWeaponData => weaponData;
 
-    /// <summary>
-    /// 武器を装備・生成するメソッド
-    /// </summary>
     public void EquipWeapon(Weapon_SO_New newWeaponSO)
     {
         weaponData = newWeaponSO;
 
         if (weaponHolderpoint == null) return;
 
-        // 既存の武器モデルを削除
         foreach (Transform child in weaponHolderpoint)
         {
             Destroy(child.gameObject);
         }
 
-        // 新しい武器のPrefabを生成して配置
         if (weaponData != null && weaponData.WeaponPrefab != null)
         {
             GameObject weaponInstance = Instantiate(weaponData.WeaponPrefab, weaponHolderpoint.position, weaponHolderpoint.rotation, weaponHolderpoint);
 
-            // 生成した武器オブジェクトからColliderを取得
             weaponCollider = weaponInstance.GetComponentInChildren<Collider>();
 
             if (weaponCollider != null)
             {
                 weaponCollider.isTrigger = true;
-                weaponCollider.enabled = false; // 初期状態は攻撃判定オフ
+                weaponCollider.enabled = false;
 
-                // Colliderが付いているオブジェクトに WeaponHitbox を取り付けて初期化
                 Weapon_HitBox hitbox = weaponCollider.gameObject.GetComponent<Weapon_HitBox>();
                 if (hitbox == null)
                 {
@@ -72,9 +76,6 @@ public class Player_WeaponController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 溜め攻撃の比率を設定するメソッド
-    /// </summary>
     public void SetChargeRatio(float ratio)
     {
         if (weaponData == null) return;
@@ -82,9 +83,6 @@ public class Player_WeaponController_New : MonoBehaviour
         currentChargeRatio = Mathf.Clamp01(ratio);
     }
 
-    /// <summary>
-    /// 武器の攻撃判定を有効化する
-    /// </summary>
     public void EnableAttackCollider()
     {
         hitEnemies.Clear();
@@ -94,9 +92,6 @@ public class Player_WeaponController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 武器の攻撃判定を無効化する
-    /// </summary>
     public void DisableAttackCollider()
     {
         if (weaponCollider != null)
@@ -104,9 +99,8 @@ public class Player_WeaponController_New : MonoBehaviour
             weaponCollider.enabled = false;
         }
 
-        hitEnemies.Clear(); // 攻撃判定を無効化した際にヒットした敵のリストをクリア
+        hitEnemies.Clear();
 
-        //溜め攻撃のフラグをリセット
         isChargedAttack = false;
         currentChargeRatio = 0f;
     }
@@ -120,10 +114,7 @@ public class Player_WeaponController_New : MonoBehaviour
 
         if (playerAnimation != null)
         {
-            // 攻撃ヒット開始の購読
             playerAnimation.OnAttackHitStart += EnableAttackCollider;
-
-            // 攻撃終了イベントでコライダーをオフにする
             playerAnimation.OnAttackEnd += DisableAttackCollider;
         }
     }
@@ -137,9 +128,6 @@ public class Player_WeaponController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// WeaponHitbox から呼び出される武器用の衝突検知メソッド
-    /// </summary>
     public void OnWeaponTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy") || other.GetComponent<Enemy>() != null)
@@ -150,10 +138,9 @@ public class Player_WeaponController_New : MonoBehaviour
             {
                 hitEnemies.Add(enemy);
 
-                // ダメージ計算処理
                 int finalDamage = CalculateDamage(out bool isCritical);
 
-                enemy.TakeDamage(finalDamage); // 敵にダメージを与える
+                enemy.TakeDamage(finalDamage);
 
                 if (isCritical)
                 {
@@ -174,21 +161,29 @@ public class Player_WeaponController_New : MonoBehaviour
     {
         isCritical = false;
 
-        if (weaponData == null) return 10; // 武器データがない場合のデフォルト
+        if (weaponData == null) return 10;
 
         float finalDamage = weaponData.AttackPower;
 
-        //溜め攻撃の場合の倍率補正
+        //スキルによる攻撃力補正を取得
+        float skillAttackMultiplier = (playerSkillController != null) ? playerSkillController.CurrentAttackMultiplier : 1.0f;
+        finalDamage *= skillAttackMultiplier;
+
+        // 溜め攻撃の場合の倍率補正
         if (isChargedAttack)
         {
             float chargeMultiplier = Mathf.Lerp(weaponData.MinChargeDamageMultiplier, weaponData.MaxChargeDamageMultiplier, currentChargeRatio);
             finalDamage *= chargeMultiplier;
-            Debug.Log($"<color=orange>[Hit Info] 溜め率: {currentChargeRatio * 100:F0}% | 倍率: {chargeMultiplier:F2}倍 | 基礎威力を計算: {finalDamage:F1}</color>");
+            Debug.Log($"<color=orange>[Hit Info] 溜め率: {currentChargeRatio * 100:F0}% | 溜め倍率: {chargeMultiplier:F2}倍 | スキル攻撃倍率: {skillAttackMultiplier:F2}倍 | 計算値: {finalDamage:F1}</color>");
 
             if (currentChargeRatio >= 1.0f)
             {
                 Debug.Log("<color=orange>【最大溜め攻撃！】</color>");
             }
+        }
+        else if (skillAttackMultiplier > 1.0f)
+        {
+            Debug.Log($"<color=red>[Hit Info] 攻撃バフ適用中！ 倍率: {skillAttackMultiplier:F2}倍 | 計算値: {finalDamage:F1}</color>");
         }
 
         // クリティカル判定
@@ -197,9 +192,9 @@ public class Player_WeaponController_New : MonoBehaviour
             isCritical = true;
             finalDamage *= weaponData.CriticalDamageMultiplier;
         }
+
         int resultDamage = Mathf.RoundToInt(finalDamage);
 
-        //デバッグログ: 最終出力ダメージ
         Debug.Log($"<color=green>[Hit Info] 最終ダメージ確定: {resultDamage}</color>");
         return resultDamage;
     }

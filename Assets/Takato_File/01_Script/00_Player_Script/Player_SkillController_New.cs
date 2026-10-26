@@ -16,6 +16,9 @@ public class Player_SkillController_New : MonoBehaviour
     // 現在移動速度にかかっているスキル倍率（デフォルト1.0倍）
     public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
 
+    // ★追加: 現在攻撃力にかかっているスキル倍率（デフォルト1.0倍）
+    public float CurrentAttackMultiplier { get; private set; } = 1.0f;
+
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
@@ -60,6 +63,11 @@ public class Player_SkillController_New : MonoBehaviour
                 {
                     CurrentSpeedMultiplier = 1.0f; // 移動速度倍率を元に戻す
                 }
+                // 攻撃力バフの解除処理
+                else if (skillSO.SkillType == SkillType.AttackBoost)
+                {
+                    CurrentAttackMultiplier = 1.0f; // 攻撃力倍率を元に戻す
+                }
             });
         }
     }
@@ -96,6 +104,11 @@ public class Player_SkillController_New : MonoBehaviour
 
                 case SkillType.Teleport:
                     ExecuteTeleport(skillSO.TeleportDistance);
+                    break;
+
+                // 攻撃力上昇スキルの効果適用
+                case SkillType.AttackBoost:
+                    CurrentAttackMultiplier = skillSO.AttackMultiplier;
                     break;
 
                 case SkillType.None:

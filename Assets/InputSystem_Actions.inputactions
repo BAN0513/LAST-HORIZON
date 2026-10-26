@@ -124,6 +124,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Skill4",
+                    "type": "Button",
+                    "id": "80efdb11-d118-4a06-87bc-b9a18f8f809d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Ult",
                     "type": "Button",
                     "id": "add851c9-316a-473c-bdef-fb461a8d6d58",
@@ -587,6 +596,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skill3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5689a2ff-e950-49e8-ba18-990c869c2da0",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
