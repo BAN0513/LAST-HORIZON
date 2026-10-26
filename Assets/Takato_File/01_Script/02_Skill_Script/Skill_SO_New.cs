@@ -7,7 +7,8 @@ public enum SkillType
 {
     None,
     SpeedBoost, // 移動速度上昇スキル
-    Teleport,   // 瞬間移動スキル（追加）
+    Teleport,   // 瞬間移動スキル
+    AttackBoost, // 攻撃力上昇スキル
 }
 
 /// <summary>
@@ -36,6 +37,9 @@ public class Skill_SO_New : ScriptableObject
     [Header("瞬間移動設定（Teleport用）")]
     [SerializeField] private float teleportDistance;
 
+    [Header("攻撃力上昇設定（AttackBoost用）")]
+    [SerializeField] private float attackMultiplier;
+
     // --- 実行時のタイマー管理 ---
     private float currentCooldownTimer = 0f;
     private float currentDurationTimer = 0f;
@@ -48,7 +52,9 @@ public class Skill_SO_New : ScriptableObject
     public float Cooldown => cooldown;
     public float SpeedMultiplier => speedMultiplier;
     public float TeleportDistance => teleportDistance;
+    public float AttackMultiplier => attackMultiplier;
 
+    // スキルの状態を外部から参照するプロパティ
     public bool IsSkillActive => isSkillActive;
     public bool IsOnCooldown => currentCooldownTimer > 0f;
 
