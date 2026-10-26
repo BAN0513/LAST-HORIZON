@@ -1784,6 +1784,18 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1787687346}
+    - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: obstacleLayer.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: activeSkillSlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: 'activeSkillSlots.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 10017f02f9b8e684caa76a7798941ac2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1799,5 +1811,5 @@ SceneRoots:
   - {fileID: 113653077}
   - {fileID: 598010510}
   - {fileID: 303097495}
-  - {fileID: 507101601842213434}
   - {fileID: 1605609600}
+  - {fileID: 507101601842213434}

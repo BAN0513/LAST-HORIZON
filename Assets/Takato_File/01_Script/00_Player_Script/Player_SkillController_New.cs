@@ -8,8 +8,18 @@ public class Player_SkillController_New : MonoBehaviour
     [Header("装着するスキルのSO(スロットに対応するキーで発動します。)")]
     [SerializeField] private Skill_SO_New[] activeSkillSlots;
 
+    [Header("テレポートの壁判定レイヤー")]
+    [SerializeField] private LayerMask obstacleLayer;
+
+    private CharacterController characterController;
+
     // 現在移動速度にかかっているスキル倍率（デフォルト1.0倍）
     public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
+
+    private void Awake()
+    {
+        characterController = GetComponent<CharacterController>();
+    }
 
     private void Start()
     {
@@ -55,7 +65,7 @@ public class Player_SkillController_New : MonoBehaviour
     }
 
     /// <summary>
-    /// スロットインデックス（0番目、1番目...）のスキルのSOを発動する
+    /// スロットインデックスのスキルのSOを発動する
     /// </summary>
     /// <param name="slotIndex">発動したいスキルスロットの番号</param>
     public void UseSkill(int slotIndex = 0)
@@ -84,10 +94,43 @@ public class Player_SkillController_New : MonoBehaviour
                     CurrentSpeedMultiplier = skillSO.SpeedMultiplier;
                     break;
 
+                case SkillType.Teleport:
+                    ExecuteTeleport(skillSO.TeleportDistance);
+                    break;
+
                 case SkillType.None:
                 default:
                     break;
             }
+        }
+    }
+
+    /// <summary>
+    /// プレイヤーを前方へ瞬間移動させる処理
+    /// </summary>
+    /// <param name="distance">移動距離</param>
+    private void ExecuteTeleport(float distance)
+    {
+        Vector3 targetPosition = transform.position + transform.forward * distance;
+
+        // 壁ぬけ防止：進行方向に障害物があるかチェック
+        if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, distance, obstacleLayer))
+        {
+            // 障害物の手前で停止
+            targetPosition = hit.point - transform.forward * 0.5f;
+            targetPosition.y = transform.position.y;
+        }
+
+        // CharacterController を使用している場合は一度無効化して位置を変更する
+        if (characterController != null)
+        {
+            characterController.enabled = false;
+            transform.position = targetPosition;
+            characterController.enabled = true;
+        }
+        else
+        {
+            transform.position = targetPosition;
         }
     }
 

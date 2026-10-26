@@ -139,6 +139,16 @@ public class Player_Script_New : MonoBehaviour
             playerInput.ResetSkillInput(); // 入力を消費してリセット
         }
 
+        //スキル2の入力処理
+        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput2)
+        {
+            if (playerSkillController != null)
+            {
+                playerSkillController.UseSkill(1); // スロット1を呼び出す
+            }
+            playerInput.ResetSkillInput(); // 入力を消費してリセット
+        }
+
         // 溜め状態の分岐
         if (isCharging)
         {

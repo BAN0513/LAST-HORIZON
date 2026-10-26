@@ -1,13 +1,18 @@
 using UnityEngine;
 
-/// <summary>/// スキルの種類を表す列挙型/// </summary>
+/// <summary>
+/// スキルの種類を表す列挙型
+/// </summary>
 public enum SkillType
 {
     None,
     SpeedBoost, // 移動速度上昇スキル
+    Teleport,   // 瞬間移動スキル（追加）
 }
 
-/// <summary>/// スキルのScriptableObjectクラス(New)/// </summary>
+/// <summary>
+/// スキルのScriptableObjectクラス(New)
+/// </summary>
 [CreateAssetMenu(fileName = "Skill_SO_New", menuName = "ScriptableObjects/Skill_SO_New", order = 3)]
 public class Skill_SO_New : ScriptableObject
 {
@@ -28,6 +33,9 @@ public class Skill_SO_New : ScriptableObject
     [Header("バフ効果設定（SpeedBoost用）")]
     [SerializeField] private float speedMultiplier;
 
+    [Header("瞬間移動設定（Teleport用）")]
+    [SerializeField] private float teleportDistance;
+
     // --- 実行時のタイマー管理 ---
     private float currentCooldownTimer = 0f;
     private float currentDurationTimer = 0f;
@@ -39,6 +47,7 @@ public class Skill_SO_New : ScriptableObject
     public float Duration => duration;
     public float Cooldown => cooldown;
     public float SpeedMultiplier => speedMultiplier;
+    public float TeleportDistance => teleportDistance;
 
     public bool IsSkillActive => isSkillActive;
     public bool IsOnCooldown => currentCooldownTimer > 0f;
@@ -46,7 +55,9 @@ public class Skill_SO_New : ScriptableObject
     // クールタイム残り割合
     public float CooldownRemainingRatio => cooldown > 0f ? Mathf.Clamp01(currentCooldownTimer / cooldown) : 0f;
 
-    /// <summary>/// ゲーム開始時にタイマーを初期化する/// </summary>
+    /// <summary>
+    /// ゲーム開始時にタイマーを初期化する
+    /// </summary>
     public void Initialize()
     {
         currentCooldownTimer = 0f;
@@ -54,7 +65,9 @@ public class Skill_SO_New : ScriptableObject
         isSkillActive = false;
     }
 
-    /// <summary>/// タイマー更新処理/// </summary>
+    /// <summary>
+    /// タイマー更新処理
+    /// </summary>
     public void UpdateTimers(float deltaTime, System.Action onSkillEnd)
     {
         // スキル効果中の処理
@@ -66,7 +79,7 @@ public class Skill_SO_New : ScriptableObject
             if (currentDurationTimer <= 0f)
             {
                 isSkillActive = false;
-                currentCooldownTimer = cooldown; 
+                currentCooldownTimer = cooldown;
                 onSkillEnd?.Invoke();
                 Debug.Log($"<color=white>[Skill Ended] {skillName} の効果が終了しました。クールタイム開始: {cooldown}秒</color>");
             }
@@ -78,13 +91,24 @@ public class Skill_SO_New : ScriptableObject
         }
     }
 
-    /// <summary>/// スキル発動チェックとタイマーセット/// </summary>
+    /// <summary>
+    /// スキル発動チェックとタイマーセット
+    /// </summary>
     public bool TryUseSkill()
     {
+        // スキルがクールタイム中または効果中の場合は使用不可
         if (IsOnCooldown || isSkillActive)
         {
             Debug.Log($"[Skill] {skillName} は使用不可 (クールタイム中: {currentCooldownTimer:F1}秒)");
             return false;
+        }
+
+        // 瞬間移動などの即時完了スキルは Duration を待たずに即座にクールタイムへ移行
+        if (skillType == SkillType.Teleport)
+        {
+            currentCooldownTimer = cooldown;
+            Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (瞬間移動 {teleportDistance}m | CD: {cooldown}秒)</color>");
+            return true;
         }
 
         isSkillActive = true;
