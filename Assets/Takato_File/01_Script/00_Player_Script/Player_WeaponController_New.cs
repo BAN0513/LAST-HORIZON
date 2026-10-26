@@ -14,7 +14,7 @@ public class Player_WeaponController_New : MonoBehaviour
     [SerializeField] private Transform weaponHolderpoint;
 
     private Collider weaponCollider; // 生成した武器のコライダー
-    private Player_SkillController_New playerSkillController; // ★追加: スキルコントローラーの参照
+    private Player_SkillController_New playerSkillController; //スキルコントローラーの参照
     private List<Enemy> hitEnemies = new List<Enemy>(); // 攻撃判定中にヒットした敵を管理するリスト
     private float currentChargeRatio = 0f;
     private bool isChargedAttack = false;
@@ -166,24 +166,24 @@ public class Player_WeaponController_New : MonoBehaviour
         float finalDamage = weaponData.AttackPower;
 
         //スキルによる攻撃力補正を取得
-        float skillAttackMultiplier = (playerSkillController != null) ? playerSkillController.CurrentAttackMultiplier : 1.0f;
-        finalDamage *= skillAttackMultiplier;
+        int skillAttackBonus = (playerSkillController != null) ? playerSkillController.CurrentAttackBonus : 0;
+        finalDamage += skillAttackBonus;
 
         // 溜め攻撃の場合の倍率補正
         if (isChargedAttack)
         {
             float chargeMultiplier = Mathf.Lerp(weaponData.MinChargeDamageMultiplier, weaponData.MaxChargeDamageMultiplier, currentChargeRatio);
             finalDamage *= chargeMultiplier;
-            Debug.Log($"<color=orange>[Hit Info] 溜め率: {currentChargeRatio * 100:F0}% | 溜め倍率: {chargeMultiplier:F2}倍 | スキル攻撃倍率: {skillAttackMultiplier:F2}倍 | 計算値: {finalDamage:F1}</color>");
+            Debug.Log($"<color=orange>[Hit Info] 溜め率: {currentChargeRatio * 100:F0}% | 溜め倍率: {chargeMultiplier:F2}倍 | スキル加算値: +{skillAttackBonus} | 計算値: {finalDamage:F1}</color>");
 
             if (currentChargeRatio >= 1.0f)
             {
                 Debug.Log("<color=orange>【最大溜め攻撃！】</color>");
             }
         }
-        else if (skillAttackMultiplier > 1.0f)
+        else if (skillAttackBonus > 0)
         {
-            Debug.Log($"<color=red>[Hit Info] 攻撃バフ適用中！ 倍率: {skillAttackMultiplier:F2}倍 | 計算値: {finalDamage:F1}</color>");
+            Debug.Log($"<color=red>[Hit Info] 攻撃バフ適用中！ 加算値: +{skillAttackBonus} | 基礎計算値: {finalDamage:F1}</color>");
         }
 
         // クリティカル判定

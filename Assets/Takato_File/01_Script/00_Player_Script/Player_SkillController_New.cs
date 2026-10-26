@@ -1,23 +1,23 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚Ì•¡”ƒXƒLƒ‹‚ğŠÇ—‚·‚éƒNƒ‰ƒX(New)
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¤‡æ•°ã‚¹ã‚­ãƒ«ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹(New)
 /// </summary>
 public class Player_SkillController_New : MonoBehaviour
 {
-    [Header("‘•’…‚·‚éƒXƒLƒ‹‚ÌSO(ƒXƒƒbƒg‚É‘Î‰‚·‚éƒL[‚Å”­“®‚µ‚Ü‚·B)")]
+    [Header("è£…ç€ã™ã‚‹ã‚¹ã‚­ãƒ«ã®SO(ã‚¹ãƒ­ãƒƒãƒˆã«å¯¾å¿œã™ã‚‹ã‚­ãƒ¼ã§ç™ºå‹•ã—ã¾ã™ã€‚)")]
     [SerializeField] private Skill_SO_New[] activeSkillSlots;
 
-    [Header("ƒeƒŒƒ|[ƒg‚Ì•Ç”»’èƒŒƒCƒ„[")]
+    [Header("ãƒ†ãƒ¬ãƒãƒ¼ãƒˆã®å£åˆ¤å®šãƒ¬ã‚¤ãƒ¤ãƒ¼")]
     [SerializeField] private LayerMask obstacleLayer;
 
     private CharacterController characterController;
 
-    // Œ»İˆÚ“®‘¬“x‚É‚©‚©‚Á‚Ä‚¢‚éƒXƒLƒ‹”{—¦iƒfƒtƒHƒ‹ƒg1.0”{j
+    // ç¾åœ¨ç§»å‹•é€Ÿåº¦ã«ã‹ã‹ã£ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«å€ç‡ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ1.0å€ï¼‰
     public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
 
-    // š’Ç‰Á: Œ»İUŒ‚—Í‚É‚©‚©‚Á‚Ä‚¢‚éƒXƒLƒ‹”{—¦iƒfƒtƒHƒ‹ƒg1.0”{j
-    public float CurrentAttackMultiplier { get; private set; } = 1.0f;
+    //ç¾åœ¨ã®ã‚¹ã‚­ãƒ«ã«ã‚ˆã‚‹æ”»æ’ƒåŠ›åŠ ç®—å€¤ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ0ï¼‰
+    public int CurrentAttackBonus { get; private set; } = 0;
 
     private void Awake()
     {
@@ -26,7 +26,6 @@ public class Player_SkillController_New : MonoBehaviour
 
     private void Start()
     {
-        // ŠeSO‚Ìƒ^ƒCƒ}[ó‘Ô‚ğƒŠƒZƒbƒg
         if (activeSkillSlots != null)
         {
             foreach (var skillSO in activeSkillSlots)
@@ -41,12 +40,9 @@ public class Player_SkillController_New : MonoBehaviour
 
     private void Update()
     {
-        HandleTimers(); // ƒ^ƒCƒ}[XVˆ—
+        HandleTimers();
     }
 
-    /// <summary>
-    /// ŠeƒXƒLƒ‹‚Ìƒ^ƒCƒ}[XVˆ—
-    /// </summary>
     private void HandleTimers()
     {
         if (activeSkillSlots == null) return;
@@ -55,47 +51,44 @@ public class Player_SkillController_New : MonoBehaviour
         {
             if (skillSO == null) continue;
 
-            // ŠeSO‚Ìƒ^ƒCƒ}[‚ğXV
             skillSO.UpdateTimers(Time.deltaTime, () =>
             {
-                // Œø‰ÊI—¹‚Ìƒoƒt‰ğœˆ—
                 if (skillSO.SkillType == SkillType.SpeedBoost)
                 {
-                    CurrentSpeedMultiplier = 1.0f; // ˆÚ“®‘¬“x”{—¦‚ğŒ³‚É–ß‚·
+                    CurrentSpeedMultiplier = 1.0f;
                 }
-                // UŒ‚—Íƒoƒt‚Ì‰ğœˆ—
+                //æ”»æ’ƒåŠ›ãƒãƒ•çµ‚äº†æ™‚ã«åŠ ç®—å€¤ã‚’0ã«æˆ»ã™
                 else if (skillSO.SkillType == SkillType.AttackBoost)
                 {
-                    CurrentAttackMultiplier = 1.0f; // UŒ‚—Í”{—¦‚ğŒ³‚É–ß‚·
+                    CurrentAttackBonus = 0;
                 }
             });
         }
     }
 
     /// <summary>
-    /// ƒXƒƒbƒgƒCƒ“ƒfƒbƒNƒX‚ÌƒXƒLƒ‹‚ÌSO‚ğ”­“®‚·‚é
+    /// ã‚¹ã‚­ãƒ«ã®ä½¿ç”¨ã‚’è©¦ã¿ã‚‹
     /// </summary>
-    /// <param name="slotIndex">”­“®‚µ‚½‚¢ƒXƒLƒ‹ƒXƒƒbƒg‚Ì”Ô†</param>
+    /// <param name="slotIndex">ã‚¹ã‚­ãƒ«ã‚¹ãƒ­ãƒƒãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹</param>
     public void UseSkill(int slotIndex = 0)
     {
         if (activeSkillSlots == null || slotIndex < 0 || slotIndex >= activeSkillSlots.Length)
         {
-            Debug.LogWarning($"[Skill] w’è‚³‚ê‚½ƒXƒLƒ‹ƒXƒƒbƒg‚ª–³Œø‚Å‚· (Index: {slotIndex})");
+            Debug.LogWarning($"[Skill] æŒ‡å®šã•ã‚ŒãŸã‚¹ã‚­ãƒ«ã‚¹ãƒ­ãƒƒãƒˆãŒç„¡åŠ¹ã§ã™ (Index: {slotIndex})");
             return;
         }
 
-        Skill_SO_New skillSO = activeSkillSlots[slotIndex];
+        Skill_SO_New skillSO = activeSkillSlots[slotIndex]; // ã‚¹ãƒ­ãƒƒãƒˆã«å¯¾å¿œã™ã‚‹ã‚¹ã‚­ãƒ«SOã‚’å–å¾—
 
         if (skillSO == null)
         {
-            Debug.LogWarning($"[Skill] ƒXƒƒbƒg {slotIndex} ‚ÉƒXƒLƒ‹SO‚ªƒZƒbƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning($"[Skill] ã‚¹ãƒ­ãƒƒãƒˆ {slotIndex} ã«ã‚¹ã‚­ãƒ«SOãŒã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
 
-        // SO‘¤‚Å”­“®‰Â”\‚©ƒ`ƒFƒbƒN‚µ‚Ä”­“®
+        // ã‚¹ã‚­ãƒ«ã®ä½¿ç”¨ã‚’è©¦ã¿ã‚‹
         if (skillSO.TryUseSkill())
         {
-            // ƒXƒLƒ‹‚Ìí—Ş‚É‰‚¶‚½Œø‰Ê‚ğ”½‰f
             switch (skillSO.SkillType)
             {
                 case SkillType.SpeedBoost:
@@ -106,9 +99,9 @@ public class Player_SkillController_New : MonoBehaviour
                     ExecuteTeleport(skillSO.TeleportDistance);
                     break;
 
-                // UŒ‚—Íã¸ƒXƒLƒ‹‚ÌŒø‰Ê“K—p
+                //æ”»æ’ƒåŠ›å›ºå®šåŠ ç®—å€¤ã‚’é©ç”¨
                 case SkillType.AttackBoost:
-                    CurrentAttackMultiplier = skillSO.AttackMultiplier;
+                    CurrentAttackBonus = skillSO.AttackBonus;
                     break;
 
                 case SkillType.None:
@@ -119,22 +112,19 @@ public class Player_SkillController_New : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ğ‘O•û‚ÖuŠÔˆÚ“®‚³‚¹‚éˆ—
+    /// ç¬é–“ç§»å‹•ã‚¹ã‚­ãƒ«ã®å®Ÿè¡Œå‡¦ç†
     /// </summary>
-    /// <param name="distance">ˆÚ“®‹——£</param>
+    /// <param name="distance"></param>
     private void ExecuteTeleport(float distance)
     {
         Vector3 targetPosition = transform.position + transform.forward * distance;
 
-        // •Ç‚Ê‚¯–h~Fis•ûŒü‚ÉáŠQ•¨‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
         if (Physics.Raycast(transform.position + Vector3.up * 0.5f, transform.forward, out RaycastHit hit, distance, obstacleLayer))
         {
-            // áŠQ•¨‚Ìè‘O‚Å’â~
             targetPosition = hit.point - transform.forward * 0.5f;
             targetPosition.y = transform.position.y;
         }
 
-        // CharacterController ‚ğg—p‚µ‚Ä‚¢‚éê‡‚Íˆê“x–³Œø‰»‚µ‚ÄˆÊ’u‚ğ•ÏX‚·‚é
         if (characterController != null)
         {
             characterController.enabled = false;
@@ -148,8 +138,10 @@ public class Player_SkillController_New : MonoBehaviour
     }
 
     /// <summary>
-    /// w’èƒXƒƒbƒg‚É“ü‚Á‚Ä‚¢‚éƒXƒLƒ‹‚ÌƒN[ƒ‹ƒ^ƒCƒ€Š„‡‚ğæ“¾‚·‚é
+    /// ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ æ®‹ã‚Šå‰²åˆã‚’å–å¾—ã™ã‚‹
     /// </summary>
+    /// <param name="slotIndex">ã‚¹ã‚­ãƒ«ã‚¹ãƒ­ãƒƒãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹</param>
+    /// <returns>ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ æ®‹ã‚Šå‰²åˆ (0ã€œ1)</returns>
     public float GetCooldownRatio(int slotIndex)
     {
         if (activeSkillSlots != null && slotIndex >= 0 && slotIndex < activeSkillSlots.Length && activeSkillSlots[slotIndex] != null)

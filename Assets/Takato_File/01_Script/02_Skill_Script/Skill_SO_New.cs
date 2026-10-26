@@ -6,8 +6,8 @@ using UnityEngine;
 public enum SkillType
 {
     None,
-    SpeedBoost, // 移動速度上昇スキル
-    Teleport,   // 瞬間移動スキル
+    SpeedBoost,  // 移動速度上昇スキル
+    Teleport,    // 瞬間移動スキル
     AttackBoost, // 攻撃力上昇スキル
 }
 
@@ -35,10 +35,12 @@ public class Skill_SO_New : ScriptableObject
     [SerializeField] private float speedMultiplier;
 
     [Header("瞬間移動設定（Teleport用）")]
+    [Header("瞬間移動距離（メートル）")]
     [SerializeField] private float teleportDistance;
 
     [Header("攻撃力上昇設定（AttackBoost用）")]
-    [SerializeField] private float attackMultiplier;
+    [Tooltip("加算する攻撃力")]
+    [SerializeField] private int attackBonus;
 
     // --- 実行時のタイマー管理 ---
     private float currentCooldownTimer = 0f;
@@ -52,7 +54,7 @@ public class Skill_SO_New : ScriptableObject
     public float Cooldown => cooldown;
     public float SpeedMultiplier => speedMultiplier;
     public float TeleportDistance => teleportDistance;
-    public float AttackMultiplier => attackMultiplier;
+    public int AttackBonus => attackBonus;
 
     // スキルの状態を外部から参照するプロパティ
     public bool IsSkillActive => isSkillActive;
@@ -79,9 +81,8 @@ public class Skill_SO_New : ScriptableObject
         // スキル効果中の処理
         if (isSkillActive)
         {
-            currentDurationTimer -= deltaTime; // 効果時間を減少させる
+            currentDurationTimer -= deltaTime;
 
-            // 効果時間が終了した場合の処理
             if (currentDurationTimer <= 0f)
             {
                 isSkillActive = false;
@@ -90,10 +91,9 @@ public class Skill_SO_New : ScriptableObject
                 Debug.Log($"<color=white>[Skill Ended] {skillName} の効果が終了しました。クールタイム開始: {cooldown}秒</color>");
             }
         }
-        // スキル効果中でない場合のみ、クールタイムをカウントダウンする
         else if (currentCooldownTimer > 0f)
         {
-            currentCooldownTimer -= deltaTime; // クールタイムを減少させる
+            currentCooldownTimer -= deltaTime;
         }
     }
 
@@ -102,14 +102,12 @@ public class Skill_SO_New : ScriptableObject
     /// </summary>
     public bool TryUseSkill()
     {
-        // スキルがクールタイム中または効果中の場合は使用不可
         if (IsOnCooldown || isSkillActive)
         {
             Debug.Log($"[Skill] {skillName} は使用不可 (クールタイム中: {currentCooldownTimer:F1}秒)");
             return false;
         }
 
-        // 瞬間移動などの即時完了スキルは Duration を待たずに即座にクールタイムへ移行
         if (skillType == SkillType.Teleport)
         {
             currentCooldownTimer = cooldown;

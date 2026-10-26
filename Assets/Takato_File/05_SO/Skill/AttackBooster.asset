@@ -18,4 +18,4 @@ MonoBehaviour:
   cooldown: 10
   speedMultiplier: 0
   teleportDistance: 0
-  attackMultiplier: 50
+  attackBonus: 50
