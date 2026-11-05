@@ -32,6 +32,7 @@ public class Player_Input_New : MonoBehaviour
     public bool IsSkillInput { get; private set; } // スキル入力
     public bool IsSkillInput2 { get; private set; } // スキル2入力
     public bool IsSkillInput3 { get; private set; } // スキル3入力
+    public bool IsSkillInput4 { get; private set; } // スキル4入力
 
     // 攻撃入力用プロパティ
     public bool LightAttackInput { get; private set; }         // 通常攻撃の入力があったか
@@ -84,6 +85,10 @@ public class Player_Input_New : MonoBehaviour
         // スキル3入力のイベント登録
         playerInputActions.Player.Skill3.started += context => IsSkillInput3 = true;
         playerInputActions.Player.Skill3.canceled += context => IsSkillInput3 = false;
+
+        // スキル4入力のイベント登録
+        playerInputActions.Player.Skill4.started += context => IsSkillInput4 = true;
+        playerInputActions.Player.Skill4.canceled += context => IsSkillInput4 = false;
     }
 
     private void OnEnable()
@@ -203,5 +208,6 @@ public class Player_Input_New : MonoBehaviour
         IsSkillInput = false;
         IsSkillInput2 = false;
         IsSkillInput3 = false;
+        IsSkillInput4 = false;
     }
 }

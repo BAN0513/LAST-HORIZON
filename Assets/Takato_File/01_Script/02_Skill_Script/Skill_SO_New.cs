@@ -9,6 +9,7 @@ public enum SkillType
     SpeedBoost,  // 移動速度上昇スキル
     Teleport,    // 瞬間移動スキル
     AttackBoost, // 攻撃力上昇スキル
+    FunnelAttack // ファンネル攻撃スキル
 }
 
 /// <summary>
@@ -30,17 +31,48 @@ public class Skill_SO_New : ScriptableObject
 
     [Header("再使用までのクールタイム(秒)")]
     [SerializeField] private float cooldown;
+    [Space(10)]
+
+    [Header("スキル効果のパラメータ設定")]
 
     [Header("バフ効果設定（SpeedBoost用）")]
     [SerializeField] private float speedMultiplier;
 
     [Header("瞬間移動設定（Teleport用）")]
+    [Space(10)]
     [Header("瞬間移動距離（メートル）")]
     [SerializeField] private float teleportDistance;
 
     [Header("攻撃力上昇設定（AttackBoost用）")]
-    [Tooltip("加算する攻撃力")]
+    [Header("加算する攻撃力")]
     [SerializeField] private int attackBonus;
+
+    [Header("ファンネル設定（FunnelAttack用）")]
+    [Space(10)]
+
+    [Header("ファンネルのPrefab")]
+    [SerializeField] private GameObject funnelPrefab;
+
+    [Header("ファンネルの数")]
+    [SerializeField] private int funnelCount;
+
+    [Header("ファンネルの生成間隔")]
+    [SerializeField] private float spawnInterval;
+
+    [Header("ファンネルの発射遅延")]
+    [SerializeField] private float launchDelay;
+
+    [Header("ファンネルの生成高さ")]
+    [SerializeField] private float spawnHeight; 
+
+    [Header("ファンネルの生成半径")]
+    [SerializeField] private float spawnRadius;
+    
+    [Header("ファンネルの速度")]
+    [SerializeField] private float funnelSpeed;
+    
+    [Header("ファンネルのダメージ")]
+    [SerializeField] private int funnelDamage;    
 
     // --- 実行時のタイマー管理 ---
     private float currentCooldownTimer = 0f;
@@ -55,6 +87,16 @@ public class Skill_SO_New : ScriptableObject
     public float SpeedMultiplier => speedMultiplier;
     public float TeleportDistance => teleportDistance;
     public int AttackBonus => attackBonus;
+
+    // ファンネル用プロパティ
+    public GameObject FunnelPrefab => funnelPrefab;
+    public int FunnelCount => funnelCount;
+    public float SpawnHeight => spawnHeight;
+    public float SpawnRadius => spawnRadius;
+    public float FunnelSpeed => funnelSpeed;
+    public int FunnelDamage => funnelDamage;
+    public float SpawnInterval => spawnInterval;
+    public float LaunchDelay => launchDelay;
 
     // スキルの状態を外部から参照するプロパティ
     public bool IsSkillActive => isSkillActive;
@@ -108,10 +150,11 @@ public class Skill_SO_New : ScriptableObject
             return false;
         }
 
-        if (skillType == SkillType.Teleport)
+        // テレポートやファンネル攻撃のような即時発動スキルは、発動後に直接クールタイムへ移行
+        if (skillType == SkillType.Teleport || skillType == SkillType.FunnelAttack)
         {
             currentCooldownTimer = cooldown;
-            Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (瞬間移動 {teleportDistance}m | CD: {cooldown}秒)</color>");
+            Debug.Log($"<color=green>[Skill Activated] {skillName} 発動！ (CD: {cooldown}秒)</color>");
             return true;
         }
 

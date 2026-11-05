@@ -538,4 +538,29 @@ public abstract class Enemy : MonoBehaviour
     {
         IsPlayerSkillActive = true;
     }
+
+    /// <summary>
+    /// スキル用などの無敵時間を無視して連続ヒットを許可するダメージ処理(ファンネルのスキルで使用するので勝手に追加してます。)
+    /// </summary>
+    public virtual void TakeDamageIgnoreInvincibility(int damage, SoundManager sound = null, int seNumber = -1)
+    {
+        if (enemyBaseState == EnemyBaseState.Dead) { return; }
+
+        if (sound != null) { sound.PlaySE(seNumber); }
+        if (enemyBaseState != EnemyBaseState.Contact) { ContactAnimation(); }
+
+        damage -= (enemySO.def - DebufDEF);
+        if (damage <= 0) { return; }
+
+        HP -= damage;
+
+        if (hpSliider != null)
+        {
+            hpSliider.value = HP;
+        }
+
+        Debug.Log("Enemy_HP(SkillHit): " + HP);
+
+        if (HP <= 0) { Death(); }
+    }
 }

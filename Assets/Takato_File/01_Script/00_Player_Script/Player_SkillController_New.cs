@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// プレイヤーの複数スキルを管理するクラス(New)
@@ -16,7 +17,7 @@ public class Player_SkillController_New : MonoBehaviour
     // 現在移動速度にかかっているスキル倍率（デフォルト1.0倍）
     public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
 
-    //現在のスキルによる攻撃力加算値（デフォルト0）
+    // 現在のスキルによる攻撃力加算値（デフォルト0）
     public int CurrentAttackBonus { get; private set; } = 0;
 
     private void Awake()
@@ -32,7 +33,7 @@ public class Player_SkillController_New : MonoBehaviour
             {
                 if (skillSO != null)
                 {
-                    skillSO.Initialize();
+                    skillSO.Initialize(); // スキルSOの初期化
                 }
             }
         }
@@ -40,7 +41,7 @@ public class Player_SkillController_New : MonoBehaviour
 
     private void Update()
     {
-        HandleTimers();
+        HandleTimers(); // スキルのクールタイムや効果時間の更新
     }
 
     private void HandleTimers()
@@ -57,7 +58,6 @@ public class Player_SkillController_New : MonoBehaviour
                 {
                     CurrentSpeedMultiplier = 1.0f;
                 }
-                //攻撃力バフ終了時に加算値を0に戻す
                 else if (skillSO.SkillType == SkillType.AttackBoost)
                 {
                     CurrentAttackBonus = 0;
@@ -66,10 +66,6 @@ public class Player_SkillController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// スキルの使用を試みる
-    /// </summary>
-    /// <param name="slotIndex">スキルスロットのインデックス</param>
     public void UseSkill(int slotIndex = 0)
     {
         if (activeSkillSlots == null || slotIndex < 0 || slotIndex >= activeSkillSlots.Length)
@@ -78,7 +74,7 @@ public class Player_SkillController_New : MonoBehaviour
             return;
         }
 
-        Skill_SO_New skillSO = activeSkillSlots[slotIndex]; // スロットに対応するスキルSOを取得
+        Skill_SO_New skillSO = activeSkillSlots[slotIndex];
 
         if (skillSO == null)
         {
@@ -86,7 +82,6 @@ public class Player_SkillController_New : MonoBehaviour
             return;
         }
 
-        // スキルの使用を試みる
         if (skillSO.TryUseSkill())
         {
             switch (skillSO.SkillType)
@@ -99,9 +94,13 @@ public class Player_SkillController_New : MonoBehaviour
                     ExecuteTeleport(skillSO.TeleportDistance);
                     break;
 
-                //攻撃力固定加算値を適用
                 case SkillType.AttackBoost:
                     CurrentAttackBonus = skillSO.AttackBonus;
+                    break;
+
+                // ファンネル攻撃の発動
+                case SkillType.FunnelAttack:
+                    StartCoroutine(ExecuteFunnelRoutine(skillSO));
                     break;
 
                 case SkillType.None:
@@ -112,9 +111,87 @@ public class Player_SkillController_New : MonoBehaviour
     }
 
     /// <summary>
-    /// 瞬間移動スキルの実行処理
+    /// ファンネルの生成と射出を行うコルーチン
     /// </summary>
-    /// <param name="distance"></param>
+    private IEnumerator ExecuteFunnelRoutine(Skill_SO_New skillSO)
+    {
+        if (skillSO.FunnelPrefab == null) yield break;
+
+        // 最も近い敵を検索
+        Transform nearestEnemy = FindNearestEnemy();
+
+        int count = skillSO.FunnelCount;
+        Funnel_Bullet[] funnels = new Funnel_Bullet[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            float angle = i * (360f / count);
+            // プレイヤー中心からの相対オフセット位置を計算
+            Vector3 relativeOffset = Vector3.up * skillSO.SpawnHeight + Quaternion.Euler(0, angle, 0) * Vector3.forward * skillSO.SpawnRadius;
+            Vector3 spawnPos = transform.position + relativeOffset;
+
+            GameObject obj = Instantiate(skillSO.FunnelPrefab, spawnPos, Quaternion.identity);
+            Funnel_Bullet bullet = obj.GetComponent<Funnel_Bullet>();
+            if (bullet == null)
+            {
+                bullet = obj.AddComponent<Funnel_Bullet>();
+            }
+
+            //追従用に transform (プレイヤー) と relativeOffset を渡す
+            bullet.Initialize(transform, relativeOffset, nearestEnemy, skillSO.FunnelSpeed, skillSO.FunnelDamage);
+            funnels[i] = bullet;
+
+            // 生成間隔（spawnInterval）を適用
+            if (skillSO.SpawnInterval > 0f)
+            {
+                yield return new WaitForSeconds(skillSO.SpawnInterval);
+            }
+        }
+
+        // 生成完了後の発射遅延を適用
+        if (skillSO.LaunchDelay > 0f)
+        {
+            yield return new WaitForSeconds(skillSO.LaunchDelay);
+        }
+
+        // 順次敵へ射出
+        for (int i = 0; i < count; i++)
+        {
+            if (funnels[i] != null)
+            {
+                funnels[i].Launch();
+            }
+
+            // 連射時のテンポ感も生成間隔を基準に少し挟む
+            if (skillSO.SpawnInterval > 0f)
+            {
+                yield return new WaitForSeconds(skillSO.SpawnInterval);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 一番近い敵を探すメソッド
+    /// </summary>
+    private Transform FindNearestEnemy()
+    {
+        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        Transform nearest = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var enemy in enemies)
+        {
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < minDistance)
+            {
+                minDistance = dist;
+                nearest = enemy.transform;
+            }
+        }
+
+        return nearest;
+    }
+
     private void ExecuteTeleport(float distance)
     {
         Vector3 targetPosition = transform.position + transform.forward * distance;
@@ -137,11 +214,6 @@ public class Player_SkillController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// スキルのクールタイム残り割合を取得する
-    /// </summary>
-    /// <param name="slotIndex">スキルスロットのインデックス</param>
-    /// <returns>クールタイム残り割合 (0〜1)</returns>
     public float GetCooldownRatio(int slotIndex)
     {
         if (activeSkillSlots != null && slotIndex >= 0 && slotIndex < activeSkillSlots.Length && activeSkillSlots[slotIndex] != null)

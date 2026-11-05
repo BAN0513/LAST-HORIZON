@@ -1790,7 +1790,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: activeSkillSlots.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: 'activeSkillSlots.Array.data[1]'
@@ -1800,6 +1800,10 @@ PrefabInstance:
       propertyPath: 'activeSkillSlots.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: 7c4236a73cc9cf548b21403bcbe1fde6, type: 2}
+    - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: 'activeSkillSlots.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 36b5657e42f039a41813499d9512160e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
