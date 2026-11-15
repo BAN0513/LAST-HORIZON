@@ -8,9 +8,6 @@ public class WarpPointerController : MonoBehaviour
     private RectTransform rect;
     private Camera mainCamera;
 
-    [Header("テスト用")]
-    [SerializeField] private GameObject testWarp;
-
     private void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Player_Script_New>();
@@ -62,11 +59,5 @@ public class WarpPointerController : MonoBehaviour
     {
         gameObject.SetActive(false);
         warpObj = null;
-    }
-
-    [ContextMenu("ワープポイントセット")]
-    public void Set()
-    {
-        SetWarpPoint(testWarp);
     }
 }

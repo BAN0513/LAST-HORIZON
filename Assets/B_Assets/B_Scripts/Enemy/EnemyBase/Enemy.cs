@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Takato;
 using UnityEngine;
@@ -79,9 +80,14 @@ public abstract class Enemy : MonoBehaviour
 
     protected EnemyActionSO currentAction;
 
+    private Renderer[] objRenderer;
+    private SkinnedMeshRenderer[] meshRenderer;
+
     private void Awake()
     {
         Agent = GetComponent<NavMeshAgent>();
+        objRenderer = GetComponentsInChildren<Renderer>();
+        meshRenderer = GetComponentsInChildren<SkinnedMeshRenderer>();
 
         if (Agent == null)
         {
@@ -101,6 +107,16 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Start()
     {
         IsAction = false;
+
+        //foreach (var obj in objRenderer)
+        //{
+        //    obj.material.color = new Color32(255, 255, 255, 0);
+        //}
+
+        //foreach(var obj in meshRenderer)
+        //{
+        //    obj.material.color = new Color32(0, 0, 0, 0);
+        //}
 
         if (hpSliider != null)
         {
@@ -258,7 +274,11 @@ public abstract class Enemy : MonoBehaviour
         if (enemyBaseState == EnemyBaseState.Contact)　{　Agent.SetDestination(Target.position);　}
     }
 
-    protected virtual void ContactAnimation() { enemyBaseState = EnemyBaseState.Contact; }
+    protected virtual void ContactAnimation()
+    {
+        enemyBaseState = EnemyBaseState.Contact;
+        Init();
+    }
 
     private void EngageMoveControl()
     {
@@ -283,7 +303,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (IsActionAnimation || enemyBaseState == EnemyBaseState.Dead) { return; }
 
-        //SOは並びかえ手はいけないから変数に代入する
+        //SOは並びかえてはいけないから変数に代入する
         List<EnemyActionSO> action = new List<EnemyActionSO>(enemySO.action);
 
         EnemyActionSO executeAction = CalcAction(action);
@@ -385,7 +405,7 @@ public abstract class Enemy : MonoBehaviour
 
             if (save >= rand) { return action[i]; }
         }
-        return null;
+        return action[action.Count];
     }
 
     public virtual void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
@@ -471,6 +491,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
+        if (enemyBaseState == EnemyBaseState.Search) { return; }
         LookRotationSpeed = enemySO.lookRotationSpeed;
         isLookPlayer = true;
         IsAction = false;
@@ -520,7 +541,33 @@ public abstract class Enemy : MonoBehaviour
     {
         if (eventProgress != null) { eventProgress.DestroyEnemy(this); }
         else                       { Debug.Log("EventProgressが見つかりません。"); }
+
+        StartCoroutine(ReduceSize());
+    }
+
+    private IEnumerator ReduceSize()
+    {
+        float elapsed = 0.0f;
+        float duration = 1.0f;
+        float t = 0.0f;
+
+        Vector3 start = transform.localScale;
+        Vector3 end = new Vector3(0, 0, 0);
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            t = Mathf.Clamp01(elapsed / duration);
+
+            transform.localScale = Vector3.Lerp(start, end, t);
+
+            yield return null;
+        }
+
+        transform.localScale = end;
         Destroy(gameObject);
+
     }
 
     /// <summary>

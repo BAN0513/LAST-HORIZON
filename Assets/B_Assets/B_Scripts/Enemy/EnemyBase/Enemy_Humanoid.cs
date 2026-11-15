@@ -59,14 +59,14 @@ public class Enemy_Humanoid : Enemy
 
     public override void TakeDamage(int damage, SoundManager sound = null, int seNumber = -1)
     {
-        base.TakeDamage(damage, sound, seNumber);
-
-        if (!isHit && HP > 0)
+        if (!isHit && HP > 0 && enemyBaseState == EnemyBaseState.Contact)
         {
             enemyAnimatorController.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Hit);
             SetLookPlayerAndEnemyStop(false, true);
             isHit = true;
         }
+
+        base.TakeDamage(damage, sound, seNumber);
     }
 
     public override void Init()

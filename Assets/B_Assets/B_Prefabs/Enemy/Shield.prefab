@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfc5b42ca4e06904ba9f88fd09ce8b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShieldController
-  shieldHP: 30
+  shieldHP: 200
   duration: 0.5
   maxSize: {x: 8, y: 8, z: 8}
 --- !u!208 &6820432206233539939

@@ -4,7 +4,7 @@ using UnityEngine;
 public class Enemy_Weak : Enemy_Humanoid
 {
     private bool isDown = false;
-    private int downDamage = 21;
+    private int downDamage = 20;
 
     public Enemy_WeakAnimatorController Enemy_WeakAnimator { get; private set; }
     public bool IsBlocking { get; set; }
@@ -33,6 +33,7 @@ public class Enemy_Weak : Enemy_Humanoid
     protected override void ContactAnimation()
     {
         base.ContactAnimation();
+        if (isHit) { return; }
         SetLookPlayerAndEnemyStop(false, true);
         Enemy_WeakAnimator.SetTriggerAnim(EnemyAnimatorController.AnimationBase.Weak_Contact);
         IsActionAnimation = true;

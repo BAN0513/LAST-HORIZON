@@ -152,6 +152,13 @@ public class Player_WeaponController_New : MonoBehaviour
                 }
             }
         }
+
+        if (other.TryGetComponent<ShieldController>(out var enemy_Shield))
+        {
+            int finalDamage = CalculateDamage(out bool isCritical);
+
+            enemy_Shield.TakeDamage(finalDamage);
+        }
     }
 
     /// <summary>

@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy_Wizard : Enemy_Humanoid
 {
@@ -10,6 +12,7 @@ public class Enemy_Wizard : Enemy_Humanoid
     [SerializeField] private GameObject shieldObj;
     [SerializeField] private Transform[] summonPos;
     [SerializeField] private Transform[] warpPos;
+    [SerializeField] private Image frashImage;
 
     private Enemy_WizardAnimatorController enemy_WizardAnimator;
     private int weakMagicCnt = 0;
@@ -105,6 +108,8 @@ public class Enemy_Wizard : Enemy_Humanoid
 
     public void Teleport()
     {
+        StartCoroutine(FrashController());
+
         int warpLimit = 10;
         int randomWarp = 0;
         float notWarpLength = 3.0f;
@@ -142,6 +147,35 @@ public class Enemy_Wizard : Enemy_Humanoid
         weakMagicCnt    = 0;
         ShortManaCharge = false;
         LongManaCharge  = false;
+    }
+
+    private IEnumerator FrashController()
+    {
+        float elapsed = 0.0f;
+        float duration = 10.0f;
+
+        Color cl;
+        cl = Color.white;
+        cl.a = 1;
+
+        float t = 0.0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+
+            t += Mathf.Clamp01(elapsed / duration);
+
+            cl.a = Mathf.Lerp(1, 0, t);
+
+            frashImage.color = cl;
+
+            yield return null;
+        }
+
+        cl.a = 0;
+
+        frashImage.color = cl;
     }
 
     //攻撃のアニメーションが終わったら全部初期化する

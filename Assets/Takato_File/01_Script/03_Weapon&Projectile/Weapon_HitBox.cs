@@ -22,6 +22,7 @@ public class Weapon_HitBox : MonoBehaviour
     {
         if (weaponController != null)
         {
+            Debug.Log("hit");
             // ÚGî•ñ‚ğe‚Ì WeaponController ‚É’Ê’m
             weaponController.OnWeaponTriggerEnter(other);
         }

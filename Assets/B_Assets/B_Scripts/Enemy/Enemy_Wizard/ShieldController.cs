@@ -43,19 +43,18 @@ public class ShieldController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void TakeDamage(int damage)
     {
         if (invincibilityTimer > 0.0f) { return; }
-        if (other.TryGetComponent<Weapon>(out var weapon))
-        {
-            shieldHP -= (int)weapon.AttackDamage;
-            invincibilityTimer = invincibilityTime;
 
-            if (shieldHP <= 0)
-            {
-                ParentEnemyWizard.IsShield = false;
-                Destroy(gameObject);
-            }
+        shieldHP -= damage;
+        invincibilityTimer = invincibilityTime;
+
+        if (shieldHP <= 0)
+        {
+            ParentEnemyWizard.IsShield = false;
+            Destroy(gameObject);
         }
+
     }
 }
