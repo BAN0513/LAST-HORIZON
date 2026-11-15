@@ -1785,6 +1785,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1787687346}
     - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
+      propertyPath: funnelArcAngle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8064764340826196335, guid: d5141c29966992642a2591d5e8e71f7f, type: 3}
       propertyPath: obstacleLayer.m_Bits
       value: 4294967295
       objectReference: {fileID: 0}

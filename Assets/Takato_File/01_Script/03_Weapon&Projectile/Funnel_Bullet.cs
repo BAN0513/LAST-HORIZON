@@ -5,8 +5,8 @@ using UnityEngine;
 /// </summary>
 public class Funnel_Bullet : MonoBehaviour
 {
-    //SOから受け取るパラメータ
-    private Transform ownerTransform; // 追従対象（プレイヤー）
+    // SOから受け取るパラメータ
+    private Transform ownerTransform; // 追従対象
     private Vector3 localOffset;      // プレイヤーからの相対位置オフセット
     private Transform targetEnemy;    // 追尾対象の敵
     private float moveSpeed;          // 弾丸の移動速度
@@ -14,8 +14,9 @@ public class Funnel_Bullet : MonoBehaviour
     private bool isLaunched = false;  // 発射済みかどうかのフラグ
     private bool hasHit = false;      // 多重ヒット防止フラグ
 
-    //コンポーネントの参照
+    // コンポーネントの参照
     private TrailRenderer trailRenderer;
+
     private void Awake()
     {
         trailRenderer = GetComponent<TrailRenderer>();
@@ -26,8 +27,11 @@ public class Funnel_Bullet : MonoBehaviour
     /// </summary>
     public void Initialize(Transform owner, Vector3 offset, Transform target, float speed, int dmg)
     {
-        trailRenderer.Clear(); // トレイルをクリアして残像を消す
-        trailRenderer.enabled = false; // 初期状態ではトレイルを無効にする
+        if (trailRenderer != null)
+        {
+            trailRenderer.Clear(); // トレイルをクリアして残像を消す
+            trailRenderer.enabled = false; // 初期状態ではトレイルを無効にする
+        }
 
         ownerTransform = owner;
         localOffset = offset;
@@ -42,18 +46,21 @@ public class Funnel_Bullet : MonoBehaviour
     public void Launch()
     {
         isLaunched = true;
-        trailRenderer.enabled = true;
+        if (trailRenderer != null)
+        {
+            trailRenderer.enabled = true;
+        }
     }
 
     private void Update()
     {
-        // 未発射状態のときはプレイヤーに追従する
+        // 未発射状態のときはプレイヤーの位置と向きに追従する
         if (!isLaunched)
         {
             if (ownerTransform != null)
             {
-                // プレイヤーの位置＋相対オフセット位置へ移動
-                transform.position = ownerTransform.position + localOffset;
+                transform.position = ownerTransform.position + ownerTransform.rotation * localOffset;
+                transform.rotation = ownerTransform.rotation;
             }
             return;
         }

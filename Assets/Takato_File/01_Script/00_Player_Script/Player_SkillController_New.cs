@@ -12,12 +12,17 @@ public class Player_SkillController_New : MonoBehaviour
     [Header("テレポートの壁判定レイヤー")]
     [SerializeField] private LayerMask obstacleLayer;
 
+    [Header("ファンネルのアーチ広がり角度")]
+    [Range(30f, 180f)]
+    [SerializeField] private float funnelArcAngle;
+
+    // キャラクターコントローラーの参照
     private CharacterController characterController;
 
-    // 現在移動速度にかかっているスキル倍率（デフォルト1.0倍）
+    // 現在移動速度にかかっているスキル倍率
     public float CurrentSpeedMultiplier { get; private set; } = 1.0f;
 
-    // 現在のスキルによる攻撃力加算値（デフォルト0）
+    // 現在のスキルによる攻撃力加算値
     public int CurrentAttackBonus { get; private set; } = 0;
 
     private void Awake()
@@ -66,6 +71,7 @@ public class Player_SkillController_New : MonoBehaviour
         }
     }
 
+    /// <summary> /// 指定されたスロットのスキルを使用するメソッド /// </summary>
     public void UseSkill(int slotIndex = 0)
     {
         if (activeSkillSlots == null || slotIndex < 0 || slotIndex >= activeSkillSlots.Length)
@@ -110,9 +116,7 @@ public class Player_SkillController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ファンネルの生成と射出を行うコルーチン
-    /// </summary>
+    /// <summary>/// ファンネルの生成と射出を行うコルーチン/// </summary>
     private IEnumerator ExecuteFunnelRoutine(Skill_SO_New skillSO)
     {
         if (skillSO.FunnelPrefab == null) yield break;
@@ -122,26 +126,33 @@ public class Player_SkillController_New : MonoBehaviour
 
         int count = skillSO.FunnelCount;
         Funnel_Bullet[] funnels = new Funnel_Bullet[count];
+        float halfAngle = funnelArcAngle * 0.5f;
 
         for (int i = 0; i < count; i++)
         {
-            float angle = i * (360f / count);
-            // プレイヤー中心からの相対オフセット位置を計算
-            Vector3 relativeOffset = Vector3.up * skillSO.SpawnHeight + Quaternion.Euler(0, angle, 0) * Vector3.forward * skillSO.SpawnRadius;
-            Vector3 spawnPos = transform.position + relativeOffset;
+            // 生成位置の角度を計算
+            float t = (count > 1) ? (float)i / (count - 1) : 0.5f;
+            float currentAngle = Mathf.Lerp(-halfAngle, halfAngle, t);
+            float rad = currentAngle * Mathf.Deg2Rad;
 
-            GameObject obj = Instantiate(skillSO.FunnelPrefab, spawnPos, Quaternion.identity);
+            // 中央が一番高く両端に行くほど外側に広がりつつ少し下がるアーチ座標
+            float offsetX = Mathf.Sin(rad) * skillSO.SpawnRadius;
+            float offsetY = skillSO.SpawnHeight - (1f - Mathf.Cos(rad)) * skillSO.SpawnRadius;
+
+            Vector3 localOffset = new Vector3(offsetX, offsetY, 0f);
+            Vector3 spawnPos = transform.position + transform.rotation * localOffset;
+
+            GameObject obj = Instantiate(skillSO.FunnelPrefab, spawnPos, transform.rotation);
             Funnel_Bullet bullet = obj.GetComponent<Funnel_Bullet>();
             if (bullet == null)
             {
                 bullet = obj.AddComponent<Funnel_Bullet>();
             }
 
-            //追従用に transform (プレイヤー) と relativeOffset を渡す
-            bullet.Initialize(transform, relativeOffset, nearestEnemy, skillSO.FunnelSpeed, skillSO.FunnelDamage);
+            bullet.Initialize(transform, localOffset, nearestEnemy, skillSO.FunnelSpeed, skillSO.FunnelDamage);
             funnels[i] = bullet;
 
-            // 生成間隔（spawnInterval）を適用
+            // 生成間隔を適用
             if (skillSO.SpawnInterval > 0f)
             {
                 yield return new WaitForSeconds(skillSO.SpawnInterval);
@@ -170,9 +181,7 @@ public class Player_SkillController_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 一番近い敵を探すメソッド
-    /// </summary>
+    /// <summary>/// 一番近い敵を探すメソッド/// </summary>
     private Transform FindNearestEnemy()
     {
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);

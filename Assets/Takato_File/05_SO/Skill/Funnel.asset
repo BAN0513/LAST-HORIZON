@@ -24,6 +24,6 @@ MonoBehaviour:
   spawnInterval: 0.25
   launchDelay: 0.5
   spawnHeight: 2
-  spawnRadius: 0.3
+  spawnRadius: 1
   funnelSpeed: 10
   funnelDamage: 10
