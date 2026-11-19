@@ -6,13 +6,13 @@ public class PausManeger : MonoBehaviour
     [SerializeField] private Canvas canvas;
 
     [Header("ポーズ画面の各UI")]
-    public GameObject BackImage;
-    public GameObject BackBrownImage;
-    public GameObject PauseTextImage;
+    [SerializeField] private GameObject BackImage;
+    [SerializeField] private GameObject BackBrownImage;
+    [SerializeField] private GameObject PauseTextImage;
 
     [Header("ゲームオーバー画面の各UI")]
-    public GameObject GameOverBackImage;
-    public GameObject GameOverTextImage;
+    [SerializeField] private GameObject GameOverBackImage;
+    [SerializeField] private GameObject GameOverTextImage;
 
     public bool IsPause = false;
     public static bool ToPause = false;
