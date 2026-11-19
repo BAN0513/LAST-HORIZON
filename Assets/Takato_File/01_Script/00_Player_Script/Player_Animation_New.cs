@@ -17,6 +17,7 @@ public class Player_Animation_New : MonoBehaviour
     private static readonly int BackRollHash = Animator.StringToHash("BackRoll");
     private static readonly int LightAttackHash = Animator.StringToHash("LightAttack");
     private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack");
+    private static readonly int IsBlockingHash = Animator.StringToHash("IsBlocking");
     private static readonly int IsChargingHash = Animator.StringToHash("IsCharging");
     private static readonly int TakeDamageHash = Animator.StringToHash("TakeDamage");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -34,6 +35,7 @@ public class Player_Animation_New : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
+    /// <summary>///プレイヤーの移動アニメーションを更新する /// </summary>
     public void UpdateMoveAnimation(Vector3 moveVelocity, float baseMoveSpeed)
     {
         if (animator == null || baseMoveSpeed <= 0f) return;
@@ -50,106 +52,95 @@ public class Player_Animation_New : MonoBehaviour
         animator.SetFloat(MoveYHash, normalizedY, dampTime, Time.deltaTime);
     }
 
+    /// <summary> /// プレイヤーのジャンプアニメーションを再生する /// </summary>
     public void PlayJump()
     {
         if (animator == null) return;
         animator.SetTrigger(JumpHash);
     }
 
+    /// <summary> /// プレイヤーのロールアニメーションを再生する /// </summary>
     public void PlayRoll()
     {
         if (animator == null) return;
         animator.SetTrigger(RollHash);
     }
 
+    /// <summary> /// プレイヤーの後方ロールアニメーションを再生する /// </summary>
     public void PlayBackRoll()
     {
         if (animator == null) return;
         animator.SetTrigger(BackRollHash);
     }
 
-    /// <summary>
-    /// プレイヤーの軽攻撃アニメーションを再生する
-    /// </summary>
+    /// <summary>/// プレイヤーの軽攻撃アニメーションを再生する /// </summary>
     public void PlayLightAttack()
     {
         if (animator == null) return;
         animator.SetTrigger(LightAttackHash);
     }
 
-    ///<summary>
-    ///強攻撃のチャージアニメーションを再生する
-    ///</summary>
+    /// <summary>/// 強攻撃のチャージアニメーションを再生する /// </summary>
     public void PlayChargeAttack(bool isCharging)
     {
         if (animator == null) return;
         animator.SetBool(IsChargingHash, isCharging);
     }
 
-    /// <summary>
-    /// プレイヤーの重攻撃アニメーションを再生する
-    /// </summary>
+    /// <summary>/// プレイヤーの重攻撃アニメーションを再生する /// </summary>
     public void PlayHeavyAttack()
     {
         if (animator == null) return;
         animator.SetTrigger(HeavyAttackHash);
     }
 
-    /// <summary>
-    /// プレイヤーがダメージを受けたときのアニメーションを再生する
-    /// </summary>
+    /// <summary>/// プレイヤーのブロックアニメーションを再生する /// </summary>
+    public void PlayBlock(bool isBlocking)
+    {
+        if (animator == null) return;
+        animator.SetBool(IsBlockingHash, isBlocking);
+    }
+
+    /// <summary>/// プレイヤーがダメージを受けたときのアニメーションを再生する /// </summary>
     public void PlayTakeDamage()
     {
         if (animator == null) return;
         animator.SetTrigger(TakeDamageHash);
     }
 
-    /// <summary>
-    /// プレイヤーが死亡したときのアニメーションを再生する
-    /// </summary>
+    /// <summary>/// プレイヤーが死亡したときのアニメーションを再生する /// </summary>
     public void PlayDie()
     {
         if (animator == null) return;
         animator.SetTrigger(DieHash);
     }
 
-    /// <summary>
-    /// プレイヤーが地面に接地しているかどうかの状態を更新する
-    /// </summary>
-    /// <param name="isGrounded"></param>
+    /// <summary>/// プレイヤーが地面に接地しているかどうかの状態を更新する /// </summary>
     public void UpdateGroundedState(bool isGrounded)
     {
         if (animator == null) return;
         animator.SetBool(IsGroundedHash, isGrounded);
     }
 
-    /// <summary>
-    /// Animation Event から呼び出すメソッド
-    /// </summary>
+    /// <summary>/// Animation Event から呼び出すメソッド /// </summary>
     public void OnRollCompleted()
     {
         OnRollEnd?.Invoke();
     }
 
-    /// <summary>
-    /// Animation Event から呼び出すメソッド
-    /// </summary>
+    /// <summary>/// Animation Event から呼び出すメソッド /// </summary>
     public void OnBackRollCompleted()
     {
         OnRollEnd?.Invoke();
     }
 
-    ///<summary>
-    ///Animation Event から呼び出すメソッド
-    ///</summary>
+    /// <summary>/// Animation Event から呼び出すメソッド /// </summary>
     public void OnAttackHitStartEvent()
     {
         OnAttackHitStart?.Invoke();
     }
 
-    /// <summary>
-    /// Animation Event から呼び出すメソッド
-    /// </summary>
+    /// <summary>/// Animation Event から呼び出すメソッド /// </summary>
     public void OnAttackCompleted()
     {
         OnAttackEnd?.Invoke();

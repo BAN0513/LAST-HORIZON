@@ -23,10 +23,11 @@ public class Player_Script_New : MonoBehaviour
     [Range(5f, 20f)]
     [SerializeField] private float rotationSmoothness;
 
-    // 体力・死亡関連プロパティ
+    // 体力・死亡・状態関連プロパティ
     public float CurrentHealth { get; private set; }
     public float CurrentStamina { get; private set; }
     public bool IsDead => isDead;
+    public bool IsBlocking => isBlocking; // 外部からブロック中か参照可能にする
 
     // イベント定義
     public event Action<float, float> OnHealthChanged;  // (現在体力, 最大体力)
@@ -47,13 +48,14 @@ public class Player_Script_New : MonoBehaviour
     private Vector3 velocity;
     private Vector3 currentMoveVelocity;
     private float staminaRegenTimer;
-    private float chargeStartTime; 
+    private float chargeStartTime;
 
     // フラグ
     private bool isRolling = false;
     private bool isAttacking = false;
     private bool isDead = false;
     private bool isCharging = false;
+    private bool isBlocking = false; // ブロック状態フラグ
     private Vector3 rollDirection;
 
     private const float GroundedDownwardForce = -2f; // 地面に接地しているときの下方向の力
@@ -122,49 +124,57 @@ public class Player_Script_New : MonoBehaviour
             velocity.y = GroundedDownwardForce;
         }
 
-        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
+        // ブロック状態の更新
+        UpdateBlockState();
+
+        // ブロック中は常にカメラ方向を向き、通常時は移動中のみカメラ方向を向く
+        if (isBlocking)
         {
-            RotatePlayerToCamera(); // 移動中は常にカメラの方向に向く
+            RotatePlayerToCamera();
+        }
+        else if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.MoveInput.sqrMagnitude > 0.01f)
+        {
+            RotatePlayerToCamera();
         }
 
         MovePlayer(); // プレイヤーの移動処理を呼び出す
 
-        // スキル入力の処理
-        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput)
+        // スキル入力の処理（ブロック中は発動不可）
+        if (!isRolling && !isAttacking && !isCharging && !isBlocking && playerInput != null && playerInput.IsSkillInput)
         {
             if (playerSkillController != null)
             {
                 playerSkillController.UseSkill(0);
             }
-            playerInput.ResetSkillInput(); // 入力を消費してリセット
+            playerInput.ResetSkillInput();
         }
 
-        //スキル2の入力処理
-        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput2)
+        // スキル2の入力処理
+        if (!isRolling && !isAttacking && !isCharging && !isBlocking && playerInput != null && playerInput.IsSkillInput2)
         {
             if (playerSkillController != null)
             {
-                playerSkillController.UseSkill(1); // スロット1を呼び出す
+                playerSkillController.UseSkill(1);
             }
-            playerInput.ResetSkillInput(); // 入力を消費してリセット
+            playerInput.ResetSkillInput();
         }
 
-        //スキル3の入力処理
-        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput3)
+        // スキル3の入力処理
+        if (!isRolling && !isAttacking && !isCharging && !isBlocking && playerInput != null && playerInput.IsSkillInput3)
         {
             if (playerSkillController != null)
             {
-                playerSkillController.UseSkill(2); // スロット2を呼び出す
+                playerSkillController.UseSkill(2);
             }
             playerInput.ResetSkillInput();
         }
 
         // スキル4の入力処理
-        if (!isRolling && !isAttacking && !isCharging && playerInput != null && playerInput.IsSkillInput4)
+        if (!isRolling && !isAttacking && !isCharging && !isBlocking && playerInput != null && playerInput.IsSkillInput4)
         {
             if (playerSkillController != null)
             {
-                playerSkillController.UseSkill(3); // スロット3を発動
+                playerSkillController.UseSkill(3);
             }
             playerInput.ResetSkillInput();
         }
@@ -176,20 +186,19 @@ public class Player_Script_New : MonoBehaviour
 
             if (playerInput != null)
             {
-                //溜め中にボタンが離されたら、押していた時間に関わらず溜め攻撃を発動！
                 if (!playerInput.IsAttackHolding)
                 {
-                    ReleaseChargeAttack(); // 溜め攻撃の発動処理を呼び出す
+                    ReleaseChargeAttack();
                 }
             }
-            ApplyGravity(); // 重力の適用
+            ApplyGravity();
             return;
         }
 
         Vector2 moveInput = playerInput != null ? playerInput.MoveInput : Vector2.zero;
-        bool isSprinting = playerInput != null && playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
+        bool isSprinting = !isBlocking && playerInput != null && playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
 
-        if (!isRolling && isGrounded && playerInput != null)
+        if (!isRolling && !isBlocking && isGrounded && playerInput != null)
         {
             if (isSprinting)
             {
@@ -234,9 +243,27 @@ public class Player_Script_New : MonoBehaviour
     }
 
     /// <summary>
+    /// ブロック入力と現在のアクション状態からブロックアニメーションを切り替えるメソッド
+    /// </summary>
+    private void UpdateBlockState()
+    {
+        bool canBlock = isGrounded && !isRolling && !isAttacking && !isCharging;
+        bool shouldBlock = canBlock && playerInput != null && playerInput.IsBlockInput;
+
+        if (isBlocking != shouldBlock)
+        {
+            isBlocking = shouldBlock;
+
+            if (playerAnimation != null)
+            {
+                playerAnimation.PlayBlock(isBlocking);
+            }
+        }
+    }
+
+    /// <summary>
     /// ダメージを受ける処理を行うメソッド
     /// </summary>
-    /// <param name="damage"></param>
     public void TakeDamage(float damage)
     {
         if (isDead || damage <= 0f) return;
@@ -260,7 +287,6 @@ public class Player_Script_New : MonoBehaviour
     /// <summary>
     /// プレイヤーが回復を行う処理を行うメソッド
     /// </summary>
-    /// <param name="amount"></param>
     public void Heal(float amount)
     {
         if (isDead || amount <= 0f) return;
@@ -278,9 +304,11 @@ public class Player_Script_New : MonoBehaviour
         isAttacking = false;
         isRolling = false;
         isCharging = false;
+        isBlocking = false;
 
         if (playerAnimation != null)
         {
+            playerAnimation.PlayBlock(false);
             playerAnimation.PlayDie();
         }
 
@@ -332,8 +360,8 @@ public class Player_Script_New : MonoBehaviour
         // カメラの方向に基づいて移動方向を計算
         Vector3 moveDirection = (cameraForward * moveInput.y + cameraRight * moveInput.x).normalized;
 
-        // スプリントが要求されているかどうかを判定
-        bool isSprintingRequested = playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
+        // スプリントが要求されているかどうかを判定（ブロック中はスプリント不可）
+        bool isSprintingRequested = !isBlocking && playerInput.IsSprinting && moveInput.y > 0f && CurrentStamina > 0f;
 
         // 現在の移動速度倍率を初期化
         float currentSpeedMultiplier = 1f;
@@ -353,7 +381,6 @@ public class Player_Script_New : MonoBehaviour
             {
                 staminaRegenTimer -= Time.deltaTime;
             }
-            // スタミナ回復が可能な状態であれば回復処理を行う
             else if (CurrentStamina < playerSO.MaxStamina)
             {
                 CurrentStamina = Mathf.Min(playerSO.MaxStamina, CurrentStamina + playerSO.StaminaRegenRate * Time.deltaTime);
@@ -383,9 +410,7 @@ public class Player_Script_New : MonoBehaviour
             playerAnimation.UpdateMoveAnimation(relativeVelocity, playerSO.MoveSpeed);
         }
     }
-    /// <summary>
-    /// 軽攻撃の処理を行うメソッド
-    /// </summary>
+
     private void LightAttack()
     {
         if (playerInput == null) return;
@@ -400,35 +425,28 @@ public class Player_Script_New : MonoBehaviour
 
         if (playerAnimation != null)
         {
-            playerAnimation.PlayLightAttack(); // 軽攻撃アニメーションを再生
+            playerAnimation.PlayLightAttack();
         }
 
-        playerInput.ResetAttackInput(); // 攻撃入力をリセット
+        playerInput.ResetAttackInput();
     }
 
-    /// <summary>
-    /// プレイヤーが溜め攻撃を開始する処理
-    /// </summary>
     private void StartCharging()
     {
-        isCharging = true;           // 溜め状態を開始
-        isAttacking = true;          // 攻撃状態も開始
-        chargeStartTime = Time.time; // 溜め開始時刻を記録 
+        isCharging = true;
+        isAttacking = true;
+        chargeStartTime = Time.time;
 
-        RotatePlayerToCamera(); // 溜め開始時にカメラの方向に向く
+        RotatePlayerToCamera();
 
         Debug.Log("<color=cyan>[Charge Attack] 溜めを開始しました。</color>");
 
-        //プレイヤーの溜め攻撃アニメーションを再生
         if (playerAnimation != null)
         {
             playerAnimation.PlayChargeAttack(true);
         }
     }
 
-    /// <summary>
-    /// チャージ攻撃の発動
-    /// </summary>
     private void ReleaseChargeAttack()
     {
         isCharging = false;
@@ -437,36 +455,27 @@ public class Player_Script_New : MonoBehaviour
 
         if (currentWeaponSO != null && currentWeaponSO.MaxChargeTime > 0f)
         {
-            //溜め開始からの経過時間を計算
             float chargeTime = Time.time - chargeStartTime;
             float chargeRatio = chargeTime / currentWeaponSO.MaxChargeTime;
-
-            // 0.0 ～ 1.0 の範囲に収める
             chargeRatio = Mathf.Clamp01(chargeRatio);
 
             Debug.Log($"<color=yellow>[Charge Attack] 溜め解放！ 純粋溜め時間: {chargeTime:F2}秒 | 溜め率: {chargeRatio * 100:F0}%</color>");
 
-            // 計算した溜め比率を WeaponController に渡す
             playerWeaponController.SetChargeRatio(chargeRatio);
         }
 
-        //プレイヤーの攻撃アニメーションを再生
         if (playerAnimation != null)
         {
-            playerAnimation.PlayChargeAttack(false); // 溜めアニメーションのフラグを解除
-            playerAnimation.PlayHeavyAttack();       // 強攻撃（溜め解放）アニメーションを再生
+            playerAnimation.PlayChargeAttack(false);
+            playerAnimation.PlayHeavyAttack();
         }
 
-        // 攻撃入力をリセット
         if (playerInput != null)
         {
-            playerInput.ResetAttackInput(); // 攻撃入力をリセット
+            playerInput.ResetAttackInput();
         }
     }
 
-    /// <summary>
-    /// 回避（前転・後転）の処理を行うメソッド
-    /// </summary>
     private void Roll()
     {
         if (playerInput == null) return;
@@ -481,7 +490,7 @@ public class Player_Script_New : MonoBehaviour
 
             if (playerAnimation != null)
             {
-                playerAnimation.PlayBackRoll(); // 後転アニメーションを再生
+                playerAnimation.PlayBackRoll();
             }
         }
         else
@@ -490,19 +499,16 @@ public class Player_Script_New : MonoBehaviour
 
             if (playerAnimation != null)
             {
-                playerAnimation.PlayRoll(); // 前転アニメーションを再生
+                playerAnimation.PlayRoll();
             }
         }
 
         characterController.height = rollHeight;
         characterController.center = new Vector3(defaultCenter.x, rollCenterY, defaultCenter.z);
 
-        playerInput.ResetRollInput(); // ロール入力をリセット
+        playerInput.ResetRollInput();
     }
 
-    /// <summary>
-    /// プレイヤーがロールアニメーションを終了した際の処理を行うメソッド
-    /// </summary>
     private void OnRollEndHandler()
     {
         isRolling = false;
@@ -514,18 +520,12 @@ public class Player_Script_New : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// プレイヤーが攻撃アニメーションを終了した際の処理を行うメソッド
-    /// </summary>
     private void OnAttackEndHandler()
     {
         isAttacking = false;
         isCharging = false;
     }
 
-    /// <summary>
-    /// プレイヤーがジャンプする処理を行うメソッド
-    /// </summary>
     private void Jump()
     {
         CurrentStamina = Mathf.Max(0f, CurrentStamina - playerSO.JumpStaminaCost);
@@ -536,7 +536,7 @@ public class Player_Script_New : MonoBehaviour
 
         if (playerAnimation != null)
         {
-            playerAnimation.PlayJump(); // ジャンプアニメーションを再生
+            playerAnimation.PlayJump();
         }
     }
 }

@@ -305,6 +305,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player_SkillController_New
   activeSkillSlots:
   - {fileID: 11400000, guid: 9d8b84c4b70d0284dbb234a3f4a00b50, type: 2}
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  funnelArcAngle: 30
 --- !u!114 &1987346700130942699
 MonoBehaviour:
   m_ObjectHideFlags: 0

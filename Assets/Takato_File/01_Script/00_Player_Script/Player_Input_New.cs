@@ -42,6 +42,7 @@ public class Player_Input_New : MonoBehaviour
     public bool IsAttackCanceled { get; private set; }         //溜め中にしきい値未満で離されたか
     public bool RollInput { get; private set; }                // ロール入力があったか
     public RollType CurrentRollType { get; private set; } = RollType.None; // 現在のロールの種類
+    public bool IsBlockInput { get; private set; } // ブロック入力があったか
 
     private float lastForwardTapTime = 0f;   // 前方へのダブルタップの最後の時間
     private float lastBackwardTapTime = 0f;  // 後方へのダブルタップの最後の時間
@@ -68,6 +69,10 @@ public class Player_Input_New : MonoBehaviour
         // 攻撃入力のイベント登録
         playerInputActions.Player.Attack.started += OnAttackStarted;
         playerInputActions.Player.Attack.canceled += OnAttackCanceled;
+
+        // Block入力のイベント登録
+        playerInputActions.Player.Block.started += context => IsBlockInput = true;
+        playerInputActions.Player.Block.canceled += context => IsBlockInput = false;
 
         // Look入力のイベント登録
         playerInputActions.Player.Look.started += OnLookInput;
